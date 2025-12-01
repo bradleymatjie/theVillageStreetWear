@@ -1,6 +1,7 @@
 import { ChevronRight } from 'lucide-react';
 import BestSeller from './components/bestSeller/bestSeller';
 import Collaboration from './components/Collaborate/collaborate';
+import Link from 'next/link';
 
 export default function Page() {
 
@@ -19,9 +20,9 @@ export default function Page() {
                 PRINTWAVES BOLD STYLE,<br />
                 UNAPOLOGETIC ATTITUDE
               </p>
-              <button className="bg-white text-black px-6 sm:px-8 py-2.5 sm:py-3 font-bold text-xs sm:text-sm hover:bg-gray-200 transition-colors">
+              <Link prefetch href={'/studio'} className="bg-white text-black px-6 sm:px-8 py-2.5 sm:py-3 font-bold text-xs sm:text-sm hover:bg-gray-200 transition-colors">
                 START DESIGNING
-              </button>
+              </Link>
             </div>
             <div className="relative h-[300px] sm:h-[400px] lg:h-[600px] bg-gray-900 order-2 lg:order-2">
               <img 
