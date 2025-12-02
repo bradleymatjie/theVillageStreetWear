@@ -60,7 +60,7 @@ export const mockProducts: Product[] = [
     price: 'R855.43',
     category: 'HOODIES',
     soldOut: false,
-    imageUrl: 'https://images.unsplash.com/photo-1483183585785-697b7e4c8f5e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0',
+    imageUrl: 'https://thefoschini.vtexassets.com/arquivos/ids/195064413-1200-1600?v=638849532966270000&width=1200&height=1600&aspect=true',
     description: 'Cozy, oversized hoodie perfect for layering.',
   },
   {
@@ -70,7 +70,7 @@ export const mockProducts: Product[] = [
     price: 'R478.96',
     category: 'T-SHIRTS',
     soldOut: false,
-    imageUrl: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0',
+    imageUrl: 'https://thefoschini.vtexassets.com/arquivos/ids/220278282-1200-1600?v=638926595154930000&width=1200&height=1600&aspect=true',
     description: 'Eye-catching graphic tee with urban vibes.',
   },
   {
@@ -90,18 +90,8 @@ export const mockProducts: Product[] = [
     price: 'R461.85',
     category: 'T-SHIRTS',
     soldOut: false,
-    imageUrl: 'https://images.unsplash.com/photo-1618354691551-1a5b9e99cbfb?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0',
+    imageUrl: 'https://thefoschini.vtexassets.com/arquivos/ids/222672873-1200-1600?v=639002206448400000&width=1200&height=1600&aspect=true',
     description: 'Personalized custom print tee with your style.',
-  },
-  {
-    id: '10',
-    slug: 'oversized-tee',
-    name: 'OVERSIZED TEE',
-    price: 'R513.19',
-    category: 'T-SHIRTS',
-    soldOut: false,
-    imageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0',
-    description: 'Relaxed oversized tee for a laid-back look.',
   },
   {
     id: '11',
@@ -120,19 +110,8 @@ export const mockProducts: Product[] = [
     price: 'R684.31',
     category: 'LONG SLEEVE',
     soldOut: false,
-    imageUrl: 'https://images.unsplash.com/photo-1523205771623-e0faa4d2813d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0',
+    imageUrl: 'https://thefoschini.vtexassets.com/arquivos/ids/221001971-300-400/ecebc2c9-690f-4ad7-957f-613047c83c88.png?v=638955972339230000',
     description: 'Versatile long sleeve for transitional weather.',
-  },
-
-  {
-    id: '13',
-    slug: 'vintage-hoodie',
-    name: 'VINTAGE HOODIE',
-    price: 'R729.99',
-    category: 'HOODIES',
-    soldOut: true,
-    imageUrl: 'https://images.unsplash.com/photo-1542272604-787c3835535d?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0',
-    description: 'Retro vintage hoodie with faded wash.',
   },
   {
     id: '14',
@@ -143,16 +122,6 @@ export const mockProducts: Product[] = [
     soldOut: false,
     imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0',
     description: 'Clean, minimal tee for understated style.',
-  },
-  {
-    id: '15',
-    slug: 'cargo-long-sleeve',
-    name: 'CARGO LONG SLEEVE',
-    price: 'R712.50',
-    category: 'LONG SLEEVE',
-    soldOut: false,
-    imageUrl: 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0',
-    description: 'Functional long sleeve with cargo details.',
   },
 ];
 
