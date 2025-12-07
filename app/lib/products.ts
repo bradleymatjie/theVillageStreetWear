@@ -70,7 +70,7 @@ export const mockProducts: Product[] = [
     price: 'R478.96',
     category: 'T-SHIRTS',
     soldOut: false,
-    imageUrl: 'https://thefoschini.vtexassets.com/arquivos/ids/220278282-1200-1600?v=638926595154930000&width=1200&height=1600&aspect=true',
+    imageUrl: '/leo.png',
     description: 'Eye-catching graphic tee with urban vibes.',
   },
   {

@@ -26,7 +26,7 @@ export default function Page() {
             </div>
             <div className="relative h-[300px] sm:h-[400px] lg:h-[600px] bg-gray-900 order-2 lg:order-2">
               <img 
-                src="/Bradley-Saint.png" 
+                src="/leo.png" 
                 alt="Custom T-shirt Design"
                 className="w-full h-full object-cover opacity-90"
               />

@@ -18,7 +18,7 @@ interface AuthContextType {
   loading: boolean;
 }
 
-// Add your real admin emails here (you can add as many as you want
+// Add your real admin emails here (you can add as many as you want)
 const ADMIN_EMAILS = new Set([
   'mazwi@mazwistore.com',
   'admin@mazwistore.com',
@@ -32,9 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // Check session on mount and listen for changes
   useEffect(() => {
-    // Initial session check
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user && ADMIN_EMAILS.has(session.user.email!)) {
         setUser({
@@ -46,7 +44,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(false);
     });
 
-    // Listen for auth changes
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user && ADMIN_EMAILS.has(session.user.email!)) {
         setUser({
@@ -63,42 +60,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email.trim().toLowerCase(),
-      password,
-    });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim().toLowerCase(),
+        password,
+      });
 
-    if (error || !data.user) {
-      console.error('Login failed:', error?.message);
+      if (error || !data.user) {
+        console.error('Login failed:', error?.message);
+        return false;
+      }
+
+      // Only allow if email is in the admin list
+      if (!ADMIN_EMAILS.has(data.user.email!)) {
+        console.error('Unauthorized: Email not in admin list');
+        await supabase.auth.signOut();
+        return false;
+      }
+
+      setUser({
+        id: data.user.id,
+        email: data.user.email!,
+        role: 'admin',
+      });
+
+      return true;
+    } catch (error) {
+      console.error('Login error:', error);
       return false;
     }
-
-    // Only allow if email is in the admin list
-    if (!ADMIN_EMAILS.has(data.user.email!)) {
-      await supabase.auth.signOut();
-      return false;
-    }
-
-    setUser({
-      id: data.user.id,
-      email: data.user.email!,
-      role: 'admin',
-    });
-
-    return true;
   };
 
-const logout = async () => {
-  try {
-    await supabase.auth.signOut();
-    setUser(null);
-    window.location.href = "/auth/admin-login";
-  } catch (error) {
-    console.error("Logout failed:", error);
-    setUser(null);
-    router.push("/");
-  }
-};
+  const logout = async () => {
+    try {
+      await supabase.auth.signOut();
+      setUser(null);
+      router.push('/auth/admin-login');
+      router.refresh();
+    } catch (error) {
+      console.error('Logout failed:', error);
+      setUser(null);
+      router.push('/auth/admin-login');
+    }
+  };
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>

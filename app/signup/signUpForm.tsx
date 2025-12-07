@@ -1,19 +1,15 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@supabase/supabase-js";
+import { createBrowserClient } from "@supabase/ssr";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Link from "next/link";
-import { User, Phone, Mail, Lock, ShoppingBag, AlertCircle, Eye, EyeOff } from "lucide-react";
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+import { User, Phone, Mail, Lock, AlertCircle, Eye, EyeOff } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
 
 export function SignupForm({ className, ...props }: React.ComponentProps<"div">) {
   const [name, setName] = useState("");
@@ -25,28 +21,6 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
   const [googleLoading, setGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-
-  // New: Function to create customer profile
-  const createCustomerProfile = async (userId: string, email: string, fullName?: string, phone?: string) => {
-    const { error } = await supabase
-      .from('customers')
-      .insert({
-        user_id: userId,
-        email,
-        full_name: fullName || name,  // Use provided name or form value
-        phone: phone || null,
-      })
-      .select('id')
-      .single();
-
-    if (error) {
-      console.error('Failed to create customer profile:', error);
-      // Optional: Show non-blocking error to user
-      setError(`Account created, but profile setup failed: ${error.message}. Please complete in settings.`);
-    } else {
-      console.log('Customer profile created successfully');
-    }
-  };
 
   const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,7 +62,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
     setError(null);
 
     try {
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
@@ -103,8 +77,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
         throw error;
       }
 
-      // Note: For Google, profile creation happens post-redirect in global auth listener (see below)
-      // data.session will be available after callback; use onAuthStateChange to insert.
+      // Note: For Google, profile creation happens post-redirect in auth callback
     } catch (err: unknown) {
       let errorMessage = 'An error occurred during Google sign-up. Please try again.';
       if (err instanceof Error) {
@@ -112,7 +85,6 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
       }
       setError(errorMessage);
       console.error('Google sign-up error:', err);
-    } finally {
       setGoogleLoading(false);
     }
   };
@@ -340,7 +312,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
         <Link
           href="/privacy"
           aria-label="Privacy Policy"
-          className="underline underline-offset-4 hover:text-primary transition-colors"
+          className="underline underline-offset-4 hover:text-primary transition-connections"
         >
           Privacy Policy
         </Link>

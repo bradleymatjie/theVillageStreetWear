@@ -3,7 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ExtendedUser, useUser } from '@/app/lib/user';
+import { createBrowserClient } from '@supabase/ssr';
 import { supabase } from '@/lib/supabaseClient';
+
 
 export default function AuthCallbackPage() {
   const router = useRouter();
@@ -24,96 +26,51 @@ export default function AuthCallbackPage() {
           return;
         }
 
-        // Handle PKCE flow (code in query params) - this is what email verification uses
-        const code = urlParams.get('code');
-        if (code) {
-          const { data: sessionData, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+        // Get the current session (this handles both OAuth and email verification)
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
 
-          if (exchangeError) {
-            console.error('Error exchanging code:', exchangeError);
-            setError(exchangeError.message);
-            setTimeout(() => router.push('/login?error=verification_failed'), 3000);
-            return;
-          }
-
-          // Verify the user's email is confirmed
-          if (sessionData.user && !sessionData.user.email_confirmed_at) {
-            console.error('Email not confirmed');
-            setError('Email verification incomplete. Please check your email.');
-            setTimeout(() => router.push('/login?error=email_not_confirmed'), 3000);
-            return;
-          }
-
-          // Store user in Zustand after successful authentication
-          if (sessionData.user) {
-            const extendedUser: ExtendedUser = {
-              ...sessionData.user,
-              user_metadata: {
-                email: sessionData.user.user_metadata?.email ?? sessionData.user.email ?? '',
-                email_verified: sessionData.user.user_metadata?.email_verified ?? true,
-                full_name: sessionData.user.user_metadata?.full_name ?? sessionData.user.user_metadata?.name ?? '',
-                phone: sessionData.user.user_metadata?.phone ?? '',
-                phone_verified: sessionData.user.user_metadata?.phone_verified ?? false,
-                sub: sessionData.user.user_metadata?.sub ?? '',
-              },
-            };
-
-            setUser(extendedUser);
-            console.log('✅ Email verified! User stored in Zustand:', extendedUser);
-          }
-
-          // Successfully authenticated and verified
-          router.push('/products');
-          router.refresh();
+        if (sessionError) {
+          console.error('Session error:', sessionError);
+          setError(sessionError.message);
+          setTimeout(() => router.push('/login?error=session_failed'), 3000);
           return;
         }
 
-        // Handle hash fragment (implicit flow) - for OAuth providers like Google
-        const hashParams = new URLSearchParams(window.location.hash.substring(1));
-        const accessToken = hashParams.get('access_token');
-        const refreshToken = hashParams.get('refresh_token');
-
-        if (accessToken) {
-          const { data: sessionData, error: sessionError } = await supabase.auth.setSession({
-            access_token: accessToken,
-            refresh_token: refreshToken || '',
-          });
-
-          if (sessionError) {
-            console.error('Error setting session:', sessionError);
-            setError(sessionError.message);
-            setTimeout(() => router.push('/login?error=verification_failed'), 3000);
-            return;
-          }
-
-          // Store user in Zustand after successful authentication
-          if (sessionData.user) {
-            const extendedUser: ExtendedUser = {
-              ...sessionData.user,
-              user_metadata: {
-                email: sessionData.user.user_metadata?.email ?? sessionData.user.email ?? '',
-                email_verified: sessionData.user.user_metadata?.email_verified ?? true,
-                full_name: sessionData.user.user_metadata?.full_name ?? sessionData.user.user_metadata?.name ?? '',
-                phone: sessionData.user.user_metadata?.phone ?? '',
-                phone_verified: sessionData.user.user_metadata?.phone_verified ?? false,
-                sub: sessionData.user.user_metadata?.sub ?? '',
-              },
-            };
-
-            setUser(extendedUser);
-            console.log('✅ OAuth verified! User stored in Zustand:', extendedUser);
-          }
-
-          // Successfully authenticated
-          router.push('/products');
-          router.refresh();
+        if (!session) {
+          console.error('No session found');
+          setError('No active session found');
+          setTimeout(() => router.push('/login'), 3000);
           return;
         }
 
-        // No authentication data found
-        console.error('No authentication data found in callback');
-        setError('No authentication data received');
-        setTimeout(() => router.push('/login'), 3000);
+        // Verify the user's email is confirmed (for email signups)
+        if (session.user && !session.user.email_confirmed_at) {
+          console.error('Email not confirmed');
+          setError('Email verification incomplete. Please check your email.');
+          setTimeout(() => router.push('/login?error=email_not_confirmed'), 3000);
+          return;
+        }
+
+        // Store user in Zustand after successful authentication
+        if (session.user) {
+          const extendedUser: ExtendedUser = {
+            ...session.user,
+            user_metadata: {
+              email: session.user.user_metadata?.email ?? session.user.email ?? '',
+              email_verified: session.user.user_metadata?.email_verified ?? true,
+              full_name: session.user.user_metadata?.full_name ?? session.user.user_metadata?.name ?? '',
+              phone: session.user.user_metadata?.phone ?? '',
+              phone_verified: session.user.user_metadata?.phone_verified ?? false,
+              sub: session.user.user_metadata?.sub ?? '',
+            },
+          };
+
+          setUser(extendedUser);
+        }
+
+        // Successfully authenticated and verified
+        router.push('/products');
+        router.refresh();
       } catch (err) {
         console.error('Unexpected error in auth callback:', err);
         setError('An unexpected error occurred');
@@ -157,8 +114,8 @@ export default function AuthCallbackPage() {
                 />
               </svg>
             </div>
-            <div className="text-lg font-semibold">Verifying your email...</div>
-            <p className="text-sm text-gray-500">Please wait while we complete your registration</p>
+            <div className="text-lg font-semibold">Completing authentication...</div>
+            <p className="text-sm text-gray-500">Please wait while we log you in</p>
           </>
         )}
       </div>

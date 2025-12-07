@@ -21,7 +21,6 @@ interface ProductPageProps {
 
 export default async function ProductPage({ params }: ProductPageProps) { // Made async to await params
   const { id } = await params; // Unwrap the Promise
-  console.log("product id", id); // Updated log to use unwrapped id
   
   const product: Product | undefined = getProductById(id);
   if (!product) {

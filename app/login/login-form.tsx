@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@supabase/supabase-js';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,17 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import Link from 'next/link';
 import { ExtendedUser, useUser } from '../lib/user';
-import { Mail, Lock, ShoppingBag, AlertCircle, Eye, EyeOff } from 'lucide-react';
-
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
-}
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+import { Mail, Lock, AlertCircle, Eye, EyeOff } from 'lucide-react';
+import { supabase } from '@/lib/supabaseClient';
 
 export function LoginForm({
   className,
@@ -56,7 +46,6 @@ export function LoginForm({
       });
 
       if (authError) {
-        // Handle specific Supabase errors for better UX
         let errorMessage = 'An unexpected error occurred. Please try again.';
         if (authError.message.includes('Invalid login credentials')) {
           errorMessage = 'Invalid email or password. Please try again.';
@@ -92,8 +81,10 @@ export function LoginForm({
       // Clear form and redirect
       setEmail('');
       setPassword('');
-      router.push('/products');
+      
+      // IMPORTANT: Refresh to update middleware cookies
       router.refresh();
+      router.push('/products');
     } catch (err: unknown) {
       let errorMessage = 'An error occurred during login. Please try again.';
       if (err instanceof Error) {
@@ -140,7 +131,6 @@ export function LoginForm({
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <form onSubmit={handleLogin} aria-busy={loading || googleLoading}>
         <div className="flex flex-col gap-6">
-          {/* Header with Icon */}
           <div className="text-center space-y-3">
             <div>
               <p className="text-sm text-muted-foreground mt-1">
@@ -166,7 +156,6 @@ export function LoginForm({
           )}
 
           <div className="flex flex-col gap-4">
-            {/* Email Input with Icon */}
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="email" className="text-sm font-medium">Email</Label>
               <div className="relative">
@@ -187,16 +176,9 @@ export function LoginForm({
               </div>
             </div>
 
-            {/* Password Input with Icons */}
             <div className="flex flex-col space-y-1.5">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password" className="text-sm font-medium">Password</Label>
-                {/* <Link 
-                  href="/forgot-password" 
-                  className="text-xs text-muted-foreground hover:text-primary underline underline-offset-4 transition-colors"
-                >
-                  Forgot password?
-                </Link> */}
               </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -268,7 +250,6 @@ export function LoginForm({
               <span className="bg-background px-2 text-muted-foreground">Or</span>
             </div>
           </div>
-                 {/* Google Sign-In Button */}
           <div className="flex flex-col gap-4">
             <Button
               type="button"
