@@ -1,9 +1,9 @@
 "use client";
 
+import { useCartStore } from "@/app/lib/cartStore";
 import { X, Minus, Plus, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useCartStore } from "@/app/lib/cartStore";
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -61,7 +61,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
             ) : (
               <div className="space-y-4">
                 {items.map((item) => (
-                  <div key={item.id} className="flex gap-3 pb-4 border-b border-gray-200">
+                  <div key={item.cartItemId} className="flex gap-3 pb-4 border-b border-gray-200">
                     {/* Product Image */}
                     <div className="relative w-20 h-20 flex-shrink-0 rounded-md overflow-hidden border border-gray-200">
                       <Image
@@ -80,10 +80,15 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                       </h3>
                       <p className="text-sm text-gray-600 mt-1">{item.price}</p>
 
+                      {/* Variant */}
+                      <p className="text-xs text-gray-500 mt-1">
+                        Size: {item.selectedSize} • Material: {item.selectedMaterial}
+                      </p>
+
                       {/* Quantity Controls */}
                       <div className="flex items-center gap-2 mt-2">
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.cartItemId, item.quantity - 1)}
                           className="p-1 hover:bg-gray-100 rounded transition-colors"
                           disabled={item.quantity <= 1}
                         >
@@ -93,7 +98,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                           {item.quantity}
                         </span>
                         <button
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.cartItemId, item.quantity + 1)}
                           className="p-1 hover:bg-gray-100 rounded transition-colors"
                         >
                           <Plus className="w-3 h-3 text-gray-600" />
@@ -103,7 +108,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
 
                     {/* Remove Button */}
                     <button
-                      onClick={() => removeItem(item.id)}
+                      onClick={() => removeItem(item.cartItemId)}
                       className="p-2 hover:bg-red-50 rounded transition-colors self-start"
                     >
                       <Trash2 className="w-4 h-4 text-red-600" />
@@ -111,20 +116,18 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                   </div>
                 ))}
 
-                {/* Clear Cart Button */}
-                {items.length > 0 && (
-                  <button
-                    onClick={clearCart}
-                    className="w-full py-2 text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
-                  >
-                    Clear Cart
-                  </button>
-                )}
+                {/* Clear Cart */}
+                <button
+                  onClick={clearCart}
+                  className="w-full py-2 text-sm text-red-600 hover:text-red-700 font-medium transition-colors"
+                >
+                  Clear Cart
+                </button>
               </div>
             )}
           </div>
 
-          {/* Footer with Total and Checkout */}
+          {/* Footer */}
           {items.length > 0 && (
             <div className="border-t border-gray-200 p-4 space-y-3">
               <div className="flex items-center justify-between">
