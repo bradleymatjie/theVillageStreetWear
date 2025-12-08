@@ -12,6 +12,7 @@ interface ProductFiltersProps {
 export default function ProductFilters({ onProductsChange }: ProductFiltersProps) {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const categories = ['all', 'T-Shirts', 'Hoodies', 'long sleeve'] as const;
+  
   const categoryLabels: Record<typeof categories[number], string> = {
     all: 'All',
     'T-Shirts': 'T-Shirts',
@@ -21,7 +22,7 @@ export default function ProductFilters({ onProductsChange }: ProductFiltersProps
 
   const filteredProducts = selectedCategory === 'all'
     ? mockProducts
-    : mockProducts.filter((p: Product) => p.category.toLowerCase() === selectedCategory.toLowerCase());
+    : mockProducts.filter((p: Product) => p.category?.toLowerCase() === selectedCategory.toLowerCase());
 
   // Notify parent when filtered products change
   useEffect(() => {
