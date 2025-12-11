@@ -70,7 +70,7 @@ export default function Page() {
                 />
                 <div className="absolute bottom-6 sm:bottom-8 left-6 sm:left-8">
                   <h3 className="text-white text-2xl sm:text-3xl font-black mb-1 sm:mb-2">COLLECTION</h3>
-                  <p className="text-white text-lg sm:text-xl font-bold">X BOX ONE (BLACK)</p>
+                  <p className="text-white text-lg sm:text-xl font-bold">100% COTTON</p>
                   <button className="mt-3 sm:mt-4 flex items-center gap-2 text-white text-sm sm:text-base font-bold hover:underline">
                     SEE MORE <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
                   </button>
