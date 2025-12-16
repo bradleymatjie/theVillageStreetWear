@@ -34,8 +34,8 @@ export default function Header() {
           
           {/* Desktop Nav */}
           <nav className="hidden lg:flex gap-4 xl:gap-8">
-            <Link href="#" className="text-sm font-semibold text-gray-700 hover:text-gray-900 hover:underline transition-colors">
-              NEW DROP
+            <Link href="contact" className="text-sm font-semibold text-gray-700 hover:text-gray-900 hover:underline transition-colors">
+              CONTACT US
             </Link>
             <Link href="/products" className="text-sm font-semibold text-gray-700 hover:text-gray-900 hover:underline transition-colors">
               CATALOG

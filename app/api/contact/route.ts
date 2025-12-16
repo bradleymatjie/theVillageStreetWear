@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     // Send email using Resend
     const data = await resend.emails.send({
-      from: 'The Village Contact <onboarding@resend.dev>', // You'll need to update this with your verified domain
+      from: 'contactus@thevillagestreetwear.com', // You'll need to update this with your verified domain
       to: 'bradleysaint45@gmail.com',
       replyTo: email,
       subject: `Contact Form: ${subject}`,
