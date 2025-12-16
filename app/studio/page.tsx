@@ -1,6 +1,7 @@
 "use client"
 import { useState, useRef, useCallback, useMemo, useEffect } from 'react';
 import { Upload, Type, Palette, Download, RotateCcw, Trash2, AlignLeft, AlignCenter, AlignRight, Bold, Italic, Shirt, GripVertical } from 'lucide-react';
+import useDesignStore from '../lib/useDesignStore';
 
 interface BaseElement {
   id: number;
@@ -40,7 +41,37 @@ interface TShirtColor {
   backImage: string;
 }
 
+interface SavedDesign {
+  id: number;
+  name: string;
+  elements: { front: Element[]; back: Element[] };
+  tshirtColor: string;
+  createdAt: string;
+}
+
+interface CartItem {
+  id: number;
+  name: string;
+  elements: { front: Element[]; back: Element[] };
+  tshirtColor: string;
+  price: number;
+  addedAt: string;
+}
+
+interface DesignStore {
+  savedDesigns: SavedDesign[];
+  cart: CartItem[];
+  addDesign: (design: SavedDesign) => void;
+  removeDesign: (id: number) => void;
+  addToCart: (item: CartItem) => void;
+  removeFromCart: (id: number) => void;
+  clearCart: () => void;
+}
+
+
 export default function DesignStudio() {
+  const { savedDesigns, cart, addDesign, removeDesign, addToCart, removeFromCart } = useDesignStore();
+  
   const [selectedTool, setSelectedTool] = useState<string>('upload');
   const [view, setView] = useState<'front' | 'back'>('front');
   const [elements, setElements] = useState<{ front: Element[]; back: Element[] }>({
@@ -61,6 +92,11 @@ export default function DesignStudio() {
   const [isResizing, setIsResizing] = useState<boolean>(false);
   const [resizeAnchor, setResizeAnchor] = useState<'nw' | 'ne' | 'sw' | 'se' | null>(null);
   const [resizeStart, setResizeStart] = useState<{ startX: number; startY: number; width: number; height: number; elementX: number; elementY: number; } | null>(null);
+  const [showSaveModal, setShowSaveModal] = useState<boolean>(false);
+  const [showCartModal, setShowCartModal] = useState<boolean>(false);
+  const [designName, setDesignName] = useState<string>('');
+  const [saveMessage, setSaveMessage] = useState<string>('');
+  const [cartMessage, setCartMessage] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const designAreaRef = useRef<HTMLDivElement>(null);
@@ -136,6 +172,52 @@ export default function DesignStudio() {
   useEffect(() => {
     setSelectedElement(null);
   }, [view]);
+
+  const saveDesign = () => {
+    if (!designName.trim()) {
+      setSaveMessage('Please enter a design name');
+      return;
+    }
+
+    const design: SavedDesign = {
+      id: Date.now(),
+      name: designName,
+      elements,
+      tshirtColor,
+      createdAt: new Date().toISOString(),
+    };
+
+    addDesign(design);
+    setSaveMessage('Design saved successfully!');
+    setDesignName('');
+    setTimeout(() => {
+      setShowSaveModal(false);
+      setSaveMessage('');
+    }, 1500);
+  };
+
+  const handleAddToCart = () => {
+    const cartItem: CartItem = {
+      id: Date.now(),
+      name: `Custom T-Shirt Design`,
+      elements,
+      tshirtColor,
+      price: 29.99,
+      addedAt: new Date().toISOString(),
+    };
+
+    addToCart(cartItem);
+    setCartMessage('Added to cart!');
+    setTimeout(() => {
+      setCartMessage('');
+    }, 2000);
+  };
+
+  const loadDesign = (design: SavedDesign) => {
+    setElements(design.elements);
+    setTshirtColor(design.tshirtColor);
+    setShowSaveModal(false);
+  };
 
   const handleLayerDragStart = useCallback((e: React.DragEvent, id: number) => {
     setDraggedElementId(id);
@@ -565,11 +647,28 @@ export default function DesignStudio() {
             <span className="text-xs sm:text-sm text-gray-400">Design Studio</span>
           </div>
           <div className="flex gap-2 sm:gap-4">
-            <button className="px-3 sm:px-4 py-2 border border-white text-xs sm:text-sm font-bold hover:bg-white hover:text-black transition-colors">
+            <button 
+              onClick={() => setShowSaveModal(true)}
+              className="px-3 sm:px-4 py-2 border border-white text-xs sm:text-sm font-bold hover:bg-white hover:text-black transition-colors"
+            >
               SAVE
             </button>
-            <button className="px-3 sm:px-4 py-2 bg-white text-black text-xs sm:text-sm font-bold hover:bg-gray-200 transition-colors">
+            <button 
+              onClick={handleAddToCart}
+              className="px-3 sm:px-4 py-2 bg-white text-black text-xs sm:text-sm font-bold hover:bg-gray-200 transition-colors relative"
+            >
               ORDER NOW
+              {cart.length > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {cart.length}
+                </span>
+              )}
+            </button>
+            <button 
+              onClick={() => setShowCartModal(true)}
+              className="px-3 sm:px-4 py-2 border border-white text-xs sm:text-sm font-bold hover:bg-white hover:text-black transition-colors"
+            >
+              CART ({cart.length})
             </button>
           </div>
         </div>
@@ -980,6 +1079,142 @@ export default function DesignStudio() {
           )}
         </div>
       </div>
+
+      {/* Save Modal */}
+      {showSaveModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-black mb-4">Save Design</h2>
+            {saveMessage && (
+              <div className={`mb-4 p-3 rounded ${saveMessage.includes('successfully') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                {saveMessage}
+              </div>
+            )}
+            <div className="mb-4">
+              <label className="text-sm font-bold block mb-2">Design Name</label>
+              <input
+                type="text"
+                value={designName}
+                onChange={(e) => setDesignName(e.target.value)}
+                placeholder="Enter design name"
+                className="w-full px-3 py-2 border border-gray-300 rounded"
+              />
+            </div>
+            <div className="flex gap-2">
+              <button
+                onClick={saveDesign}
+                className="flex-1 bg-black text-white py-2 rounded font-bold hover:bg-gray-800 transition-colors"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => {
+                  setShowSaveModal(false);
+                  setSaveMessage('');
+                  setDesignName('');
+                }}
+                className="flex-1 border border-gray-300 py-2 rounded font-bold hover:bg-gray-100 transition-colors"
+              >
+                Cancel
+              </button>
+            </div>
+
+            {savedDesigns.length > 0 && (
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <h3 className="text-sm font-black mb-3">Saved Designs ({savedDesigns.length})</h3>
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {savedDesigns.map((design) => (
+                    <div key={design.id} className="flex items-center justify-between p-3 border border-gray-200 rounded hover:bg-gray-50">
+                      <div className="flex-1">
+                        <p className="font-bold text-sm">{design.name}</p>
+                        <p className="text-xs text-gray-500">
+                          {new Date(design.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => loadDesign(design)}
+                          className="px-3 py-1 bg-black text-white text-xs font-bold rounded hover:bg-gray-800"
+                        >
+                          Load
+                        </button>
+                        <button
+                          onClick={() => removeDesign(design.id)}
+                          className="px-3 py-1 bg-red-500 text-white text-xs font-bold rounded hover:bg-red-600"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Cart Modal */}
+      {showCartModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <h2 className="text-xl font-black mb-4">Shopping Cart</h2>
+            {cart.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">Your cart is empty</p>
+            ) : (
+              <>
+                <div className="space-y-4 mb-6">
+                  {cart.map((item) => (
+                    <div key={item.id} className="flex items-start gap-4 p-4 border border-gray-200 rounded">
+                      <div className="w-20 h-20 bg-gray-100 rounded flex items-center justify-center flex-shrink-0">
+                        <Shirt className="w-10 h-10 text-gray-400" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-bold">{item.name}</h3>
+                        <p className="text-sm text-gray-600">Color: {item.tshirtColor}</p>
+                        <p className="text-sm text-gray-600">
+                          Elements: {item.elements.front.length + item.elements.back.length}
+                        </p>
+                        <p className="font-bold mt-2">${item.price.toFixed(2)}</p>
+                      </div>
+                      <button
+                        onClick={() => removeFromCart(item.id)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+                <div className="border-t border-gray-200 pt-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <span className="text-lg font-black">Total:</span>
+                    <span className="text-2xl font-black">
+                      ${cart.reduce((sum, item) => sum + item.price, 0).toFixed(2)}
+                    </span>
+                  </div>
+                  <button className="w-full bg-black text-white py-3 rounded font-bold hover:bg-gray-800 transition-colors">
+                    Proceed to Checkout
+                  </button>
+                </div>
+              </>
+            )}
+            <button
+              onClick={() => setShowCartModal(false)}
+              className="w-full mt-4 border border-gray-300 py-2 rounded font-bold hover:bg-gray-100 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Cart Success Message */}
+      {cartMessage && (
+        <div className="fixed top-20 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 animate-fade-in">
+          {cartMessage}
+        </div>
+      )}
     </div>
   );
 }

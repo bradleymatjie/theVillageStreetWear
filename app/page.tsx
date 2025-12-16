@@ -1,5 +1,8 @@
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import Catalog from './components/catalog/page';
+import { Suspense } from 'react';
+import CatalogLoading from './components/catalog/loading';
 
 export default function Page() {
 
@@ -23,8 +26,8 @@ export default function Page() {
               </Link>
             </div>
             <div className="relative h-[300px] sm:h-[400px] lg:h-[600px] bg-gray-900 order-2 lg:order-2">
-              <img 
-                src="/leo.png" 
+              <img
+                src="/leo.png"
                 alt="Custom T-shirt Design"
                 className="w-full h-full object-cover opacity-90"
               />
@@ -32,13 +35,16 @@ export default function Page() {
           </div>
         </div>
       </section>
+      <Suspense fallback={<CatalogLoading />}>
+        <Catalog />
+      </Suspense>
 
       <section className="bg-black text-white py-12 sm:py-16 lg:py-20 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-center">
             <div className="relative h-[300px] sm:h-[400px] lg:h-[500px] order-2 lg:order-1">
-              <img 
-                src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&h=500&fit=crop" 
+              <img
+                src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&h=500&fit=crop"
                 alt="Featured Design"
                 className="w-full h-full object-cover"
               />
@@ -63,8 +69,8 @@ export default function Page() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
             <div className="group cursor-pointer">
               <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] bg-gray-100 overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1622445275463-afa2ab738c34?w=600&h=400&fit=crop" 
+                <img
+                  src="https://images.unsplash.com/photo-1622445275463-afa2ab738c34?w=600&h=400&fit=crop"
                   alt="Collection 1"
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform"
                 />
@@ -79,8 +85,8 @@ export default function Page() {
             </div>
             <div className="group cursor-pointer">
               <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] bg-gray-100 overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                <img
+                  src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                   alt="Collection 2"
                   className="w-full h-full object-cover transform group-hover:scale-105 transition-transform"
                 />
