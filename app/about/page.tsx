@@ -164,7 +164,7 @@ export default function AboutPage() {
       </section>
 
       {/* Founder Section */}
-      <section className="py-20 px-4 sm:px-6 border-t border-white/10">
+      {/* <section className="py-20 px-4 sm:px-6 border-t border-white/10">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-5xl font-black mb-4 uppercase tracking-tight">
@@ -195,7 +195,7 @@ export default function AboutPage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Contact CTA Section */}
       <section className="py-20 px-4 sm:px-6 bg-white text-black">

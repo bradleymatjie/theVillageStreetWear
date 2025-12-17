@@ -14,6 +14,7 @@ export interface Product {
     category?: string;
     soldOut?: boolean;
     imageurl: string;
+    images: string[];
     description?: string;
     availableSizes: string[];
     availableMaterials: string[];

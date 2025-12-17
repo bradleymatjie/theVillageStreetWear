@@ -1,5 +1,3 @@
-// components/ProductCard.tsx
-
 'use client';
 
 import Link from 'next/link';
@@ -15,6 +13,7 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, className = '' }: ProductCardProps) {
+ 
   const addItem = useCartStore((state) => state.addItem);
   const [isAdded, setIsAdded] = useState(false);
 
@@ -27,20 +26,19 @@ export default function ProductCard({ product, className = '' }: ProductCardProp
     const defaultMaterial = product.availableMaterials?.[0] || 'Cotton';
 
     addItem(product, defaultSize, defaultMaterial);
-
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
   };
 
-  // Handle both database fields (imageurl) and mock data (imageUrl)
-  const imageUrl = product.imageurl || '/placeholder-product.jpg';
-  debugger;
-  
-  // Handle both database fields (soldout) and mock data (soldOut)
-  const isSoldOut = product.soldOut ?? product.soldOut ?? false;
+  // Prioritize images array (full gallery), fallback to single imageurl
+  const primaryImage = product.imageurl;
+  const extraImages = product.images?? [];
 
-  // Format price - handle both string and number
-  const formattedPrice = typeof product.price === 'string' 
+  // Handle sold out (database uses lowercase soldout)
+  const isSoldOut = product.soldOut ?? false;
+
+  // Format price
+  const formattedPrice = typeof product.price === 'string'
     ? product.price.startsWith('R') ? product.price : `R${product.price}`
     : `R${product.price}`;
 
@@ -50,40 +48,68 @@ export default function ProductCard({ product, className = '' }: ProductCardProp
         
         {/* SOLD OUT BADGE */}
         {isSoldOut && (
-          <div className="absolute top-2 left-2 z-10 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+          <div className="absolute top-2 left-2 z-20 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
             SOLD OUT
           </div>
         )}
 
-        {/* IMAGE */}
-        <div className="aspect-square relative">
+        {/* IMAGE CONTAINER */}
+        <div className="aspect-square relative overflow-hidden">
           <Image
-            src={imageUrl}
+            src={primaryImage}
             alt={product.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
           />
+
+          {/* EXTRA IMAGES THUMBNAILS (overlay on bottom) */}
+          {extraImages.length > 0 && (
+            <>
+              {/* Gradient overlay for readability */}
+              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
+
+              {/* Thumbnails */}
+              <div className="absolute inset-x-0 bottom-3 flex justify-center gap-2 px-4">
+                <div className="flex gap-2">
+                  {extraImages.slice(0, 5).map((url, i) => (
+                    <div
+                      key={i}
+                      className="w-12 h-12 rounded-md overflow-hidden border border-white/40 shadow-md flex-shrink-0"
+                    >
+                      <Image
+                        src={url}
+                        alt={`${product.name} view ${i + 2}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+                  {extraImages.length > 5 && (
+                    <div className="w-12 h-12 rounded-md bg-black/70 flex items-center justify-center text-xs font-bold border border-white/40 flex-shrink-0">
+                      +{extraImages.length - 5}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         {/* DETAILS */}
         <div className="p-3 sm:p-4 space-y-2">
-
           <h3 className="font-bold text-white text-xs sm:text-sm leading-tight">
             {product.name}
           </h3>
-
           {product.category && (
             <p className="text-gray-400 text-xs uppercase tracking-wide">
               {product.category}
             </p>
           )}
-
           <div className="flex justify-between items-end pt-1">
             <p className="text-white font-bold text-lg sm:text-xl leading-none">
               {formattedPrice}
             </p>
-
             {!isSoldOut && (
               <button
                 onClick={(e) => handleAddToCart(e, product)}

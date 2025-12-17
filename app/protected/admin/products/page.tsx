@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus, Pencil, Trash, Image as ImageIcon, LogIn, LogOut, X } from "lucide-react";
+import { Plus, Trash, Image as ImageIcon, LogIn, LogOut, X, Pencil } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import {
   Sheet,
@@ -23,8 +22,9 @@ interface Product {
   name: string;
   price: string;
   category?: string;
-  soldout: boolean;
+  soldout?: boolean;
   imageurl?: string;
+  images?: string[];
   description?: string;
   availablesizes?: string[];
   availablematerials?: string[];
@@ -32,11 +32,17 @@ interface Product {
   updated_at?: string;
 }
 
+type ImageItem = {
+  url: string; // public URL or blob preview
+  file?: File;
+};
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [mainImage, setMainImage] = useState<ImageItem | null>(null);
+  const [additionalImages, setAdditionalImages] = useState<ImageItem[]>([]);
   const [user, setUser] = useState<any>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
@@ -52,10 +58,9 @@ export default function ProductsPage() {
     description: "",
     sizes: "",
     materials: "",
-    image: null as File | null,
   });
 
-  // Auth: Check user and admin status
+  // Auth logic (unchanged)
   useEffect(() => {
     const checkAuth = async () => {
       const { data: { session } } = await supabase.auth.getSession();
@@ -90,7 +95,6 @@ export default function ProductsPage() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Login
   const handleLogin = async () => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email: loginForm.email,
@@ -100,7 +104,6 @@ export default function ProductsPage() {
     else setLoginForm({ email: "", password: "" });
   };
 
-  // Logout
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setIsAdmin(false);
@@ -120,47 +123,84 @@ export default function ProductsPage() {
     if (isAdmin) fetchProducts();
   }, [isAdmin]);
 
-  // Handle input change
+  // Form handlers
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const target = e.target as HTMLInputElement;
-    const { name, value, type, checked, files } = target;
-    if (name === "image" && files && files[0]) {
-      setForm({ ...form, image: files[0] });
-      if (imagePreview) URL.revokeObjectURL(imagePreview);
-      const previewUrl = URL.createObjectURL(files[0]);
-      setImagePreview(previewUrl);
-    } else if (type === "checkbox") {
+    const { name, value, type, checked } = e.target as HTMLInputElement;
+    if (type === "checkbox") {
       setForm({ ...form, [name]: checked });
     } else {
       setForm({ ...form, [name]: value });
     }
   };
 
-  // Cleanup image preview
-  useEffect(() => {
-    return () => {
-      if (imagePreview) URL.revokeObjectURL(imagePreview);
-    };
-  }, [imagePreview]);
+  // Main image handler
+  const handleMainImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const preview = URL.createObjectURL(file);
+      setMainImage({ file, url: preview });
+    }
+  };
+
+  const removeMainImage = () => {
+    if (mainImage?.url.startsWith("blob:")) {
+      URL.revokeObjectURL(mainImage.url);
+    }
+    setMainImage(null);
+  };
+
+  // Additional images handler
+  const handleAdditionalImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+    const newItems: ImageItem[] = Array.from(files).map((file) => ({
+      file,
+      url: URL.createObjectURL(file),
+    }));
+    setAdditionalImages((prev) => [...prev, ...newItems]);
+  };
+
+  const removeAdditionalImage = (index: number) => {
+    const item = additionalImages[index];
+    if (item.url.startsWith("blob:")) {
+      URL.revokeObjectURL(item.url);
+    }
+    setAdditionalImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Cleanup previews
+  const cleanupPreviews = () => {
+    if (mainImage?.url.startsWith("blob:")) {
+      URL.revokeObjectURL(mainImage.url);
+    }
+    additionalImages.forEach((item) => {
+      if (item.url.startsWith("blob:")) {
+        URL.revokeObjectURL(item.url);
+      }
+    });
+  };
 
   // Generate slug
   const generateSlug = (name: string) =>
     name.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
 
-  // Upload image
+  // Upload single image
   const uploadImage = async (file: File, productId: string) => {
-    const filePath = `products/${productId}-${Date.now()}-${file.name}`;
-    const { data, error } = await supabase.storage
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 10)}.${fileExt}`;
+    const filePath = `products/${productId}/${fileName}`;
+
+    const { error } = await supabase.storage
       .from("thevillageProductsBucket")
       .upload(filePath, file, { upsert: true });
 
     if (error) throw error;
 
-    const { data: urlData } = supabase.storage
+    const { data: { publicUrl } } = supabase.storage
       .from("thevillageProductsBucket")
-      .getPublicUrl(data.path);
+      .getPublicUrl(filePath);
 
-    return urlData.publicUrl;
+    return publicUrl;
   };
 
   // Submit product
@@ -171,14 +211,31 @@ export default function ProductsPage() {
 
     try {
       const productId = editingProduct?.id || crypto.randomUUID();
-      let imageUrl = editingProduct?.imageurl || "";
 
-      if (form.image) {
-        imageUrl = await uploadImage(form.image, productId);
+      // Determine main URL
+      let mainUrl = editingProduct?.imageurl ?? "";
+      if (mainImage?.file) {
+        mainUrl = await uploadImage(mainImage.file, productId);
       }
 
-      const sizesArray = form.sizes ? form.sizes.split(',').map(s => s.trim()).filter(Boolean) : [];
-      const materialsArray = form.materials ? form.materials.split(',').map(m => m.trim()).filter(Boolean) : [];
+      // Existing additional URLs (non-new)
+      const existingAdditional = additionalImages
+        .filter((img) => !img.file)
+        .map((img) => img.url);
+
+      // Upload new additional images
+      const newAdditionalFiles = additionalImages.filter((img) => img.file);
+      const newAdditionalUrls = newAdditionalFiles.length > 0
+        ? await Promise.all(newAdditionalFiles.map((img) => uploadImage(img.file!, productId)))
+        : [];
+
+      // Build final arrays
+      const finalAdditionalUrls = [...existingAdditional, ...newAdditionalUrls];
+      const finalImages = mainUrl ? [mainUrl, ...finalAdditionalUrls] : finalAdditionalUrls;
+      const finalMainUrl = finalImages[0] ?? null;
+
+      const sizesArray = form.sizes ? form.sizes.split(',').map(s => s.trim()).filter(Boolean) : null;
+      const materialsArray = form.materials ? form.materials.split(',').map(m => m.trim()).filter(Boolean) : null;
 
       const payload = {
         id: productId,
@@ -188,9 +245,10 @@ export default function ProductsPage() {
         category: form.category || null,
         soldout: form.soldout,
         description: form.description || null,
-        imageurl: imageUrl || null,
-        availablesizes: sizesArray.length ? sizesArray : null,
-        availablematerials: materialsArray.length ? materialsArray : null,
+        imageurl: finalMainUrl,
+        images: finalImages.length > 0 ? finalImages : null,
+        availablesizes: sizesArray,
+        availablematerials: materialsArray,
       };
 
       if (editingProduct) {
@@ -206,29 +264,39 @@ export default function ProductsPage() {
         if (insertError) throw insertError;
       }
 
-      setForm({
-        name: "",
-        price: "",
-        category: "",
-        soldout: false,
-        description: "",
-        sizes: "",
-        materials: "",
-        image: null,
-      });
-      setImagePreview(null);
-      setEditingProduct(null);
-      setDrawerOpen(false);
+      cleanupPreviews();
+      resetForm();
       await fetchProducts();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error submitting product:", error);
-      alert("Failed to submit product. Check console for details.");
+      alert("Failed to submit product: " + (error.message || error));
     } finally {
       setLoading(false);
     }
   };
 
-  // Delete product
+  const resetForm = () => {
+    setForm({
+      name: "",
+      price: "",
+      category: "",
+      soldout: false,
+      description: "",
+      sizes: "",
+      materials: "",
+    });
+    setMainImage(null);
+    setAdditionalImages([]);
+    setEditingProduct(null);
+    setDrawerOpen(false);
+  };
+
+  const handleCloseDrawer = () => {
+    cleanupPreviews();
+    resetForm();
+  };
+
+  // Delete product (unchanged)
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
     const { error } = await supabase.from("thevillageproducts").delete().eq("id", id);
@@ -247,17 +315,21 @@ export default function ProductsPage() {
       name: product.name,
       price: product.price,
       category: product.category || "",
-      soldout: product.soldout,
+      soldout: product.soldout ?? false,
       description: product.description || "",
       sizes: product.availablesizes?.join(', ') || "",
       materials: product.availablematerials?.join(', ') || "",
-      image: null,
     });
-    setImagePreview(null);
+
+    // Load images – prioritize `images` array, fallback to `imageurl`
+    const allImages = product.images ?? (product.imageurl ? [product.imageurl] : []);
+    setMainImage(allImages[0] ? { url: allImages[0] } : null);
+    setAdditionalImages(allImages.slice(1).map(url => ({ url })));
+
     setDrawerOpen(true);
   };
 
-  // Open drawer for new product
+  // Add new
   const handleAddNew = () => {
     setEditingProduct(null);
     setForm({
@@ -268,35 +340,16 @@ export default function ProductsPage() {
       description: "",
       sizes: "",
       materials: "",
-      image: null,
     });
-    setImagePreview(null);
+    setMainImage(null);
+    setAdditionalImages([]);
     setDrawerOpen(true);
   };
 
-  // Close drawer
-  const handleCloseDrawer = () => {
-    setDrawerOpen(false);
-    setEditingProduct(null);
-    setForm({
-      name: "",
-      price: "",
-      category: "",
-      soldout: false,
-      description: "",
-      sizes: "",
-      materials: "",
-      image: null,
-    });
-    if (imagePreview) {
-      URL.revokeObjectURL(imagePreview);
-      setImagePreview(null);
-    }
-  };
-
-  // Guards
+  // Auth guards (unchanged)
   if (authLoading) return <div className="flex justify-center items-center h-screen bg-black text-white">Loading...</div>;
   if (!user) {
+    // ... login form unchanged
     return (
       <div className="min-h-screen bg-black text-white p-8 flex flex-col items-center justify-center">
         <h1 className="text-2xl mb-4 uppercase tracking-widest">ADMIN ACCESS REQUIRED</h1>
@@ -323,6 +376,7 @@ export default function ProductsPage() {
     );
   }
   if (!isAdmin) {
+    // ... denied unchanged
     return (
       <div className="min-h-screen bg-black text-white p-8 flex flex-col items-center justify-center">
         <h1 className="text-2xl mb-4 uppercase tracking-widest">ADMIN ACCESS DENIED</h1>
@@ -334,10 +388,9 @@ export default function ProductsPage() {
     );
   }
 
-  // Admin UI
   return (
     <div className="min-h-screen bg-black text-white p-4 md:p-8">
-      {/* Header */}
+      {/* Header (unchanged) */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-wider">
@@ -358,7 +411,7 @@ export default function ProductsPage() {
         </div>
       </div>
 
-      {/* Product Grid */}
+      {/* Product Grid – updated to use images[0] ?? imageurl */}
       <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
         {loading ? (
           <div className="text-center text-gray-400 py-12">Loading products...</div>
@@ -373,68 +426,71 @@ export default function ProductsPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="group bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden hover:border-gray-600 transition-all"
-              >
-                <div className="relative aspect-square bg-gray-900">
-                  {product.imageurl ? (
-                    <img
-                      src={product.imageurl}
-                      alt={product.name}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <ImageIcon size={48} className="text-gray-700" />
+            {products.map((product) => {
+              const primaryImage = product.images?.[0] ?? product.imageurl;
+              return (
+                <div
+                  key={product.id}
+                  className="group bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden hover:border-gray-600 transition-all"
+                >
+                  <div className="relative aspect-square bg-gray-900">
+                    {primaryImage ? (
+                      <img
+                        src={primaryImage}
+                        alt={product.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ImageIcon size={48} className="text-gray-700" />
+                      </div>
+                    )}
+                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => handleEdit(product)}
+                        className="h-8 w-8 p-0"
+                      >
+                        <Pencil size={14} />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => handleDelete(product.id)}
+                        className="h-8 w-8 p-0"
+                      >
+                        <Trash size={14} />
+                      </Button>
                     </div>
-                  )}
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      onClick={() => handleEdit(product)}
-                      className="h-8 w-8 p-0"
-                    >
-                      <Pencil size={14} />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => handleDelete(product.id)}
-                      className="h-8 w-8 p-0"
-                    >
-                      <Trash size={14} />
-                    </Button>
+                    {product.soldout && (
+                      <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                        SOLD OUT
+                      </div>
+                    )}
                   </div>
-                  {product.soldout && (
-                    <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
-                      SOLD OUT
-                    </div>
-                  )}
+                  <div className="p-4">
+                    <h3 className="font-semibold text-lg mb-1 truncate">{product.name}</h3>
+                    <p className="text-xl font-bold mb-2">R{product.price}</p>
+                    {product.category && (
+                      <p className="text-xs text-gray-400 uppercase mb-2">{product.category}</p>
+                    )}
+                    {product.availablesizes && product.availablesizes.length > 0 && (
+                      <p className="text-xs text-gray-500">
+                        Sizes: {product.availablesizes.join(', ')}
+                      </p>
+                    )}
+                  </div>
                 </div>
-                <div className="p-4">
-                  <h3 className="font-semibold text-lg mb-1 truncate">{product.name}</h3>
-                  <p className="text-xl font-bold mb-2">R{product.price}</p>
-                  {product.category && (
-                    <p className="text-xs text-gray-400 uppercase mb-2">{product.category}</p>
-                  )}
-                  {product.availablesizes && product.availablesizes.length > 0 && (
-                    <p className="text-xs text-gray-500">
-                      Sizes: {product.availablesizes.join(', ')}
-                    </p>
-                  )}
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
 
-      {/* Drawer */}
+      {/* Drawer – updated image sections */}
       <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
-        <SheetContent className="w-full sm:max-w-lg bg-gray-900 border-gray-800 text-white overflow-y-auto p-3">
+        <SheetContent className="w-full sm:max-w-lg bg-gray-900 border-gray-800 text-white overflow-y-auto">
           <SheetHeader>
             <SheetTitle className="text-white text-xl">
               {editingProduct ? "Edit Product" : "Add New Product"}
@@ -444,8 +500,8 @@ export default function ProductsPage() {
             </SheetDescription>
           </SheetHeader>
 
-          <div className="mt-6 space-y-4">
-            {/* Product Name */}
+          <div className="mt-6 space-y-6">
+            {/* Form fields (unchanged except image sections removed) */}
             <div className="space-y-2">
               <Label htmlFor="name">Product Name *</Label>
               <Input
@@ -458,7 +514,6 @@ export default function ProductsPage() {
               />
             </div>
 
-            {/* Price */}
             <div className="space-y-2">
               <Label htmlFor="price">Price *</Label>
               <Input
@@ -471,7 +526,6 @@ export default function ProductsPage() {
               />
             </div>
 
-            {/* Category */}
             <div className="space-y-2">
               <Label htmlFor="category">Category</Label>
               <Input
@@ -484,7 +538,6 @@ export default function ProductsPage() {
               />
             </div>
 
-            {/* Description */}
             <div className="space-y-2">
               <Label htmlFor="description">Description</Label>
               <Textarea
@@ -498,7 +551,6 @@ export default function ProductsPage() {
               />
             </div>
 
-            {/* Sizes */}
             <div className="space-y-2">
               <Label htmlFor="sizes">Available Sizes</Label>
               <Input
@@ -511,7 +563,6 @@ export default function ProductsPage() {
               />
             </div>
 
-            {/* Materials */}
             <div className="space-y-2">
               <Label htmlFor="materials">Materials</Label>
               <Input
@@ -524,34 +575,66 @@ export default function ProductsPage() {
               />
             </div>
 
-            {/* Image Upload */}
-            <div className="space-y-2">
-              <Label htmlFor="image">Product Image</Label>
+            {/* Main Image Section */}
+            <div className="space-y-3">
+              <Label>Main Image (used in catalog grid) *</Label>
               <Input
-                id="image"
-                name="image"
                 type="file"
                 accept="image/*"
-                onChange={handleChange}
+                onChange={handleMainImageChange}
                 className="bg-gray-800 border-gray-700 text-white file:bg-gray-700 file:text-white file:border-0 file:mr-4"
               />
-              {imagePreview && (
-                <div className="mt-3 relative rounded-lg overflow-hidden border border-gray-700">
-                  <img src={imagePreview} alt="Preview" className="w-full h-48 object-cover" />
+              {mainImage && (
+                <div className="relative rounded-lg overflow-hidden border border-gray-700">
+                  <img src={mainImage.url} alt="Main preview" className="w-full h-64 object-cover" />
+                  <Button
+                    size="icon"
+                    variant="destructive"
+                    className="absolute top-2 right-2"
+                    onClick={removeMainImage}
+                  >
+                    <X size={16} />
+                  </Button>
+                  {!mainImage.file && <p className="text-xs text-gray-400 mt-1 text-center">Current main image</p>}
                 </div>
               )}
-              {editingProduct?.imageurl && !form.image && (
-                <div className="mt-3 relative rounded-lg overflow-hidden border border-gray-700">
-                  <img src={editingProduct.imageurl} alt="Current" className="w-full h-48 object-cover" />
-                  <p className="text-xs text-gray-400 mt-2">Current image - upload new to replace</p>
+            </div>
+
+            {/* Additional Images Section */}
+            <div className="space-y-3">
+              <Label>Additional Images (gallery on detail page)</Label>
+              <Input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleAdditionalImagesChange}
+                className="bg-gray-800 border-gray-700 text-white file:bg-gray-700 file:text-white file:border-0 file:mr-4"
+              />
+              {additionalImages.length > 0 && (
+                <div className="grid grid-cols-3 gap-4">
+                  {additionalImages.map((item, index) => (
+                    <div key={index} className="relative rounded-lg overflow-hidden border border-gray-700">
+                      <img src={item.url} alt={`Additional ${index + 1}`} className="w-full h-32 object-cover" />
+                      <Button
+                        size="icon"
+                        variant="destructive"
+                        className="absolute top-1 right-1 h-6 w-6"
+                        onClick={() => removeAdditionalImage(index)}
+                      >
+                        <X size={14} />
+                      </Button>
+                      {!item.file && <p className="text-xs text-gray-400 text-center mt-1">Current</p>}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
 
             {/* Sold Out */}
-            <div className="flex items-center space-x-2 pt-2">
+            <div className="flex items-center space-x-2">
               <Checkbox
                 id="soldout"
+                name="soldout"
                 checked={form.soldout}
                 onCheckedChange={(checked) => setForm({ ...form, soldout: checked as boolean })}
               />

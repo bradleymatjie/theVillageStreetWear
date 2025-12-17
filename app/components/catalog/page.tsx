@@ -40,7 +40,6 @@ export default async function Catalog() {
                 </div>
                 <div className="p-3 sm:p-4">
                   <h3 className="font-bold text-xs sm:text-sm mb-1">{item.name}</h3>
-                  <span className="text-sm sm:text-base font-bold block">R{item.price}</span>
                 </div>
               </div>
             </Link>
