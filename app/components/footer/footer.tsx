@@ -42,14 +42,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h3 className="font-bold mb-3 sm:mb-4 text-xs sm:text-sm">CONTACT</h3>
-            <a 
-              href="mailto:thevillagestreetwear@gmail.com" 
-              className="text-xs text-gray-400 hover:text-white flex items-start gap-2 mb-4"
-            >
-              <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
-              <span>thevillagestreetwear@gmail.com</span>
-            </a>
+            <h3 className="font-bold mb-3 sm:mb-4 text-xs sm:text-sm">ADDRESS</h3>
             <p className="text-xs text-gray-400">
               Johannesburg, Gauteng<br />
               South Africa
