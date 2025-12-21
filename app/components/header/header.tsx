@@ -8,6 +8,7 @@ import { useCartStore } from "@/app/lib/cartStore";
 import { Button } from "@/components/ui/button";
 import CartSidebar from "./CartSidebar";
 import { usePathname } from "next/navigation";
+import DesignHeader from "@/app/studio/components/Designheader";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -26,6 +27,7 @@ export default function Header() {
 
   return (
     <>
+    {pathname.includes("/studio") ? <DesignHeader />:
       <header className="border-b border-gray-200 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <Link href="/" className="text-xl sm:text-2xl font-black text-gray-900">
@@ -127,7 +129,7 @@ export default function Header() {
             </Link>
           </nav>
         </div>
-      </header>
+      </header>}
 
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>

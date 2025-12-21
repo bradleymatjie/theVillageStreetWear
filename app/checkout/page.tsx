@@ -9,7 +9,7 @@ import { useUser } from "../lib/user";
 
 const PICKUP_ADDRESS = {
   name: "The Village CBD Pickup Point",
-  address: "123 Main Street, Unit 5",
+  address: "Joburg Central",
   city: "Johannesburg",
   postalCode: "2000",
   province: "Gauteng",

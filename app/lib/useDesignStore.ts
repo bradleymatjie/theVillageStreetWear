@@ -1,14 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-// Types
-interface BaseElement {
+// Types (your original + Element types you already had)
+export interface BaseElement {
   id: number;
   zIndex: number;
   type: 'text' | 'image';
 }
 
-interface TextElement extends BaseElement {
+export interface TextElement extends BaseElement {
   type: 'text';
   text: string;
   color: string;
@@ -19,9 +19,10 @@ interface TextElement extends BaseElement {
   align: string;
   bold: boolean;
   italic: boolean;
+  rotation: number;
 }
 
-interface ImageElement extends BaseElement {
+export interface ImageElement extends BaseElement {
   type: 'image';
   src: string;
   x: number;
@@ -29,6 +30,7 @@ interface ImageElement extends BaseElement {
   width: number;
   height: number;
   aspect: number;
+  rotation: number; 
 }
 
 export type Element = TextElement | ImageElement;
@@ -48,10 +50,9 @@ export interface SavedDesign {
 export interface CartItem {
   id: number;
   name: string;
-  elements: { 
-    front: Element[]; 
-    back: Element[] 
-  };
+  screenshot: string; // Base64 data URL of the design screenshot
+  elements: Element[]; // Flattened elements array (front or back)
+  view: 'front' | 'back'; // Which side this cart item represents
   tshirtColor: string;
   price: number;
   quantity: number;
@@ -68,7 +69,7 @@ export interface User {
 interface DesignStoreState {
   // Saved Designs
   savedDesigns: SavedDesign[];
-  addDesign: (design: Omit<SavedDesign, 'id' | 'createdAt'>) => SavedDesign;
+  addDesign: (design: Omit<SavedDesign, 'id' | 'createdAt' | 'updatedAt'>) => SavedDesign;
   updateDesign: (id: number, updates: Partial<SavedDesign>) => void;
   removeDesign: (id: number) => void;
   getDesignById: (id: number) => SavedDesign | undefined;
@@ -83,11 +84,28 @@ interface DesignStoreState {
   getCartTotal: () => number;
   getCartItemCount: () => number;
   
+  // Current working design (temporary, NOT persisted)
+  currentDesign: {
+    elements: { front: Element[]; back: Element[] };
+    tshirtColor: string;
+  };
+  currentView: 'front' | 'back';
+  selectedElementId: number | null;
+
+  setCurrentTshirtColor: (color: string) => void;
+  setCurrentView: (view: 'front' | 'back') => void;
+  setSelectedElementId: (id: number | null) => void;
+  addElement: (element: Element) => void;
+  updateElement: (id: number, updates: Partial<Element>) => void;
+  deleteElement: (id: number) => void;
+  clearCurrentDesign: () => void;
+  loadCurrentFromSaved: (design: SavedDesign) => void;
+  
   // User (for future use)
   user: User | null;
   setUser: (user: User | null) => void;
   
-  // Loading states (for database integration)
+  // Loading states
   isLoading: boolean;
   setIsLoading: (loading: boolean) => void;
   
@@ -112,7 +130,92 @@ export const useDesignStore = create<DesignStoreState>()(
       error: null,
       lastSyncedAt: null,
 
-      // Saved Designs Actions
+      currentDesign: {
+        elements: { front: [], back: [] },
+        tshirtColor: 'white',
+      },
+      currentView: 'front',
+      selectedElementId: null,
+
+      // Current design actions
+      setCurrentTshirtColor: (color) =>
+        set((state) => ({
+          currentDesign: { ...state.currentDesign, tshirtColor: color },
+        })),
+
+      setCurrentView: (view) => set({ currentView: view }),
+
+      setSelectedElementId: (id) => set({ selectedElementId: id }),
+
+      addElement: (element) =>
+        set((state) => {
+          const currentEls = state.currentDesign.elements[state.currentView];
+          return {
+            currentDesign: {
+              ...state.currentDesign,
+              elements: {
+                ...state.currentDesign.elements,
+                [state.currentView]: [
+                  ...currentEls,
+                  { ...element, zIndex: currentEls.length },
+                ],
+              },
+            },
+            selectedElementId: element.id,
+          };
+        }),
+
+      updateElement: (id, updates) =>
+        set((state) => ({
+          currentDesign: {
+            ...state.currentDesign,
+            elements: {
+              ...state.currentDesign.elements,
+              [state.currentView]: state.currentDesign.elements[state.currentView].map((el) =>
+                el.id === id ? { ...el, ...updates } : el
+              ),
+            },
+          },
+        })),
+
+      deleteElement: (id) =>
+        set((state) => ({
+          currentDesign: {
+            ...state.currentDesign,
+            elements: {
+              ...state.currentDesign.elements,
+              [state.currentView]: state.currentDesign.elements[state.currentView].filter(
+                (el) => el.id !== id
+              ),
+            },
+          },
+          selectedElementId: state.selectedElementId === id ? null : state.selectedElementId,
+        })),
+
+      clearCurrentDesign: () =>
+        set({
+          currentDesign: {
+            elements: { front: [], back: [] },
+            tshirtColor: 'white',
+          },
+          selectedElementId: null,
+          currentView: 'front',
+        }),
+
+      loadCurrentFromSaved: (design) =>
+        set({
+          currentDesign: {
+            elements: {
+              front: design.elements.front.map((el) => ({ ...el, rotation: el.rotation ?? 0 })),
+              back: design.elements.back.map((el) => ({ ...el, rotation: el.rotation ?? 0 })),
+            },
+            tshirtColor: design.tshirtColor,
+          },
+          currentView: 'front',
+          selectedElementId: null,
+        }),
+
+      // Saved Designs Actions (your original)
       addDesign: (design) => {
         const newDesign: SavedDesign = {
           ...design,
@@ -154,16 +257,16 @@ export const useDesignStore = create<DesignStoreState>()(
         set({ savedDesigns: [], error: null });
       },
 
-      // Shopping Cart Actions
+      // Shopping Cart Actions - UPDATED to support screenshot and elements
       addToCart: (item) => {
         const existingItem = get().cart.find(
           (cartItem) =>
             cartItem.tshirtColor === item.tshirtColor &&
+            cartItem.view === item.view &&
             JSON.stringify(cartItem.elements) === JSON.stringify(item.elements)
         );
 
         if (existingItem) {
-          // If item already exists, increment quantity
           set((state) => ({
             cart: state.cart.map((cartItem) =>
               cartItem.id === existingItem.id
@@ -173,7 +276,6 @@ export const useDesignStore = create<DesignStoreState>()(
             error: null,
           }));
         } else {
-          // Add new item
           const newItem: CartItem = {
             ...item,
             id: Date.now(),
@@ -245,9 +347,8 @@ export const useDesignStore = create<DesignStoreState>()(
       },
     }),
     {
-      name: 'tshirt-design-storage', // localStorage key
+      name: 'tshirt-design-storage',
       partialize: (state) => ({
-        // Only persist these fields
         savedDesigns: state.savedDesigns,
         cart: state.cart,
         user: state.user,
@@ -257,7 +358,7 @@ export const useDesignStore = create<DesignStoreState>()(
   )
 );
 
-// Selectors (for optimized re-renders)
+// Your original selectors
 export const useDesigns = () => useDesignStore((state) => state.savedDesigns);
 export const useCart = () => useDesignStore((state) => state.cart);
 export const useCartTotal = () => useDesignStore((state) => state.getCartTotal());
@@ -266,80 +367,9 @@ export const useUser = () => useDesignStore((state) => state.user);
 export const useIsLoading = () => useDesignStore((state) => state.isLoading);
 export const useError = () => useDesignStore((state) => state.error);
 
-// Database Integration Helpers (for future use)
-export const syncDesignsToDatabase = async () => {
-  const { savedDesigns, setIsLoading, setError, markAsSynced } = useDesignStore.getState();
-  
-  setIsLoading(true);
-  setError(null);
-  
-  try {
-    // Example API call structure
-    const response = await fetch('/api/designs/sync', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ designs: savedDesigns }),
-    });
-    
-    if (!response.ok) throw new Error('Failed to sync designs');
-    
-    markAsSynced();
-    return true;
-  } catch (error) {
-    setError(error instanceof Error ? error.message : 'Unknown error');
-    return false;
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-export const syncCartToDatabase = async () => {
-  const { cart, setIsLoading, setError } = useDesignStore.getState();
-  
-  setIsLoading(true);
-  setError(null);
-  
-  try {
-    const response = await fetch('/api/cart/sync', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cart }),
-    });
-    
-    if (!response.ok) throw new Error('Failed to sync cart');
-    
-    return true;
-  } catch (error) {
-    setError(error instanceof Error ? error.message : 'Unknown error');
-    return false;
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-export const loadDesignsFromDatabase = async (userId: string) => {
-  const { setIsLoading, setError, markAsSynced } = useDesignStore.getState();
-  
-  setIsLoading(true);
-  setError(null);
-  
-  try {
-    const response = await fetch(`/api/designs?userId=${userId}`);
-    
-    if (!response.ok) throw new Error('Failed to load designs');
-    
-    const designs: SavedDesign[] = await response.json();
-    
-    useDesignStore.setState({ savedDesigns: designs });
-    markAsSynced();
-    
-    return designs;
-  } catch (error) {
-    setError(error instanceof Error ? error.message : 'Unknown error');
-    return [];
-  } finally {
-    setIsLoading(false);
-  }
-};
+// Additional useful selectors
+export const useCurrentDesign = () => useDesignStore((state) => state.currentDesign);
+export const useCurrentView = () => useDesignStore((state) => state.currentView);
+export const useSelectedElementId = () => useDesignStore((state) => state.selectedElementId);
 
 export default useDesignStore;
