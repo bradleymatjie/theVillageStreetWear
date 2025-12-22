@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/header/header";
 import Footer from "./components/footer/footer";
+import CountdownBanner from "./components/countDown";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
   description: "Create your style",
 };
 
+
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,10 +30,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Header />
-        {children}
-        <Footer />
-        <Analytics/>
+        <CountdownBanner />
+        <div className="pt-12">
+          <Header />
+          {children}
+          <Footer />
+        </div>
+        <Analytics />
       </body>
     </html>
   );
