@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 
 interface Product {
   id: string;
@@ -100,7 +101,7 @@ export default function ProductsPage() {
       email: loginForm.email,
       password: loginForm.password,
     });
-    if (error) alert("Login failed: " + error.message);
+    if (error) toast.error("Login failed: " + error.message);
     else setLoginForm({ email: "", password: "" });
   };
 
@@ -269,7 +270,7 @@ export default function ProductsPage() {
       await fetchProducts();
     } catch (error: any) {
       console.error("Error submitting product:", error);
-      alert("Failed to submit product: " + (error.message || error));
+      toast.error("Failed to submit product: " + (error.message || error));
     } finally {
       setLoading(false);
     }
@@ -302,7 +303,7 @@ export default function ProductsPage() {
     const { error } = await supabase.from("thevillageproducts").delete().eq("id", id);
     if (error) {
       console.error("Delete error:", error);
-      alert("Failed to delete product.");
+      toast.error("Failed to delete product.");
     } else {
       await fetchProducts();
     }

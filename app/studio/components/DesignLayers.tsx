@@ -16,13 +16,11 @@ export default function DesignLayers() {
 
   const currentElements = currentDesign.elements[currentView];
 
-  // Sort by zIndex descending (highest = topmost layer)
   const sortedElements = useMemo(
     () => [...currentElements].sort((a, b) => b.zIndex - a.zIndex),
     [currentElements]
   );
 
-  // Drag state for reordering
   const draggedIdRef = useRef<number | null>(null);
 
   const handleDragStart = useCallback((e: React.DragEvent, id: number) => {
@@ -47,7 +45,6 @@ export default function DesignLayers() {
 
       if (!draggedEl || !targetEl) return;
 
-      // Swap zIndex
       updateElement(draggedId, { zIndex: targetEl.zIndex });
       updateElement(targetId, { zIndex: draggedEl.zIndex });
 
@@ -64,7 +61,7 @@ export default function DesignLayers() {
   );
 
   return (
-    <div className="w-full lg:w-64 bg-white border-t lg:border-l border-gray-200 p-4 overflow-y-auto">
+    <div className="w-full lg:w-120 bg-white border-t lg:border-l border-gray-200 p-4 overflow-y-auto">
       <h2 className="text-lg font-black mb-4">LAYERS ({currentView.toUpperCase()})</h2>
       <p className="text-xs text-gray-500 mb-4">Drag to reorder (top = frontmost)</p>
 

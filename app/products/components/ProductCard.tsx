@@ -62,38 +62,6 @@ export default function ProductCard({ product, className = '' }: ProductCardProp
             className="object-cover group-hover:scale-105 transition-transform duration-500"
             sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
           />
-
-          {/* EXTRA IMAGES THUMBNAILS (overlay on bottom) */}
-          {extraImages.length > 0 && (
-            <>
-              {/* Gradient overlay for readability */}
-              <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
-
-              {/* Thumbnails */}
-              <div className="absolute inset-x-0 bottom-3 flex justify-center gap-2 px-4">
-                <div className="flex gap-2">
-                  {extraImages.slice(0, 5).map((url, i) => (
-                    <div
-                      key={i}
-                      className="w-12 h-12 rounded-md overflow-hidden border border-white/40 shadow-md flex-shrink-0"
-                    >
-                      <Image
-                        src={url}
-                        alt={`${product.name} view ${i + 2}`}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                  ))}
-                  {extraImages.length > 5 && (
-                    <div className="w-12 h-12 rounded-md bg-black/70 flex items-center justify-center text-xs font-bold border border-white/40 flex-shrink-0">
-                      +{extraImages.length - 5}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </>
-          )}
         </div>
 
         {/* DETAILS */}

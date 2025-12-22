@@ -37,7 +37,6 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
     }
   }, [data]);
 
-  // Loading / no data state
   if (!data) {
     return (
       <div className="text-center py-12">

@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useCartStore } from "@/app/lib/cartStore";
 import { ShoppingBag, Truck, MapPin, Package } from "lucide-react";
 import { useUser } from "../lib/user";
+import { toast } from "sonner";
+
 
 const PICKUP_ADDRESS = {
   name: "The Village CBD Pickup Point",
@@ -126,7 +128,7 @@ export default function CheckoutPage() {
 
       if (!res.ok) {
         console.error("Backend error:", data);
-        alert(data.error || "Payment error");
+        toast.error(data.error || "Payment error");
         setIsProcessing(false);
         return;
       }
@@ -135,13 +137,13 @@ export default function CheckoutPage() {
       if (data.redirectUrl) {
         window.location.href = data.redirectUrl;
       } else {
-        alert("No redirect URL received from server");
+        toast.warning("No redirect URL received from server");
         setIsProcessing(false);
       }
 
     } catch (err) {
       console.error("Checkout error:", err);
-      alert("Something went wrong. Please try again.");
+      toast.error("Something went wrong. Please try again.");
       setIsProcessing(false);
     }
   };
@@ -338,8 +340,9 @@ export default function CheckoutPage() {
 
               {/* Payment Button */}
               <button
-                type="submit"
-                disabled={isProcessing}
+                // type="submit"
+                // disabled={isProcessing}
+                disabled
                 className="w-full py-4 bg-black text-white font-bold rounded-md hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isProcessing ? (

@@ -10,7 +10,7 @@ interface ProductPageProps {
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
-  const { id } = await params; // Server component can await
+  const { id } = await params;
   
   // Fetch product by ID or slug
   const product: Product | null = await getProduct(id);
@@ -19,7 +19,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  // Pass the product data to the client component
   return <ProductPageClient product={product} />;
 }
 
@@ -43,7 +42,7 @@ export async function generateStaticParams() {
   }
 }
 
-// Optional: Generate metadata for SEO
+// metadata for SEO
 export async function generateMetadata({ params }: ProductPageProps) {
   const { id } = await params;
   const product = await getProduct(id);

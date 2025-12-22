@@ -4,7 +4,7 @@ import { ChevronRight } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 
 export default async function Catalog() {
-    const { data, error } = await supabase.from('thevillageproducts').select('*');
+    const { data, error } = await supabase.from('thevillageproducts').select('*').order('created_at', { ascending: false }).limit(4);
 
     if (error) {
       return;
@@ -20,7 +20,7 @@ export default async function Catalog() {
           </Link>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-          {data?.slice(0,4).map((item) => (
+          {data?.map((item) => (
             <Link key={item.slug} href={`/products/${item.id}`} className="group block">
               <div className={`relative overflow-hidden rounded-md border border-white/20 hover:border-white/50 transition-colors ${item.soldOut ? 'opacity-50' : ''}`}>
                 <div className="aspect-square relative">

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface OrderItem {
   name: string;
@@ -179,7 +180,7 @@ function CheckoutSuccess() {
         await navigator.clipboard.writeText(
           `I just ordered a custom t-shirt! Order #${order.order_number}\n${window.location.href}`
         );
-        alert('Order link copied to clipboard!');
+        toast.success('Order link copied to clipboard!');
       }
     } catch (error) {
       console.error('Error sharing:', error);

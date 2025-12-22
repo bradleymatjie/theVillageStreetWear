@@ -58,8 +58,6 @@ export default function DesignCanvas() {
           tshirtColor: currentDesign.tshirtColor,
           price: 250, // Set your price here
         });
-
-        alert('Added to cart!');
         setSelectedElementId(prevId); // Restore UI
       } catch (err) {
         console.error('Failed to add to cart:', err);

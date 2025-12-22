@@ -5,7 +5,7 @@ import { Product } from '@/app/lib/types';
 export default async function CatalogPage() {
   const { data, error } = await supabase
     .from('thevillageproducts')
-    .select('*');
+    .select('*').order('created_at', { ascending: false });
 
   if (error) {
     console.error('Supabase error:', error);

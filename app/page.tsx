@@ -44,7 +44,7 @@ export default function Page() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-center">
             <div className="relative h-[300px] sm:h-[400px] lg:h-[500px] order-2 lg:order-1">
               <img
-                src="https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=600&h=500&fit=crop"
+                src="/joziHome.jpg"
                 alt="Featured Design"
                 className="w-full h-full object-cover"
               />
@@ -64,44 +64,52 @@ export default function Page() {
       </section>
 
       {/* Featured Collections */}
-      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
-            <div className="group cursor-pointer">
-              <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] bg-gray-100 overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1622445275463-afa2ab738c34?w=600&h=400&fit=crop"
-                  alt="Collection 1"
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform"
-                />
-                <div className="absolute bottom-6 sm:bottom-8 left-6 sm:left-8">
-                  <h3 className="text-white text-2xl sm:text-3xl font-black mb-1 sm:mb-2">COLLECTION</h3>
-                  <p className="text-white text-lg sm:text-xl font-bold">100% COTTON</p>
-                  <button className="mt-3 sm:mt-4 flex items-center gap-2 text-white text-sm sm:text-base font-bold hover:underline">
-                    SEE MORE <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="group cursor-pointer">
-              <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] bg-gray-100 overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                  alt="Collection 2"
-                  className="w-full h-full object-cover transform group-hover:scale-105 transition-transform"
-                />
-                <div className="absolute bottom-6 sm:bottom-8 left-6 sm:left-8">
-                  <h3 className="text-white text-2xl sm:text-3xl font-black mb-1 sm:mb-2">COLLECTION</h3>
-                  <p className="text-white text-lg sm:text-xl font-bold">X MODERN ALTER</p>
-                  <button className="mt-3 sm:mt-4 flex items-center gap-2 text-white text-sm sm:text-base font-bold hover:underline">
-                    SEE MORE <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
+<section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 bg-black">
+  <div className="max-w-7xl mx-auto">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
+      <div className="group cursor-pointer">
+        <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] overflow-hidden">
+          <img
+            src="/panda.png"
+            alt="Premium Cotton Collection"
+            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+          />
+          {/* Dark gradient overlay for edgy contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+          
+          <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-12 text-left">
+            <p className="text-white text-lg sm:text-xl font-bold uppercase mb-10 opacity-90 drop-shadow-lg">
+              CLEAN. TIMELESS. ESSENTIAL.
+            </p>
+            <Link href={"/products"} className="mt-8 bg-white text-black font-bold px-8 py-4 text-base sm:text-lg uppercase tracking-wide">
+              Explore Collection
+            </Link>
           </div>
         </div>
-      </section>
+      </div>
+      
+      <div className="group cursor-pointer">
+        <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0"
+            alt="Modern Alter Collection"
+            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+          
+          <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-12 text-left">
+            <p className="text-white text-lg sm:text-xl font-bold uppercase mb-4 opacity-90 drop-shadow-lg">
+              EDGE. VISION. REDEFINED.
+            </p>
+            <button className="mt-8 bg-white text-black font-bold px-8 py-4 text-base sm:text-lg uppercase tracking-wide">
+              Explore Collection
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
     </div>
   );
 }
