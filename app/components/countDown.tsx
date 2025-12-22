@@ -45,17 +45,16 @@ export default function CountdownBanner() {
 
   return (
     <div
-      className={`fixed inset-x-0 top-0 z-50 py-3 text-center font-semibold text-sm flex items-center justify-center gap-2 transition-colors duration-500 ${
+      className={`fixed inset-x-0 top-0 z-50 p-3 text-center font-semibold text-sm flex items-center justify-center gap-2 h-[50px] transition-colors duration-500 ${
         isExpired ? "bg-green-500 text-green-950" : "bg-yellow-400 text-yellow-950"
       }`}
     >
-      <Clock className="w-4 h-4" />
       <span>
         Early Access Testing Mode —{" "}
         {isExpired
           ? "Full Launch Live! 🎉"
           : `Full Launch in ${
-              timeLeft.days > 0 ? `${timeLeft.days}days ` : ""
+              timeLeft.days > 0 ? `${timeLeft.days} days ` : ""
             }${formatTime(timeLeft.hours)}:${formatTime(timeLeft.minutes)}:${formatTime(
               timeLeft.seconds
             )}`}

@@ -106,7 +106,7 @@ export default function DesignTools() {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
 
   const [textSettings, setTextSettings] = useState({
-    text: 'Your Text Here',
+    text: '',
     color: '#000000',
     fontSize: 32,
     fontFamily: 'Arial',
@@ -123,7 +123,7 @@ export default function DesignTools() {
   useEffect(() => {
     if (!selectedElement) {
       setTextSettings({
-        text: 'Your Text Here',
+        text: '',
         color: '#000000',
         fontSize: 32,
         fontFamily: 'Arial',
@@ -273,10 +273,11 @@ export default function DesignTools() {
                 <Button
                   key={color.name}
                   variant={currentDesign.tshirtColor === color.name ? 'default' : 'outline'}
-                  className="aspect-square h-2"
+                  className="aspect-square h-2 border border-gray-500"
                   style={{
                     backgroundColor: color.hex,
-                    borderColor: currentDesign.tshirtColor === color.name ? '#000000' : 'transparent'
+                    borderColor: currentDesign.tshirtColor === color.name ? '#000000':'gray',
+                    scale: currentDesign.tshirtColor === color.name ? '1.1':'.8'
                   }}
                   onClick={() => setCurrentTshirtColor(color.name)}
                 >

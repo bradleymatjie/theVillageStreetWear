@@ -1,9 +1,10 @@
 "use client";
 import { useRef, useCallback, useMemo, useState } from 'react';
-import { Trash2, RotateCw, Download, ShoppingCart } from 'lucide-react';
+import { Trash2, RotateCw, Download, ShoppingCart, MoveLeftIcon, ChevronLeft, HomeIcon } from 'lucide-react';
 import useDesignStore, { ImageElement, TextElement } from '@/app/lib/useDesignStore';
 import { toPng } from 'html-to-image';
 import React from 'react';
+import Link from 'next/link';
 
 interface TShirtColor {
   name: string;
@@ -219,8 +220,10 @@ export default function DesignCanvas() {
 
   return (
     <div className="h-full w-full flex flex-col bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-inner">
-      <div className="p-4 border-b border-slate-200 bg-white/80 backdrop-blur-sm flex items-center justify-between">
-        <h2 className="text-lg font-bold text-slate-800">Canvas Studio</h2>
+      <div className="p-4 border-b border-slate-200 bg-white/80 backdrop-blur-sm flex items-center justify-between flex-wrap gap-3">
+        <Link href="/" className="text-lg font-bold text-slate-800 flex items-center">
+          <ChevronLeft /> Home
+        </Link>
         <div className="flex gap-2">
           <button
             onClick={handleAddToCart}

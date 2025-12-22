@@ -61,7 +61,7 @@ export default function Header() {
             {isLoggedIn ? (
               <Link
                 href="/protected/profile"
-                className="hidden lg:block text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors underline"
+                className="hidden lg:block text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors "
               >
                 Hi, {firstName}
               </Link>

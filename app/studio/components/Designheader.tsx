@@ -1,9 +1,10 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { Shirt, Trash2 } from 'lucide-react';
+import { Home, Shirt, ShoppingCart, Trash2 } from 'lucide-react';
 import useDesignStore from '@/app/lib/useDesignStore';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 export default function DesignHeader() {
   const {
@@ -77,11 +78,11 @@ export default function DesignHeader() {
             </button>
             <button 
               onClick={() => setShowCartModal(true)}
-              className="px-3 sm:px-4 py-2 border border-white text-xs sm:text-sm font-bold hover:bg-white hover:text-black transition-colors relative"
+              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold hover:bg-white hover:text-black transition-colors relative"
             >
-              CART ({getCartItemCount()})
+              <ShoppingCart />
               {getCartItemCount() > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                <span className="absolute -top-1 right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                   {getCartItemCount()}
                 </span>
               )}
