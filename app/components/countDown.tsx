@@ -54,7 +54,7 @@ export default function CountdownBanner() {
         Early Access Testing Mode —{" "}
         {isExpired
           ? "Full Launch Live! 🎉"
-          : `Launch in ${
+          : `Full Launch in ${
               timeLeft.days > 0 ? `${timeLeft.days}days ` : ""
             }${formatTime(timeLeft.hours)}:${formatTime(timeLeft.minutes)}:${formatTime(
               timeLeft.seconds
