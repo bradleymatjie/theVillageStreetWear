@@ -40,7 +40,7 @@ export default function AboutPage() {
                   We're a movement. A collective. A voice for those who dare to stand out.
                 </p>
                 <p>
-                  Founded by Bradley Matjie, we bring you carefully curated pieces that blend 
+                  We bring you carefully curated pieces that blend 
                   urban aesthetics with bold self-expression. Every drop tells a story. Every piece 
                   makes a statement.
                 </p>
