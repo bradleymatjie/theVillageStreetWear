@@ -105,12 +105,12 @@ export async function POST(req: Request) {
         orderData = {
           order_id: customOrderId,
           yoco_checkout_id: yocoCheckoutId,
-          status: "paid",
-          payment_status: "paid", // ADDED: payment_status field
+          status: "pending", // CHANGED: Use 'pending' instead of 'paid' due to check constraint
+          payment_status: "paid",
           total: orderAmount,
           amount: orderAmount,
           subtotal: orderAmount,
-          shipping_cost: 0.00, // ADDED: shipping_cost field (0 for pickup)
+          shipping_cost: 0.00,
           email: customer.email || metadata.email,
           phone: metadata.phone || "",
           customer_name: metadata.customer_name || customer.name || "Customer",
@@ -119,7 +119,7 @@ export async function POST(req: Request) {
           pickup_location: metadata.pickup_location || "",
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
-          metadata: {}, // ADDED: empty metadata object
+          metadata: {},
         };
 
         const { data: newOrder, error: insertError } = await supabase
@@ -163,12 +163,12 @@ export async function POST(req: Request) {
           }
         }
       } else {
-        console.log("📝 Updating existing order status to 'paid'");
+        console.log("📝 Updating existing order status to 'pending'");
         
         const { data: updatedOrder, error: updateError } = await supabase
           .from("orders")
           .update({
-            status: "paid",
+            status: "pending", // CHANGED: Use 'pending' instead of 'paid'
             payment_status: "paid",
             amount: data.amount / 100,
             subtotal: data.amount / 100,
@@ -211,7 +211,7 @@ export async function POST(req: Request) {
               pickup_location: orderData.pickup_location || metadata.pickup_location || "",
               cartItems: cartItemsForEmail,
               payment_status: "paid",
-              payment_reference: data.id, // Add payment ID to email data if needed
+            //   payment_reference: data.id,
             }),
           });
 
