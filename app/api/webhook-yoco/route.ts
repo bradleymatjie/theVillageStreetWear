@@ -204,7 +204,7 @@ export async function POST(req: Request) {
 
                     console.log("📧 Attempting to send email with bypass secret...");
 
-                    const emailRes = await fetch(`${baseUrl}/api/order-confirmation`, {
+                    const emailRes = await fetch(`${baseUrl}/api/yoco/order-confirmation`, {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json',
