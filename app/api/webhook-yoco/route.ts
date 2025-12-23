@@ -97,6 +97,7 @@ export async function POST(req: Request) {
         console.log("🆕 Creating new order from webhook data (order not found in database)");
         
         const customer = data.customer || {};
+        const orderAmount = data.amount / 100; // Convert cents to rands
         
         // Use custom orderId from metadata if available
         const customOrderId = metadata.orderId || yocoCheckoutId;
@@ -105,8 +106,11 @@ export async function POST(req: Request) {
           order_id: customOrderId,
           yoco_checkout_id: yocoCheckoutId,
           status: "paid",
-          total: data.amount / 100,
-          amount: data.amount / 100, // ADD THIS - your database requires this field
+          payment_status: "paid", // ADDED: payment_status field
+          total: orderAmount,
+          amount: orderAmount,
+          subtotal: orderAmount,
+          shipping_cost: 0.00, // ADDED: shipping_cost field (0 for pickup)
           email: customer.email || metadata.email,
           phone: metadata.phone || "",
           customer_name: metadata.customer_name || customer.name || "Customer",
@@ -114,6 +118,8 @@ export async function POST(req: Request) {
           shipping_address: metadata.shipping_address || "",
           pickup_location: metadata.pickup_location || "",
           created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          metadata: {}, // ADDED: empty metadata object
         };
 
         const { data: newOrder, error: insertError } = await supabase
@@ -163,7 +169,9 @@ export async function POST(req: Request) {
           .from("orders")
           .update({
             status: "paid",
-            amount: data.amount / 100, // Also update amount if needed
+            payment_status: "paid",
+            amount: data.amount / 100,
+            subtotal: data.amount / 100,
             updated_at: new Date().toISOString(),
           })
           .eq("yoco_checkout_id", yocoCheckoutId)
@@ -203,7 +211,7 @@ export async function POST(req: Request) {
               pickup_location: orderData.pickup_location || metadata.pickup_location || "",
               cartItems: cartItemsForEmail,
               payment_status: "paid",
-            //   payment_reference: data.id, // Add payment ID to email data if needed
+              payment_reference: data.id, // Add payment ID to email data if needed
             }),
           });
 
