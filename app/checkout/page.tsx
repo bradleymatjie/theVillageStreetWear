@@ -348,9 +348,9 @@ export default function CheckoutPage() {
 
               {/* Payment Button */}
               <button
-                // type="submit"
-                // disabled={isProcessing}
-                disabled
+                type="submit"
+                disabled={isProcessing}
+                // disabled
                 className="w-full py-4 bg-black text-white font-bold rounded-md hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 {isProcessing ? (
