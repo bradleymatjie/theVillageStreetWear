@@ -38,7 +38,6 @@ export async function POST(req: Request) {
     const eventType = payload.type;
     const data = payload.data;
     
-    // Verify Svix signature if secret is configured
     if (process.env.YOCO_WEBHOOK_SECRET && svixSignature && svixId && svixTimestamp) {
       try {
         // Svix signature format: v1,<base64_signature>
