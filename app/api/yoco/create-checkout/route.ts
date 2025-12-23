@@ -35,7 +35,7 @@ export async function POST(req: Request) {
     const encodedOrderId = encodeURIComponent(orderId);
 
     const successUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/success?orderId=${encodedOrderId}&amount=${encodedAmount}&email=${encodedEmail}&phone=${encodedPhone}&cartItems=${encodedCartItems}&customer_name=${encodedCustomerName}&shipping_method=${encodedShippingMethod}&shipping_address=${encodedShippingAddress}&pickup_location=${encodedPickupLocation}`;
-
+    console.log("yoco: key: ", process.env.YOCO_SECRET_KEY);
     const yocoRes = await fetch("https://payments.yoco.com/api/checkouts", {
       method: "POST",
       headers: {
