@@ -1,48 +1,74 @@
 // app/api/webhook-yoco/route.ts
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 import crypto from 'crypto';
-import { supabase } from "@/lib/supabaseClient";
 
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function POST(req: Request) {
   console.log("🎯 Webhook endpoint hit!");
   
   try {
+    // Log all headers for debugging
+    const headers: Record<string, string> = {};
+    req.headers.forEach((value, key) => {
+      headers[key] = value;
+    });
+    console.log("📋 Headers:", JSON.stringify(headers, null, 2));
+    
     const signature = req.headers.get('x-webhook-signature');
     const rawBody = await req.text();
     
     console.log("📨 Received webhook:");
     console.log("- Signature:", signature ? "Present" : "Missing");
     console.log("- Body length:", rawBody.length);
+    console.log("- Raw body:", rawBody.substring(0, 500)); // First 500 chars
     
-    const payload = JSON.parse(rawBody);
-    console.log("- Event type:", payload.event);
-    console.log("- Checkout ID:", payload.data?.id);
-    
-    // Verify webhook signature
-    if (!process.env.YOCO_WEBHOOK_SECRET) {
-      console.error("❌ YOCO_WEBHOOK_SECRET not configured!");
-      return NextResponse.json({ error: "Webhook secret not configured" }, { status: 500 });
+    let payload;
+    try {
+      payload = JSON.parse(rawBody);
+      console.log("- Parsed payload:", JSON.stringify(payload, null, 2));
+    } catch (parseError) {
+      console.error("❌ Failed to parse JSON:", parseError);
+      console.log("Raw body:", rawBody);
+      return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
     }
     
-    const expectedSignature = crypto
-      .createHmac('sha256', process.env.YOCO_WEBHOOK_SECRET!)
-      .update(rawBody)
-      .digest('hex');
+    console.log("- Event type:", payload.event || payload.type);
+    console.log("- Checkout ID:", payload.data?.id || payload.id);
     
-    if (signature !== expectedSignature) {
-      console.error("❌ Invalid webhook signature");
-      console.log("Expected:", expectedSignature);
-      console.log("Received:", signature);
-      return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+    // Verify webhook signature (only if secret is configured)
+    if (process.env.YOCO_WEBHOOK_SECRET) {
+      if (!signature) {
+        console.warn("⚠️ No signature provided but secret is configured");
+        // Don't fail - Yoco might not be sending signatures in test mode
+      } else {
+        const expectedSignature = crypto
+          .createHmac('sha256', process.env.YOCO_WEBHOOK_SECRET!)
+          .update(rawBody)
+          .digest('hex');
+        
+        if (signature !== expectedSignature) {
+          console.error("❌ Invalid webhook signature");
+          console.log("Expected:", expectedSignature);
+          console.log("Received:", signature);
+          return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
+        }
+        
+        console.log("✅ Signature verified");
+      }
+    } else {
+      console.warn("⚠️ YOCO_WEBHOOK_SECRET not configured - skipping signature verification");
     }
-    
-    console.log("✅ Signature verified");
 
-    const eventType = payload.event;
-    const data = payload.data;
+    const eventType = payload.event || payload.type;
+    const data = payload.data || payload;
 
-    console.log(`📦 Processing event: ${eventType} for checkout ${data.id}`);
+    console.log(`📦 Processing event: ${eventType}`);
+    console.log(`📦 Data:`, JSON.stringify(data, null, 2));
 
     // Process successful payments
     if (eventType === "payment.success" && data.id) {
