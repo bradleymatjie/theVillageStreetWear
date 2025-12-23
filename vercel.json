@@ -1,0 +1,8 @@
+{
+  "deploymentProtection": {
+    "enabled": true,
+    "excludePaths": [
+      "/api/webhook-yoco"
+    ]
+  }
+}

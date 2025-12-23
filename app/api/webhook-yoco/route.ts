@@ -1,21 +1,30 @@
 // app/api/webhook-yoco/route.ts
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 import crypto from 'crypto';
+import { supabase } from "@/lib/supabaseClient";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export async function POST(req: Request) {
+  console.log("🎯 Webhook endpoint hit!");
+  
   try {
-    // Verify webhook signature (CRITICAL for security)
     const signature = req.headers.get('x-webhook-signature');
     const rawBody = await req.text();
-    const payload = JSON.parse(rawBody);
     
-    // Verify the signature matches Yoco's webhook secret
+    console.log("📨 Received webhook:");
+    console.log("- Signature:", signature ? "Present" : "Missing");
+    console.log("- Body length:", rawBody.length);
+    
+    const payload = JSON.parse(rawBody);
+    console.log("- Event type:", payload.event);
+    console.log("- Checkout ID:", payload.data?.id);
+    
+    // Verify webhook signature
+    if (!process.env.YOCO_WEBHOOK_SECRET) {
+      console.error("❌ YOCO_WEBHOOK_SECRET not configured!");
+      return NextResponse.json({ error: "Webhook secret not configured" }, { status: 500 });
+    }
+    
     const expectedSignature = crypto
       .createHmac('sha256', process.env.YOCO_WEBHOOK_SECRET!)
       .update(rawBody)
@@ -23,19 +32,23 @@ export async function POST(req: Request) {
     
     if (signature !== expectedSignature) {
       console.error("❌ Invalid webhook signature");
+      console.log("Expected:", expectedSignature);
+      console.log("Received:", signature);
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
+    
+    console.log("✅ Signature verified");
 
     const eventType = payload.event;
     const data = payload.data;
 
-    console.log(`📦 Webhook received: ${eventType} for checkout ${data.id}`);
+    console.log(`📦 Processing event: ${eventType} for checkout ${data.id}`);
 
-    // Only process successful payments
+    // Process successful payments
     if (eventType === "payment.success" && data.id) {
       const checkoutId = data.id;
       
-      // Try to find existing order first
+      // Try to find existing order
       const { data: existingOrder, error: findError } = await supabase
         .from("orders")
         .select("*")
@@ -45,17 +58,15 @@ export async function POST(req: Request) {
       let orderData;
       
       if (findError || !existingOrder) {
-        // Order doesn't exist - create it from webhook data
         console.log("🆕 Creating new order from webhook data");
         
-        // Extract order details from metadata or webhook payload
         const metadata = data.metadata || {};
         const customer = data.customer || {};
         
         orderData = {
           order_id: checkoutId,
           status: "paid",
-          total: data.amount / 100, // Convert cents to Rand
+          total: data.amount / 100,
           email: customer.email || metadata.email,
           phone: metadata.phone || "",
           customer_name: metadata.customer_name || customer.name || "Customer",
@@ -66,7 +77,6 @@ export async function POST(req: Request) {
           created_at: new Date().toISOString(),
         };
 
-        // Insert new order
         const { data: newOrder, error: insertError } = await supabase
           .from("orders")
           .insert([orderData])
@@ -79,8 +89,9 @@ export async function POST(req: Request) {
         }
         
         orderData = newOrder;
+        console.log("✅ Order created:", orderData.order_id);
         
-        // If you have cart items in metadata, create order items
+        // Create order items if available
         if (metadata.cartItems) {
           try {
             const cartItems = typeof metadata.cartItems === 'string' 
@@ -98,18 +109,13 @@ export async function POST(req: Request) {
               selected_material: item.selectedMaterial,
             }));
             
-            await supabase
-              .from("order_items")
-              .insert(orderItems);
-              
+            await supabase.from("order_items").insert(orderItems);
             console.log(`✅ Created ${orderItems.length} order items`);
           } catch (itemsError) {
-            console.error("Failed to create order items:", itemsError);
-            // Continue anyway - the order is still created
+            console.error("⚠️ Failed to create order items:", itemsError);
           }
         }
       } else {
-        // Order exists - update it
         console.log("📝 Updating existing order status");
         
         const { data: updatedOrder, error: updateError } = await supabase
@@ -125,37 +131,44 @@ export async function POST(req: Request) {
 
         if (updateError) throw updateError;
         orderData = updatedOrder;
+        console.log("✅ Order updated:", orderData.order_id);
       }
 
       // Send confirmation email
-      if (orderData) {
-        const emailRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/yoco/order-confirmation`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            orderId: orderData.order_id,
-            amount: orderData.total.toString(),
-            email: orderData.email,
-            phone: orderData.phone || "",
-            customer_name: orderData.customer_name,
-            shipping_method: orderData.shipping_method,
-            shipping_address: orderData.shipping_address || "",
-            pickup_location: orderData.pickup_location || "",
-            cartItems: [], // You might need to fetch these from order_items
-            payment_status: "paid",
-          }),
-        });
+      if (orderData && process.env.NEXT_PUBLIC_BASE_URL) {
+        try {
+          const emailRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/yoco/order-confirmation`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              orderId: orderData.order_id,
+              amount: orderData.total.toString(),
+              email: orderData.email,
+              phone: orderData.phone || "",
+              customer_name: orderData.customer_name,
+              shipping_method: orderData.shipping_method,
+              shipping_address: orderData.shipping_address || "",
+              pickup_location: orderData.pickup_location || "",
+              cartItems: [],
+              payment_status: "paid",
+            }),
+          });
 
-        if (!emailRes.ok) {
-          const errorText = await emailRes.text();
-          console.error("❌ Email sending failed:", errorText);
-        } else {
-          console.log("✅ Order confirmation email sent");
+          if (!emailRes.ok) {
+            const errorText = await emailRes.text();
+            console.error("❌ Email sending failed:", errorText);
+          } else {
+            console.log("✅ Order confirmation email sent");
+          }
+        } catch (emailError) {
+          console.error("⚠️ Email error:", emailError);
         }
       }
+    } else {
+      console.log(`ℹ️ Ignoring event type: ${eventType}`);
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, received: true });
   } catch (error: unknown) {
     console.error("🔥 Webhook processing error:", error);
     return NextResponse.json(
@@ -166,4 +179,13 @@ export async function POST(req: Request) {
       { status: 500 }
     );
   }
+}
+
+// Add GET method for testing
+export async function GET() {
+  console.log("✅ Webhook endpoint is accessible");
+  return NextResponse.json({ 
+    status: "Webhook endpoint is active",
+    timestamp: new Date().toISOString() 
+  });
 }

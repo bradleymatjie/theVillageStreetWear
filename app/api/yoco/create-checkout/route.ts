@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { OrderData } from "../../villageorders/create/route";
 
 export async function POST(req: Request) {
   try {
@@ -15,7 +14,6 @@ export async function POST(req: Request) {
       pickup_location, 
     } = await req.json();
 
-    // Validate required fields
     if (!orderId || !amount || !email || !customer_name || !Array.isArray(cartItems) || cartItems.length === 0) {
       return NextResponse.json(
         { 
@@ -34,27 +32,23 @@ export async function POST(req: Request) {
 
     const amountInCents = Math.round(parseFloat(amount) * 100);
 
-    // STRIP imageurl FOR successUrl TO PREVENT TRUNCATION
-    const strippedCartItems = cartItems.map(item => {
-      const { imageurl, ...rest } = item; // eslint-disable-line @typescript-eslint/no-unused-vars
-      return rest;
-    });
-    const encodedCartItems = encodeURIComponent(JSON.stringify(strippedCartItems));
+    const successUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/success?orderId=${encodeURIComponent(orderId)}`;
 
-    // Encode other params
-    const encodedEmail = encodeURIComponent(email);
-    const encodedPhone = encodeURIComponent(phone || '');
-    const encodedCustomerName = encodeURIComponent(customer_name);
-    const encodedShippingMethod = encodeURIComponent(shipping_method || '');
-    const encodedShippingAddress = encodeURIComponent(shipping_address || '');
-    const encodedPickupLocation = encodeURIComponent(pickup_location || '');
-    const encodedAmount = encodeURIComponent(parseFloat(amount).toFixed(2));
-    const encodedOrderId = encodeURIComponent(orderId);
+    console.log("Generated successUrl:", successUrl);
 
-    const successUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/success?orderId=${encodedOrderId}&amount=${encodedAmount}&email=${encodedEmail}&phone=${encodedPhone}&cartItems=${encodedCartItems}&customer_name=${encodedCustomerName}&shipping_method=${encodedShippingMethod}&shipping_address=${encodedShippingAddress}&pickup_location=${encodedPickupLocation}`;
-
-    // DEBUG URL length
-    console.log("Generated successUrl length:", successUrl.length);
+    const metadata = {
+      checkoutId: orderId,
+      email,
+      customer_name,
+      phone: phone || '',
+      shipping_method: shipping_method || '',
+      shipping_address: shipping_address || '',
+      pickup_location: pickup_location || '',
+      cartItems: JSON.stringify(cartItems.map(item => {
+        const { imageurl, ...rest } = item;
+        return rest;
+      }))
+    };
 
     const yocoRes = await fetch("https://payments.yoco.com/api/checkouts", {
       method: "POST",
@@ -67,8 +61,11 @@ export async function POST(req: Request) {
         currency: "ZAR",
         successUrl,
         cancelUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout`,
-        customer: { email },
-        metadata: { checkoutId: orderId },
+        customer: { 
+          email,
+          name: customer_name,
+        },
+        metadata, // Send all data to webhook via metadata
       }),
     });
 
@@ -78,68 +75,22 @@ export async function POST(req: Request) {
       console.error("Yoco API error:", data);
       return NextResponse.json({ error: data.message || "Checkout failed" }, { status: 400 });
     }
-    
 
-    // start
+    // ✅ REMOVED: Order creation and email sending
+    // DO NOT create order or send email here
+    // Let the webhook handle it after payment
 
-     const orderDBData:OrderData = {
+    return NextResponse.json({ 
+      redirectUrl: data.redirectUrl || data.redirect_url,
       orderId,
-      amount: parseFloat(amount).toFixed(2),
-      email,
-      phone: phone || '',
-      customer_name,
-      shipping_method: shipping_method || '',
-      shipping_address: shipping_address || '',
-      pickup_location: pickup_location || '',
-      cartItems,
-    };
-       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/villageorders/create`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderDBData),
-      });
-
-      
-    // end
+      status: "redirecting_to_payment"
+    });
     
-
-    const orderEmailData = {
-      orderId,
-      amount: parseFloat(amount).toFixed(2),
-      email,
-      phone: phone || '',
-      customer_name,
-      shipping_method: shipping_method || '',
-      shipping_address: shipping_address || '',
-      pickup_location: pickup_location || '',
-      cartItems,
-    };
-
-    try {
-      const emailRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/yoco/order-confirmation`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderEmailData),
-      });
-
-      if (!emailRes.ok) {
-        const errData = await emailRes.json().catch(() => ({}));
-        console.error("Confirmation email send failed:", errData);
-      } else {
-        console.log("Order confirmation email sent successfully (pre-payment)");
-      }
-    } catch (emailErr) {
-      console.error("Error triggering confirmation email:", emailErr);
-    }
-
-    return NextResponse.json({ redirectUrl: data.redirectUrl || data.redirect_url });
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      console.error("Checkout handler error:", error.message);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    console.error("Unknown error:", error);
-    return NextResponse.json({ error: "An unknown error occurred" }, { status: 500 });
+    console.error("Checkout handler error:", error);
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : "Checkout failed" }, 
+      { status: 500 }
+    );
   }
 }
