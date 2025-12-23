@@ -195,17 +195,18 @@ export async function POST(req: Request) {
             }
 
             // Send confirmation email
-            if (orderData && process.env.NEXT_PUBLIC_BASE_URL) {
-                const cookieHeader = req.headers.get('cookie') || '';
-                const headers = {
-                    'Content-Type': 'application/json',
-                    'Cookie': cookieHeader
-                };
-
+            // In your webhook code, replace the email section with this:
+            if (orderData) {
                 try {
-                    const emailRes = await fetch(`/api/yoco/order-confirmation`, {
+                    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `https://${req.headers.get('host')}`;
+                    const cookieHeader = req.headers.get('cookie') || '';
+
+                    const emailRes = await fetch(`${baseUrl}/api/order-confirmation`, {
                         method: "POST",
-                        headers: headers,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Cookie': cookieHeader
+                        },
                         body: JSON.stringify({
                             orderId: orderData.order_id,
                             amount: (orderData.total || data.amount / 100).toString(),
@@ -217,6 +218,7 @@ export async function POST(req: Request) {
                             pickup_location: orderData.pickup_location || metadata.pickup_location || "",
                             cartItems: cartItemsForEmail,
                             payment_status: "paid",
+                            payment_reference: data.id,
                         }),
                     });
 
