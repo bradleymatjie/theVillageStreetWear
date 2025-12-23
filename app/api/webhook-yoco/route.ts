@@ -46,25 +46,31 @@ export async function POST(req: Request) {
 
     // Process successful payments
     if (eventType === "payment.success" && data.id) {
-      const checkoutId = data.id;
+      const yocoCheckoutId = data.id;
       
-      // Try to find existing order
+      console.log("🔍 Looking for order with yoco_checkout_id:", yocoCheckoutId);
+      
+      // Try to find existing order by Yoco checkout ID
       const { data: existingOrder, error: findError } = await supabase
         .from("orders")
         .select("*")
-        .eq("order_id", checkoutId)
+        .eq("yoco_checkout_id", yocoCheckoutId)
         .single();
 
       let orderData;
       
       if (findError || !existingOrder) {
-        console.log("🆕 Creating new order from webhook data");
+        console.log("🆕 Creating new order from webhook data (order not found in database)");
         
         const metadata = data.metadata || {};
         const customer = data.customer || {};
         
+        // Use custom orderId from metadata if available
+        const customOrderId = metadata.checkoutId || yocoCheckoutId;
+        
         orderData = {
-          order_id: checkoutId,
+          order_id: customOrderId,
+          yoco_checkout_id: yocoCheckoutId,
           status: "paid",
           total: data.amount / 100,
           email: customer.email || metadata.email,
@@ -73,7 +79,7 @@ export async function POST(req: Request) {
           shipping_method: metadata.shipping_method || "",
           shipping_address: metadata.shipping_address || "",
           pickup_location: metadata.pickup_location || "",
-          payment_reference: data.paymentId || checkoutId,
+          payment_reference: data.paymentId || yocoCheckoutId,
           created_at: new Date().toISOString(),
         };
 
@@ -99,14 +105,14 @@ export async function POST(req: Request) {
               : metadata.cartItems;
             
             const orderItems = cartItems.map((item: any) => ({
-              order_id: checkoutId,
+              order_id: customOrderId, // Use custom order ID
               product_id: item.id,
               product_name: item.name,
               price: item.price,
               quantity: item.quantity,
-              image_url: item.imageurl,
-              selected_size: item.selectedSize,
-              selected_material: item.selectedMaterial,
+              image_url: item.imageurl || "/noImage.jpg",
+              selected_size: item.selectedSize || null,
+              selected_material: item.selectedMaterial || null,
             }));
             
             await supabase.from("order_items").insert(orderItems);
@@ -116,16 +122,16 @@ export async function POST(req: Request) {
           }
         }
       } else {
-        console.log("📝 Updating existing order status");
+        console.log("📝 Updating existing order status to 'paid'");
         
         const { data: updatedOrder, error: updateError } = await supabase
           .from("orders")
           .update({
             status: "paid",
-            payment_reference: data.paymentId || checkoutId,
+            payment_reference: data.paymentId || yocoCheckoutId,
             updated_at: new Date().toISOString(),
           })
-          .eq("order_id", checkoutId)
+          .eq("yoco_checkout_id", yocoCheckoutId)
           .select()
           .single();
 

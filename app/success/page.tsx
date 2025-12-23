@@ -56,8 +56,7 @@ function SuccessContent() {
       const cartItems: CartItem[] = cartItemsParam
         ? JSON.parse(cartItemsParam)
         : [];
-
-        debugger;
+        
 
       setOrderDetails({
         orderId: searchParams.get("orderId") || "",
@@ -170,7 +169,7 @@ function SuccessContent() {
               >
                 <div className="relative w-20 h-20 rounded-lg overflow-hidden border">
                   <Image
-                    src={item?.imageurl||"/noImage.jpg"}
+                    src={item.imageurl}
                     alt={item.name}
                     fill
                     className="object-cover"
