@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
+export const dynamic = 'force-dynamic';
 
 export default async function Catalog() {
     const { data, error } = await supabase.from('thevillageproducts').select('*').order('created_at', { ascending: false }).limit(4);

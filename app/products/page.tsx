@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabaseClient';
 import ProductFilters from './components/ProductFilters';
 import { Product } from '@/app/lib/types';
+export const dynamic = 'force-dynamic';
 
 export default async function CatalogPage() {
   const { data, error } = await supabase

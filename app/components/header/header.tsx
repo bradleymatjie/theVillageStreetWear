@@ -57,7 +57,6 @@ export default function Header() {
 
           {/* Right Section: User/Auth + Cart */}
           <div className="flex items-center gap-3 sm:gap-4">
-            {/* Desktop: Show name if logged in, otherwise show Login button */}
             {isLoggedIn ? (
               <Link
                 href="/protected/profile"
