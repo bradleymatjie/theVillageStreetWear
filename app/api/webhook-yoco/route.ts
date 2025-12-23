@@ -38,19 +38,17 @@ export async function POST(req: Request) {
         const eventType = payload.type;
         const data = payload.payload || {};
 
-        // Verify Svix signature if secret is configured
         if (process.env.YOCO_WEBHOOK_SECRET && svixSignature && svixId && svixTimestamp) {
             try {
-                // Svix signature format: v1,<base64_signature>
                 const signedContent = `${svixId}.${svixTimestamp}.${rawBody}`;
                 const expectedSignature = crypto
                     .createHmac('sha256', process.env.YOCO_WEBHOOK_SECRET)
                     .update(signedContent)
                     .digest('base64');
 
-                // Extract all signatures (Svix sends multiple v1 signatures)
+
                 const signatures = svixSignature.split(' ').map(sig => {
-                    const [version, signature] = sig.split(',');
+                    const [signature] = sig.split(',');
                     return signature;
                 });
 
@@ -60,9 +58,7 @@ export async function POST(req: Request) {
                     console.error("❌ Invalid Svix signature");
                     console.log("Expected one of:", signatures);
                     console.log("Got:", expectedSignature);
-                    // For production, you should return an error here
-                    // return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
-                    console.warn("⚠️ Continuing despite signature mismatch for debugging");
+                    return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
                 } else {
                     console.log("✅ Signature verified");
                 }
@@ -137,29 +133,52 @@ export async function POST(req: Request) {
                 console.log("✅ Order created:", orderData.order_id);
 
                 // Create order items if available
+                // Create order items if available
                 if (metadata.cartItems) {
                     try {
-                        const cartItems = typeof metadata.cartItems === 'string'
-                            ? JSON.parse(metadata.cartItems)
-                            : metadata.cartItems;
+                        console.log("🛒 Processing cart items from metadata...");
 
-                        cartItemsForEmail = cartItems; // Save for email
+                        // Parse cartItems (it's a JSON string in metadata)
+                        let cartItems;
+                        if (typeof metadata.cartItems === 'string') {
+                            cartItems = JSON.parse(metadata.cartItems);
+                        } else if (Array.isArray(metadata.cartItems)) {
+                            cartItems = metadata.cartItems;
+                        } else {
+                            console.error("❌ cartItems is neither a string nor array:", metadata.cartItems);
+                            cartItems = [];
+                        }
 
-                        const orderItems = cartItems.map((item: any) => ({
-                            order_id: customOrderId, // Use custom order ID
-                            product_id: item.id,
-                            product_name: item.name,
-                            price: item.price,
-                            quantity: item.quantity,
-                            image_url: item.imageurl || "/noImage.jpg",
-                            selected_size: item.selectedSize || null,
-                            selected_material: item.selectedMaterial || null,
-                        }));
+                        console.log(`📦 Parsed ${cartItems.length} cart items:`, cartItems);
 
-                        await supabase.from("order_items").insert(orderItems);
-                        console.log(`✅ Created ${orderItems.length} order items`);
+                        if (cartItems.length > 0) {
+                            const orderItems = cartItems.map((item: any) => ({
+                                order_id: customOrderId,
+                                product_id: item.id,
+                                product_name: item.name,
+                                price: item.price,
+                                quantity: item.quantity,
+                                image_url: item.imageurl || "/noImage.jpg",
+                                selected_size: item.selectedSize || null,
+                                selected_material: item.selectedMaterial || null,
+                            }));
+
+                            console.log("📝 Inserting order items:", orderItems);
+
+                            const { error: itemsError } = await supabase
+                                .from("order_items")
+                                .insert(orderItems);
+
+                            if (itemsError) {
+                                console.error("❌ Failed to insert order items:", itemsError);
+                            } else {
+                                console.log(`✅ Created ${orderItems.length} order items`);
+                                cartItemsForEmail = cartItems; // Save for email
+                            }
+                        }
                     } catch (itemsError) {
-                        console.error("⚠️ Failed to create order items:", itemsError);
+                        console.error("❌ Failed to process cart items:", itemsError);
+                        console.error("cartItems value was:", metadata.cartItems);
                     }
                 }
             } else {
@@ -168,7 +187,7 @@ export async function POST(req: Request) {
                 const { data: updatedOrder, error: updateError } = await supabase
                     .from("orders")
                     .update({
-                        status: "pending", // CHANGED: Use 'pending' instead of 'paid'
+                        status: "pending",
                         payment_status: "paid",
                         amount: data.amount / 100,
                         subtotal: data.amount / 100,
@@ -182,7 +201,7 @@ export async function POST(req: Request) {
                 orderData = updatedOrder;
                 console.log("✅ Order updated:", orderData.order_id);
 
-                // Get existing cart items for email if updating order
+
                 if (metadata.cartItems) {
                     try {
                         cartItemsForEmail = typeof metadata.cartItems === 'string'
@@ -194,9 +213,6 @@ export async function POST(req: Request) {
                 }
             }
 
-            // Send confirmation email
-            // In your webhook code, replace the email section with this:
-            // Send confirmation email
             if (orderData) {
                 try {
                     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `https://${req.headers.get('host') || 'testing.thevillagestreetwear.com'}`;
