@@ -24,7 +24,7 @@ const provinces = [
 
 export default function CheckoutPage() {
   const { user } = useUser();
-  const { items, getTotalPrice } = useCartStore();
+  const { items, getTotalPrice,hasHydrated } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
   const [deliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup'>('delivery');
   const [orderId, setOrderId] = useState<string>("");
@@ -110,7 +110,7 @@ export default function CheckoutPage() {
         orderId: orderId,
         customer_name: formData.fullName,
         phone: formData.phone,
-        cart_items: cartItems,
+        cartItems: cartItems,
         shipping_method: shipping_method,
         shipping_address: shipping_address,
         pickup_location: pickup_location,
@@ -163,6 +163,14 @@ export default function CheckoutPage() {
             Continue Shopping
           </Link>
         </div>
+      </div>
+    );
+  }
+
+    if (!hasHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading cart…
       </div>
     );
   }

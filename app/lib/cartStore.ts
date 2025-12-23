@@ -12,10 +12,15 @@ interface CartItem extends Product {
 
 interface CartStore {
   items: CartItem[];
+  hasHydrated: boolean;
+
+  setHasHydrated: (state: boolean) => void;
+
   addItem: (product: Product, selectedSize: string, selectedMaterial: string) => void;
   removeItem: (cartItemId: string) => void;
   updateQuantity: (cartItemId: string, quantity: number) => void;
   clearCart: () => void;
+
   getTotalItems: () => number;
   getTotalPrice: () => number;
 }
@@ -24,18 +29,19 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      hasHydrated: false,
 
-      // ✅ FIXED addItem
+      setHasHydrated: (state) => set({ hasHydrated: state }),
+
       addItem: (product, selectedSize, selectedMaterial) => {
         const items = get().items;
-
-        // unique ID per variant of a product
         const cartItemId = `${product.id}-${selectedSize}-${selectedMaterial}`;
 
-        const existingItem = items.find((item) => item.cartItemId === cartItemId);
+        const existingItem = items.find(
+          (item) => item.cartItemId === cartItemId
+        );
 
         if (existingItem) {
-          // increase quantity of same variant
           set({
             items: items.map((item) =>
               item.cartItemId === cartItemId
@@ -44,7 +50,6 @@ export const useCartStore = create<CartStore>()(
             ),
           });
         } else {
-          // brand new variant
           set({
             items: [
               ...items,
@@ -62,7 +67,9 @@ export const useCartStore = create<CartStore>()(
 
       removeItem: (cartItemId) => {
         set({
-          items: get().items.filter((item) => item.cartItemId !== cartItemId),
+          items: get().items.filter(
+            (item) => item.cartItemId !== cartItemId
+          ),
         });
       },
 
@@ -74,28 +81,31 @@ export const useCartStore = create<CartStore>()(
 
         set({
           items: get().items.map((item) =>
-            item.cartItemId === cartItemId ? { ...item, quantity } : item
+            item.cartItemId === cartItemId
+              ? { ...item, quantity }
+              : item
           ),
         });
       },
 
-      clearCart: () => {
-        set({ items: [] });
-      },
+      clearCart: () => set({ items: [] }),
 
-      getTotalItems: () => {
-        return get().items.reduce((total, item) => total + item.quantity, 0);
-      },
+      getTotalItems: () =>
+        get().items.reduce((total, item) => total + item.quantity, 0),
 
-      getTotalPrice: () => {
-        return get().items.reduce((total, item) => {
-          const price = parseFloat(item.price.replace('R', '').replace(',', ''));
+      getTotalPrice: () =>
+        get().items.reduce((total, item) => {
+          const price = parseFloat(
+            item.price.replace('R', '').replace(',', '')
+          );
           return total + price * item.quantity;
-        }, 0);
-      },
+        }, 0),
     }),
     {
       name: 'cart-storage',
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

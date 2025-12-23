@@ -8,34 +8,53 @@ export async function POST(req: Request) {
       orderId, 
       customer_name, 
       phone, 
-      cart_items, 
+      cartItems, 
       shipping_method,
       shipping_address, 
       pickup_location, 
-    } = await req.json();  // Expanded body for full order deets
+    } = await req.json();
 
     // Validate required fields
-    if (!orderId || !amount || !email || !customer_name || !cart_items) {
-      return NextResponse.json({ error: "Missing required fields: orderId, amount, email, customer_name, cart_items" }, { status: 400 });
+    if (!orderId || !amount || !email || !customer_name || !Array.isArray(cartItems) || cartItems.length === 0) {
+      return NextResponse.json(
+        { 
+          error: "Missing or invalid required fields",
+          received: {
+            email: !!email,
+            orderId: !!orderId,
+            customer_name: !!customer_name,
+            amount: !!amount,
+            cartItems: Array.isArray(cartItems) ? cartItems.length : "missing/invalid"
+          }
+        },
+        { status: 400 }
+      );
     }
 
-    const amountInCents = Math.round(parseFloat(amount) * 100); // Ensure numeric and in cents
+    const amountInCents = Math.round(parseFloat(amount) * 100);
 
-    // Encode cart_items for URL param (JSON string + URI encode)
-    const encodedCartItems = encodeURIComponent(JSON.stringify(cart_items || []));
+    // STRIP imageurl FOR successUrl TO PREVENT TRUNCATION
+    const strippedCartItems = cartItems.map(item => {
+      const { imageurl, ...rest } = item; // eslint-disable-line @typescript-eslint/no-unused-vars
+      return rest;
+    });
+    const encodedCartItems = encodeURIComponent(JSON.stringify(strippedCartItems));
 
-    // Encode all URL params to prevent breaking on special characters
+    // Encode other params
     const encodedEmail = encodeURIComponent(email);
-    const encodedPhone = encodeURIComponent(phone);
+    const encodedPhone = encodeURIComponent(phone || '');
     const encodedCustomerName = encodeURIComponent(customer_name);
     const encodedShippingMethod = encodeURIComponent(shipping_method || '');
     const encodedShippingAddress = encodeURIComponent(shipping_address || '');
     const encodedPickupLocation = encodeURIComponent(pickup_location || '');
-    const encodedAmount = encodeURIComponent(amount.toFixed(2)); // Format for cleanliness
+    const encodedAmount = encodeURIComponent(parseFloat(amount).toFixed(2));
     const encodedOrderId = encodeURIComponent(orderId);
 
     const successUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/success?orderId=${encodedOrderId}&amount=${encodedAmount}&email=${encodedEmail}&phone=${encodedPhone}&cartItems=${encodedCartItems}&customer_name=${encodedCustomerName}&shipping_method=${encodedShippingMethod}&shipping_address=${encodedShippingAddress}&pickup_location=${encodedPickupLocation}`;
-    console.log("yoco: key: ", process.env.YOCO_SECRET_KEY);
+
+    // DEBUG URL length
+    console.log("Generated successUrl length:", successUrl.length);
+
     const yocoRes = await fetch("https://payments.yoco.com/api/checkouts", {
       method: "POST",
       headers: {
@@ -59,15 +78,44 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: data.message || "Checkout failed" }, { status: 400 });
     }
 
+    // SEND ORDER CONFIRMATION EMAIL IMMEDIATELY AFTER SUCCESSFUL CHECKOUT CREATION
+    // We use the FULL cartItems (with imageurl) for the email – body can be large, no truncation issue
+    const orderEmailData = {
+      orderId,
+      amount: parseFloat(amount).toFixed(2),
+      email,
+      phone: phone || '',
+      customer_name,
+      shipping_method: shipping_method || '',
+      shipping_address: shipping_address || '',
+      pickup_location: pickup_location || '',
+      cartItems,
+    };
+
+    try {
+      const emailRes = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/yoco/order-confirmation`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderEmailData),
+      });
+
+      if (!emailRes.ok) {
+        const errData = await emailRes.json().catch(() => ({}));
+        console.error("Confirmation email send failed:", errData);
+      } else {
+        console.log("Order confirmation email sent successfully (pre-payment)");
+      }
+    } catch (emailErr) {
+      console.error("Error triggering confirmation email:", emailErr);
+    }
+
     return NextResponse.json({ redirectUrl: data.redirectUrl || data.redirect_url });
   } catch (error: unknown) {
-    // Safely narrow the error type
     if (error instanceof Error) {
-      console.error("Update handler error:", error.message);
+      console.error("Checkout handler error:", error.message);
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    // If it’s not an instance of Error
     console.error("Unknown error:", error);
     return NextResponse.json({ error: "An unknown error occurred" }, { status: 500 });
   }
