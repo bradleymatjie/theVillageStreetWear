@@ -196,16 +196,19 @@ export async function POST(req: Request) {
 
             // Send confirmation email
             // In your webhook code, replace the email section with this:
+            // Send confirmation email
             if (orderData) {
                 try {
-                    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `https://${req.headers.get('host')}`;
-                    const cookieHeader = req.headers.get('cookie') || '';
+                    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `https://${req.headers.get('host') || 'testing.thevillagestreetwear.com'}`;
+                    const bypassSecret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET || "fTR0teGrKTYoEDNIVTudNnSGt7QvTTnV";
+
+                    console.log("📧 Attempting to send email with bypass secret...");
 
                     const emailRes = await fetch(`${baseUrl}/api/order-confirmation`, {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json',
-                            'Cookie': cookieHeader
+                            'x-vercel-protection-bypass': bypassSecret
                         },
                         body: JSON.stringify({
                             orderId: orderData.order_id,
@@ -225,8 +228,10 @@ export async function POST(req: Request) {
                     if (!emailRes.ok) {
                         const errorText = await emailRes.text();
                         console.error("❌ Email sending failed:", errorText);
+                        console.log("Response status:", emailRes.status);
                     } else {
-                        console.log("✅ Order confirmation email sent");
+                        const result = await emailRes.json();
+                        console.log("✅ Order confirmation email sent:", result);
                     }
                 } catch (emailError) {
                     console.error("⚠️ Email error:", emailError);
