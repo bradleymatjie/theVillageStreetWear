@@ -490,3 +490,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
+
+export async function GET() {
+  return NextResponse.json({ 
+    status: 'Email endpoint is accessible',
+    note: 'This endpoint only accepts POST requests for sending emails'
+  });
+}
