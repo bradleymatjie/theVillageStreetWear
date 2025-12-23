@@ -106,13 +106,13 @@ export async function POST(req: Request) {
           yoco_checkout_id: yocoCheckoutId,
           status: "paid",
           total: data.amount / 100,
+          amount: data.amount / 100, // ADD THIS - your database requires this field
           email: customer.email || metadata.email,
           phone: metadata.phone || "",
           customer_name: metadata.customer_name || customer.name || "Customer",
           shipping_method: metadata.shipping_method || "",
           shipping_address: metadata.shipping_address || "",
           pickup_location: metadata.pickup_location || "",
-          // REMOVED: payment_reference: data.id, // This column doesn't exist in your table
           created_at: new Date().toISOString(),
         };
 
@@ -163,7 +163,7 @@ export async function POST(req: Request) {
           .from("orders")
           .update({
             status: "paid",
-            // REMOVED: payment_reference: data.id, // This column doesn't exist in your table
+            amount: data.amount / 100, // Also update amount if needed
             updated_at: new Date().toISOString(),
           })
           .eq("yoco_checkout_id", yocoCheckoutId)
