@@ -24,7 +24,7 @@ interface CartItem {
   selectedMaterial?: string;
 }
 
-interface OrderData {
+export interface OrderData {
   orderId: string;
   amount: string;
   email: string;

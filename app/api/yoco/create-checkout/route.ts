@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { OrderData } from "../../villageorders/create/route";
 
 export async function POST(req: Request) {
   try {
@@ -77,9 +78,31 @@ export async function POST(req: Request) {
       console.error("Yoco API error:", data);
       return NextResponse.json({ error: data.message || "Checkout failed" }, { status: 400 });
     }
+    
 
-    // SEND ORDER CONFIRMATION EMAIL IMMEDIATELY AFTER SUCCESSFUL CHECKOUT CREATION
-    // We use the FULL cartItems (with imageurl) for the email – body can be large, no truncation issue
+    // start
+
+     const orderDBData:OrderData = {
+      orderId,
+      amount: parseFloat(amount).toFixed(2),
+      email,
+      phone: phone || '',
+      customer_name,
+      shipping_method: shipping_method || '',
+      shipping_address: shipping_address || '',
+      pickup_location: pickup_location || '',
+      cartItems,
+    };
+       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/villageorders/create`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderDBData),
+      });
+
+      
+    // end
+    
+
     const orderEmailData = {
       orderId,
       amount: parseFloat(amount).toFixed(2),
