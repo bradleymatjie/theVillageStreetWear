@@ -374,7 +374,7 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                               </td>
                               <td valign="top">
                                 <p style="margin:0 0 4px; font-size:16px; font-weight:500; color:#111827;">Need Help?</p>
-                                <p style="margin:0; font-size:14px; color:#4b5563;">Contact us at <a href="mailto:support@thevillage.co.za" style="color:#2563eb; text-decoration:none; font-weight:500;">support@thevillage.co.za</a></p>
+                                <p style="margin:0; font-size:14px; color:#4b5563;">Contact us at <a href="mailto:support@thevillage.com" style="color:#2563eb; text-decoration:none; font-weight:500;">support@thevillage.com</a></p>
                               </td>
                             </tr>
                           </table>
@@ -402,7 +402,7 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                         <td align="center">
                           <p style="margin:0; font-size:14px; color:#6b7280; line-height:1.5;">
                             Questions about your order?<br>
-                            <a href="mailto:support@thevillage.co.za" style="color:#2563eb; text-decoration:none; font-weight:500;">support@thevillage.co.za</a>
+                            <a href="mailto:support@thevillage.com" style="color:#2563eb; text-decoration:none; font-weight:500;">support@thevillage.com</a>
                           </p>
                         </td>
                       </tr>

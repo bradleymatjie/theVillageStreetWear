@@ -77,11 +77,11 @@ export async function POST(req: Request) {
               <p>We'll keep you posted on any further updates. Thank you for shopping with us!</p>
               <hr style="border-color: #333; margin: 30px 0;" />
               <p style="font-size: 0.9em; color: #888;">
-                Questions? Reply to this email or contact <a href="mailto:support@thevillage.co.za" style="color: #fff;">support@thevillage.co.za</a>
+                Questions? Reply to this email or contact <a href="mailto:support@thevillage.com" style="color: #fff;">support@thevillage.com</a>
               </p>
             </div>
           `,
-          text: `Hi ${firstName},\n\nYour order #${order.order_id} status has been updated to ${getStatusLabel(status)}.\n\nThank you for shopping with The Village!\n\nQuestions? Contact support@thevillage.co.za`,
+          text: `Hi ${firstName},\n\nYour order #${order.order_id} status has been updated to ${getStatusLabel(status)}.\n\nThank you for shopping with The Village!\n\nQuestions? Contact support@thevillage.com`,
         });
 
         console.log(`Status update email sent to ${order.email}`);
