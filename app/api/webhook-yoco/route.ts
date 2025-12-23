@@ -112,7 +112,7 @@ export async function POST(req: Request) {
           shipping_method: metadata.shipping_method || "",
           shipping_address: metadata.shipping_address || "",
           pickup_location: metadata.pickup_location || "",
-          payment_reference: data.id, // This is the payment ID
+          // REMOVED: payment_reference: data.id, // This column doesn't exist in your table
           created_at: new Date().toISOString(),
         };
 
@@ -163,7 +163,7 @@ export async function POST(req: Request) {
           .from("orders")
           .update({
             status: "paid",
-            payment_reference: data.id, // Use the payment ID
+            // REMOVED: payment_reference: data.id, // This column doesn't exist in your table
             updated_at: new Date().toISOString(),
           })
           .eq("yoco_checkout_id", yocoCheckoutId)
@@ -203,6 +203,7 @@ export async function POST(req: Request) {
               pickup_location: orderData.pickup_location || metadata.pickup_location || "",
               cartItems: cartItemsForEmail,
               payment_status: "paid",
+            //   payment_reference: data.id, // Add payment ID to email data if needed
             }),
           });
 
