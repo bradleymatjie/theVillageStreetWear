@@ -13,6 +13,14 @@ export async function POST(req: Request) {
       shipping_address, 
       pickup_location, 
     } = await req.json();  // Expanded body for full order deets
+      console.log("=== ENVIRONMENT CHECK ===");
+  console.log("YOCO_SECRET_KEY exists:", !!process.env.YOCO_SECRET_KEY);
+  console.log("YOCO_SECRET_KEY length:", process.env.YOCO_SECRET_KEY?.length);
+  console.log("YOCO_SECRET_KEY prefix:", process.env.YOCO_SECRET_KEY?.substring(0, 8));
+  console.log("BASE_URL:", process.env.NEXT_PUBLIC_BASE_URL);
+  console.log("All env keys:", Object.keys(process.env).filter(k => k.includes('YOCO')));
+  console.log("========================");
+
 
     // Validate required fields
     if (!orderId || !amount || !email || !customer_name || !cart_items) {
