@@ -36,8 +36,9 @@ export async function POST(req: Request) {
     }
     
     const eventType = payload.type;
-    const data = payload.data;
+    const data = payload.data || {};
     
+    // Verify Svix signature if secret is configured
     if (process.env.YOCO_WEBHOOK_SECRET && svixSignature && svixId && svixTimestamp) {
       try {
         // Svix signature format: v1,<base64_signature>
@@ -194,7 +195,7 @@ export async function POST(req: Request) {
         }
       }
     } else {
-      console.log(`ℹ️ Ignoring event type: ${eventType}`);
+      console.log(`ℹ️ Event type '${eventType}' received but not processed (expected 'payment.succeeded')`);
     }
 
     return NextResponse.json({ success: true, received: true });

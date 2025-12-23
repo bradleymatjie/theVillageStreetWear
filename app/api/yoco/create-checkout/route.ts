@@ -41,9 +41,10 @@ export async function POST(req: Request) {
     const successUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/success?orderId=${encodeURIComponent(orderId)}`;
 
     console.log("Generated successUrl:", successUrl);
+    console.log("Order ID to send:", orderId);
 
     const metadata = {
-      checkoutId: orderId, // Your custom order ID
+      orderId: orderId, // Use 'orderId' instead of 'checkoutId' to avoid conflicts
       email,
       customer_name,
       phone: phone || '',
@@ -52,6 +53,8 @@ export async function POST(req: Request) {
       pickup_location: pickup_location || '',
       cartItems: JSON.stringify(cartItems)
     };
+
+    console.log("Metadata being sent to Yoco:", JSON.stringify(metadata, null, 2));
 
     // Create Yoco checkout
     const yocoRes = await fetch("https://payments.yoco.com/api/checkouts", {
@@ -86,7 +89,7 @@ export async function POST(req: Request) {
     // Store BOTH your orderId AND Yoco's checkout ID
     const orderData = {
       order_id: orderId, // Your custom ID (for success page)
-      yoco_checkout_id: data.id, // Yoco's ID (for webhook lookup)
+      yoco_checkout_id: data.id, // Yoco's checkout ID (for webhook lookup)
       status: "pending",
       total: parseFloat(amount),
       email,
@@ -99,6 +102,8 @@ export async function POST(req: Request) {
       created_at: new Date().toISOString(),
     };
 
+    console.log("Creating pending order:", orderData);
+
     const { data: newOrder, error: insertError } = await supabase
       .from("orders")
       .insert([orderData])
@@ -109,7 +114,7 @@ export async function POST(req: Request) {
       console.error("❌ Failed to create pending order:", insertError);
       // Continue anyway - webhook can still create it
     } else {
-      console.log("✅ Pending order created:", orderId);
+      console.log("✅ Pending order created:", orderId, "with Yoco ID:", data.id);
 
       // Create order items
       try {
