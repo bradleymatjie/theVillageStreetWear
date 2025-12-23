@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     }
     
     const eventType = payload.type;
-    const data = payload.data || {};
+    const data = payload.payload || {};
     
     // Verify Svix signature if secret is configured
     if (process.env.YOCO_WEBHOOK_SECRET && svixSignature && svixId && svixTimestamp) {
@@ -48,14 +48,20 @@ export async function POST(req: Request) {
           .update(signedContent)
           .digest('base64');
         
-        const signatures = svixSignature.split(' ').map(sig => sig.split(',')[1]);
+        // Extract all signatures (Svix sends multiple v1 signatures)
+        const signatures = svixSignature.split(' ').map(sig => {
+          const [version, signature] = sig.split(',');
+          return signature;
+        });
+        
         const isValid = signatures.some(sig => sig === expectedSignature);
         
         if (!isValid) {
           console.error("❌ Invalid Svix signature");
           console.log("Expected one of:", signatures);
           console.log("Got:", expectedSignature);
-          // For now, just warn but don't block - we'll fix this after seeing the payload
+          // For production, you should return an error here
+          // return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
           console.warn("⚠️ Continuing despite signature mismatch for debugging");
         } else {
           console.log("✅ Signature verified");
@@ -69,8 +75,11 @@ export async function POST(req: Request) {
     }
 
     // Process successful payments
-    if (eventType === "payment.success" && data.id) {
-      const yocoCheckoutId = data.id;
+    if (eventType === "payment.succeeded" && data.id) {
+      const metadata = data.metadata || {};
+      
+      // Use checkoutId from metadata instead of payment id
+      const yocoCheckoutId = metadata.checkoutId || data.id;
       
       console.log("🔍 Looking for order with yoco_checkout_id:", yocoCheckoutId);
       
@@ -82,15 +91,15 @@ export async function POST(req: Request) {
         .single();
 
       let orderData;
+      let cartItemsForEmail = [];
       
       if (findError || !existingOrder) {
         console.log("🆕 Creating new order from webhook data (order not found in database)");
         
-        const metadata = data.metadata || {};
         const customer = data.customer || {};
         
         // Use custom orderId from metadata if available
-        const customOrderId = metadata.checkoutId || yocoCheckoutId;
+        const customOrderId = metadata.orderId || yocoCheckoutId;
         
         orderData = {
           order_id: customOrderId,
@@ -103,7 +112,7 @@ export async function POST(req: Request) {
           shipping_method: metadata.shipping_method || "",
           shipping_address: metadata.shipping_address || "",
           pickup_location: metadata.pickup_location || "",
-          payment_reference: data.paymentId || yocoCheckoutId,
+          payment_reference: data.id, // This is the payment ID
           created_at: new Date().toISOString(),
         };
 
@@ -127,6 +136,8 @@ export async function POST(req: Request) {
             const cartItems = typeof metadata.cartItems === 'string' 
               ? JSON.parse(metadata.cartItems) 
               : metadata.cartItems;
+            
+            cartItemsForEmail = cartItems; // Save for email
             
             const orderItems = cartItems.map((item: any) => ({
               order_id: customOrderId, // Use custom order ID
@@ -152,7 +163,7 @@ export async function POST(req: Request) {
           .from("orders")
           .update({
             status: "paid",
-            payment_reference: data.paymentId || yocoCheckoutId,
+            payment_reference: data.id, // Use the payment ID
             updated_at: new Date().toISOString(),
           })
           .eq("yoco_checkout_id", yocoCheckoutId)
@@ -162,6 +173,17 @@ export async function POST(req: Request) {
         if (updateError) throw updateError;
         orderData = updatedOrder;
         console.log("✅ Order updated:", orderData.order_id);
+        
+        // Get existing cart items for email if updating order
+        if (metadata.cartItems) {
+          try {
+            cartItemsForEmail = typeof metadata.cartItems === 'string' 
+              ? JSON.parse(metadata.cartItems) 
+              : metadata.cartItems;
+          } catch (itemsError) {
+            console.error("⚠️ Failed to parse cart items for email:", itemsError);
+          }
+        }
       }
 
       // Send confirmation email
@@ -172,14 +194,14 @@ export async function POST(req: Request) {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               orderId: orderData.order_id,
-              amount: orderData.total.toString(),
+              amount: (orderData.total || data.amount / 100).toString(),
               email: orderData.email,
-              phone: orderData.phone || "",
-              customer_name: orderData.customer_name,
-              shipping_method: orderData.shipping_method,
-              shipping_address: orderData.shipping_address || "",
-              pickup_location: orderData.pickup_location || "",
-              cartItems: [],
+              phone: orderData.phone || metadata.phone || "",
+              customer_name: orderData.customer_name || metadata.customer_name || "Customer",
+              shipping_method: orderData.shipping_method || metadata.shipping_method || "",
+              shipping_address: orderData.shipping_address || metadata.shipping_address || "",
+              pickup_location: orderData.pickup_location || metadata.pickup_location || "",
+              cartItems: cartItemsForEmail,
               payment_status: "paid",
             }),
           });
