@@ -7,6 +7,12 @@ export async function proxy(request: NextRequest) {
   
   let supabaseResponse = NextResponse.next({ request });
 
+  if (pathname === '/api/webhook-yoco') {
+    const response = NextResponse.next();
+    response.headers.set('X-Middleware-Skip', 'webhook');
+    return response;
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
