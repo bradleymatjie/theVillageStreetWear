@@ -1,170 +1,115 @@
-'use client';
+import { ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+import Catalog from './components/catalog/page';
+import { Suspense } from 'react';
+import CatalogLoading from './components/catalog/loading';
 
-import { useState, useEffect } from 'react';
-import { toast } from 'sonner';
-
-interface CountdownProps {
-  targetDate: Date;
-}
-
-const CountdownTimer: React.FC<CountdownProps> = ({ targetDate }) => {
-  const calculateTimeLeft = () => {
-    const difference = targetDate.getTime() - new Date().getTime();
-    if (difference <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
-
-    return {
-      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-      minutes: Math.floor((difference / 1000 / 60) % 60),
-      seconds: Math.floor((difference / 1000) % 60),
-    };
-  };
-
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [targetDate]);
+export default function Page() {
 
   return (
-    <div className="flex justify-center items-center text-white">
-      <div className="flex space-x-6">
-        {Object.entries(timeLeft).map(([label, value]) => (
-          <div key={label} className="text-center">
-            <div className="text-5xl md:text-7xl font-bold">
-              {value.toString().padStart(2, '0')}
+    <div className="min-h-screen bg-white">
+      {/* Hero Section */}
+      <section className="bg-black text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-8 items-center min-h-[500px] sm:min-h-[600px]">
+            <div className="px-6 sm:px-8 lg:px-12 py-8 sm:py-12 order-1 lg:order-1">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none mb-4 sm:mb-6">
+                CREATE YOUR<br />STYLE
+              </h1>
+              <p className="text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 font-bold">
+                DESIGN CUSTOM TEES WITH<br />
+                PRINTWAVES BOLD STYLE,<br />
+                UNAPOLOGETIC ATTITUDE
+              </p>
+              <Link prefetch href={'/studio'} className="bg-white text-black px-6 sm:px-8 py-2.5 sm:py-3 font-bold text-xs sm:text-sm hover:bg-gray-200 transition-colors">
+                START DESIGNING
+              </Link>
             </div>
-            <div className="text-xs md:text-sm uppercase">{label}</div>
+            <div className="relative h-[300px] sm:h-[400px] lg:h-[600px] bg-gray-900 order-2 lg:order-2">
+              <img
+                src="/leo.png"
+                alt="Custom T-shirt Design"
+                className="w-full h-full object-cover opacity-90"
+              />
+            </div>
           </div>
-        ))}
+        </div>
+      </section>
+      <Suspense fallback={<CatalogLoading />}>
+        <Catalog />
+      </Suspense>
+
+      <section className="bg-black text-white py-12 sm:py-16 lg:py-20 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-center">
+            <div className="relative h-[300px] sm:h-[400px] lg:h-[500px] order-2 lg:order-1">
+              <img
+                src="/joziHome.jpg"
+                alt="Featured Design"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <div className="px-4 sm:px-8 order-1 lg:order-2">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black leading-tight mb-4 sm:mb-6">
+                STAND OUT. BE SEEN.<br />
+                REDEFINING STREETWEAR WITH<br />
+                UNMATCHED EDGE AND VISION.
+              </h2>
+              <Link href="/products" className="bg-white text-black px-6 sm:px-8 py-2.5 sm:py-3 font-bold text-xs sm:text-sm hover:bg-gray-200 transition-colors">
+                EXPLORE DESIGNS
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Collections */}
+<section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 bg-black">
+  <div className="max-w-7xl mx-auto">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
+      <div className="group cursor-pointer">
+        <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] overflow-hidden">
+          <img
+            src="/panda.png"
+            alt="Premium Cotton Collection"
+            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+          />
+          {/* Dark gradient overlay for edgy contrast */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+          
+          <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-12 text-left">
+            <p className="text-white text-lg sm:text-xl font-bold uppercase mb-10 opacity-90 drop-shadow-lg">
+              CLEAN. TIMELESS. ESSENTIAL.
+            </p>
+            <Link href={"/products"} className="mt-8 bg-white text-black font-bold px-8 py-4 text-base sm:text-lg uppercase tracking-wide">
+              Explore Collection
+            </Link>
+          </div>
+        </div>
+      </div>
+      
+      <div className="group cursor-pointer">
+        <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0"
+            alt="Modern Alter Collection"
+            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+          
+          <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-12 text-left">
+            <p className="text-white text-lg sm:text-xl font-bold uppercase mb-4 opacity-90 drop-shadow-lg">
+              EDGE. VISION. REDEFINED.
+            </p>
+            <button className="mt-8 bg-white text-black font-bold px-8 py-4 text-base sm:text-lg uppercase tracking-wide">
+              Explore Collection
+            </button>
+          </div>
+        </div>
       </div>
     </div>
-  );
-};
-
-const ComingSoonPage: React.FC = () => {
-  // Dec 24, 2025 + 7 hours
-  const launchDate = new Date(
-    new Date('2025-12-24T00:00:00').getTime() + 12 * 60 * 60 * 1000
-  );
-
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleSubscribe = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!email || !email.includes('@')) {
-      setMessage('Please enter a valid email.');
-      return;
-    }
-
-    setLoading(true);
-    setMessage('');
-
-    try {
-      const res = await fetch('/api/notify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        toast.success("You're on the list! Check your inbox for updates. 🎉");
-        setEmail('');
-      } else {
-        toast.error(`Oops: ${data.error}`);
-      }
-    } catch (error) {
-      toast.error('Something went wrong—try again!');
-      console.error('Subscription error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
-      {/* Header */}
-      <header className="flex justify-between items-center p-6 border-b border-gray-800">
-        <h1 className="text-3xl md:text-4xl font-black tracking-tight">
-          THE VILLAGE
-        </h1>
-      </header>
-
-      {/* Main */}
-      <main className="flex-1 flex flex-col justify-center items-center px-6 py-12 space-y-16">
-        <h1 className="text-[2em] m-0 font-extrabold tracking-wide">
-          COMING SOON
-        </h1>
-
-        {/* Countdown */}
-        <div className="relative w-full max-w-4xl mx-auto text-center">
-          <CountdownTimer targetDate={launchDate} />
-
-          <div className="absolute inset-0 flex items-center justify-center z-[-10]">
-            <h2 className="text-5xl md:text-8xl lg:text-[150px] font-extrabold text-gray-800 leading-none text-center">
-              COMING
-              <br />
-              SOON
-            </h2>
-          </div>
-        </div>
-
-        {/* Preview */}
-        <div className="max-w-md text-center space-y-4">
-          <h3 className="text-xl font-bold">
-            A new era of streetwear customization
-          </h3>
-          <p className="text-gray-300 text-sm leading-relaxed">
-            Design your own shirts in our online studio, order custom prints,
-            explore new drops, and join a community built on style and creativity.
-          </p>
-        </div>
-
-        {/* Email Sign-up */}
-        <div className="w-full max-w-md">
-          <form
-            onSubmit={handleSubscribe}
-            className="flex gap-3 flex-wrap justify-center"
-          >
-            <input
-              type="email"
-              required
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={loading}
-              className="flex-1 px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-white placeholder:text-gray-400 text-white disabled:opacity-50"
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-6 py-3 bg-white text-black rounded-lg font-semibold hover:bg-gray-200 transition disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Sending...' : 'Notify Me'}
-            </button>
-          </form>
-
-          {message && (
-            <p className="mt-4 text-center text-red-400">{message}</p>
-          )}
-        </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="p-6 text-center text-sm text-gray-400 border-t border-gray-800">
-        © 2025 The Village StreetWear. All Rights Reserved.
-      </footer>
+  </div>
+</section>
     </div>
   );
-};
-
-export default ComingSoonPage;
+}

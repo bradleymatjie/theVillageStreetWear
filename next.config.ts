@@ -4,28 +4,10 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'velocityrecords.com',
+        hostname: 'hshrizhbgvfjnhjmnwfp.supabase.co',
         port: '',
-        pathname: '/cdn/shop/**',
+        pathname: '/storage/v1/object/public/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'printify.com',
-        port: '',
-        pathname: '/wp-content/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**', // <-- Correct & flexible
-      },
-      {
-        protocol: 'https',
-        hostname: 'thefoschini.vtexassets.com',
-        port: '',
-        pathname: '/arquivos/**',
-      }
     ],
   },
 };
