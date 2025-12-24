@@ -49,7 +49,7 @@ const CountdownTimer: React.FC<CountdownProps> = ({ targetDate }) => {
 const ComingSoonPage: React.FC = () => {
   // Dec 24, 2025 + 7 hours
   const launchDate = new Date(
-    new Date('2025-12-24T00:00:00').getTime() + 7 * 60 * 60 * 1000
+    new Date('2025-12-24T00:00:00').getTime() + 12 * 60 * 60 * 1000
   );
 
   const [email, setEmail] = useState('');
