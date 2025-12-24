@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Catalog from './components/catalog/page';
 import { Suspense } from 'react';
 import CatalogLoading from './components/catalog/loading';
+import NewsletterSignup from './components/mailList/mailList';
 
 export default function Page() {
 
@@ -64,52 +65,53 @@ export default function Page() {
       </section>
 
       {/* Featured Collections */}
-<section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 bg-black">
-  <div className="max-w-7xl mx-auto">
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
-      <div className="group cursor-pointer">
-        <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] overflow-hidden">
-          <img
-            src="/panda.png"
-            alt="Premium Cotton Collection"
-            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-          />
-          {/* Dark gradient overlay for edgy contrast */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-          
-          <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-12 text-left">
-            <p className="text-white text-lg sm:text-xl font-bold uppercase mb-10 opacity-90 drop-shadow-lg">
-              CLEAN. TIMELESS. ESSENTIAL.
-            </p>
-            <Link href={"/products"} className="mt-8 bg-white text-black font-bold px-8 py-4 text-base sm:text-lg uppercase tracking-wide">
-              Explore Collection
-            </Link>
+      <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 bg-black">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12">
+            <div className="group cursor-pointer">
+              <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] overflow-hidden">
+                <img
+                  src="/panda.png"
+                  alt="Premium Cotton Collection"
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                />
+                {/* Dark gradient overlay for edgy contrast */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+
+                <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-12 text-left">
+                  <p className="text-white text-lg sm:text-xl font-bold uppercase mb-10 opacity-90 drop-shadow-lg">
+                    CLEAN. TIMELESS. ESSENTIAL.
+                  </p>
+                  <Link href={"/products"} className="mt-8 bg-white text-black font-bold px-8 py-4 text-base sm:text-lg uppercase tracking-wide">
+                    Explore Collection
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            <div className="group cursor-pointer">
+              <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0"
+                  alt="Modern Alter Collection"
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
+
+                <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-12 text-left">
+                  <p className="text-white text-lg sm:text-xl font-bold uppercase mb-8 opacity-90 drop-shadow-lg">
+                    EDGE. VISION. REDEFINED.
+                  </p>
+                  <Link href={"/about"} className="mt-8 bg-white text-black font-bold px-8 py-4 text-base sm:text-lg uppercase tracking-wide">
+                    OUR STORY
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-      
-      <div className="group cursor-pointer">
-        <div className="relative h-[300px] sm:h-[350px] lg:h-[400px] overflow-hidden">
-          <img
-            src="https://images.unsplash.com/photo-1581655353564-df123a1eb820?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0"
-            alt="Modern Alter Collection"
-            className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
-          
-          <div className="absolute bottom-0 left-0 p-6 sm:p-8 lg:p-12 text-left">
-            <p className="text-white text-lg sm:text-xl font-bold uppercase mb-4 opacity-90 drop-shadow-lg">
-              EDGE. VISION. REDEFINED.
-            </p>
-            <button className="mt-8 bg-white text-black font-bold px-8 py-4 text-base sm:text-lg uppercase tracking-wide">
-              Explore Collection
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
+      <NewsletterSignup />
     </div>
   );
 }
