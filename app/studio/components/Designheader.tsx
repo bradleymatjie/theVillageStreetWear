@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect } from 'react';
-import { Home, Shirt, ShoppingCart, Trash2 } from 'lucide-react';
+import { Home, LockIcon, Shirt, ShoppingCart, Trash2 } from 'lucide-react';
 import useDesignStore from '@/app/lib/useDesignStore';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
@@ -247,12 +247,14 @@ export default function DesignHeader() {
                     </span>
                   </div>
                   <Button 
-                    onClick={() => {
-                      router.push("/studio/checkout");
-                      setShowCartModal(false);
-                    }}
+                    // onClick={() => {
+                    //   router.push("/studio/checkout");
+                    //   setShowCartModal(false);
+                    // }}
+                    disabled
                     className="w-full bg-black text-white py-3 rounded font-bold hover:bg-gray-800 transition-colors"
                   >
+                    <LockIcon />
                     Proceed to Checkout
                   </Button>
                 </div>

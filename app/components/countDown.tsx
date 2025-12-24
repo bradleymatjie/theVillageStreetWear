@@ -1,11 +1,10 @@
 "use client"
 import { useState, useEffect } from "react";
-import { Clock } from "lucide-react";
 
 export default function CountdownBanner() {
   "use client";
 
-  const targetDate = new Date("2025-12-27T00:00:00");
+  const targetDate = new Date("2025-12-30T12:00:00");
 
   const [timeLeft, setTimeLeft] = useState({
     days: 0,

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCartStore } from "@/app/lib/cartStore";
-import { ShoppingBag, Truck, MapPin, Package } from "lucide-react";
+import { ShoppingBag, Truck, MapPin, Package, LockIcon } from "lucide-react";
 import { useUser } from "../lib/user";
 import { toast } from "sonner";
 
@@ -348,11 +348,12 @@ export default function CheckoutPage() {
 
               {/* Payment Button */}
               <button
-                type="submit"
-                disabled={isProcessing}
-                // disabled
+                // type="submit"
+                // disabled={isProcessing}
+                disabled
                 className="w-full py-4 bg-black text-white font-bold rounded-md hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
+                <LockIcon />
                 {isProcessing ? (
                   <>
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
