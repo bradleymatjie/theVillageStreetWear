@@ -1,11 +1,7 @@
 // app/api/yoco/create-checkout/route.ts
+import { supabase } from "@/lib/supabaseClient";
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export async function POST(req: Request) {
   try {
@@ -38,13 +34,25 @@ export async function POST(req: Request) {
     }
 
     const amountInCents = Math.round(parseFloat(amount) * 100);
-    const successUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/success?orderId=${encodeURIComponent(orderId)}`;
+    const params = new URLSearchParams({
+    orderId,
+    amount: amount.toString(),
+    email,
+    customer_name,
+    phone: phone || '',
+    cartItems: JSON.stringify(cartItems),
+    shipping_method,
+    shipping_address: shipping_address || '',
+    pickup_location: pickup_location || ''
+  });
+
+const successUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/success?${params.toString()}`;
 
     console.log("Generated successUrl:", successUrl);
     console.log("Order ID to send:", orderId);
 
     const metadata = {
-      orderId: orderId, // Use 'orderId' instead of 'checkoutId' to avoid conflicts
+      orderId: orderId,
       email,
       customer_name,
       phone: phone || '',
@@ -83,28 +91,27 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: data.message || "Checkout failed" }, { status: 400 });
     }
 
-    console.log("✅ Yoco checkout created:", data.id);
+    console.log("✅ Yoco checkout created:", yocoRes);
 
-    // CRITICAL: Create order in database with "pending" status
-    // Store BOTH your orderId AND Yoco's checkout ID
     const orderData = {
-      order_id: orderId, // Your custom ID (for success page)
-      yoco_checkout_id: data.id, // Yoco's checkout ID (for webhook lookup)
+      order_id: orderId,
+      yoco_checkout_id: data.id,
       status: "pending",
       total: parseFloat(amount),
       email,
       phone: phone || "",
       customer_name,
+      amount,
+      metadata,
       shipping_method: shipping_method || "",
       shipping_address: shipping_address || "",
       pickup_location: pickup_location || "",
-      payment_reference: null, // Will be set by webhook
       created_at: new Date().toISOString(),
     };
 
     console.log("Creating pending order:", orderData);
 
-    const { data: newOrder, error: insertError } = await supabase
+    const { data:newData, error: insertError } = await supabase
       .from("orders")
       .insert([orderData])
       .select()
@@ -112,28 +119,6 @@ export async function POST(req: Request) {
 
     if (insertError) {
       console.error("❌ Failed to create pending order:", insertError);
-      // Continue anyway - webhook can still create it
-    } else {
-      console.log("✅ Pending order created:", orderId, "with Yoco ID:", data.id);
-
-      // Create order items
-      try {
-        const orderItems = cartItems.map((item: any) => ({
-          order_id: orderId, // Link to your custom order ID
-          product_id: item.id,
-          product_name: item.name,
-          price: item.price,
-          quantity: item.quantity,
-          image_url: item.imageurl || "/noImage.jpg",
-          selected_size: item.selectedSize || null,
-          selected_material: item.selectedMaterial || null,
-        }));
-
-        await supabase.from("order_items").insert(orderItems);
-        console.log(`✅ Created ${orderItems.length} order items`);
-      } catch (itemsError) {
-        console.error("⚠️ Failed to create order items:", itemsError);
-      }
     }
 
     return NextResponse.json({ 

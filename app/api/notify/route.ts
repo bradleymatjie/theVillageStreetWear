@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h1 style="color: #000;">Welcome to The Village!</h1>
-            <p>Hey ${email.split('@')[0]},</p>
+            <p>Hey ${email},</p>
             <p>Thanks for joining the waitlist. Get ready for custom streetwear drops built on community style. We'll hit you up ~19 days from now.</p>
             <p>Stay tuned,<br>The Village Crew</p>
             <p>© 2025 The Village StreetWear. All Rights Reserved.</p>

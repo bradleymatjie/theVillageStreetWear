@@ -181,7 +181,7 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                       ${shipping_method === 'delivery' ? 'Shipped' : 'Ready for Pickup'}
                     </p>
                     <p style="margin:0; font-size:14px; color:#6b7280;">
-                      ${shipping_method === 'delivery' ? '1-2 Days' : '1-2 Hours'}
+                      ${shipping_method === 'delivery' ? '1-2 Days' : '2-3 days'}
                     </p>
                   </div>
                 </div>
@@ -320,9 +320,8 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                               <li style="margin-bottom:4px;">• Estimated delivery: 3-5 business days</li>
                               <li style="margin-bottom:0;">• ${shippingCost === 0 ? 'Free shipping on orders over R500' : 'Shipping fee: R75'}</li>
                               ` : `
-                              <li style="margin-bottom:4px;">• Your order will be ready in 1-2 hours</li>
+                              <li style="margin-bottom:4px;">• Your order will be ready in 2-3 days</li>
                               <li style="margin-bottom:4px;">• We'll notify you when it's ready for pickup</li>
-                              <li style="margin-bottom:4px;">• Please bring your order confirmation and ID</li>
                               <li style="margin-bottom:0;">• No pickup fee — completely free!</li>
                               `}
                             </ul>
@@ -343,8 +342,8 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                           <!-- Step 1 -->
                           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
                             <tr>
-                              <td width="32" valign="top" style="padding-right:12px;">
-                                <div style="width:32px; height:32px; background:#dbeafe; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#2563eb; font-weight:600; font-size:14px;">1</div>
+                              <td width="32" valign="top">
+                                <div style="width:32px; height:32px; background:#dbeafe; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#2563eb; font-weight:600; font-size:14px;text-align:center;">1</div>
                               </td>
                               <td valign="top">
                                 <p style="margin:0 0 4px; font-size:16px; font-weight:500; color:#111827;">Order Confirmation Email</p>
@@ -356,25 +355,12 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                           <!-- Step 2 -->
                           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
                             <tr>
-                              <td width="32" valign="top" style="padding-right:12px;">
-                                <div style="width:32px; height:32px; background:#dbeafe; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#2563eb; font-weight:600; font-size:14px;">2</div>
+                              <td width="32" valign="top">
+                                <div style="width:32px; height:32px; background:#dbeafe; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#2563eb; font-weight:600; font-size:14px;text-align:center;">2</div>
                               </td>
                               <td valign="top">
                                 <p style="margin:0 0 4px; font-size:16px; font-weight:500; color:#111827;">${shipping_method === 'delivery' ? 'Shipping Update' : 'Pickup Notification'}</p>
-                                <p style="margin:0; font-size:14px; color:#4b5563;">${shipping_method === 'delivery' ? "You'll receive tracking information within 48 hours" : "We'll notify you when your order is ready (usually 1-2 hours)"}</p>
-                              </td>
-                            </tr>
-                          </table>
-                          
-                          <!-- Step 3 -->
-                          <table width="100%" cellpadding="0" cellspacing="0">
-                            <tr>
-                              <td width="32" valign="top" style="padding-right:12px;">
-                                <div style="width:32px; height:32px; background:#dbeafe; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#2563eb; font-weight:600; font-size:14px;">3</div>
-                              </td>
-                              <td valign="top">
-                                <p style="margin:0 0 4px; font-size:16px; font-weight:500; color:#111827;">Need Help?</p>
-                                <p style="margin:0; font-size:14px; color:#4b5563;">Contact us at <a href="mailto:support@thevillage.com" style="color:#2563eb; text-decoration:none; font-weight:500;">support@thevillage.com</a></p>
+                                <p style="margin:0; font-size:14px; color:#4b5563;">${shipping_method === 'delivery' ? "You'll receive tracking information within 48 hours" : "We'll notify you when your order is ready (usually 2-3 days)"}</p>
                               </td>
                             </tr>
                           </table>
@@ -489,12 +475,4 @@ export async function POST(request: NextRequest) {
     console.error('Unexpected error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
-
-
-export async function GET() {
-  return NextResponse.json({ 
-    status: 'Email endpoint is accessible',
-    note: 'This endpoint only accepts POST requests for sending emails'
-  });
 }

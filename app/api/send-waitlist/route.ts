@@ -36,15 +36,12 @@ export async function POST() {
         let failedCount = 0;
         const results: any[] = [];
 
-        const waitt = [{id:1, email:""}];
 
         // Send sequentially with 600ms delay (under 2 requests/second)
-        for (const { id: rowId, email } of waitt) {
+        for (const { id: rowId, email } of waitlist) {
             const emailPayload = {
                 from: 'The Village <support@thevillagestreetwear.com>',
-                // Remove the hard-coded line when ready
-                to: "bradleysaint45@gmail.com",
-                // to: email, // Uncomment this for real sends
+                to: email,
                 subject: 'The Village Is Now Live — Public Beta Open!',
                 text: `Welcome to The Village
 
