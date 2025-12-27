@@ -11,9 +11,7 @@ interface Customer {
 
 async function fetchCustomers(): Promise<Customer[]> {
   // Build absolute URL: dev uses localhost, prod uses Vercel domain (or set NEXT_PUBLIC_BASE_URL in .env)
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
   const response = await fetch(`${baseUrl}/api/customers`, { cache: 'no-store' });
   if (!response.ok) {
