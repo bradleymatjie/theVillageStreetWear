@@ -36,8 +36,8 @@ export default function Header() {
           
           {/* Desktop Nav */}
           <nav className="hidden lg:flex gap-4 xl:gap-8">
-            <Link href="contact" className="text-sm font-semibold text-gray-700 hover:text-gray-900 hover:underline transition-colors">
-              CONTACT US
+            <Link href="/track-order" className="text-sm font-semibold text-gray-700 hover:text-gray-900 hover:underline transition-colors">
+              Track Order
             </Link>
             <Link href="/products" className="text-sm font-semibold text-gray-700 hover:text-gray-900 hover:underline transition-colors">
               CATALOG

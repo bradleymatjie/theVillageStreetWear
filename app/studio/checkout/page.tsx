@@ -495,18 +495,6 @@ const handlePlaceOrder = async (e: React.FormEvent) => {
                 {errors.agreeToTerms && (
                   <p className="text-sm text-red-600">{errors.agreeToTerms}</p>
                 )}
-
-                <div className="flex items-center gap-3">
-                  <input
-                    type="checkbox"
-                    id="subscribe"
-                    name="subscribe"
-                    className="h-5 w-5 rounded border-gray-300 text-black focus:ring-black"
-                  />
-                  <label htmlFor="subscribe" className="text-sm text-gray-700">
-                    Subscribe to our newsletter for updates and promotions
-                  </label>
-                </div>
               </div>
 
               {/* Payment Info */}
@@ -535,9 +523,9 @@ const handlePlaceOrder = async (e: React.FormEvent) => {
                 </div>
               </div>
               <button
-                // type="submit"
-                // disabled={processing || getCartItemCount() === 0}
-                disabled
+                type="submit"
+                disabled={processing || getCartItemCount() === 0}
+                // disabled
                 className="w-full bg-black text-white py-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
               >
                 

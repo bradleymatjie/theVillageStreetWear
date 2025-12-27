@@ -1,29 +1,15 @@
 // app/api/webhook-yoco/route.ts
 import { NextResponse } from "next/server";
-import { createClient } from "@supabase/supabase-js";
-import crypto from 'crypto';
+import { supabase } from "@/lib/supabaseClient";
 
-const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
 
 export async function POST(req: Request) {
     console.log("🎯 Webhook endpoint hit!");
 
     try {
-        // Yoco uses Svix for webhooks - different headers
-        const svixId = req.headers.get('webhook-id');
-        const svixTimestamp = req.headers.get('webhook-timestamp');
-        const svixSignature = req.headers.get('webhook-signature');
 
         const rawBody = await req.text();
 
-        console.log("📨 Received webhook:");
-        console.log("- Svix ID:", svixId);
-        console.log("- Svix Timestamp:", svixTimestamp);
-        console.log("- Svix Signature:", svixSignature ? "Present" : "Missing");
-        console.log("- Body length:", rawBody.length);
 
         let payload;
         try {
@@ -37,42 +23,6 @@ export async function POST(req: Request) {
 
         const eventType = payload.type;
         const data = payload.payload || {};
-
-        // Verify Svix signature if secret is configured
-        if (process.env.YOCO_WEBHOOK_SECRET && svixSignature && svixId && svixTimestamp) {
-            try {
-                // Svix signature format: v1,<base64_signature>
-                const signedContent = `${svixId}.${svixTimestamp}.${rawBody}`;
-                const expectedSignature = crypto
-                    .createHmac('sha256', process.env.YOCO_WEBHOOK_SECRET)
-                    .update(signedContent)
-                    .digest('base64');
-
-                // Extract all signatures (Svix sends multiple v1 signatures)
-                const signatures = svixSignature.split(' ').map(sig => {
-                    const [version, signature] = sig.split(',');
-                    return signature;
-                });
-
-                const isValid = signatures.some(sig => sig === expectedSignature);
-
-                if (!isValid) {
-                    console.error("❌ Invalid Svix signature");
-                    console.log("Expected one of:", signatures);
-                    console.log("Got:", expectedSignature);
-                    // For production, you should return an error here
-                    // return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
-                    console.warn("⚠️ Continuing despite signature mismatch for debugging");
-                } else {
-                    console.log("✅ Signature verified");
-                }
-            } catch (sigError) {
-                console.error("⚠️ Signature verification error:", sigError);
-                console.warn("⚠️ Continuing despite signature error for debugging");
-            }
-        } else {
-            console.warn("⚠️ Skipping signature verification (missing secret or headers)");
-        }
 
         // Process successful payments
         if (eventType === "payment.succeeded" && data.id) {
@@ -136,8 +86,6 @@ export async function POST(req: Request) {
                 orderData = newOrder;
                 console.log("✅ Order created:", orderData.order_id);
 
-                // Create order items if available
-                // Create order items if available
                 if (metadata.cartItems) {
                     try {
                         console.log("🛒 Processing cart items from metadata...");
