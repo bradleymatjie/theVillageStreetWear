@@ -4,13 +4,19 @@ import { useState } from 'react';
 import { Shirt, ArrowLeft, Check, Image as ImageIcon, Type, Loader2 } from 'lucide-react';
 import useDesignStore from '@/app/lib/useDesignStore';
 import Link from 'next/link';
+import { useUser } from '@/app/lib/user';
 
 export default function StudioCheckout() {
   const { cart, getCartItemCount, getCartTotal, updateCartItemQuantity, removeFromCart } = useDesignStore();
+  const {user} = useUser();
+
+  const userId = user?.id;
 
   const [processing, setProcessing] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   
+  const shippingCost = 90; // Fixed delivery fee
+
   // Form data
   const [formData, setFormData] = useState({
     fullName: '',
@@ -23,29 +29,13 @@ export default function StudioCheckout() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = 'Full name is required';
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
-    }
-    
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-    } else if (!/^\+?[\d\s\-()]+$/.test(formData.phone.replace(/\s/g, ''))) {
-      newErrors.phone = 'Please enter a valid phone number';
-    }
-    
-    if (!formData.address.trim()) {
-      newErrors.address = 'Shipping address is required';
-    }
-    
-    if (!formData.agreeToTerms) {
-      newErrors.agreeToTerms = 'You must agree to the terms and conditions';
-    }
+    if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Please enter a valid email address';
+    if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
+    else if (!/^\+?[\d\s\-()]+$/.test(formData.phone.replace(/\s/g, ''))) newErrors.phone = 'Please enter a valid phone number';
+    if (!formData.address.trim()) newErrors.address = 'Shipping address is required';
+    if (!formData.agreeToTerms) newErrors.agreeToTerms = 'You must agree to the terms and conditions';
     
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -53,101 +43,89 @@ export default function StudioCheckout() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
+    const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
     
-    setFormData({
-      ...formData,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value,
-    });
+    setFormData(prev => ({
+      ...prev,
+      [name]: checked !== undefined ? checked : value,
+    }));
     
-    // Clear error when user starts typing
     if (errors[name]) {
-      setErrors({
-        ...errors,
-        [name]: '',
-      });
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
-const handlePlaceOrder = async (e: React.FormEvent) => {
-  e.preventDefault();
-  
-  if (!validateForm()) {
-    return;
-  }
-  
-  setProcessing(true);
-  setErrors({});
-
-  try {
-    // Create order ID
-    const orderId = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
-
-    // Prepare cart items with proper structure
-    const cartItems = cart.map(item => ({
-      name: item.name,
-      screenshot: item.screenshot,
-      elements: item.elements,
-      view: item.view,
-      tshirt_color: item.tshirtColor,
-      price: parseFloat(item.price.toFixed(2)), // Ensure it's a number
-      quantity: item.quantity,
-      total_price: parseFloat((item.price * item.quantity).toFixed(2)), // Ensure it's a number
-    }));
-
-    // Call our checkout API endpoint
-    const response = await fetch('/api/orders/yoco', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        amount: parseFloat(getCartTotal().toFixed(2)), // Ensure it's a number
-        email: formData.email.trim(),
-        orderId: orderId,
-        customer_name: formData.fullName.trim(),
-        phone: formData.phone.trim(),
-        cart_items: cartItems,
-        shipping_address: formData.address.trim(),
-        // Note: shipping_method is not in your schema but we include it for metadata
-        shipping_method: 'standard',
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Payment failed to initialize');
-    }
-
-    // Store order info in localStorage for success page
-    localStorage.setItem('lastOrder', JSON.stringify({
-      order_number: orderId,
-      customer_name: formData.fullName,
-      customer_email: formData.email,
-      customer_phone: formData.phone,
-      shipping_address: formData.address,
-      items: cartItems,
-      subtotal: getCartTotal(),
-      shipping_cost: 0,
-      total: getCartTotal(),
-      created_at: new Date().toISOString(),
-      status: 'pending',
-    }));
+  const handlePlaceOrder = async (e: React.FormEvent) => {
+    e.preventDefault();
     
-    // Redirect to Yoco checkout page
-    if (data.redirectUrl) {
-      window.location.href = data.redirectUrl;
-    } else {
-      throw new Error('No redirect URL received from payment gateway');
+    if (!validateForm()) return;
+    
+    setProcessing(true);
+    setErrors({});
+
+    try {
+      const orderId = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+
+      const cartItems = cart.map(item => ({
+        name: item.name,
+        front: item.front,
+        back: item.back,
+        elements: item.elements,
+        tshirt_color: item.tshirtColor,
+        price: parseFloat(item.price.toFixed(2)),
+        quantity: item.quantity,
+        total_price: parseFloat((item.price * item.quantity).toFixed(2)),
+      }));
+
+      const totalAmount = getCartTotal() + shippingCost;
+      debugger;
+      const response = await fetch('/api/orders/yoco', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: parseFloat(totalAmount.toFixed(2)),
+          email: formData.email.trim(),
+          orderId,
+          customer_name: formData.fullName.trim(),
+          phone: formData.phone.trim(),
+          cart_items: cartItems,
+          shipping_address: formData.address.trim(),
+          shipping_method: 'standard',
+          shipping_cost: shippingCost,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) throw new Error(data.error || 'Payment failed to initialize');
+
+      localStorage.setItem('lastOrder', JSON.stringify({
+        order_number: orderId,
+        customer_name: formData.fullName,
+        customer_email: formData.email,
+        customer_phone: formData.phone,
+        shipping_address: formData.address,
+        items: cartItems,
+        subtotal: getCartTotal(),
+        shipping_cost: shippingCost,
+        total: totalAmount,
+        created_at: new Date().toISOString(),
+        status: 'pending',
+      }));
+      
+      if (data.redirectUrl) {
+        window.location.href = data.redirectUrl;
+      } else {
+        throw new Error('No redirect URL received from payment gateway');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      setErrors({
+        submit: error instanceof Error ? error.message : 'Failed to process payment. Please try again.'
+      });
+      setProcessing(false);
     }
-  } catch (error) {
-    console.error('Payment error:', error);
-    setErrors({
-      submit: error instanceof Error ? error.message : 'Failed to process payment. Please try again.'
-    });
-    setProcessing(false);
-  }
-};
+  };
 
   if (getCartItemCount() === 0) {
     return (
@@ -175,6 +153,8 @@ const handlePlaceOrder = async (e: React.FormEvent) => {
       </div>
     );
   }
+
+  const totalAmount = getCartTotal() + shippingCost;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 md:py-12">
@@ -206,156 +186,237 @@ const handlePlaceOrder = async (e: React.FormEvent) => {
             </div>
             
             <div className="space-y-8">
-              {cart.map((item) => (
-                <div key={item.id} className="pb-6 border-b border-gray-200 last:border-0">
-                  <div className="flex flex-col md:flex-row gap-6 mb-4">
-                    {/* Screenshot Preview */}
-                    <div className="w-full md:w-40 h-48 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 flex items-center justify-center shadow-sm">
-                      {item.screenshot ? (
-                        <img 
-                          src={item.screenshot} 
-                          alt={item.name} 
-                          className="max-w-full max-h-full object-contain p-2" 
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none';
-                            (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
-                          }}
-                        />
-                      ) : (
-                        <Shirt className="w-20 h-20 text-gray-400" />
-                      )}
-                      {!item.screenshot && (
-                        <Shirt className="w-20 h-20 text-gray-400" />
-                      )}
-                    </div>
+              {cart.map((item) => {
+                const totalElements = item.elements.front.length + item.elements.back.length;
+                const capitalizedColor = item.tshirtColor.charAt(0).toUpperCase() + item.tshirtColor.slice(1);
 
-                    {/* Item Details */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 mb-3">
-                        <h3 className="font-bold text-lg md:text-xl truncate">{item.name}</h3>
-                        <p className="text-xl md:text-2xl font-black whitespace-nowrap">
-                          R{(item.price * item.quantity).toFixed(2)}
-                        </p>
+                return (
+                  <div key={item.id} className="pb-6 border-b border-gray-200 last:border-0">
+                    <div className="flex flex-col md:flex-row gap-6 mb-4">
+                      {/* Previews - Front & Back */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full md:w-96 flex-shrink-0">
+                        {/* Front */}
+                        <div>
+                          <p className="text-sm font-medium text-gray-600 mb-2 text-center">Front</p>
+                          <div className="h-48 bg-gray-100 rounded-lg overflow-hidden shadow-sm">
+                            <img 
+                              src={item.front} 
+                              alt="Front design" 
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                          {item.elements.front.length === 0 && (
+                            <p className="text-center text-sm text-gray-500 mt-2">Blank front</p>
+                          )}
+                        </div>
+
+                        {/* Back */}
+                        <div>
+                          <p className="text-sm font-medium text-gray-600 mb-2 text-center">Back</p>
+                          <div className="h-48 bg-gray-100 rounded-lg overflow-hidden shadow-sm">
+                            <img 
+                              src={item.back} 
+                              alt="Back design" 
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                          {item.elements.back.length === 0 && (
+                            <p className="text-center text-sm text-gray-500 mt-2">Blank back</p>
+                          )}
+                        </div>
                       </div>
-                      
-                      <div className="space-y-2 mb-4">
-                        <p className="text-sm text-gray-600">
-                          <span className="font-medium">Color:</span> {item.tshirtColor}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          <span className="font-medium">View:</span> {item.view}
-                        </p>
-                        <p className="text-sm text-gray-600">
-                          <span className="font-medium">Elements:</span> {item.elements.length}
-                        </p>
-                      </div>
-                      
-                      {/* Quantity Controls */}
-                      <div className="flex flex-wrap items-center gap-3">
-                        <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
-                          <button
-                            onClick={() => {
-                              if (item.quantity > 1) {
-                                updateCartItemQuantity(item.id, item.quantity - 1);
-                              } else {
-                                removeFromCart(item.id);
-                              }
-                            }}
-                            className="px-3 py-2 hover:bg-gray-100 text-sm font-bold transition-colors"
-                            aria-label="Decrease quantity"
-                          >
-                            -
-                          </button>
-                          <span className="px-4 py-2 border-x border-gray-300 text-sm font-bold min-w-[3rem] text-center">
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() => updateCartItemQuantity(item.id, item.quantity + 1)}
-                            className="px-3 py-2 hover:bg-gray-100 text-sm font-bold transition-colors"
-                            aria-label="Increase quantity"
-                          >
-                            +
-                          </button>
+
+                      {/* Item Details */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 mb-3">
+                          <h3 className="font-bold text-lg md:text-xl truncate">{item.name}</h3>
+                          <p className="text-xl md:text-2xl font-black whitespace-nowrap">
+                            R{(item.price * item.quantity).toFixed(2)}
+                          </p>
                         </div>
                         
-                        <button
-                          onClick={() => {
-                            if (confirm('Remove this item from your cart?')) {
-                              removeFromCart(item.id);
-                            }
-                          }}
-                          className="text-red-500 hover:text-red-700 text-sm font-bold transition-colors ml-auto"
-                        >
-                          Remove
-                        </button>
+                        <div className="space-y-2 mb-4">
+                          <p className="text-sm text-gray-600">
+                            <span className="font-medium">Color:</span> {capitalizedColor}
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            <span className="font-medium">Design elements:</span> {totalElements} ({item.elements.front.length} front, {item.elements.back.length} back)
+                          </p>
+                        </div>
+                        
+                        {/* Quantity Controls */}
+                        <div className="flex flex-wrap items-center gap-3">
+                          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                            <button
+                              onClick={() => {
+                                if (item.quantity > 1 && userId) {
+                                  updateCartItemQuantity(item.id,userId, item.quantity - 1);
+                                } else {
+                                  removeFromCart(item.id,userId!);
+                                }
+                              }}
+                              className="px-3 py-2 hover:bg-gray-100 text-sm font-bold transition-colors"
+                              aria-label="Decrease quantity"
+                            >
+                              -
+                            </button>
+                            <span className="px-4 py-2 border-x border-gray-300 text-sm font-bold min-w-[3rem] text-center">
+                              {item.quantity}
+                            </span>
+                            <button
+                              onClick={() => updateCartItemQuantity(item.id,userId!, item.quantity + 1)}
+                              className="px-3 py-2 hover:bg-gray-100 text-sm font-bold transition-colors"
+                              aria-label="Increase quantity"
+                            >
+                              +
+                            </button>
+                          </div>
+                          
+                          <button
+                            onClick={() => {
+                              if (confirm('Remove this item from your cart?')) {
+                                removeFromCart(item.id,userId!);
+                              }
+                            }}
+                            className="text-red-500 hover:text-red-700 text-sm font-bold transition-colors ml-auto"
+                          >
+                            Remove
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Elements List */}
-                  {item.elements.length > 0 && (
-                    <div className="bg-gray-50 rounded-lg p-4 mt-4">
-                      <h4 className="text-sm font-bold mb-3 text-gray-700 flex items-center gap-2">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                        Design Elements:
-                      </h4>
-                      <ul className="space-y-3">
-                        {item.elements.map((element, idx) => (
-                          <li key={element.id} className="flex items-start gap-3 text-sm">
-                            {element.type === 'image' ? (
-                              <>
-                                <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center flex-shrink-0">
-                                  <ImageIcon className="w-4 h-4 text-blue-600" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex flex-wrap items-center gap-2">
-                                    <span className="font-medium text-gray-800">Image {idx + 1}</span>
-                                    <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded">
-                                      {Math.round((element as any).width)}×{Math.round((element as any).height)}px
-                                    </span>
-                                  </div>
-                                  {(element as any).src && (
-                                    <p className="text-xs text-gray-500 truncate mt-1">
-                                      {(element as any).src.split('/').pop()}
-                                    </p>
+                    {/* Elements List */}
+                    {totalElements > 0 && (
+                      <div className="bg-gray-50 rounded-lg p-4 mt-4 space-y-6">
+                        {item.elements.front.length > 0 && (
+                          <div>
+                            <h4 className="text-sm font-bold mb-3 text-gray-700 flex items-center gap-2">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              </svg>
+                              Front Elements ({item.elements.front.length})
+                            </h4>
+                            <ul className="space-y-3">
+                              {item.elements.front.map((element, idx) => (
+                                <li key={element.id} className="flex items-start gap-3 text-sm">
+                                  {element.type === 'image' ? (
+                                    <>
+                                      <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center flex-shrink-0">
+                                        <ImageIcon className="w-4 h-4 text-blue-600" />
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <div className="flex flex-wrap items-center gap-2">
+                                          <span className="font-medium text-gray-800">Image {idx + 1}</span>
+                                          <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded">
+                                            {Math.round(element.width)}×{Math.round(element.height)}px
+                                          </span>
+                                        </div>
+                                        {element.src && (
+                                          <p className="text-xs text-gray-500 truncate mt-1">
+                                            {element.src.split('/').pop()}
+                                          </p>
+                                        )}
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div className="w-8 h-8 bg-purple-100 rounded flex items-center justify-center flex-shrink-0">
+                                        <Type className="w-4 h-4 text-purple-600" />
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                                          <span className="font-medium text-gray-800">Text Element</span>
+                                          <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded">
+                                            {element.fontSize}px
+                                          </span>
+                                          <div 
+                                            className="w-4 h-4 rounded-full border border-gray-300 flex-shrink-0" 
+                                            style={{ backgroundColor: element.color }}
+                                            title={element.color}
+                                          />
+                                        </div>
+                                        <p className="text-gray-600 truncate">"{element.text}"</p>
+                                        {element.fontFamily && (
+                                          <p className="text-xs text-gray-500 mt-1">
+                                            Font: {element.fontFamily}
+                                          </p>
+                                        )}
+                                      </div>
+                                    </>
                                   )}
-                                </div>
-                              </>
-                            ) : (
-                              <>
-                                <div className="w-8 h-8 bg-purple-100 rounded flex items-center justify-center flex-shrink-0">
-                                  <Type className="w-4 h-4 text-purple-600" />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                                    <span className="font-medium text-gray-800">Text Element</span>
-                                    <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded">
-                                      {(element as any).fontSize}px
-                                    </span>
-                                    <div 
-                                      className="w-4 h-4 rounded-full border border-gray-300 flex-shrink-0" 
-                                      style={{ backgroundColor: (element as any).color }}
-                                      title={(element as any).color}
-                                    />
-                                  </div>
-                                  <p className="text-gray-600 truncate">"{(element as any).text}"</p>
-                                  {(element as any).fontFamily && (
-                                    <p className="text-xs text-gray-500 mt-1">
-                                      Font: {(element as any).fontFamily}
-                                    </p>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+
+                        {item.elements.back.length > 0 && (
+                          <div>
+                            <h4 className="text-sm font-bold mb-3 text-gray-700 flex items-center gap-2">
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              </svg>
+                              Back Elements ({item.elements.back.length})
+                            </h4>
+                            <ul className="space-y-3">
+                              {item.elements.back.map((element, idx) => (
+                                <li key={element.id} className="flex items-start gap-3 text-sm">
+                                  {element.type === 'image' ? (
+                                    <>
+                                      <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center flex-shrink-0">
+                                        <ImageIcon className="w-4 h-4 text-blue-600" />
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <div className="flex flex-wrap items-center gap-2">
+                                          <span className="font-medium text-gray-800">Image {idx + 1}</span>
+                                          <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded">
+                                            {Math.round(element.width)}×{Math.round(element.height)}px
+                                          </span>
+                                        </div>
+                                        {element.src && (
+                                          <p className="text-xs text-gray-500 truncate mt-1">
+                                            {element.src.split('/').pop()}
+                                          </p>
+                                        )}
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <div className="w-8 h-8 bg-purple-100 rounded flex items-center justify-center flex-shrink-0">
+                                        <Type className="w-4 h-4 text-purple-600" />
+                                      </div>
+                                      <div className="flex-1 min-w-0">
+                                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                                          <span className="font-medium text-gray-800">Text Element</span>
+                                          <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded">
+                                            {element.fontSize}px
+                                          </span>
+                                          <div 
+                                            className="w-4 h-4 rounded-full border border-gray-300 flex-shrink-0" 
+                                            style={{ backgroundColor: element.color }}
+                                            title={element.color}
+                                          />
+                                        </div>
+                                        <p className="text-gray-600 truncate">"{element.text}"</p>
+                                        {element.fontFamily && (
+                                          <p className="text-xs text-gray-500 mt-1">
+                                            Font: {element.fontFamily}
+                                          </p>
+                                        )}
+                                      </div>
+                                    </>
                                   )}
-                                </div>
-                              </>
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
-              ))}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
 
             {/* Order Totals */}
@@ -366,12 +427,12 @@ const handlePlaceOrder = async (e: React.FormEvent) => {
                   <span className="font-medium">R{getCartTotal().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Shipping</span>
-                  <span className="font-medium text-green-600">FREE</span>
+                  <span>Delivery</span>
+                  <span className="font-medium">R{shippingCost.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-xl md:text-2xl font-black pt-4 border-t border-gray-300">
                   <span>Total</span>
-                  <span>R{getCartTotal().toFixed(2)}</span>
+                  <span>R{totalAmount.toFixed(2)}</span>
                 </div>
                 <p className="text-sm text-gray-500 pt-2">
                   All prices include VAT where applicable
@@ -512,23 +573,22 @@ const handlePlaceOrder = async (e: React.FormEvent) => {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-blue-200 gap-2">
                   <div className="flex items-center gap-2">
                     <Check className="w-5 h-5 text-green-600" />
-                    <span className="font-bold text-gray-800">Total Amount:</span>
+                    <span className="font-bold text-gray-800">Total Amount (incl. delivery):</span>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl md:text-3xl font-black text-gray-900">
-                      R{getCartTotal().toFixed(2)}
+                      R{totalAmount.toFixed(2)}
                     </div>
                     <p className="text-sm text-gray-500">ZAR - South African Rand</p>
                   </div>
                 </div>
               </div>
+
               <button
                 type="submit"
                 disabled={processing || getCartItemCount() === 0}
-                // disabled
                 className="w-full bg-black text-white py-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
               >
-                
                 {processing ? (
                   <>
                     <Loader2 className="w-5 h-5 animate-spin" />

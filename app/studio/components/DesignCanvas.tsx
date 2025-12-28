@@ -1,10 +1,12 @@
 "use client";
 import { useRef, useCallback, useMemo, useState } from 'react';
-import { Trash2, RotateCw, Download, ShoppingCart, MoveLeftIcon, ChevronLeft, HomeIcon } from 'lucide-react';
-import useDesignStore, { ImageElement, TextElement } from '@/app/lib/useDesignStore';
-import { toPng } from 'html-to-image';
-import React from 'react';
+import { Trash2, RotateCw, Download, ShoppingCart, ChevronLeft } from 'lucide-react';
+import useDesignStore from '@/app/lib/useDesignStore';
+import { toPng, toJpeg } from 'html-to-image';
 import Link from 'next/link';
+import { v4 as uuidv4 } from 'uuid';
+import { supabase } from '@/lib/supabaseClient';
+import { useUser } from '@/app/lib/user';
 
 interface TShirtColor {
   name: string;
@@ -19,6 +21,20 @@ const tshirtColors: TShirtColor[] = [
   { name: 'red', hex: '#FF0000', frontImage: '/assets/red_front.png', backImage: '/assets/red_back.png' },
 ];
 
+// Helper function to convert data URL to Blob
+const dataURLtoBlob = (dataUrl: string): Blob => {
+  debugger;
+  const arr = dataUrl.split(',');
+  const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new Blob([u8arr], { type: mime });
+};
+
 export default function DesignCanvas() {
   const {
     currentDesign,
@@ -28,71 +44,133 @@ export default function DesignCanvas() {
     updateElement,
     deleteElement,
     addToCart,
+    setCurrentView,
   } = useDesignStore();
-
+  const {user} = useUser();
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const ToCaptureRef = useRef<HTMLDivElement>(null);
   const designAreaRef = useRef<HTMLDivElement>(null);
 
+  const hasElements = useMemo(
+    () => currentDesign.elements.front.length > 0 || currentDesign.elements.back.length > 0,
+    [currentDesign.elements]
+  );
+
+  // High quality PNG for downloads
+  const highQualityOptions = {
+    cacheBust: true,
+    backgroundColor: '#ffffff',
+    pixelRatio: 2,
+  };
+
+  // Compressed JPEG for cart previews (much smaller size to avoid localStorage quota issues)
+  const cartPreviewOptions = {
+    cacheBust: true,
+    backgroundColor: '#ffffff',
+    pixelRatio: 1,
+    quality: 0.8,
+  };
+
   const handleAddToCart = async () => {
+    debugger;
     if (!ToCaptureRef.current) return;
-    
+    debugger;
     setIsAddingToCart(true);
+    const originalView = currentView;
     const prevId = selectedElementId;
-    setSelectedElementId(null); // Remove blue rings for clean screenshot
+    setSelectedElementId(null); // Hide handles for clean previews
 
-    // Give React a moment to clear the UI handles
-    setTimeout(async () => {
-      try {
-        const dataUrl = await toPng(ToCaptureRef.current!, {
-          cacheBust: true,
-          backgroundColor: '#ffffff',
-          pixelRatio: 2,
-        });
+    let frontDataUrl: string | null = null;
+    let backDataUrl: string | null = null;
+    debugger;
+    try {
+      // Generate unique ID for this design
+      const itemUuid = uuidv4();
 
-        // Add to cart with screenshot and current view's elements
-        addToCart({
-          name: `${currentDesign.tshirtColor} T-Shirt (${currentView})`,
-          screenshot: dataUrl,
-          elements: currentDesign.elements[currentView],
-          view: currentView,
-          tshirtColor: currentDesign.tshirtColor,
-          price: 250, // Set your price here
-        });
-        setSelectedElementId(prevId); // Restore UI
-      } catch (err) {
-        console.error('Failed to add to cart:', err);
-        setSelectedElementId(prevId);
-      } finally {
-        setIsAddingToCart(false);
-      }
-    }, 150);
+      // Capture front as JPEG
+      setCurrentView('front');
+      await new Promise(resolve => setTimeout(resolve, 300));
+      frontDataUrl = await toJpeg(ToCaptureRef.current!, cartPreviewOptions);
+
+      // Capture back as JPEG
+      setCurrentView('back');
+      await new Promise(resolve => setTimeout(resolve, 300));
+      backDataUrl = await toJpeg(ToCaptureRef.current!, cartPreviewOptions);
+
+      // Convert data URLs to Blobs then Files
+      const blobToFile = (blob: Blob, filename: string) => 
+        new File([blob], filename, { type: blob.type });
+
+      const frontBlob = dataURLtoBlob(frontDataUrl);
+      const backBlob = dataURLtoBlob(backDataUrl);
+      const frontFile = blobToFile(frontBlob, `${itemUuid}_front.jpg`);
+      const backFile = blobToFile(backBlob, `${itemUuid}_back.jpg`);
+
+      // Get user ID from store
+      const userId = user?.id;
+      debugger;
+      if (!userId) throw new Error('Login required');
+
+      // Upload to Supabase Storage
+      const { data: frontData, error: frontError } = await supabase.storage
+        .from('design-assets')
+        .upload(`previews/${userId}/${itemUuid}_front.jpg`, frontFile, { upsert: true });
+
+      if (frontError) throw frontError;
+
+      const { data: backData, error: backError } = await supabase.storage
+        .from('design-assets')
+        .upload(`previews/${userId}/${itemUuid}_back.jpg`, backFile, { upsert: true });
+
+      if (backError) throw backError;
+
+      // Get public URLs
+      const frontUrl = supabase.storage
+        .from('design-assets')
+        .getPublicUrl(frontData.path).data.publicUrl;
+
+      const backUrl = supabase.storage
+        .from('design-assets')
+        .getPublicUrl(backData.path).data.publicUrl;
+
+      // Add to cart with URLs instead of data URLs
+      addToCart({
+        name: `${currentDesign.tshirtColor.charAt(0).toUpperCase() + currentDesign.tshirtColor.slice(1)} T-Shirt`,
+        front: frontUrl,
+        back: backUrl,
+        elements: currentDesign.elements,
+        tshirtColor: currentDesign.tshirtColor,
+        price: 250,
+      }, user);
+    } catch (err) {
+      console.error('Failed to generate previews or add to cart:', err);
+      alert('Failed to add to cart. Please make sure you are logged in and try again.');
+    } finally {
+      setCurrentView(originalView);
+      await new Promise(resolve => setTimeout(resolve, 100));
+      setSelectedElementId(prevId);
+      setIsAddingToCart(false);
+    }
   };
 
   const handleDownload = async () => {
     if (!ToCaptureRef.current) return;
 
     const prevId = selectedElementId;
-    setSelectedElementId(null); // Remove blue rings
+    setSelectedElementId(null);
 
-    // Give React a moment to clear the UI handles
-    setTimeout(() => {
-      toPng(ToCaptureRef.current!, {
-        cacheBust: true,
-        backgroundColor: '#ffffff',
-        pixelRatio: 2,
-      })
-        .then((dataUrl) => {
-          const link = document.createElement('a');
-          link.download = `village-design-${currentDesign.tshirtColor}-${currentView}.png`;
-          link.href = dataUrl;
-          link.click();
-          setSelectedElementId(prevId); // Restore UI
-        })
-        .catch((err) => {
-          console.error('Screenshot failed:', err);
-          setSelectedElementId(prevId);
-        });
+    setTimeout(async () => {
+      try {
+        const dataUrl = await toPng(ToCaptureRef.current!, highQualityOptions);
+        const link = document.createElement('a');
+        link.download = `village-design-${currentDesign.tshirtColor}-${currentView}.png`;
+        link.href = dataUrl;
+        link.click();
+      } catch (err) {
+        console.error('Screenshot failed:', err);
+      } finally {
+        setSelectedElementId(prevId);
+      }
     }, 150);
   };
 
@@ -124,7 +202,7 @@ export default function DesignCanvas() {
       startX: e.clientX,
       startY: e.clientY,
       initialX: element.x,
-      initialY: element.y
+      initialY: element.y,
     };
     setSelectedElementId(id);
     document.addEventListener('mousemove', handleMouseMove);
@@ -152,12 +230,13 @@ export default function DesignCanvas() {
   const handleResizeStart = useCallback((e: React.MouseEvent, anchor: string, id: number) => {
     e.preventDefault();
     e.stopPropagation();
-    const el = currentElements.find((el) => el.id === id) as ImageElement;
+    const el = currentElements.find((el) => el.id === id);
+    if (el?.type !== 'image') return;
     resizeRef.current = {
       anchor,
       startX: e.clientX,
       initialWidth: el.width,
-      aspect: el.aspect || 1
+      aspect: el.aspect || 1,
     };
     document.addEventListener('mousemove', handleResizeMove);
     document.addEventListener('mouseup', handleResizeEnd);
@@ -171,7 +250,7 @@ export default function DesignCanvas() {
 
     updateElement(selectedElementId, {
       width: newWidth,
-      height: newWidth / resizeRef.current.aspect
+      height: newWidth / resizeRef.current.aspect,
     });
   }, [selectedElementId, updateElement]);
 
@@ -208,7 +287,7 @@ export default function DesignCanvas() {
     const currentAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
 
     updateElement(selectedElementId, {
-      rotation: (rotateRef.current.initialRotation + (currentAngle - rotateRef.current.startAngle)) % 360
+      rotation: (rotateRef.current.initialRotation + (currentAngle - rotateRef.current.startAngle)) % 360,
     });
   }, [selectedElementId, updateElement, currentElements]);
 
@@ -221,24 +300,24 @@ export default function DesignCanvas() {
   return (
     <div className="h-full w-full flex flex-col bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-inner">
       <div className="p-4 border-b border-slate-200 bg-white/80 backdrop-blur-sm flex items-center justify-between flex-wrap gap-3">
-        <Link href="/" className="text-lg font-bold text-slate-800 flex items-center">
-          <ChevronLeft /> Home
+        <Link href="/" className="text-lg font-bold text-slate-800 flex items-center gap-2">
+          <ChevronLeft className="w-5 h-5" /> Home
         </Link>
-        <div className="flex gap-2">
+        <div className="flex gap-3">
           <button
             onClick={handleAddToCart}
-            disabled={isAddingToCart || currentElements.length === 0}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-md hover:shadow-lg"
+            disabled={isAddingToCart || !hasElements}
+            className="flex items-center gap-2 px-5 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg font-medium"
           >
-            <ShoppingCart className="w-4 h-4" />
+            <ShoppingCart className="w-5 h-5" />
             {isAddingToCart ? 'Adding...' : 'Add to Cart'}
           </button>
           <button
             onClick={handleDownload}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
+            className="flex items-center gap-2 px-5 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md hover:shadow-lg font-medium"
           >
-            <Download className="w-4 h-4" />
-            Save Image
+            <Download className="w-5 h-5" />
+            Save Current View
           </button>
         </div>
       </div>
@@ -248,7 +327,6 @@ export default function DesignCanvas() {
           ref={ToCaptureRef}
           className="relative w-full max-w-2xl aspect-square bg-white rounded-2xl shadow-2xl overflow-hidden"
         >
-          {/* Layer 1: The T-Shirt */}
           <img
             src={currentTshirtImage}
             alt="T-Shirt"
@@ -256,7 +334,6 @@ export default function DesignCanvas() {
             draggable={false}
           />
 
-          {/* Layer 2: Interactive Design Space */}
           <div
             ref={designAreaRef}
             className="absolute inset-0 cursor-crosshair"
@@ -277,11 +354,11 @@ export default function DesignCanvas() {
                 >
                   {element.type === 'image' ? (
                     <img
-                      src={(element as ImageElement).src}
+                      src={element.src}
                       alt="Design element"
                       style={{
-                        width: `${(element as ImageElement).width}px`,
-                        height: `${(element as ImageElement).height}px`,
+                        width: `${element.width}px`,
+                        height: `${element.height}px`,
                         objectFit: 'contain',
                         pointerEvents: 'none',
                         userSelect: 'none',
@@ -291,37 +368,40 @@ export default function DesignCanvas() {
                   ) : (
                     <div
                       style={{
-                        color: (element as TextElement).color,
-                        fontSize: `${(element as TextElement).fontSize}px`,
-                        fontFamily: (element as TextElement).fontFamily,
-                        fontWeight: (element as TextElement).bold ? 'bold' : 'normal',
-                        fontStyle: (element as TextElement).italic ? 'italic' : 'normal',
-                        textAlign: (element as TextElement).align as any,
+                        color: element.color,
+                        fontSize: `${element.fontSize}px`,
+                        fontFamily: element.fontFamily,
+                        fontWeight: element.bold ? 'bold' : 'normal',
+                        fontStyle: element.italic ? 'italic' : 'normal',
+                        textAlign: element.align as any,
                         whiteSpace: 'nowrap',
                         pointerEvents: 'none',
                         userSelect: 'none',
                       }}
                     >
-                      {(element as TextElement).text}
+                      {element.text}
                     </div>
                   )}
 
                   {selectedElementId === element.id && (
                     <>
-                      <div className="absolute inset-0 border-2 border-blue-500 rounded pointer-events-none" style={{ transform: 'translate(0, 0)' }} />
+                      <div
+                        className="absolute inset-0 border-2 border-blue-500 rounded pointer-events-none"
+                        style={{ transform: 'translate(0, 0)' }}
+                      />
 
                       {element.type === 'image' && (
                         <div
                           onMouseDown={(e) => handleResizeStart(e, 'se', element.id)}
-                          className="absolute -bottom-2 -right-2 w-4 h-4 bg-blue-500 border-2 border-white rounded-full cursor-se-resize hover:bg-blue-600 transition-colors z-10"
+                          className="absolute -bottom-3 -right-3 w-6 h-6 bg-blue-500 border-3 border-white rounded-full cursor-se-resize hover:bg-blue-600 transition-colors shadow-lg z-10"
                         />
                       )}
 
                       <div
                         onMouseDown={(e) => handleRotateStart(e, element.id)}
-                        className="absolute -top-8 left-1/2 -translate-x-1/2 cursor-pointer z-10"
+                        className="absolute -top-10 left-1/2 -translate-x-1/2 cursor-grab active:cursor-grabbing z-10"
                       >
-                        <RotateCw className="w-5 h-5 text-blue-500 hover:text-blue-600" />
+                        <RotateCw className="w-6 h-6 text-blue-500 hover:text-blue-600 drop-shadow-md" />
                       </div>
 
                       <button
@@ -329,9 +409,9 @@ export default function DesignCanvas() {
                           e.stopPropagation();
                           deleteElement(element.id);
                         }}
-                        className="absolute -top-4 -right-4 bg-rose-500 text-white p-1.5 rounded-full shadow hover:bg-rose-600 transition-colors z-20"
+                        className="absolute -top-5 -right-5 bg-rose-500 text-white p-2 rounded-full shadow-lg hover:bg-rose-600 transition-colors z-20"
                       >
-                        <Trash2 className="w-3 h-3" />
+                        <Trash2 className="w-4 h-4" />
                       </button>
                     </>
                   )}

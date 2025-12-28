@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ExtendedUser, useUser } from '@/app/lib/user';
-import { createBrowserClient } from '@supabase/ssr';
 import { supabase } from '@/lib/supabaseClient';
 
 
@@ -28,7 +27,7 @@ export default function AuthCallbackPage() {
 
         // Get the current session (this handles both OAuth and email verification)
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-
+        debugger;
         if (sessionError) {
           console.error('Session error:', sessionError);
           setError(sessionError.message);
@@ -43,7 +42,6 @@ export default function AuthCallbackPage() {
           return;
         }
 
-        // Verify the user's email is confirmed (for email signups)
         if (session.user && !session.user.email_confirmed_at) {
           console.error('Email not confirmed');
           setError('Email verification incomplete. Please check your email.');
@@ -53,6 +51,8 @@ export default function AuthCallbackPage() {
 
         // Store user in Zustand after successful authentication
         if (session.user) {
+          debugger;
+          console.log("user in zustand", session);
           const extendedUser: ExtendedUser = {
             ...session.user,
             user_metadata: {

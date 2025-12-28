@@ -135,15 +135,12 @@ export async function POST(request: NextRequest) {
 
       if (!orderResponse.ok) {
         console.error('Order creation failed:', orderData);
-        // We still return Yoco URL but log the error
         console.warn('Order saved to Yoco but not to database:', orderData.error);
       }
     } catch (dbError) {
       console.error('Database error during order creation:', dbError);
-      // Continue to payment even if database fails
     }
 
-    // Return Yoco redirect URL
     return NextResponse.json({
       success: true,
       redirectUrl: yocoData.redirectUrl,

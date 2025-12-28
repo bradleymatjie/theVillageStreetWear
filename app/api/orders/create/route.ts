@@ -12,8 +12,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-
-    // Additional validation based on your schema constraints
+     
     if (!orderData.customer_name) {
       return NextResponse.json(
         { error: 'customer_name is required' },
@@ -56,12 +55,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Convert numeric values to proper format
     const subtotal = parseFloat(orderData.subtotal);
     const shippingCost = parseFloat(orderData.shipping_cost || 0);
     const total = parseFloat(orderData.total);
 
-    // Validate numeric values
     if (isNaN(subtotal) || isNaN(shippingCost) || isNaN(total)) {
       return NextResponse.json(
         { error: 'Invalid numeric values in subtotal, shipping_cost, or total' },
@@ -69,7 +66,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Insert order into Supabase (matching your exact schema)
     const { data, error } = await supabase
       .from('design_orders')
       .insert([
@@ -79,7 +75,7 @@ export async function POST(request: NextRequest) {
           customer_email: orderData.customer_email,
           customer_phone: orderData.customer_phone,
           shipping_address: orderData.shipping_address,
-          items: orderData.items, // JSONB field
+          items: orderData.items,
           subtotal: subtotal,
           shipping_cost: shippingCost,
           total: total,
@@ -88,7 +84,6 @@ export async function POST(request: NextRequest) {
           status: orderData.status || 'pending',
           notes: orderData.notes || null,
           created_at: orderData.created_at || new Date().toISOString(),
-          // updated_at will be automatically set by the trigger
         }
       ])
       .select();
