@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Shirt, ArrowLeft, Check, Image as ImageIcon, Type, Loader2 } from 'lucide-react';
 import useDesignStore from '@/app/lib/useDesignStore';
 import Link from 'next/link';
@@ -8,14 +8,14 @@ import { useUser } from '@/app/lib/user';
 
 export default function StudioCheckout() {
   const { cart, getCartItemCount, getCartTotal, updateCartItemQuantity, removeFromCart } = useDesignStore();
-  const {user} = useUser();
+  const { user } = useUser();
 
   const userId = user?.id;
 
   const [processing, setProcessing] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   
-  const shippingCost = 90; // Fixed delivery fee
+  const baseDeliveryFee = 90; // Fixed delivery fee when delivery is selected
 
   // Form data
   const [formData, setFormData] = useState({
@@ -23,8 +23,24 @@ export default function StudioCheckout() {
     email: '',
     phone: '',
     address: '',
+    deliveryMethod: 'delivery' as 'delivery' | 'pickup',
     agreeToTerms: false,
   });
+
+  // Pre-fill form with user data when user becomes available
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        fullName: user.user_metadata?.full_name || prev.fullName || '',
+        email: user.email || prev.email || '',
+        phone: user.user_metadata?.phone || prev.phone || '',
+      }));
+    }
+  }, [user]);
+
+  const deliveryFee = formData.deliveryMethod === 'delivery' ? baseDeliveryFee : 0;
+  const totalAmount = getCartTotal() + deliveryFee;
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -34,7 +50,11 @@ export default function StudioCheckout() {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Please enter a valid email address';
     if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
     else if (!/^\+?[\d\s\-()]+$/.test(formData.phone.replace(/\s/g, ''))) newErrors.phone = 'Please enter a valid phone number';
-    if (!formData.address.trim()) newErrors.address = 'Shipping address is required';
+    
+    if (formData.deliveryMethod === 'delivery' && !formData.address.trim()) {
+      newErrors.address = 'Shipping address is required for delivery';
+    }
+    
     if (!formData.agreeToTerms) newErrors.agreeToTerms = 'You must agree to the terms and conditions';
     
     setErrors(newErrors);
@@ -67,6 +87,7 @@ export default function StudioCheckout() {
       const orderId = `ORD-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
       const cartItems = cart.map(item => ({
+        id: item.id,
         name: item.name,
         front: item.front,
         back: item.back,
@@ -77,8 +98,6 @@ export default function StudioCheckout() {
         total_price: parseFloat((item.price * item.quantity).toFixed(2)),
       }));
 
-      const totalAmount = getCartTotal() + shippingCost;
-      debugger;
       const response = await fetch('/api/orders/yoco', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -89,9 +108,10 @@ export default function StudioCheckout() {
           customer_name: formData.fullName.trim(),
           phone: formData.phone.trim(),
           cart_items: cartItems,
-          shipping_address: formData.address.trim(),
-          shipping_method: 'standard',
-          shipping_cost: shippingCost,
+          shipping_address: formData.deliveryMethod === 'delivery' ? formData.address.trim() : 'Pickup - Johannesburg CBD',
+          shipping_method: formData.deliveryMethod,
+          shipping_cost: deliveryFee,
+          pickup_location: formData.deliveryMethod === 'pickup' ? 'Johannesburg CBD' : '',
         }),
       });
 
@@ -104,10 +124,12 @@ export default function StudioCheckout() {
         customer_name: formData.fullName,
         customer_email: formData.email,
         customer_phone: formData.phone,
-        shipping_address: formData.address,
+        shipping_address: formData.deliveryMethod === 'delivery' ? formData.address : 'Pickup - Johannesburg CBD',
+        shipping_method: formData.deliveryMethod,
+        pickup_location: formData.deliveryMethod === 'pickup' ? 'Johannesburg CBD' : '',
         items: cartItems,
         subtotal: getCartTotal(),
-        shipping_cost: shippingCost,
+        shipping_cost: deliveryFee,
         total: totalAmount,
         created_at: new Date().toISOString(),
         status: 'pending',
@@ -153,8 +175,6 @@ export default function StudioCheckout() {
       </div>
     );
   }
-
-  const totalAmount = getCartTotal() + shippingCost;
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 md:py-12">
@@ -249,13 +269,15 @@ export default function StudioCheckout() {
                           <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
                             <button
                               onClick={() => {
-                                if (item.quantity > 1 && userId) {
-                                  updateCartItemQuantity(item.id,userId, item.quantity - 1);
+                                if (!userId) return;
+                                if (item.quantity > 1) {
+                                  updateCartItemQuantity(item.id, userId, item.quantity - 1);
                                 } else {
-                                  removeFromCart(item.id,userId!);
+                                  removeFromCart(item.id, userId);
                                 }
                               }}
-                              className="px-3 py-2 hover:bg-gray-100 text-sm font-bold transition-colors"
+                              disabled={!userId}
+                              className="px-3 py-2 hover:bg-gray-100 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                               aria-label="Decrease quantity"
                             >
                               -
@@ -264,8 +286,12 @@ export default function StudioCheckout() {
                               {item.quantity}
                             </span>
                             <button
-                              onClick={() => updateCartItemQuantity(item.id,userId!, item.quantity + 1)}
-                              className="px-3 py-2 hover:bg-gray-100 text-sm font-bold transition-colors"
+                              onClick={() => {
+                                if (!userId) return;
+                                updateCartItemQuantity(item.id, userId, item.quantity + 1);
+                              }}
+                              disabled={!userId}
+                              className="px-3 py-2 hover:bg-gray-100 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                               aria-label="Increase quantity"
                             >
                               +
@@ -274,11 +300,13 @@ export default function StudioCheckout() {
                           
                           <button
                             onClick={() => {
+                              if (!userId) return;
                               if (confirm('Remove this item from your cart?')) {
-                                removeFromCart(item.id,userId!);
+                                removeFromCart(item.id, userId);
                               }
                             }}
-                            className="text-red-500 hover:text-red-700 text-sm font-bold transition-colors ml-auto"
+                            disabled={!userId}
+                            className="text-red-500 hover:text-red-700 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ml-auto"
                           >
                             Remove
                           </button>
@@ -292,9 +320,6 @@ export default function StudioCheckout() {
                         {item.elements.front.length > 0 && (
                           <div>
                             <h4 className="text-sm font-bold mb-3 text-gray-700 flex items-center gap-2">
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                              </svg>
                               Front Elements ({item.elements.front.length})
                             </h4>
                             <ul className="space-y-3">
@@ -354,9 +379,6 @@ export default function StudioCheckout() {
                         {item.elements.back.length > 0 && (
                           <div>
                             <h4 className="text-sm font-bold mb-3 text-gray-700 flex items-center gap-2">
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                              </svg>
                               Back Elements ({item.elements.back.length})
                             </h4>
                             <ul className="space-y-3">
@@ -427,8 +449,10 @@ export default function StudioCheckout() {
                   <span className="font-medium">R{getCartTotal().toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Delivery</span>
-                  <span className="font-medium">R{shippingCost.toFixed(2)}</span>
+                  <span>{formData.deliveryMethod === 'delivery' ? 'Delivery' : 'Pickup'}</span>
+                  <span className="font-medium">
+                    {formData.deliveryMethod === 'delivery' ? `R${baseDeliveryFee.toFixed(2)}` : 'Free'}
+                  </span>
                 </div>
                 <div className="flex justify-between text-xl md:text-2xl font-black pt-4 border-t border-gray-300">
                   <span>Total</span>
@@ -476,13 +500,17 @@ export default function StudioCheckout() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
+                    readOnly={!!user}
                     className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all ${
                       errors.email ? 'border-red-500 ring-red-200' : 'border-gray-300'
-                    }`} 
+                    } ${!!user ? 'bg-gray-100 cursor-not-allowed' : ''}`} 
                     placeholder="john@example.com" 
                   />
                   {errors.email && (
                     <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                  )}
+                  {!!user && (
+                    <p className="mt-1 text-sm text-gray-600">Using your account email</p>
                   )}
                 </div>
 
@@ -507,28 +535,83 @@ export default function StudioCheckout() {
                 </div>
               </div>
 
+              {/* Delivery Method Selection */}
               <div>
-                <label className="block font-bold mb-2 text-gray-800">
-                  Shipping Address <span className="text-red-500">*</span>
+                <label className="block font-bold mb-3 text-gray-800">
+                  Delivery Method <span className="text-red-500">*</span>
                 </label>
-                <textarea 
-                  required
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  rows={4} 
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all resize-none ${
-                    errors.address ? 'border-red-500 ring-red-200' : 'border-gray-300'
-                  }`} 
-                  placeholder="Street Address, City, Province, Postal Code" 
-                />
-                {errors.address && (
-                  <p className="mt-1 text-sm text-red-600">{errors.address}</p>
-                )}
-                <p className="mt-2 text-sm text-gray-500">
-                  Please provide your complete shipping address for delivery
-                </p>
+                <div className="space-y-4">
+                  <label className="flex items-center justify-between cursor-pointer rounded-lg border-2 p-4 transition-all hover:border-black ${formData.deliveryMethod === 'delivery' ? 'border-black bg-gray-50' : 'border-gray-300'}">
+                    <div className="flex items-center gap-4">
+                      <input
+                        type="radio"
+                        name="deliveryMethod"
+                        value="delivery"
+                        checked={formData.deliveryMethod === 'delivery'}
+                        onChange={handleInputChange}
+                        className="h-5 w-5 text-black focus:ring-black"
+                      />
+                      <div>
+                        <p className="font-bold">Door-to-Door Delivery</p>
+                        <p className="text-sm text-gray-600">Nationwide courier</p>
+                      </div>
+                    </div>
+                    <span className="font-bold">R{baseDeliveryFee.toFixed(2)}</span>
+                  </label>
+
+                  <label className="flex items-center justify-between cursor-pointer rounded-lg border-2 p-4 transition-all hover:border-black ${formData.deliveryMethod === 'pickup' ? 'border-black bg-green-50' : 'border-gray-300'}">
+                    <div className="flex items-center gap-4">
+                      <input
+                        type="radio"
+                        name="deliveryMethod"
+                        value="pickup"
+                        checked={formData.deliveryMethod === 'pickup'}
+                        onChange={handleInputChange}
+                        className="h-5 w-5 text-black focus:ring-black"
+                      />
+                      <div>
+                        <p className="font-bold text-green-700">Free Pickup</p>
+                        <p className="text-sm text-gray-600">Collect in Johannesburg CBD</p>
+                      </div>
+                    </div>
+                    <span className="font-bold text-green-600">Free</span>
+                  </label>
+                </div>
               </div>
+
+              {/* Conditional Address or Pickup Info */}
+              {formData.deliveryMethod === 'delivery' ? (
+                <div>
+                  <label className="block font-bold mb-2 text-gray-800">
+                    Shipping Address <span className="text-red-500">*</span>
+                  </label>
+                  <textarea 
+                    required
+                    name="address"
+                    value={formData.address}
+                    onChange={handleInputChange}
+                    rows={4} 
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all resize-none ${
+                      errors.address ? 'border-red-500 ring-red-200' : 'border-gray-300'
+                    }`} 
+                    placeholder="Street Address, City, Province, Postal Code" 
+                  />
+                  {errors.address && (
+                    <p className="mt-1 text-sm text-red-600">{errors.address}</p>
+                  )}
+                  <p className="mt-2 text-sm text-gray-500">
+                    Please provide your complete shipping address for delivery
+                  </p>
+                </div>
+              ) : (
+                <div className="bg-green-50 border-2 border-green-300 rounded-xl p-6">
+                  <h3 className="font-bold text-lg mb-3 text-green-800">Pickup Location</h3>
+                  <p className="font-medium text-gray-800">Johannesburg CBD</p>
+                  <p className="text-sm text-gray-700 mt-3">
+                    Save on shipping! We'll send the exact pickup address, map link, and collection instructions to your email once your order is ready (typically 3–5 business days).
+                  </p>
+                </div>
+              )}
 
               {/* Terms and Conditions */}
               <div className="space-y-4">
@@ -561,10 +644,6 @@ export default function StudioCheckout() {
               {/* Payment Info */}
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
                 <h3 className="font-bold mb-3 flex items-center gap-2 text-blue-800">
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 15V3M12 15L8 11M12 15L16 11" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <path d="M2 17L2.621 19.485C2.72915 19.9179 2.97842 20.3014 3.33033 20.5763C3.68224 20.8512 4.11699 21.0019 4.565 21H19.435C19.883 21.0019 20.3178 20.8512 20.6697 20.5763C21.0216 20.3014 21.2709 19.9179 21.379 19.485L22 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
                   Secure Payment via Yoco
                 </h3>
                 <p className="text-sm text-blue-700 mb-4">
@@ -573,7 +652,7 @@ export default function StudioCheckout() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-blue-200 gap-2">
                   <div className="flex items-center gap-2">
                     <Check className="w-5 h-5 text-green-600" />
-                    <span className="font-bold text-gray-800">Total Amount (incl. delivery):</span>
+                    <span className="font-bold text-gray-800">Total Amount:</span>
                   </div>
                   <div className="text-right">
                     <div className="text-2xl md:text-3xl font-black text-gray-900">
@@ -596,15 +675,11 @@ export default function StudioCheckout() {
                   </>
                 ) : (
                   <>
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3v-8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
                     Proceed to Secure Payment
                   </>
                 )}
               </button>
 
-              {/* Security Badges */}
               <div className="pt-4 border-t border-gray-200">
                 <p className="text-center text-sm text-gray-500 mb-4">
                   Your payment is secure and encrypted
