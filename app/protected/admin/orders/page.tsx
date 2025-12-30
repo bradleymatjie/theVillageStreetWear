@@ -14,13 +14,13 @@ interface OrderItem {
   selected_material?: string;
 }
 
-interface Order {
+interface CatalogOrder {
   id: number;
   order_id: string;
   created_at: string;
   customer_name: string;
   email: string;
-  phone: string;
+  phone?: string;
   total: number;
   status: string;
   payment_status: string;
@@ -28,6 +28,30 @@ interface Order {
   shipping_address?: string;
   pickup_location?: string;
   order_items: OrderItem[];
+}
+
+interface DesignOrder {
+  id: string;
+  order_id: string;
+  created_at: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone?: string;
+  total: number;
+  status: string;
+  payment_status: string;
+  shipping_method: string;
+  shipping_address?: string;
+  pickup_location?: string;
+  cartItems: {
+    name?: string;
+    front?: string;
+    back?: string;
+    tshirt_color: string;
+    price: number;
+    quantity: number;
+    selectedSize?: string;
+  }[];
 }
 
 const statusOptions = [
@@ -48,18 +72,18 @@ function getStatusLabel(status: string) {
   return option?.label || status.charAt(0).toUpperCase() + status.slice(1);
 }
 
-function OrderCard({
+// Catalog Order Card (unchanged from your original, just minor refactors)
+function CatalogOrderCard({
   order,
   updateStatus,
 }: {
-  order: Order;
+  order: CatalogOrder;
   updateStatus: (id: number, newStatus: string) => Promise<void>;
 }) {
   const [expanded, setExpanded] = useState(false);
   const [localStatus, setLocalStatus] = useState(order.status);
   const [updating, setUpdating] = useState(false);
 
-  // Sync localStatus if the order prop changes (e.g., after successful update or refetch)
   useEffect(() => {
     setLocalStatus(order.status);
   }, [order.status]);
@@ -70,7 +94,6 @@ function OrderCard({
     try {
       await updateStatus(order.id, localStatus);
     } catch (err) {
-      // Error handling (alert or toast)
       alert("Failed to update status. Please try again.");
     } finally {
       setUpdating(false);
@@ -79,7 +102,6 @@ function OrderCard({
 
   return (
     <div className="bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg overflow-hidden">
-      {/* Summary Row - Click to Expand */}
       <button
         onClick={() => setExpanded(!expanded)}
         className="w-full p-6 text-left flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-[#1A1A1A] transition-colors"
@@ -107,10 +129,8 @@ function OrderCard({
         </div>
       </button>
 
-      {/* Expanded Details */}
       {expanded && (
         <div className="p-6 border-t border-[#1A1A1A] space-y-8">
-          {/* Order Items */}
           <div>
             <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
               <Package className="w-5 h-5" />
@@ -124,7 +144,7 @@ function OrderCard({
                 >
                   <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-[#1A1A1A] flex-shrink-0">
                     <Image
-                      src={item.image_url || "/noImage.jpg"}
+                      src={item.image_url || "/placeholder.jpg"}
                       alt={item.name}
                       fill
                       className="object-cover"
@@ -149,7 +169,6 @@ function OrderCard({
             </div>
           </div>
 
-          {/* Customer & Shipping Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <h3 className="font-bold mb-3 flex items-center gap-2">
@@ -171,22 +190,15 @@ function OrderCard({
 
             <div>
               <h3 className="font-bold mb-3 flex items-center gap-2">
-                {order.shipping_method === "delivery" ? (
-                  <Truck className="w-5 h-5" />
-                ) : (
-                  <MapPin className="w-5 h-5" />
-                )}
+                {order.shipping_method === "delivery" ? <Truck className="w-5 h-5" /> : <MapPin className="w-5 h-5" />}
                 {order.shipping_method === "delivery" ? "Delivery" : "Pickup"} Details
               </h3>
-              {order.shipping_method === "delivery" ? (
-                <p className="whitespace-pre-line text-gray-300">{order.shipping_address}</p>
-              ) : (
-                <p className="text-gray-300">{order.pickup_location}</p>
-              )}
+              <p className="text-gray-300">
+                {order.shipping_address || order.pickup_location || "N/A"}
+              </p>
             </div>
           </div>
 
-          {/* Status Update Form */}
           <div className="pt-6 border-t border-[#1A1A1A]">
             <h3 className="font-bold text-lg mb-4">Update Fulfillment Status</h3>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -213,7 +225,197 @@ function OrderCard({
                 </button>
               )}
             </div>
+            <p className="text-sm text-gray-500 mt-3">
+              Current status: <span className="font-medium">{getStatusLabel(order.status)}</span>
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
+// New Design Order Card – tailored for custom tees
+function DesignOrderCard({
+  order,
+  updateStatus,
+}: {
+  order: DesignOrder;
+  updateStatus: (id: string, newStatus: string) => Promise<void>;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const [localStatus, setLocalStatus] = useState(order.status);
+  const [updating, setUpdating] = useState(false);
+
+  useEffect(() => {
+    setLocalStatus(order.status);
+  }, [order.status]);
+
+  const handleSave = async () => {
+    if (localStatus === order.status) return;
+    setUpdating(true);
+    try {
+      await updateStatus(order.id, localStatus);
+    } catch (err) {
+      alert("Failed to update status. Please try again.");
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  return (
+    <div className="bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg overflow-hidden">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full p-6 text-left flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-[#1A1A1A] transition-colors"
+      >
+        <div className="flex flex-col md:flex-row md:items-center gap-4">
+          <span className="font-bold text-lg">#{order.order_id}</span>
+          <span className="text-gray-400 flex items-center gap-2">
+            <Clock className="w-4 h-4" />
+            {new Date(order.created_at).toLocaleString()}
+          </span>
+          <span className="font-medium">{order.customer_name}</span>
+          <span className="text-gray-400">{order.customer_email}</span>
+          <span className="font-bold text-xl">R{order.total.toFixed(2)}</span>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <span className={`px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
+            {getStatusLabel(order.status)}
+          </span>
+          {order.shipping_method === "delivery" ? (
+            <Truck className="w-5 h-5 text-gray-400" />
+          ) : (
+            <MapPin className="w-5 h-5 text-gray-400" />
+          )}
+        </div>
+      </button>
+
+      {expanded && (
+        <div className="p-6 border-t border-[#1A1A1A] space-y-8">
+          <div>
+            <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+              <Package className="w-5 h-5" />
+              Custom Items ({order.cartItems.length})
+            </h3>
+            <div className="space-y-12">
+              {order.cartItems.map((item, idx) => (
+                <div key={idx} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {item.front ? (
+                      <div className="relative aspect-square bg-[#1A1A1A] rounded-lg overflow-hidden border border-[#333]">
+                        <Image
+                          src={item.front}
+                          alt="Front design"
+                          fill
+                          className="object-contain"
+                        />
+                        <span className="absolute bottom-0 left-0 bg-black/70 text-white text-xs px-3 py-1 rounded-tr-lg">
+                          Front
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="aspect-square bg-[#1A1A1A] rounded-lg border border-[#333] flex items-center justify-center">
+                        <span className="text-gray-500">No front design</span>
+                      </div>
+                    )}
+                    {item.back ? (
+                      <div className="relative aspect-square bg-[#1A1A1A] rounded-lg overflow-hidden border border-[#333]">
+                        <Image
+                          src={item.back}
+                          alt="Back design"
+                          fill
+                          className="object-contain"
+                        />
+                        <span className="absolute bottom-0 left-0 bg-black/70 text-white text-xs px-3 py-1 rounded-tr-lg">
+                          Back
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="aspect-square bg-[#1A1A1A] rounded-lg border border-[#333] flex items-center justify-center">
+                        <span className="text-gray-500">No back design</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                    <p>
+                      <span className="text-gray-400">Color:</span> {item.tshirt_color}
+                    </p>
+                    {item.selectedSize && (
+                      <p>
+                        <span className="text-gray-400">Size:</span> {item.selectedSize}
+                      </p>
+                    )}
+                    <p>
+                      <span className="text-gray-400">Quantity:</span> {item.quantity}
+                    </p>
+                    <p>
+                      <span className="text-gray-400">Price:</span> R{(item.price * item.quantity).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-bold mb-3 flex items-center gap-2">
+                <Mail className="w-5 h-5" />
+                Customer Info
+              </h3>
+              <p>{order.customer_name}</p>
+              <p className="text-gray-400 flex items-center gap-2 mt-1">
+                <Mail className="w-4 h-4" />
+                {order.customer_email}
+              </p>
+              {order.customer_phone && (
+                <p className="text-gray-400 flex items-center gap-2 mt-1">
+                  <Phone className="w-4 h-4" />
+                  {order.customer_phone}
+                </p>
+              )}
+            </div>
+
+            <div>
+              <h3 className="font-bold mb-3 flex items-center gap-2">
+                {order.shipping_method === "delivery" ? <Truck className="w-5 h-5" /> : <MapPin className="w-5 h-5" />}
+                {order.shipping_method === "delivery" ? "Delivery" : "Pickup"} Details
+              </h3>
+              <p className="text-gray-300">
+                {order.shipping_address || order.pickup_location || "N/A"}
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-6 border-t border-[#1A1A1A]">
+            <h3 className="font-bold text-lg mb-4">Update Fulfillment Status</h3>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <select
+                value={localStatus}
+                onChange={(e) => setLocalStatus(e.target.value)}
+                disabled={updating}
+                className="bg-[#1A1A1A] border border-[#333] text-white px-4 py-2 rounded-lg focus:outline-none focus:border-white"
+              >
+                {statusOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+
+              {localStatus !== order.status && (
+                <button
+                  onClick={handleSave}
+                  disabled={updating}
+                  className="px-6 py-2 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {updating ? "Saving..." : "Save Changes"}
+                </button>
+              )}
+            </div>
             <p className="text-sm text-gray-500 mt-3">
               Current status: <span className="font-medium">{getStatusLabel(order.status)}</span>
             </p>
@@ -225,17 +427,35 @@ function OrderCard({
 }
 
 export default function OrdersPage() {
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [activeTab, setActiveTab] = useState<"catalog" | "design">("catalog");
+  const [catalogOrders, setCatalogOrders] = useState<CatalogOrder[]>([]);
+  const [designOrders, setDesignOrders] = useState<DesignOrder[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchOrders() {
+    async function fetchAllOrders() {
+      setLoading(true);
+      setError(null);
       try {
-        const res = await fetch("/api/admin/orders");
-        if (!res.ok) throw new Error("Failed to fetch orders");
-        const data = await res.json();
-        setOrders(data);
+        const [catalogRes, designRes] = await Promise.all([
+          fetch("/api/admin/orders"),
+          fetch("/api/admin/design-orders"),
+        ]);
+
+        if (!catalogRes.ok && !designRes.ok) {
+          throw new Error("Failed to load orders");
+        }
+
+        if (catalogRes.ok) {
+          const catalogData = await catalogRes.json();
+          setCatalogOrders(catalogData);
+        }
+
+        if (designRes.ok) {
+          const designData = await designRes.json();
+          setDesignOrders(designData);
+        }
       } catch (err) {
         setError("Failed to load orders. Please try again later.");
         console.error(err);
@@ -244,10 +464,10 @@ export default function OrdersPage() {
       }
     }
 
-    fetchOrders();
+    fetchAllOrders();
   }, []);
 
-  const updateStatus = async (orderId: number, newStatus: string) => {
+  const updateCatalogStatus = async (orderId: number, newStatus: string) => {
     try {
       const res = await fetch("/api/admin/orders/update", {
         method: "POST",
@@ -260,15 +480,38 @@ export default function OrdersPage() {
         throw new Error(data.error || "Failed to update status");
       }
 
-      // Optimistically update the UI
-      setOrders((prev) =>
+      setCatalogOrders((prev) =>
         prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
       );
     } catch (err) {
-      console.error("Status update error:", err);
-      throw err; // Re-throw so card can handle
+      console.error("Catalog status update error:", err);
+      throw err;
     }
   };
+
+  const updateDesignStatus = async (orderId: string, newStatus: string) => {
+    try {
+      const res = await fetch("/api/admin/design-orders/update", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: orderId, status: newStatus }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || "Failed to update status");
+      }
+
+      setDesignOrders((prev) =>
+        prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
+      );
+    } catch (err) {
+      console.error("Design status update error:", err);
+      throw err;
+    }
+  };
+
+  const totalOrders = catalogOrders.length + designOrders.length;
 
   if (loading) {
     return (
@@ -289,25 +532,72 @@ export default function OrdersPage() {
     );
   }
 
-  if (orders.length === 0) {
-    return (
-      <div>
-        <h1 className="text-3xl font-bold uppercase mb-6">Orders</h1>
-        <div className="p-6 bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg">
-          <p className="text-gray-400">You have no orders yet.</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div>
-      <h1 className="text-3xl font-bold uppercase mb-6">Orders ({orders.length})</h1>
+      <h1 className="text-3xl font-bold uppercase mb-6">
+        Orders ({totalOrders})
+      </h1>
+
+      {/* Simple underline tabs */}
+      <div className="flex gap-8 mb-8 border-b border-[#1A1A1A]">
+        <button
+          onClick={() => setActiveTab("catalog")}
+          className={`pb-3 font-medium transition-colors ${
+            activeTab === "catalog"
+              ? "text-white border-b-2 border-white"
+              : "text-gray-500 hover:text-gray-300"
+          }`}
+        >
+          Catalog Orders ({catalogOrders.length})
+        </button>
+        <button
+          onClick={() => setActiveTab("design")}
+          className={`pb-3 font-medium transition-colors ${
+            activeTab === "design"
+              ? "text-white border-b-2 border-white"
+              : "text-gray-500 hover:text-gray-300"
+          }`}
+        >
+          Custom Design Orders ({designOrders.length})
+        </button>
+      </div>
 
       <div className="space-y-6">
-        {orders.map((order) => (
-          <OrderCard key={order.id} order={order} updateStatus={updateStatus} />
-        ))}
+        {activeTab === "catalog" && (
+          <>
+            {catalogOrders.length === 0 ? (
+              <div className="p-10 bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg text-center">
+                <p className="text-gray-400">No catalog orders yet.</p>
+              </div>
+            ) : (
+              catalogOrders.map((order) => (
+                <CatalogOrderCard
+                  key={order.id}
+                  order={order}
+                  updateStatus={updateCatalogStatus}
+                />
+              ))
+            )}
+          </>
+        )}
+
+        {activeTab === "design" && (
+          <>
+            {designOrders.length === 0 ? (
+              <div className="p-10 bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg text-center">
+                <p className="text-gray-400">No custom design orders yet.</p>
+              </div>
+            ) : (
+              designOrders.map((order) => (
+                <DesignOrderCard
+                  key={order.id}
+                  order={order}
+                  updateStatus={updateDesignStatus}
+                />
+              ))
+            )}
+          </>
+        )}
       </div>
     </div>
   );
