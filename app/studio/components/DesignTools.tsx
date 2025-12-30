@@ -4,7 +4,6 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 import {
   Upload,
   Type,
-  Palette,
   Bold,
   Italic,
   AlignLeft,
@@ -56,6 +55,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from 'sonner';
+import { v4 as uuidv4 } from 'uuid';
+import { supabase } from '@/lib/supabaseClient';
+import { useUser } from '@/app/lib/user';
 
 interface TShirtColor {
   name: string;
@@ -92,6 +94,7 @@ export default function DesignTools() {
     setCurrentTshirtColor,
     updateElement,
   } = useDesignStore();
+  const { user } = useUser();
 
   const currentElements = currentDesign.elements[currentView];
 
@@ -104,6 +107,7 @@ export default function DesignTools() {
 
   const [selectedTool, setSelectedTool] = useState<'upload' | 'text' | 'color'>('text');
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const [textSettings, setTextSettings] = useState({
     text: '',
@@ -182,7 +186,8 @@ export default function DesignTools() {
     addElement(newEl);
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    debugger;
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -191,9 +196,33 @@ export default function DesignTools() {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      const src = ev.target?.result as string;
+    // Get user ID from store
+    const userId = user?.id;
+    if (!userId) {
+      toast.error('Login required to upload images');
+      return;
+    }
+
+    setIsUploading(true);
+    debugger;
+    try {
+      // Generate unique file path
+      const fileExt = file.name.split('.').pop();
+      const filePath = `elements/${userId}/${uuidv4()}.${fileExt}`;
+
+      // Upload to Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('design-assets')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('design-assets')
+        .getPublicUrl(filePath);
+
+      // Load image to get dimensions
       const img = new Image();
       img.onload = () => {
         const aspect = img.naturalWidth / img.naturalHeight;
@@ -204,7 +233,7 @@ export default function DesignTools() {
           id: Date.now(),
           type: 'image',
           zIndex: currentElements.length,
-          src,
+          src: publicUrl,
           x: 50,
           y: 50,
           width,
@@ -214,10 +243,25 @@ export default function DesignTools() {
         };
         addElement(newEl);
         setUploadModalOpen(false);
+        toast.success('Image uploaded successfully!');
       };
-      img.src = src;
-    };
-    reader.readAsDataURL(file);
+
+      img.onerror = () => {
+        toast.error('Failed to load uploaded image');
+        setIsUploading(false);
+      };
+
+      img.src = publicUrl;
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Failed to upload image. Please try again.');
+    } finally {
+      setIsUploading(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
   };
 
   const handleImageSize = (value: number[]) => {
@@ -304,8 +348,9 @@ export default function DesignTools() {
               <TabsContent value="upload" className="space-y-6">
                 <Dialog open={uploadModalOpen} onOpenChange={setUploadModalOpen}>
                   <DialogTrigger asChild>
-                    <Button size="lg" className="w-full h-12">
-                      <Upload className="w-5 h-5 mr-2" /> Upload New Image
+                    <Button size="lg" className="w-full h-12" disabled={isUploading}>
+                      <Upload className="w-5 h-5 mr-2" /> 
+                      {isUploading ? 'Uploading...' : 'Upload New Image'}
                     </Button>
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-lg">
@@ -322,17 +367,20 @@ export default function DesignTools() {
                         accept="image/*"
                         onChange={handleImageUpload}
                         className="hidden"
+                        disabled={isUploading}
                       />
                       <div
-                        onClick={() => fileInputRef.current?.click()}
-                        className="border-4 border-dashed border-border rounded-xl p-12 text-center cursor-pointer hover:border-primary transition-all hover:bg-muted/50 bg-muted/30"
+                        onClick={() => !isUploading && fileInputRef.current?.click()}
+                        className={`border-4 border-dashed border-border rounded-xl p-12 text-center cursor-pointer hover:border-primary transition-all hover:bg-muted/50 bg-muted/30 ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <div className="flex flex-col items-center gap-4">
                           <div className="p-4 bg-primary/10 rounded-full">
                             <Upload className="w-12 h-12 text-primary" />
                           </div>
                           <div>
-                            <p className="text-lg font-semibold mb-1">Click to upload image</p>
+                            <p className="text-lg font-semibold mb-1">
+                              {isUploading ? 'Uploading...' : 'Click to upload image'}
+                            </p>
                             <p className="text-sm text-muted-foreground">PNG, JPG, GIF • Max 10MB</p>
                           </div>
                         </div>
