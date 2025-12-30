@@ -10,32 +10,50 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="bg-black text-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-8 items-center min-h-[500px] sm:min-h-[600px]">
-            <div className="px-6 sm:px-8 lg:px-12 py-8 sm:py-12 order-1 lg:order-1">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none mb-4 sm:mb-6">
-                CREATE YOUR<br />STYLE
-              </h1>
-              <p className="text-base sm:text-lg lg:text-xl mb-6 sm:mb-8 font-bold">
-                DESIGN CUSTOM TEES WITH<br />
-                PRINTWAVES BOLD STYLE,<br />
-                UNAPOLOGETIC ATTITUDE
-              </p>
-              <Link prefetch href={'/studio'} className="bg-white text-black px-6 sm:px-8 py-2.5 sm:py-3 font-bold text-xs sm:text-sm hover:bg-gray-200 transition-colors">
-                START DESIGNING
-              </Link>
-            </div>
-            <div className="relative h-[300px] sm:h-[400px] lg:h-[600px] bg-gray-900 order-2 lg:order-2">
-              <img
-                src="/leo.png"
-                alt="Custom T-shirt Design"
-                className="w-full h-full object-cover opacity-90"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+<section className="bg-black text-white">
+  <div className="max-w-7xl mx-auto">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-8 items-center min-h-[500px] sm:min-h-[600px]">
+      
+      {/* LEFT CONTENT */}
+      <div className="px-6 sm:px-8 lg:px-12 py-8 sm:py-12 order-1">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none mb-4 sm:mb-6">
+          Design It.<br />
+          Wear It.<br />
+          Own It.
+        </h1>
+
+        <p className="text-base sm:text-lg lg:text-xl mb-4 sm:mb-6 font-bold">
+          Custom tees printed on demand.
+        </p>
+
+        {/* PRICE ANCHOR */}
+        <p className="text-sm sm:text-base mb-4 opacity-90">
+          From <span className="font-bold">R250</span> • No minimum order
+        </p>
+
+        {/* CTA */}
+        <Link
+          prefetch
+          href="/studio"
+          className="inline-block bg-white text-black px-6 sm:px-8 py-2.5 sm:py-3 font-bold text-xs sm:text-sm hover:bg-gray-200 transition-colors"
+        >
+          START DESIGNING
+        </Link>
+      </div>
+
+      {/* RIGHT IMAGE */}
+      <div className="relative h-[300px] sm:h-[400px] lg:h-[600px] bg-gray-900 order-2">
+        <img
+          src="/leo.png"
+          alt="Custom T-shirt Design"
+          className="w-full h-full object-cover opacity-90"
+        />
+      </div>
+
+    </div>
+  </div>
+</section>
+
       <Suspense fallback={<CatalogLoading />}>
         <Catalog />
       </Suspense>
