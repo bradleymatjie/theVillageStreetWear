@@ -4,6 +4,7 @@ import { getProduct } from '@/app/lib/utils';
 import ProductPageClient from './clientComponent';
 import { Product } from '@/app/lib/types';
 import { supabase } from '@/lib/supabaseClient';
+import { Suspense } from 'react';
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -11,30 +12,30 @@ interface ProductPageProps {
 
 export default async function ProductPage({ params }: ProductPageProps) {
   const { id } = await params;
-  
-  // Fetch product by ID or slug
+
+
   const product: Product | null = await getProduct(id);
-  
+
   if (!product) {
     notFound();
   }
 
-  return <ProductPageClient product={product} />;
+  return (<Suspense fallback="loading...">
+    <ProductPageClient product={product} />;
+  </Suspense>)
 }
 
-// Generate static params for all products in database
 export async function generateStaticParams() {
   try {
     const { data: products } = await supabase
       .from('thevillageproducts')
-      .select('id, slug');
+      .select('id');
 
     if (!products) return [];
 
     // Generate params for both ID and slug routes
-    return products.flatMap((product: { id: string; slug: string }) => [
+    return products.flatMap((product: { id: string; }) => [
       { id: product.id },
-      { id: product.slug },
     ]);
   } catch (error) {
     console.error('Error generating static params:', error);
@@ -42,7 +43,6 @@ export async function generateStaticParams() {
   }
 }
 
-// metadata for SEO
 export async function generateMetadata({ params }: ProductPageProps) {
   const { id } = await params;
   const product = await getProduct(id);
