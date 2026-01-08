@@ -350,7 +350,6 @@ export default function ProductsPage() {
   // Auth guards (unchanged)
   if (authLoading) return <div className="flex justify-center items-center h-screen bg-black text-white">Loading...</div>;
   if (!user) {
-    // ... login form unchanged
     return (
       <div className="min-h-screen bg-black text-white p-8 flex flex-col items-center justify-center">
         <h1 className="text-2xl mb-4 uppercase tracking-widest">ADMIN ACCESS REQUIRED</h1>
@@ -377,7 +376,6 @@ export default function ProductsPage() {
     );
   }
   if (!isAdmin) {
-    // ... denied unchanged
     return (
       <div className="min-h-screen bg-black text-white p-8 flex flex-col items-center justify-center">
         <h1 className="text-2xl mb-4 uppercase tracking-widest">ADMIN ACCESS DENIED</h1>
