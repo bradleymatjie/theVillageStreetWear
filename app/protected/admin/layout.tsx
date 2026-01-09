@@ -8,8 +8,6 @@ import {
   ShoppingCart,
   Users,
   BarChart2,
-  CreditCard,
-  Settings,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -22,8 +20,6 @@ const navItems = [
   { icon: ShoppingCart, label: "Orders", href: "/protected/admin/orders" },
   { icon: Users, label: "Customers", href: "/protected/admin/customers" },
   { icon: BarChart2, label: "Analytics", href: "/protected/admin/analytics" },
-  { icon: CreditCard, label: "Payments", href: "/protected/admin/payments" },
-  { icon: Settings, label: "Settings", href: "/protected/admin/settings" },
 ];
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
