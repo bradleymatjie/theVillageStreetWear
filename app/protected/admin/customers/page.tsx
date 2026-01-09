@@ -1,4 +1,6 @@
 import { formatDistanceToNow } from 'date-fns';
+import { Suspense } from 'react';
+export const dynamic = 'force-dynamic';
 
 interface Customer {
   id: string;
@@ -42,47 +44,49 @@ export default async function CustomersPage() {
   }
 
   return (
-    <div>
-      <div className='flex justify-between items-center mx-2'>
-      <h1 className="text-3xl font-bold uppercase mb-6">Customers</h1>
-      <p>{customers.length} Total</p>
+    <Suspense fallback="loading">
+      <div>
+        <div className='flex justify-between items-center mx-2'>
+          <h1 className="text-3xl font-bold uppercase mb-6">Customers</h1>
+          <p>{customers.length} Total</p>
+        </div>
+
+        {customers.length === 0 ? (
+          <div className="p-6 bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg">
+            <p className="text-gray-400">No customers found.</p>
+          </div>
+        ) : (
+          <div className="bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg overflow-hidden">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-[#1A1A1A] bg-[#1A1A1A]">
+                  <th className="text-left p-4 font-semibold text-gray-300">User ID</th>
+                  <th className="text-left p-4 font-semibold text-gray-300">Full Name</th>
+                  <th className="text-left p-4 font-semibold text-gray-300">Email</th>
+                  <th className="text-left p-4 font-semibold text-gray-300">Updated At</th>
+                </tr>
+              </thead>
+              <tbody>
+                {customers.map((customer) => {
+                  const createdAt = customer.created_at
+                    ? formatDistanceToNow(new Date(customer.created_at), { addSuffix: true })
+                    : 'N/A';
+                  const updatedAt = formatDistanceToNow(new Date(customer.updated_at), { addSuffix: true });
+
+                  return (
+                    <tr key={customer.id} className="border-b border-[#1A1A1A] hover:bg-[#1A1A1A]">
+                      <td className="p-4 text-gray-300">{customer.user_id}</td>
+                      <td className="p-4 text-white">{customer.full_name ?? 'N/A'}</td>
+                      <td className="p-4 text-gray-300">{customer.email}</td>
+                      <td className="p-4 text-gray-300">{updatedAt}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
-
-      {customers.length === 0 ? (
-        <div className="p-6 bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg">
-          <p className="text-gray-400">No customers found.</p>
-        </div>
-      ) : (
-        <div className="bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg overflow-hidden">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-[#1A1A1A] bg-[#1A1A1A]">
-                <th className="text-left p-4 font-semibold text-gray-300">User ID</th>
-                <th className="text-left p-4 font-semibold text-gray-300">Full Name</th>
-                <th className="text-left p-4 font-semibold text-gray-300">Email</th>
-                <th className="text-left p-4 font-semibold text-gray-300">Updated At</th>
-              </tr>
-            </thead>
-            <tbody>
-              {customers.map((customer) => {
-                const createdAt = customer.created_at 
-                  ? formatDistanceToNow(new Date(customer.created_at), { addSuffix: true })
-                  : 'N/A';
-                const updatedAt = formatDistanceToNow(new Date(customer.updated_at), { addSuffix: true });
-
-                return (
-                  <tr key={customer.id} className="border-b border-[#1A1A1A] hover:bg-[#1A1A1A]">
-                    <td className="p-4 text-gray-300">{customer.user_id}</td>
-                    <td className="p-4 text-white">{customer.full_name ?? 'N/A'}</td>
-                    <td className="p-4 text-gray-300">{customer.email}</td>
-                    <td className="p-4 text-gray-300">{updatedAt}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </div>
+    </Suspense>
   );
 }
