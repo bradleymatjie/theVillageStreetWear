@@ -1,5 +1,6 @@
 import { formatDistanceToNow } from 'date-fns';
 import { Suspense } from 'react';
+export const dynamic = 'force-dynamic';
 
 interface Customer {
   id: string;
@@ -43,7 +44,7 @@ export default async function CustomersPage() {
   }
 
   return (
-    <Suspense fallback="laoding">
+    <Suspense fallback="loading">
       <div>
         <div className='flex justify-between items-center mx-2'>
           <h1 className="text-3xl font-bold uppercase mb-6">Customers</h1>

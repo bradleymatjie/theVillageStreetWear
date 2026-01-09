@@ -7,6 +7,7 @@ import Footer from "./components/footer/footer";
 import { Toaster } from "sonner";
 import Script from "next/script";
 import GoogleAnalytics from "./components/GoogleAnalytics";
+import { Suspense } from "react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -107,10 +108,12 @@ export default function RootLayout({
       </head>
       <body className={`${poppins.variable} antialiased`}>
         <div>
+          <Suspense fallback={null}>
           <Header />
           <GoogleAnalytics />
           {children}
           <Footer />
+          </Suspense>
         </div>
         <Toaster />
         <Analytics />

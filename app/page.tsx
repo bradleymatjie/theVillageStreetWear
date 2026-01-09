@@ -1,9 +1,9 @@
-import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Catalog from './components/catalog/page';
 import { Suspense } from 'react';
 import CatalogLoading from './components/catalog/loading';
 import NewsletterSignup from './components/mailList/mailList';
+export const dynamic = 'force-dynamic';
 
 export default function Page() {
 
