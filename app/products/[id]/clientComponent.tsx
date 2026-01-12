@@ -205,7 +205,6 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 {isSoldOut ? "Sold Out" : "Buy Now"}
               </Link>
             </div>
-
           </div>
         </div>
       </div>
