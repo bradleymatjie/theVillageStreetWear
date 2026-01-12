@@ -158,7 +158,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             )}
 
             {/* ========== MATERIAL SELECTOR ========== */}
-            {availableMaterials.length > 0 && (
+            {/* {availableMaterials.length > 0 && (
               <div className="space-y-2">
                 <p className="font-medium text-gray-300">Select Material</p>
 
@@ -178,7 +178,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                   ))}
                 </div>
               </div>
-            )}
+            )} */}
 
             {/* ACTION BUTTONS */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
@@ -210,5 +210,5 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         </div>
       </div>
     </div>
-  );
+  )
 }
