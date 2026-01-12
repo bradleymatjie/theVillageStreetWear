@@ -21,7 +21,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   return (<Suspense fallback="loading...">
-    <ProductPageClient product={product} />;
+    <ProductPageClient product={product} />
   </Suspense>)
 }
 

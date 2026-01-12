@@ -1,5 +1,5 @@
 // app/products/[id]/ProductPageClient.tsx
-'use client';
+'use client'
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -53,21 +53,15 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-4">
+    <div className="min-h-screen bg-black text-white p-4 border-b ">
       <div className="max-w-6xl mx-auto">
-
-        {/* Back Link */}
         <Link
           href="/products"
           className="inline-flex items-center gap-2 mb-8 text-sm font-medium hover:underline group"
         >
           ← Back to Catalog
         </Link>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-
-          {/* Hero Image */}
-
           <div>
             <div className="relative aspect-square rounded-md overflow-hidden border border-white/20 group">
               <Image
@@ -86,7 +80,6 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
               )}
             </div>
             
-            {/* Image Thumbnails */}
             {productImages.length > 1 && (
               <div className="mt-4 flex h-[100px] w-full justify-center">
                 {productImages.map((img, index) => (
@@ -112,10 +105,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             )}
           </div>
 
-
-          {/* Product Details */}
           <div className="space-y-6 lg:pt-4 ">
-
             {product.category && (
               <p className="text-sm uppercase tracking-wide text-gray-400 font-medium">
                 {product.category}
@@ -156,29 +146,6 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 </div>
               </div>
             )}
-
-            {/* ========== MATERIAL SELECTOR ========== */}
-            {/* {availableMaterials.length > 0 && (
-              <div className="space-y-2">
-                <p className="font-medium text-gray-300">Select Material</p>
-
-                <div className="flex flex-wrap gap-2">
-                  {availableMaterials.map((mat) => (
-                    <button
-                      key={mat}
-                      onClick={() => setSelectedMaterial(mat)}
-                      disabled={isSoldOut}
-                      className={`px-4 py-2 border rounded-md transition-all ${selectedMaterial === mat
-                          ? "bg-white text-black"
-                          : "border-white/20 text-gray-300 hover:border-white/40"
-                        } ${isSoldOut ? "opacity-50 cursor-not-allowed" : ""}`}
-                    >
-                      {mat}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )} */}
 
             {/* ACTION BUTTONS */}
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
