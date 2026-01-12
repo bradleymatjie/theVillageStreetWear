@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "./components/header/header";
 import Footer from "./components/footer/footer";
@@ -8,15 +8,6 @@ import { Toaster } from "sonner";
 import Script from "next/script";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { Suspense } from "react";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -41,9 +32,9 @@ export const metadata: Metadata = {
     "street fashion SA",
   ],
 
-  authors: [{ name: "The Village" }],
-  creator: "The Village",
-  publisher: "The Village",
+  authors: [{ name: "The Village Streetwear" }],
+  creator: "The Village Streetwear",
+  publisher: "The Village Streetwear",
 
   metadataBase: new URL("https://thevillagestreetwear.com"),
 
