@@ -10,48 +10,43 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-<section className="bg-black text-white">
-  <div className="max-w-7xl mx-auto">
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 lg:gap-8 items-center min-h-[500px] sm:min-h-[600px]">
-      
-      {/* LEFT CONTENT */}
-      <div className="px-6 sm:px-8 lg:px-12 py-8 sm:py-12 order-1">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-none mb-4 sm:mb-6">
-          Design It.<br />
-          Wear It.<br />
-          Own It.
-        </h1>
+<section className="relative overflow-hidden bg-black px-4 py-16 text-white sm:px-6 sm:py-20 lg:px-8 lg:py-28">
+  <div className="mx-auto max-w-7xl">
+    <div className="max-w-3xl">
+      <p className="mb-4 inline-flex border border-white/20 px-3 py-1 text-xs font-bold uppercase tracking-[0.25em] text-white/70">
+        Now onboarding early brands
+      </p>
 
-        <p className="text-base sm:text-lg lg:text-xl mb-4 sm:mb-6 font-bold">
-          Custom tees printed on demand.
-        </p>
+      <h1 className="text-5xl font-black leading-[0.9] tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
+        A Marketplace for
+        <br />
+        Streetwear Brands.
+      </h1>
 
-        {/* PRICE ANCHOR */}
-        <p className="text-sm sm:text-base mb-4 opacity-90">
-          From <span className="font-bold">R250</span> • No minimum order
-        </p>
+      <p className="mt-6 max-w-2xl text-base font-semibold leading-7 text-white/80 sm:text-lg lg:text-xl">
+        Discover unique streetwear or start selling your brand to a growing audience
+      </p>
 
-        {/* CTA */}
+      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
         <Link
-          prefetch
-          href="/studio"
-          className="inline-block bg-white text-black px-6 sm:px-8 py-2.5 sm:py-3 font-bold text-xs sm:text-sm hover:bg-gray-200 transition-colors"
+          href="/products"
+          className="inline-flex items-center justify-center bg-white px-7 py-3 text-sm font-black uppercase tracking-wide text-black transition hover:bg-white/80"
         >
-          START DESIGNING
+          Explore Designs
+        </Link>
+
+        <Link
+          href="/sell"
+          className="inline-flex items-center justify-center border border-white/30 px-7 py-3 text-sm font-black uppercase tracking-wide text-white transition hover:bg-white hover:text-black"
+        >
+          Join as a Brand
         </Link>
       </div>
-
-      {/* RIGHT IMAGE */}
-      <div className="relative h-[300px] sm:h-[400px] lg:h-[600px] bg-gray-900 order-2">
-        <img
-          src="/leo.png"
-          alt="Custom T-shirt Design"
-          className="w-full h-full object-cover opacity-90"
-        />
-      </div>
-
     </div>
   </div>
+
+  <div className="pointer-events-none absolute -right-24 top-10 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+  <div className="pointer-events-none absolute bottom-0 left-0 h-px w-full bg-white/10" />
 </section>
 
       <Suspense fallback={<CatalogLoading />}>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useUser } from "@/app/lib/user";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { LogOut, Edit, Mail, Phone, User as UserIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";

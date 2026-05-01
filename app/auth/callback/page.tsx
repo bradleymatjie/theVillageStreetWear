@@ -5,8 +5,6 @@ import { useRouter } from 'next/navigation';
 import { ExtendedUser, useUser } from '@/app/lib/user';
 import { supabase } from '@/lib/supabaseClient';
 
-
-
  export default function AuthCallbackPage() {
   const router = useRouter();
   const { setUser } = useUser();
@@ -15,7 +13,6 @@ import { supabase } from '@/lib/supabaseClient';
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Check for error in query params
         const urlParams = new URLSearchParams(window.location.search);
         const errorParam = urlParams.get('error');
         const errorDescription = urlParams.get('error_description');
@@ -26,9 +23,7 @@ import { supabase } from '@/lib/supabaseClient';
           return;
         }
 
-        // Get the current session (this handles both OAuth and email verification)
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        debugger;
         if (sessionError) {
           console.error('Session error:', sessionError);
           setError(sessionError.message);
@@ -50,9 +45,7 @@ import { supabase } from '@/lib/supabaseClient';
           return;
         }
 
-        // Store user in Zustand after successful authentication
         if (session.user) {
-          debugger;
           console.log("user in zustand", session);
           const extendedUser: ExtendedUser = {
             ...session.user,
@@ -69,8 +62,7 @@ import { supabase } from '@/lib/supabaseClient';
           setUser(extendedUser);
         }
 
-        // Successfully authenticated and verified
-        router.push('/products');
+        router.push('/protected/profile');
         router.refresh();
       } catch (err) {
         console.error('Unexpected error in auth callback:', err);

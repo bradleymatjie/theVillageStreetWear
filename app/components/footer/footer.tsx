@@ -6,7 +6,7 @@ import { Mail } from "lucide-react";
 export default function Footer() {
   const pathname = usePathname();
   
-  if (pathname.includes("admin")) {
+  if (pathname.includes("admin") || pathname.includes("profile")) {
     return null;
   }
 
