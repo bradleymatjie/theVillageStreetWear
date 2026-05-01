@@ -1,8 +1,7 @@
 "use client";
 import { useSearchParams } from "next/navigation";
-import { Mail, CheckCircle2, ArrowLeft, AlertCircle } from "lucide-react";
+import { Mail, ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Suspense } from "react";
 
 function VerifyContents() {

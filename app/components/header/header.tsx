@@ -37,13 +37,13 @@ export default function Header() {
           {/* Desktop Nav */}
           <nav className="hidden lg:flex gap-4 xl:gap-8">
             <Link href="/track-order" className="text-sm font-semibold text-gray-700 hover:text-gray-900 hover:underline transition-colors">
-              Track Order
+              TRACK ORDER
             </Link>
             <Link href="/products" className="text-sm font-semibold text-gray-700 hover:text-gray-900 hover:underline transition-colors">
               CATALOG
             </Link>
-            <Link href="/about" className="text-sm font-semibold text-gray-700 hover:text-gray-900 hover:underline transition-colors">
-              ABOUT
+            <Link href="/studio" className="text-sm font-semibold text-gray-700 hover:text-gray-900 hover:underline transition-colors">
+              STUDIO
             </Link>
           </nav>
 
@@ -106,11 +106,11 @@ export default function Header() {
         >
           <nav className="px-4 py-4 flex flex-col gap-2">
             <Link
-              href="#"
+              href="/track-order"
               className="text-sm font-semibold text-gray-700 hover:text-gray-900 py-2 transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              NEW DROP
+              TRACK ORDER
             </Link>
             <Link
               href="/products"
@@ -120,11 +120,11 @@ export default function Header() {
               CATALOG
             </Link>
             <Link
-              href="/about"
+              href="/studio"
               className="text-sm font-semibold text-gray-700 hover:text-gray-900 py-2 transition-colors"
               onClick={() => setIsMobileMenuOpen(false)}
             >
-              ABOUT
+              STUDIO
             </Link>
           </nav>
         </div>

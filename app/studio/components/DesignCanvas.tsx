@@ -190,30 +190,48 @@ export default function DesignCanvas() {
   const resizeRef = useRef<any>(null);
   const rotateRef = useRef<any>(null);
 
-  const handleMouseDown = useCallback((e: React.MouseEvent, id: number) => {
+  // Helper function to get coordinates from touch or mouse event
+  const getEventCoordinates = (e: MouseEvent | TouchEvent) => {
+    if ('touches' in e) {
+      const touch = e.touches[0];
+      return { clientX: touch.clientX, clientY: touch.clientY };
+    } else {
+      return { clientX: e.clientX, clientY: e.clientY };
+    }
+  };
+
+  const handleDragStart = useCallback((e: React.MouseEvent | React.TouchEvent, id: number) => {
     e.preventDefault();
     e.stopPropagation();
     const rect = designAreaRef.current?.getBoundingClientRect();
     const element = currentElements.find((el) => el.id === id);
     if (!rect || !element) return;
 
+    const coords = 'touches' in e ? 
+      { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } :
+      { clientX: e.clientX, clientY: e.clientY };
+
     dragRef.current = {
       id,
-      startX: e.clientX,
-      startY: e.clientY,
+      startX: coords.clientX,
+      startY: coords.clientY,
       initialX: element.x,
       initialY: element.y,
     };
     setSelectedElementId(id);
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    
+    document.addEventListener('mousemove', handleDragMove);
+    document.addEventListener('touchmove', handleDragMove, { passive: false });
+    document.addEventListener('mouseup', handleDragEnd);
+    document.addEventListener('touchend', handleDragEnd);
   }, [currentElements, setSelectedElementId]);
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
+  const handleDragMove = useCallback((e: MouseEvent | TouchEvent) => {
     if (!dragRef.current || !designAreaRef.current) return;
     const rect = designAreaRef.current.getBoundingClientRect();
-    const deltaX = ((e.clientX - dragRef.current.startX) / rect.width) * 100;
-    const deltaY = ((e.clientY - dragRef.current.startY) / rect.height) * 100;
+    const coords = getEventCoordinates(e);
+    const deltaX = ((coords.clientX - dragRef.current.startX) / rect.width) * 100;
+    const deltaY = ((coords.clientY - dragRef.current.startY) / rect.height) * 100;
 
     updateElement(dragRef.current.id, {
       x: Math.max(0, Math.min(100, dragRef.current.initialX + deltaX)),
@@ -221,30 +239,40 @@ export default function DesignCanvas() {
     });
   }, [updateElement]);
 
-  const handleMouseUp = useCallback(() => {
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
+  const handleDragEnd = useCallback(() => {
+    document.removeEventListener('mousemove', handleDragMove);
+    document.removeEventListener('touchmove', handleDragMove);
+    document.removeEventListener('mouseup', handleDragEnd);
+    document.removeEventListener('touchend', handleDragEnd);
     dragRef.current = null;
-  }, [handleMouseMove]);
+  }, [handleDragMove]);
 
-  const handleResizeStart = useCallback((e: React.MouseEvent, anchor: string, id: number) => {
+  const handleResizeStart = useCallback((e: React.MouseEvent | React.TouchEvent, anchor: string, id: number) => {
     e.preventDefault();
     e.stopPropagation();
     const el = currentElements.find((el) => el.id === id);
     if (el?.type !== 'image') return;
+    
+    const coords = 'touches' in e ? 
+      { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } :
+      { clientX: e.clientX, clientY: e.clientY };
+
     resizeRef.current = {
       anchor,
-      startX: e.clientX,
+      startX: coords.clientX,
       initialWidth: el.width,
       aspect: el.aspect || 1,
     };
     document.addEventListener('mousemove', handleResizeMove);
+    document.addEventListener('touchmove', handleResizeMove, { passive: false });
     document.addEventListener('mouseup', handleResizeEnd);
+    document.addEventListener('touchend', handleResizeEnd);
   }, [currentElements]);
 
-  const handleResizeMove = useCallback((e: MouseEvent) => {
+  const handleResizeMove = useCallback((e: MouseEvent | TouchEvent) => {
     if (!resizeRef.current || !selectedElementId) return;
-    const deltaX = e.clientX - resizeRef.current.startX;
+    const coords = getEventCoordinates(e);
+    const deltaX = coords.clientX - resizeRef.current.startX;
     const multiplier = resizeRef.current.anchor.includes('e') ? 1 : -1;
     const newWidth = Math.max(20, resizeRef.current.initialWidth + (deltaX * multiplier));
 
@@ -256,35 +284,44 @@ export default function DesignCanvas() {
 
   const handleResizeEnd = useCallback(() => {
     document.removeEventListener('mousemove', handleResizeMove);
+    document.removeEventListener('touchmove', handleResizeMove);
     document.removeEventListener('mouseup', handleResizeEnd);
+    document.removeEventListener('touchend', handleResizeEnd);
     resizeRef.current = null;
   }, [handleResizeMove]);
 
-  const handleRotateStart = useCallback((e: React.MouseEvent, id: number) => {
+  const handleRotateStart = useCallback((e: React.MouseEvent | React.TouchEvent, id: number) => {
     e.preventDefault();
     e.stopPropagation();
     const rect = designAreaRef.current?.getBoundingClientRect();
     const el = currentElements.find((el) => el.id === id);
     if (!rect || !el) return;
 
+    const coords = 'touches' in e ? 
+      { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } :
+      { clientX: e.clientX, clientY: e.clientY };
+
     const centerX = rect.left + (rect.width * el.x / 100);
     const centerY = rect.top + (rect.height * el.y / 100);
-    const startAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
+    const startAngle = Math.atan2(coords.clientY - centerY, coords.clientX - centerX) * (180 / Math.PI);
 
     rotateRef.current = { startAngle, initialRotation: el.rotation || 0 };
     document.addEventListener('mousemove', handleRotateMove);
+    document.addEventListener('touchmove', handleRotateMove, { passive: false });
     document.addEventListener('mouseup', handleRotateEnd);
+    document.addEventListener('touchend', handleRotateEnd);
   }, [currentElements]);
 
-  const handleRotateMove = useCallback((e: MouseEvent) => {
+  const handleRotateMove = useCallback((e: MouseEvent | TouchEvent) => {
     if (!rotateRef.current || !selectedElementId || !designAreaRef.current) return;
     const rect = designAreaRef.current.getBoundingClientRect();
     const el = currentElements.find((el) => el.id === selectedElementId);
     if (!el) return;
 
+    const coords = getEventCoordinates(e);
     const centerX = rect.left + (rect.width * el.x / 100);
     const centerY = rect.top + (rect.height * el.y / 100);
-    const currentAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * (180 / Math.PI);
+    const currentAngle = Math.atan2(coords.clientY - centerY, coords.clientX - centerX) * (180 / Math.PI);
 
     updateElement(selectedElementId, {
       rotation: (rotateRef.current.initialRotation + (currentAngle - rotateRef.current.startAngle)) % 360,
@@ -293,9 +330,17 @@ export default function DesignCanvas() {
 
   const handleRotateEnd = useCallback(() => {
     document.removeEventListener('mousemove', handleRotateMove);
+    document.removeEventListener('touchmove', handleRotateMove);
     document.removeEventListener('mouseup', handleRotateEnd);
+    document.removeEventListener('touchend', handleRotateEnd);
     rotateRef.current = null;
   }, [handleRotateMove]);
+
+  const handleTouchEndOnDesignArea = useCallback((e: React.TouchEvent) => {
+    if (e.target === e.currentTarget) {
+      setSelectedElementId(null);
+    }
+  }, [setSelectedElementId]);
 
   return (
     <div className="h-full w-full flex flex-col bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-inner">
@@ -338,11 +383,13 @@ export default function DesignCanvas() {
             ref={designAreaRef}
             className="absolute inset-0 cursor-crosshair"
             onClick={(e) => e.target === e.currentTarget && setSelectedElementId(null)}
+            onTouchEnd={handleTouchEndOnDesignArea}
           >
             {sortedElements.map((element) => (
               <div key={element.id}>
                 <div
-                  onMouseDown={(e) => handleMouseDown(e, element.id)}
+                  onMouseDown={(e) => handleDragStart(e, element.id)}
+                  onTouchStart={(e) => handleDragStart(e, element.id)}
                   style={{
                     position: 'absolute',
                     left: `${element.x}%`,
@@ -350,6 +397,7 @@ export default function DesignCanvas() {
                     transform: `translate(-50%, -50%) rotate(${element.rotation || 0}deg)`,
                     cursor: 'move',
                     zIndex: element.zIndex,
+                    touchAction: 'none', // Prevent browser default touch actions
                   }}
                 >
                   {element.type === 'image' ? (
@@ -393,13 +441,17 @@ export default function DesignCanvas() {
                       {element.type === 'image' && (
                         <div
                           onMouseDown={(e) => handleResizeStart(e, 'se', element.id)}
+                          onTouchStart={(e) => handleResizeStart(e, 'se', element.id)}
                           className="absolute -bottom-3 -right-3 w-6 h-6 bg-blue-500 border-3 border-white rounded-full cursor-se-resize hover:bg-blue-600 transition-colors shadow-lg z-10"
+                          style={{ touchAction: 'none' }}
                         />
                       )}
 
                       <div
                         onMouseDown={(e) => handleRotateStart(e, element.id)}
+                        onTouchStart={(e) => handleRotateStart(e, element.id)}
                         className="absolute -top-10 left-1/2 -translate-x-1/2 cursor-grab active:cursor-grabbing z-10"
+                        style={{ touchAction: 'none' }}
                       >
                         <RotateCw className="w-6 h-6 text-blue-500 hover:text-blue-600 drop-shadow-md" />
                       </div>
@@ -409,7 +461,12 @@ export default function DesignCanvas() {
                           e.stopPropagation();
                           deleteElement(element.id);
                         }}
+                        onTouchEnd={(e) => {
+                          e.stopPropagation();
+                          deleteElement(element.id);
+                        }}
                         className="absolute -top-5 -right-5 bg-rose-500 text-white p-2 rounded-full shadow-lg hover:bg-rose-600 transition-colors z-20"
+                        style={{ touchAction: 'none' }}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>

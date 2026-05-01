@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCartStore } from "@/app/lib/cartStore";
@@ -22,7 +22,7 @@ const provinces = [
   "Free State", "Limpopo", "Mpumalanga", "Northern Cape", "North West"
 ];
 
-export default function CheckoutPage() {
+function CheckoutPage() {
   const { user } = useUser();
   const { items, getTotalPrice,hasHydrated } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
@@ -444,4 +444,12 @@ export default function CheckoutPage() {
       </div>
     </div>
   );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback="loading...">
+      <CheckoutPage />
+    </Suspense>
+  )
 }

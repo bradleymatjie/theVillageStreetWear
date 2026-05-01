@@ -78,13 +78,10 @@ export function LoginForm({
         setUser(extendedUser);
       }
 
-      // Clear form and redirect
       setEmail('');
       setPassword('');
       
-      // IMPORTANT: Refresh to update middleware cookies
-      router.refresh();
-      router.push('/products');
+      router.push('/protected/profile');
     } catch (err: unknown) {
       let errorMessage = 'An error occurred during login. Please try again.';
       if (err instanceof Error) {
