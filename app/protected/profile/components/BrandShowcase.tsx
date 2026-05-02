@@ -1,14 +1,12 @@
 import { supabase } from "@/lib/supabaseClient";
 import { Product } from "@/app/lib/types";
 import BrandShowcaseClient from "./BrandShowcaseClient";
-import { Suspense } from "react";
-import BrandShowcaseSkeleton from "./BrandShowcaseSkeleton";
 
 export default async function BrandShowcase() {
   const { data, error } = await supabase
     .from("thevillageproducts")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false }).limit(4);
 
   if (error) {
     console.error("Error fetching products:", error);

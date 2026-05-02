@@ -8,6 +8,7 @@ import { Toaster } from "sonner";
 import Script from "next/script";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { Suspense } from "react";
+import { ThemeProvider } from "next-themes";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -78,7 +79,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* Load gtag.js */}
         <Script
@@ -98,6 +99,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${poppins.variable} antialiased`}>
+         <ThemeProvider attribute="class" defaultTheme="dark">
         <div>
           <Suspense fallback={null}>
           <Header />
@@ -106,6 +108,7 @@ export default function RootLayout({
           <Footer />
           </Suspense>
         </div>
+         </ThemeProvider>
         <Toaster />
         <Analytics />
       </body>
