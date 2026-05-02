@@ -18,6 +18,8 @@ export interface Product {
     description?: string;
     availableSizes: string[];
     availableMaterials: string[];
+    brand_id?: string;
+    brand_name?: string;
 }
 
 export interface ProductInput {

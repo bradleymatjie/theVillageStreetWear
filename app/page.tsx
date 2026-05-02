@@ -10,44 +10,153 @@ export default function Page() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-<section className="relative overflow-hidden bg-black px-4 py-16 text-white sm:px-6 sm:py-20 lg:px-8 lg:py-28">
-  <div className="mx-auto max-w-7xl">
-    <div className="max-w-3xl">
-      <p className="mb-4 inline-flex border border-white/20 px-3 py-1 text-xs font-bold uppercase tracking-[0.25em] text-white/70">
-        Now onboarding early brands
-      </p>
+      <section className="relative min-h-[calc(100dvh-72px)] overflow-hidden bg-black px-4 py-10 text-white sm:px-6 sm:py-20 lg:px-8 lg:py-28">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-25"
+          style={{ backgroundImage: "url('/joziHome.jpg')" }}
+        />
+        {/* <div className="absolute inset-0 bg-black/75" /> */}
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/40 to-black/50 lg:bg-gradient-to-r lg:from-black lg:via-black/80 lg:to-black/40" /> */}
 
-      <h1 className="text-5xl font-black leading-[0.9] tracking-tight sm:text-6xl md:text-7xl lg:text-8xl">
-        A Marketplace for
-        <br />
-        Streetwear Brands.
-      </h1>
+        <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2">
+          <div className="max-w-3xl">
+            <p className="mb-4 inline-flex border border-white/20 bg-black/20 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.25em] text-white/70 backdrop-blur sm:text-xs">
+              Now onboarding early brands
+            </p>
 
-      <p className="mt-6 max-w-2xl text-base font-semibold leading-7 text-white/80 sm:text-lg lg:text-xl">
-        Discover unique streetwear or start selling your brand to a growing audience
-      </p>
+            <h1 className="text-4xl font-black leading-[0.9] tracking-tight sm:text-6xl lg:text-7xl">
+              A Marketplace for
+              <br />
+              Streetwear Brands.
+            </h1>
 
-      <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <Link
-          href="/products"
-          className="inline-flex items-center justify-center bg-white px-7 py-3 text-sm font-black uppercase tracking-wide text-black transition hover:bg-white/80"
-        >
-          Explore Designs
-        </Link>
+            <p className="mt-5 max-w-2xl text-base font-semibold leading-7 text-white/80 sm:text-lg lg:text-xl">
+              Discover unique streetwear or start selling your brand to a growing audience.
+            </p>
 
-        <Link
-          href="/sell"
-          className="inline-flex items-center justify-center border border-white/30 px-7 py-3 text-sm font-black uppercase tracking-wide text-white transition hover:bg-white hover:text-black"
-        >
-          Join as a Brand
-        </Link>
-      </div>
-    </div>
-  </div>
+            <div className="mt-8 grid grid-cols-1 gap-3 sm:flex sm:flex-row">
+              <Link
+                href="/products"
+                className="inline-flex items-center justify-center bg-white px-7 py-4 text-sm font-black uppercase tracking-wide text-black transition hover:bg-white/80"
+              >
+                Explore Catalog
+              </Link>
 
-  <div className="pointer-events-none absolute -right-24 top-10 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
-  <div className="pointer-events-none absolute bottom-0 left-0 h-px w-full bg-white/10" />
-</section>
+              <Link
+                href="/sell"
+                className="inline-flex items-center justify-center border border-white/30 bg-black/20 px-7 py-4 text-sm font-black uppercase tracking-wide text-white transition hover:bg-white hover:text-black"
+              >
+                Join as a Brand
+              </Link>
+            </div>
+
+            {/* Mobile cards */}
+            <div className="mt-10 grid grid-cols-2 gap-3 lg:hidden">
+              {[
+                ["Marketplace", "The Village", "Local brands selling online."],
+                ["For Brands", "Start Selling", "Upload apparel and get orders."],
+                ["Customers", "Discover Drops", "Browse streetwear and track orders."],
+                ["App Feel", "Shop Mobile", "Dashboard, cart and checkout."],
+              ].map(([eyebrow, title, text], index) => (
+                <div
+                  key={title}
+                  className={`rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-md ${index % 2 === 1 ? "translate-y-5" : ""
+                    }`}
+                >
+                  <p className="text-[10px] font-bold uppercase tracking-wide text-white/45">
+                    {eyebrow}
+                  </p>
+                  <h3 className="mt-2 text-base font-black">{title}</h3>
+                  <p className="mt-2 text-xs leading-5 text-white/60">{text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop cards */}
+          <div className="relative hidden h-[520px] lg:block">
+            <div className="absolute left-10 top-8 w-80 rotate-[-2deg] rounded-[2rem] border border-white/10 bg-white/[0.06] p-6 shadow-2xl backdrop-blur-xl">
+              <p className="text-sm font-bold text-white/40">Marketplace</p>
+              <h3 className="mt-3 text-3xl font-black">The Village</h3>
+              <p className="mt-4 text-sm leading-6 text-white/55">
+                A streetwear platform helping local brands sell, grow and get discovered.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {["Brands", "Products", "Orders"].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white/70"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="absolute right-0 top-0 w-72 rotate-[5deg] rounded-[2rem] border border-white/10 bg-white/[0.06] p-6 shadow-2xl backdrop-blur-xl">
+              <p className="text-sm font-bold text-white/40">For Brands</p>
+              <h3 className="mt-3 text-2xl font-black">Start Selling</h3>
+              <p className="mt-4 text-sm leading-6 text-white/55">
+                Upload your apparel, manage your catalog and reach customers online.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {["Dashboard", "Catalog", "Sales"].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white/70"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="absolute bottom-10 left-0 w-72 rotate-[4deg] rounded-[2rem] border border-white/10 bg-white/[0.06] p-6 shadow-2xl backdrop-blur-xl">
+              <p className="text-sm font-bold text-white/40">For Customers</p>
+              <h3 className="mt-3 text-2xl font-black">Discover Drops</h3>
+              <p className="mt-4 text-sm leading-6 text-white/55">
+                Browse local streetwear, find fresh designs and track your orders.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {["Drops", "Cart", "Tracking"].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white/70"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="absolute bottom-0 right-6 w-80 rotate-[-3deg] rounded-[2rem] border border-white/10 bg-white/[0.06] p-6 shadow-2xl backdrop-blur-xl">
+              <p className="text-sm font-bold text-white/40">Mobile App Experience</p>
+              <h3 className="mt-3 text-2xl font-black">Shop Like an App</h3>
+              <p className="mt-4 text-sm leading-6 text-white/55">
+                Bottom navigation, dashboard, product pages and cart built for mobile.
+              </p>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {["Mobile", "Orders", "Checkout"].map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white/70"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div className="pointer-events-none absolute -right-24 top-10 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
+        <div className="pointer-events-none absolute bottom-0 left-0 h-px w-full bg-white/10" />
+      </section>
 
       <Suspense fallback={<CatalogLoading />}>
         <Catalog />

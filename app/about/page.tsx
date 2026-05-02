@@ -1,118 +1,122 @@
 // app/about/page.tsx
-import { MapPin, Mail, Phone, Instagram, Facebook } from "lucide-react";
+import { MapPin, Mail, Phone, Store, Shirt, Users, PackageCheck } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-black text-white">
-      {/* Hero Section - Bold & Minimalist */}
-      <section className="relative h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black z-10" />
-        {/* Background pattern */}
+      <section className="relative flex h-[60vh] items-center justify-center overflow-hidden md:h-[70vh]">
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/70 to-black" />
+
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 2px, white 2px, white 4px)',
-          }} />
+          <div
+            className="absolute inset-0"
+            style={{
+              backgroundImage:
+                "repeating-linear-gradient(0deg, transparent, transparent 2px, white 2px, white 4px)",
+            }}
+          />
         </div>
-        
-        <div className="relative z-20 text-center px-4 max-w-5xl mx-auto">
-          <h1 className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-6">
+
+        <div className="relative z-20 mx-auto max-w-5xl px-4 text-center">
+          <h1 className="mb-6 text-6xl font-black tracking-tighter sm:text-7xl md:text-8xl lg:text-9xl">
             THE VILLAGE
           </h1>
-          <p className="text-xl sm:text-2xl md:text-3xl font-light tracking-wide uppercase text-gray-300">
-            Where Street Culture Meets Expression
+          <p className="text-xl font-light uppercase tracking-wide text-gray-300 sm:text-2xl md:text-3xl">
+            A Marketplace for Streetwear Brands
           </p>
         </div>
       </section>
 
-      {/* Story Section */}
-      <section className="py-20 px-4 sm:px-6 border-t border-white/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+      <section className="border-t border-white/10 px-4 py-20 sm:px-6">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid items-center gap-12 md:grid-cols-2">
             <div>
-              <h2 className="text-4xl sm:text-5xl font-black mb-6 uppercase tracking-tight">
-                Our Story
+              <h2 className="mb-6 text-4xl font-black uppercase tracking-tight sm:text-5xl">
+                The Platform
               </h2>
-              <div className="space-y-4 text-gray-300 text-lg leading-relaxed">
+
+              <div className="space-y-4 text-lg leading-relaxed text-gray-300">
                 <p>
-                  Born from the streets of Johannesburg, The Village isn't just another streetwear brand. 
-                  We're a movement. A collective. A voice for those who dare to stand out.
+                  The Village is a marketplace built for streetwear brands to
+                  launch, sell, and grow online.
                 </p>
                 <p>
-                  We bring you carefully curated pieces that blend 
-                  urban aesthetics with bold self-expression. Every drop tells a story. Every piece 
-                  makes a statement.
+                  We connect creators with customers through a seamless,
+                  mobile-first shopping experience — from product discovery to
+                  orders and delivery tracking.
                 </p>
                 <p className="font-semibold text-white">
-                  This is more than fashion. This is culture.
+                  This is where brands are built.
                 </p>
               </div>
             </div>
-            
-            <div className="relative h-[400px] md:h-[500px] bg-white/5 rounded-sm overflow-hidden">
-              <div className="absolute inset-0 flex items-center justify-center text-white/20 text-9xl font-black">
-                 <Image 
+
+            <div className="relative h-[400px] overflow-hidden rounded-2xl bg-white/5 md:h-[500px]">
+              <Image
                 src="/jozi.jpg"
-                width={400} 
-                height={400} 
-                alt="Custom print design" 
-                className="w-full h-full object-cover object-bottom"
+                width={700}
+                height={700}
+                alt="Johannesburg street culture"
+                className="h-full w-full object-cover object-bottom"
               />
-              </div>
+              <div className="absolute inset-0 bg-black/30" />
             </div>
           </div>
         </div>
       </section>
 
-      {/* Mission Section - Full Width */}
-      <section className="py-20 px-4 sm:px-6 bg-white text-black">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl sm:text-6xl font-black mb-8 uppercase tracking-tight">
+      <section className="bg-white px-4 py-20 text-black sm:px-6">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="mb-8 text-5xl font-black uppercase tracking-tight sm:text-6xl">
             Our Mission
           </h2>
-          <p className="text-xl sm:text-2xl leading-relaxed font-light">
-            To create a space where individuality thrives. Where every piece empowers you to own your style, 
-            tell your story, and rep your city with pride. From the streets of Jozi to the world.
+          <p className="text-xl font-light leading-relaxed sm:text-2xl">
+            To empower streetwear brands to launch faster, sell smarter, and
+            reach a wider audience — starting from the streets of Johannesburg.
           </p>
         </div>
       </section>
 
-      {/* Custom Prints Callout */}
-      <section className="py-20 px-4 sm:px-6 border-t border-white/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-             <div className="relative h-[400px] bg-white/5 rounded-sm overflow-hidden order-2 md:order-1">
-              <Image 
-                src="/leo.png" 
-                width={400} 
-                height={400} 
-                alt="Custom print design" 
-                className="w-full h-full object-cover object-bottom"
+      <section className="border-t border-white/10 px-4 py-20 sm:px-6">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid items-center gap-12 md:grid-cols-2">
+            <div className="relative order-2 h-[400px] overflow-hidden rounded-2xl bg-white/5 md:order-1">
+              <Image
+                src="/leo.png"
+                width={700}
+                height={700}
+                alt="Streetwear product showcase"
+                className="h-full w-full object-cover object-bottom"
               />
             </div>
-            
+
             <div className="order-1 md:order-2">
-              <h2 className="text-4xl sm:text-5xl font-black mb-6 uppercase tracking-tight">
-                Design Your Own
+              <h2 className="mb-6 text-4xl font-black uppercase tracking-tight sm:text-5xl">
+                Create & Sell Your Designs
               </h2>
-              <div className="space-y-4 text-gray-300 text-lg leading-relaxed">
+
+              <div className="space-y-4 text-lg leading-relaxed text-gray-300">
                 <p>
-                  Got a vision? Bring it to life. At The Village, we don't just sell clothes—we help you 
-                  create them. Design your own custom prints and make something that's truly yours.
+                  Turn your ideas into products and sell them on The Village.
+                  Design custom apparel, launch your own drops, and start
+                  building your brand.
                 </p>
                 <p>
-                  Whether it's a personal statement, a brand logo, or artwork that speaks to you, 
-                  we'll print it on premium blanks and deliver wearable art straight to your door.
+                  Whether you already have a clothing label or you’re starting
+                  from scratch, The Village gives you a place to showcase,
+                  promote, and sell.
                 </p>
                 <p className="font-semibold text-white">
-                  Your idea. Our execution. Limitless possibilities.
+                  Your brand. Your products. Your marketplace.
                 </p>
-                <Link 
-                  href="/studio" 
-                  className="inline-block mt-6 bg-white text-black px-8 py-3 font-bold uppercase tracking-wider hover:bg-gray-200 transition-colors"
+
+                <Link
+                  href="/sell"
+                  className="mt-6 inline-block bg-white px-8 py-3 font-bold uppercase tracking-wider text-black transition-colors hover:bg-gray-200"
                 >
-                  Start Creating
+                  Join as a Brand
                 </Link>
               </div>
             </div>
@@ -120,128 +124,120 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Values Grid */}
-      <section className="py-20 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-5xl font-black mb-16 uppercase tracking-tight text-center">
+      <section className="px-4 py-20 sm:px-6">
+        <div className="mx-auto max-w-6xl">
+          <h2 className="mb-16 text-center text-5xl font-black uppercase tracking-tight">
             What We Stand For
           </h2>
-          
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="border border-white/20 p-8 hover:bg-white/5 transition-colors">
-              <div className="text-6xl font-black mb-4 text-white/20">01</div>
-              <h3 className="text-2xl font-bold mb-3 uppercase">Authenticity</h3>
-              <p className="text-gray-400">
-                No fake hype. No copied designs. Just real, raw, original streetwear that represents who we are.
-              </p>
-            </div>
-            
-            <div className="border border-white/20 p-8 hover:bg-white/5 transition-colors">
-              <div className="text-6xl font-black mb-4 text-white/20">02</div>
-              <h3 className="text-2xl font-bold mb-3 uppercase">Quality</h3>
-              <p className="text-gray-400">
-                Premium materials. Attention to detail. Every piece is made to last, not just for the season.
-              </p>
-            </div>
-            
-            <div className="border border-white/20 p-8 hover:bg-white/5 transition-colors">
-              <div className="text-6xl font-black mb-4 text-white/20">03</div>
-              <h3 className="text-2xl font-bold mb-3 uppercase">Creativity</h3>
-              <p className="text-gray-400">
-                Your vision, your design. We give you the tools to create custom pieces that are uniquely yours.
-              </p>
-            </div>
-            
-            <div className="border border-white/20 p-8 hover:bg-white/5 transition-colors">
-              <div className="text-6xl font-black mb-4 text-white/20">04</div>
-              <h3 className="text-2xl font-bold mb-3 uppercase">Community</h3>
-              <p className="text-gray-400">
-                The Village is you. It's us. It's everyone who believes in the culture and lives it daily.
-              </p>
-            </div>
+
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              {
+                icon: Store,
+                title: "Creator First",
+                text: "We build tools that help brands launch and grow without friction.",
+              },
+              {
+                icon: PackageCheck,
+                title: "Reliable Commerce",
+                text: "Products, orders, and customer journeys need to feel simple and professional.",
+              },
+              {
+                icon: Shirt,
+                title: "Brand Freedom",
+                text: "Every brand deserves space to express its own style, voice, and identity.",
+              },
+              {
+                icon: Users,
+                title: "Community",
+                text: "The Village is built around local creators, customers, and streetwear culture.",
+              },
+            ].map((item, index) => {
+              const Icon = item.icon;
+
+              return (
+                <div
+                  key={item.title}
+                  className="border border-white/20 p-8 transition-colors hover:bg-white/5"
+                >
+                  <div className="mb-4 flex items-center justify-between">
+                    <span className="text-5xl font-black text-white/20">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <Icon className="h-7 w-7 text-white/40" />
+                  </div>
+
+                  <h3 className="mb-3 text-2xl font-bold uppercase">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-400">{item.text}</p>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* Founder Section */}
-      {/* <section className="py-20 px-4 sm:px-6 border-t border-white/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-black mb-4 uppercase tracking-tight">
-              Meet the Founder
-            </h2>
-            <p className="text-gray-400 text-lg">The vision behind The Village</p>
-          </div>
-          
-          <div className="max-w-5xl mx-auto">
-            <div className="bg-white/5 border border-white/10 p-8 md:p-12">
-              <div className="flex flex-col md:flex-row gap-8 items-center">
-                <div className="w-32 h-32 bg-white/10 rounded-full flex items-center justify-center text-4xl font-black">
-                  BM
-                </div>
-               <div className="flex-1 text-center md:text-left">
-                    <h3 className="text-3xl font-bold mb-2">Bradley Matjie</h3>
-                    <p className="text-gray-400 mb-4 uppercase tracking-wide text-sm">Founder & Creative Director</p>
-                    <p className="text-gray-300 leading-relaxed">
-                        The Village Streetwear is about creating your own style—no rules, no trends dictating your fit. 
-                        Jump in and design your own T-shirt: pick bold SA-inspired graphics, tweak the cuts to match your flow.<br/> 
-                        It's hands-on, it's yours, from sketch to street. And when you're hunting ready-to-wear? We've got the 
-                        brands for us, by us.<br/> Curated drops from local hustlers and collectives—affordable, authentic, and unapologetic.<br/> 
-                        Think repurposed fabrics that honor the grind. This ain't retail; it's rebellion. Step up, design up, own the 
-                        narrative. What's your first creation?
-                    </p>
-                    </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section> */}
-
-      {/* Contact CTA Section */}
-      <section className="py-20 px-4 sm:px-6 bg-white text-black">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-5xl sm:text-6xl font-black mb-8 uppercase tracking-tight">
-            Join The Movement
+      <section className="bg-white px-4 py-20 text-black sm:px-6">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="mb-8 text-5xl font-black uppercase tracking-tight sm:text-6xl">
+            Start Your Brand
           </h2>
-          <p className="text-xl mb-12">
-            Got questions? Want to collaborate? Hit us up.
+          <p className="mb-12 text-xl">
+            Want to sell on The Village? Let’s get your brand live.
           </p>
-          
-          <div className="grid sm:grid-cols-3 gap-8 mb-12">
+
+          <div className="mb-12 grid gap-8 sm:grid-cols-3">
             <div className="flex flex-col items-center space-y-2">
-              <MapPin className="w-8 h-8 mb-2" />
+              <MapPin className="mb-2 h-8 w-8" />
               <span className="font-semibold">Location</span>
               <span className="text-gray-600">Johannesburg, SA</span>
             </div>
+
             <div className="flex flex-col items-center space-y-2">
-              <Mail className="w-8 h-8 mb-2" />
+              <Mail className="mb-2 h-8 w-8" />
               <span className="font-semibold">Email</span>
-              <Link href="mailto:hello@thevillagestreetwear.com" className="text-gray-600 hover:text-black transition-colors">
-                hello@thevillagestreetwear.com
+              <Link
+                href="mailto:thevillagestreetwear@gmail.com"
+                className="text-gray-600 transition-colors hover:text-black"
+              >
+                thevillagestreetwear@gmail.com
               </Link>
             </div>
+
             <div className="flex flex-col items-center space-y-2">
-              <Phone className="w-8 h-8 mb-2" />
+              <Phone className="mb-2 h-8 w-8" />
               <span className="font-semibold">Phone</span>
-              <Link href="tel:+27729509295" className="text-gray-600 hover:text-black transition-colors">
+              <Link
+                href="tel:+27729509295"
+                className="text-gray-600 transition-colors hover:text-black"
+              >
                 072 950 9295
               </Link>
             </div>
           </div>
-          
-          <Link
-            href="/products"
-            className="inline-block bg-black text-white px-12 py-4 text-lg font-bold uppercase tracking-wider hover:bg-gray-900 transition-colors"
-          >
-            Shop The Collection
-          </Link>
+
+          <div className="flex flex-col justify-center gap-3 sm:flex-row">
+            <Link
+              href="/sell"
+              className="inline-block bg-black px-12 py-4 text-lg font-bold uppercase tracking-wider text-white transition-colors hover:bg-gray-900"
+            >
+              Start Selling
+            </Link>
+
+            <Link
+              href="/products"
+              className="inline-block border border-black px-12 py-4 text-lg font-bold uppercase tracking-wider text-black transition-colors hover:bg-black hover:text-white"
+            >
+              Explore Catalog
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Bottom Banner */}
-      <section className="py-8 px-4 border-t border-white/10 text-center">
-        <p className="text-gray-500 uppercase tracking-widest text-sm">
-          Est. 2025 • Johannesburg, South Africa • The Village Streetwear
+      <section className="border-t border-white/10 px-4 py-8 text-center">
+        <p className="text-sm uppercase tracking-widest text-gray-500">
+          Est. 2025 • Johannesburg, South Africa • The Village Marketplace
         </p>
       </section>
     </div>

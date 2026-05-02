@@ -1,10 +1,10 @@
-'use client'
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
-import { useCartStore } from '@/app/lib/cartStore';
-import { Product } from '@/app/lib/types';
+import Image from "next/image";
+import Link from "next/link";
+import { useState } from "react";
+import { useCartStore } from "@/app/lib/cartStore";
+import { Product } from "@/app/lib/types";
 
 interface ProductPageClientProps {
   product: Product;
@@ -13,85 +13,85 @@ interface ProductPageClientProps {
 export default function ProductPageClient({ product }: ProductPageClientProps) {
   const addItem = useCartStore((state) => state.addItem);
 
-  console.log("product:", product);
+  const availableSizes =
+    product.availableSizes?.length > 0
+      ? product.availableSizes
+      : ["S", "M", "L", "XL"];
 
-  const availableSizes = product.availableSizes && product.availableSizes.length > 0
-    ? product.availableSizes
-    : ["S", "M", "L", "XL"];
+  const productImages =
+    product.images?.length > 0
+      ? product.images
+      : [product.imageurl || "/noImage.jpg"];
 
-  const availableMaterials = product.availableMaterials && product.availableMaterials.length > 0
-    ? product.availableMaterials
-    : ["100% Cotton"];
-
-  const productImages = product.images && product.images.length > 0 
-    ? product.images 
-    : [product.imageurl || '/placeholder-product.jpg'];
-
-  const [selectedSize, setSelectedSize] = useState<string>(availableSizes[0]);
-  const [selectedMaterial, setSelectedMaterial] = useState<string>(availableMaterials[0]);
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+  const [selectedSize, setSelectedSize] = useState(availableSizes[0]);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isAdded, setIsAdded] = useState(false);
 
   const imageUrl = productImages[selectedImageIndex];
-  const isSoldOut = product.soldOut ?? product.soldOut ?? false;
+  const isSoldOut = product.soldOut ?? false;
 
-  const formattedPrice = typeof product.price === 'string'
-    ? product.price.startsWith('R') ? product.price : `R${product.price}`
-    : `R${product.price}`;
+  const formattedPrice =
+    typeof product.price === "string"
+      ? product.price.startsWith("R")
+        ? product.price
+        : `R${product.price}`
+      : `R${product.price}`;
 
   const handleAddToCart = () => {
-    addItem(product, selectedSize, selectedMaterial);
-
+    addItem(product, selectedSize, "Default");
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-4">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-white p-4 text-black dark:bg-black dark:text-white lg:pb-4">
+      <div className="mx-auto max-w-6xl">
+        {/* BACK */}
         <Link
           href="/protected/profile/products"
-          className="inline-flex items-center gap-2 mb-8 text-sm font-medium hover:underline group"
+          className="mb-8 inline-flex items-center gap-2 text-sm font-medium hover:underline"
         >
           ← Back to Catalog
         </Link>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
+          {/* IMAGE */}
           <div>
-            <div className="relative aspect-square rounded-md overflow-hidden border border-white/20 group">
+            <div className="group relative aspect-square overflow-hidden rounded-xl border border-black/10 bg-white dark:border-white/10">
               <Image
-                src={imageUrl || "/noImage.jpg"}
+                src={imageUrl}
                 alt={product.name}
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-contain transition duration-300 group-hover:scale-105"
               />
+
               {isSoldOut && (
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
-                  <span className="text-white font-bold text-xl uppercase tracking-wide px-4 py-2 bg-black/30 rounded-full">
+                <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+                  <span className="rounded-full bg-black/40 px-4 py-2 text-xl font-bold uppercase text-white">
                     Sold Out
                   </span>
                 </div>
               )}
             </div>
-            
+
+            {/* THUMBNAILS */}
             {productImages.length > 1 && (
-              <div className="mt-4 flex h-[100px] w-full justify-center">
+              <div className="mt-4 flex gap-2 overflow-x-auto">
                 {productImages.map((img, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`relative aspect-square rounded-md overflow-hidden border-2 transition-all ${
-                      selectedImageIndex === index 
-                        ? "border-white" 
-                        : "border-white/20 hover:border-white/40"
+                    className={`relative h-20 w-20 overflow-hidden rounded-md border-2 ${
+                      selectedImageIndex === index
+                        ? "border-black dark:border-white"
+                        : "border-black/10 dark:border-white/10"
                     }`}
                   >
                     <Image
-                      src={img || "/noImage.jpg"}
-                      alt={`${product.name} - Image ${index + 1}`}
+                      src={img}
+                      alt="product"
                       fill
                       className="object-cover"
-                      sizes="(max-width: 1024px) 25vw, 12vw"
                     />
                   </button>
                 ))}
@@ -99,76 +99,100 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             )}
           </div>
 
-          <div className="space-y-6 lg:pt-4 ">
+          {/* DETAILS */}
+          <div className="space-y-6">
             {product.category && (
-              <p className="text-sm uppercase tracking-wide text-gray-400 font-medium">
+              <p className="text-sm uppercase tracking-wide text-black/50 dark:text-white/50">
                 {product.category}
               </p>
             )}
 
-            <h1 className="text-4xl lg:text-5xl font-black leading-tight">
-              {product.name}
-            </h1>
+            <h1 className="text-4xl font-black">{product.name}</h1>
 
-            <p className="text-3xl font-bold text-white">{formattedPrice}</p>
+            <p className="text-3xl font-bold">{formattedPrice}</p>
 
             {product.description && (
-              <div className="prose prose-invert max-w-none text-gray-300 leading-relaxed">
-                <p>{product.description}</p>
-              </div>
+              <p className="leading-relaxed text-black/70 dark:text-white/70">
+                {product.description}
+              </p>
             )}
 
-            {/* ========== SIZE SELECTOR ========== */}
-            {availableSizes.length > 0 && (
-              <div className="space-y-2">
-                <p className="font-medium text-gray-300">Select Size</p>
+            {/* SIZE */}
+            <div>
+              <p className="mb-2 font-medium text-black/70 dark:text-white/70">
+                Select Size
+              </p>
 
-                <div className="flex flex-wrap gap-2">
-                  {availableSizes.map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      disabled={isSoldOut}
-                      className={`px-4 py-2 border rounded-md transition-all ${selectedSize === size
-                          ? "bg-white text-black"
-                          : "border-white/20 text-gray-300 hover:border-white/40"
-                        } ${isSoldOut ? "opacity-50 cursor-not-allowed" : ""}`}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
+              <div className="flex gap-2">
+                {availableSizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    className={`rounded-md border px-4 py-2 ${
+                      selectedSize === size
+                        ? "bg-black text-white dark:bg-white dark:text-black"
+                        : "border-black/20 dark:border-white/20"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
 
-            {/* ACTION BUTTONS */}
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+            {/* DESKTOP ACTIONS */}
+            <div className="hidden gap-4 sm:flex">
               <button
                 onClick={handleAddToCart}
-                className={`flex-1 py-4 px-6 font-bold rounded-md text-center transition-all duration-300 ${isAdded
-                    ? "bg-green-600 text-white"
-                    : "bg-white text-black hover:bg-gray-100"
-                  } ${isSoldOut ? "opacity-50 cursor-not-allowed" : ""}`}
                 disabled={isSoldOut}
+                className={`flex-1 rounded-md px-6 py-4 font-bold transition ${
+                  isAdded
+                    ? "bg-green-600 text-white"
+                    : "bg-black text-white hover:bg-black/80 dark:bg-white dark:text-black"
+                }`}
               >
                 {isSoldOut
                   ? "Sold Out"
                   : isAdded
-                    ? "✓ Added to Cart"
-                    : "Add to Cart"}
+                  ? "✓ Added"
+                  : "Add to Cart"}
               </button>
 
               <Link
                 href={isSoldOut ? "#" : "/checkout"}
-                className={`py-4 px-6 border border-white/20 rounded-md font-bold text-center hover:border-white/50 transition-colors ${isSoldOut ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
-                  }`}
+                className="rounded-md border border-black/20 px-6 py-4 text-center font-bold dark:border-white/20"
               >
-                {isSoldOut ? "Sold Out" : "Buy Now"}
+                Buy Now
               </Link>
             </div>
           </div>
         </div>
       </div>
+
+      {/* 🔥 MOBILE FIXED ADD TO CART */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t z-10000 border-black/10 bg-white/95 p-4 backdrop-blur-xl dark:border-white/10 dark:bg-black/95 sm:hidden">
+        <div className="flex items-center gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-black">{formattedPrice}</p>
+            <p className="text-sm font-bold text-black/60 dark:text-white/60">
+              <span>Size: {selectedSize}</span>
+            </p>
+            
+          </div>
+
+          <button
+            onClick={handleAddToCart}
+            disabled={isSoldOut}
+            className={`rounded-full px-6 py-4 text-sm font-black transition ${
+              isAdded
+                ? "bg-green-600 text-white"
+                : "bg-black text-white dark:bg-white dark:text-black"
+            } ${isSoldOut ? "cursor-not-allowed opacity-50" : ""}`}
+          >
+            {isSoldOut ? "Sold Out" : isAdded ? "✓ Added" : "Add To Bag"}
+          </button>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
