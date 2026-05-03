@@ -44,7 +44,6 @@ export function LoginForm({
         email,
         password,
       });
-
       if (authError) {
         let errorMessage = 'An unexpected error occurred. Please try again.';
         if (authError.message.includes('Invalid login credentials')) {
@@ -80,8 +79,16 @@ export function LoginForm({
 
       setEmail('');
       setPassword('');
-      
-      router.push('/protected/profile');
+
+      const role = data.user?.user_metadata?.role;
+
+      if (role === "brand") {
+        router.push("/protected/brand-dashboard");
+      } else {
+        router.push("/protected/profile");
+      }
+
+      router.refresh();
     } catch (err: unknown) {
       let errorMessage = 'An error occurred during login. Please try again.';
       if (err instanceof Error) {
@@ -136,8 +143,8 @@ export function LoginForm({
             </div>
             <p className="text-sm text-muted-foreground">
               Don&apos;t have an account?{' '}
-              <Link 
-                href="/signup" 
+              <Link
+                href="/signup"
                 className="font-medium text-foreground underline underline-offset-4 hover:text-primary transition-colors"
               >
                 Sign up
@@ -238,7 +245,7 @@ export function LoginForm({
               )}
             </Button>
           </div>
-          
+
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-gray-200" />
@@ -307,16 +314,16 @@ export function LoginForm({
       {/* Terms and Privacy */}
       <div className="text-muted-foreground text-center text-xs text-balance">
         By clicking continue, you agree to our{' '}
-        <Link 
-          href="/terms" 
+        <Link
+          href="/terms"
           aria-label="Terms of Service"
           className="underline underline-offset-4 hover:text-primary transition-colors"
         >
           Terms of Service
         </Link>{' '}
         and{' '}
-        <Link 
-          href="/privacy" 
+        <Link
+          href="/privacy"
           aria-label="Privacy Policy"
           className="underline underline-offset-4 hover:text-primary transition-colors"
         >
