@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Home,
   Package,
@@ -9,7 +10,9 @@ import {
   Users,
   BarChart2,
   Store,
+  LogOut,
 } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -19,12 +22,24 @@ const navItems = [
   { icon: Home, label: "Dashboard", href: "/protected/admin" },
   { icon: Package, label: "Products", href: "/protected/admin/products" },
   { icon: ShoppingCart, label: "Orders", href: "/protected/admin/orders" },
-  { icon: Store, label: "Applications", href: "/protected/admin/brand-applications" },
+  {
+    icon: Store,
+    label: "Applications",
+    href: "/protected/admin/brand-applications",
+  },
   { icon: Users, label: "Customers", href: "/protected/admin/customers" },
   { icon: BarChart2, label: "Analytics", href: "/protected/admin/analytics" },
 ];
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  };
+
   return (
     <div className="flex min-h-screen bg-black text-white">
       <aside className="fixed left-0 top-0 flex h-full w-64 flex-col border-r border-white/10 p-6">
@@ -32,7 +47,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           The Village
         </h1>
 
-        <nav className="space-y-2 text-sm">
+        <nav className="space-y-2 text-sm flex-1">
           {navItems.map(({ icon: Icon, label, href }) => (
             <Link
               key={href}
@@ -44,6 +59,15 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             </Link>
           ))}
         </nav>
+
+        {/* Logout Button */}
+        <button
+          onClick={handleLogout}
+          className="mt-6 flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium uppercase tracking-wide text-red-400 transition hover:bg-red-500/10 hover:text-red-300"
+        >
+          <LogOut size={18} />
+          Logout
+        </button>
       </aside>
 
       <main className="ml-64 flex-1 p-10">{children}</main>

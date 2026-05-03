@@ -33,16 +33,19 @@ export async function POST(req: Request) {
   if (status === "approved") {
     const { data: brand, error: brandError } = await supabaseAdmin
       .from("brands")
-      .insert({
-        application_id: application.id,
-        name: application.brand_name,
-        owner_name: application.owner_name,
-        email: application.email,
-        phone: application.phone,
-        instagram: application.instagram,
-        plan: application.plan,
-        status: "active",
-      })
+      .upsert(
+        {
+          application_id: application.id,
+          name: application.brand_name,
+          owner_name: application.owner_name,
+          email: application.email,
+          phone: application.phone,
+          instagram: application.instagram,
+          plan: application.plan,
+          status: "active",
+        },
+        { onConflict: "application_id" }
+      )
       .select()
       .single();
 
@@ -50,16 +53,15 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: brandError.message }, { status: 500 });
     }
 
-    const { data: createdUser, error: userError } =
-      await supabaseAdmin.auth.admin.createUser({
-        email: application.email,
-        email_confirm: true,
-        user_metadata: {
-          role: "brand",
-          brand_id: brand.id,
-          brand_name: application.brand_name,
-        },
-      });
+    const { error: userError } = await supabaseAdmin.auth.admin.createUser({
+      email: application.email,
+      email_confirm: true,
+      user_metadata: {
+        role: "brand",
+        brand_id: brand.id,
+        brand_name: brand.name,
+      },
+    });
 
     if (userError && !userError.message.includes("already registered")) {
       return NextResponse.json({ error: userError.message }, { status: 500 });
@@ -67,7 +69,7 @@ export async function POST(req: Request) {
 
     const { error: resetError } =
       await supabaseAdmin.auth.resetPasswordForEmail(application.email, {
-       redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password`,
+        redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/auth/reset-password`,
       });
 
     if (resetError) {

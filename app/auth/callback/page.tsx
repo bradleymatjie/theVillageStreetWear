@@ -16,6 +16,7 @@ import { supabase } from '@/lib/supabaseClient';
         const urlParams = new URLSearchParams(window.location.search);
         const errorParam = urlParams.get('error');
         const errorDescription = urlParams.get('error_description');
+        debugger
 
         if (errorParam) {
           setError(errorDescription || errorParam);
@@ -30,7 +31,7 @@ import { supabase } from '@/lib/supabaseClient';
           setTimeout(() => router.push('/login?error=session_failed'), 3000);
           return;
         }
-
+        debugger;
         if (!session) {
           console.error('No session found');
           setError('No active session found');
@@ -61,9 +62,42 @@ import { supabase } from '@/lib/supabaseClient';
 
           setUser(extendedUser);
         }
+        debugger;
 
-        router.push('/protected/profile');
-        router.refresh();
+     const { data: brand, error: brandError } = await supabase
+  .from("brands")
+  .select("id")
+  .eq("id", session.user.id)
+  .maybeSingle();
+
+if (brandError) {
+  console.error("Brand check error:", brandError);
+}
+
+if (brand) {
+  router.push("/brand/dashboard");
+  router.refresh();
+  return;
+}
+
+const { data: customer, error: customerError } = await supabase
+  .from("customers")
+  .select("id")
+  .eq("id", session.user.id)
+  .maybeSingle();
+
+if (customerError) {
+  console.error("Customer check error:", customerError);
+}
+
+if (customer) {
+  router.push("/protected/profile");
+  router.refresh();
+  return;
+}
+
+setError("Account type not found. Please contact support.");
+setTimeout(() => router.push("/login"), 3000);
       } catch (err) {
         console.error('Unexpected error in auth callback:', err);
         setError('An unexpected error occurred');

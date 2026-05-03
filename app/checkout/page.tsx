@@ -29,7 +29,6 @@ function CheckoutPage() {
   const [deliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup'>('delivery');
   const [orderId, setOrderId] = useState<string>("");
 
-  // Generate order ID on component mount
   useEffect(() => {
     const generateOrderId = () => {
       const timestamp = Date.now();
@@ -194,83 +193,6 @@ function CheckoutPage() {
           {/* Left Column - Forms */}
           <div className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Delivery Options */}
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Delivery Options</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <button
-                    type="button"
-                    onClick={() => setDeliveryOption('delivery')}
-                    className={`flex flex-col items-start p-4 border rounded-lg transition-colors ${
-                      deliveryOption === 'delivery' ? 'border-black ring-2 ring-black bg-gray-50' : 'border-gray-300 hover:border-gray-500'
-                    }`}
-                  >
-                    <Truck className="w-5 h-5 mb-2 text-black" />
-                    <span className="font-semibold text-gray-900">Ship to Address</span>
-                    <span className="text-xs text-gray-600 mt-1">
-                      {shipping === 0 ? "Free shipping" : `R${shipping.toFixed(2)} standard`}
-                    </span>
-                  </button>
-                  
-                  <button
-                    type="button"
-                    onClick={() => setDeliveryOption('pickup')}
-                    className={`flex flex-col items-start p-4 border rounded-lg transition-colors ${
-                      deliveryOption === 'pickup' ? 'border-black ring-2 ring-black bg-gray-50' : 'border-gray-300 hover:border-gray-500'
-                    }`}
-                  >
-                    <Package className="w-5 h-5 mb-2 text-black" />
-                    <span className="font-semibold text-gray-900">Free Pickup</span>
-                    <span className="text-xs text-gray-600 mt-1">Available in Johannesburg CBD</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Contact Information - Always Required */}
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Contact Information</h2>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
-                    <input
-                      type="text"
-                      name="fullName"
-                      required
-                      value={formData.fullName}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
-                      placeholder="Your full name"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      required
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
-                      placeholder="+27 12 345 6789"
-                    />
-                  </div>
-                </div>
-              </div>
-
               {/* Conditional Shipping Address */}
               {deliveryOption === 'delivery' && (
                 <div className="bg-white rounded-lg shadow-sm p-6">
@@ -333,21 +255,8 @@ function CheckoutPage() {
                 </div>
               )}
 
-              {/* Pickup Info Display */}
-              {deliveryOption === 'pickup' && (
-                <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <MapPin className="w-5 h-5 text-black" />
-                    <h2 className="text-lg font-bold text-gray-900">Pickup Location</h2>
-                  </div>
-                  <p className="text-gray-800 font-semibold">{PICKUP_ADDRESS.name}</p>
-                  <p className="text-gray-600 mt-1">{PICKUP_ADDRESS.address}</p>
-                  <p className="text-gray-600">{PICKUP_ADDRESS.city}, {PICKUP_ADDRESS.postalCode}, {PICKUP_ADDRESS.province}</p>
-                </div>
-              )}
-
               {/* Payment Button */}
-              <button
+              {user ? <button
                 type="submit"
                 disabled={isProcessing}
                 // disabled
@@ -362,7 +271,20 @@ function CheckoutPage() {
                 ) : (
                   `Pay R${total.toFixed(2)}`
                 )}
-              </button>
+              </button>:<Link
+              href={"/login"}
+                className="w-full py-4 bg-black text-white font-bold rounded-md hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                <LockIcon />
+                {isProcessing ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    Processing...
+                  </>
+                ) : (
+                  `LOGIN TO CONTINUE`
+                )}
+              </Link>}
 
               <p className="text-xs text-gray-500 text-center">
                 By completing your purchase, you agree to our Terms of Service

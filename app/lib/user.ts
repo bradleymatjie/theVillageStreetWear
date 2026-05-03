@@ -1,10 +1,9 @@
 // store/authStore.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { User } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabaseClient';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { User } from "@supabase/supabase-js";
+import { supabase } from "@/lib/supabaseClient";
 
-// Extended User type to include metadata
 export interface ExtendedUser extends User {
   user_metadata: {
     email: string;
@@ -13,10 +12,14 @@ export interface ExtendedUser extends User {
     phone?: string;
     phone_verified: boolean;
     sub: string;
+
+    // The Village roles
+    role?: "customer" | "brand" | "super_admin";
+    brand_id?: string;
+    brand_name?: string;
   };
 }
 
-// Zustand store interface
 interface AuthState {
   user: ExtendedUser | null;
   isAuthenticated: boolean;
@@ -28,7 +31,6 @@ interface AuthState {
   _authSubscription: (() => void) | null;
 }
 
-// Create the store
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
@@ -49,24 +51,30 @@ export const useAuthStore = create<AuthState>()(
           user: null,
           isAuthenticated: false,
           isLoading: false,
+          _authSubscription: null,
         }),
 
-      // Initialize auth state from Supabase
       initializeAuth: async () => {
         try {
           set({ isLoading: true });
 
-          // Cleanup existing subscription if any
+          // Remove old storage key once after rename
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("mazwi-auth-storage");
+          }
+
           const existingSubscription = get()._authSubscription;
           if (existingSubscription) {
             existingSubscription();
           }
 
-          // Get current session
-          const { data: { session }, error } = await supabase.auth.getSession();
-          debugger;
+          const {
+            data: { session },
+            error,
+          } = await supabase.auth.getSession();
+
           if (error) {
-            console.error('Error getting session:', error);
+            console.error("Error getting session:", error);
             get().clearUser();
             return;
           }
@@ -77,64 +85,74 @@ export const useAuthStore = create<AuthState>()(
             get().clearUser();
           }
 
-          // Listen for auth state changes
-          const { data: { subscription } } = supabase.auth.onAuthStateChange(
-            async (event, session) => {
-              console.log('Auth state changed:', event);
-
-              if (event === 'SIGNED_IN' && session?.user) {
-                get().setUser(session.user as ExtendedUser);
-              } else if (event === 'SIGNED_OUT') {
-                get().clearUser();
-              } else if (event === 'TOKEN_REFRESHED' && session?.user) {
-                get().setUser(session.user as ExtendedUser);
-              } else if (event === 'USER_UPDATED' && session?.user) {
-                get().setUser(session.user as ExtendedUser);
-              }
+          const {
+            data: { subscription },
+          } = supabase.auth.onAuthStateChange((event, session) => {
+            if (
+              ["SIGNED_IN", "TOKEN_REFRESHED", "USER_UPDATED"].includes(event) &&
+              session?.user
+            ) {
+              get().setUser(session.user as ExtendedUser);
+              return;
             }
-          );
 
-          // Store cleanup function
+            if (event === "SIGNED_OUT") {
+              get().clearUser();
+            }
+          });
+
           set({ _authSubscription: () => subscription.unsubscribe() });
         } catch (error) {
-          console.error('Error initializing auth:', error);
+          console.error("Error initializing auth:", error);
           get().clearUser();
         }
       },
 
-      // Sign out helper
       signOut: async () => {
         try {
           const { error } = await supabase.auth.signOut();
+
           if (error) {
-            console.error('Error signing out:', error);
+            console.error("Error signing out:", error);
             throw error;
           }
+
           get().clearUser();
+
+          if (typeof window !== "undefined") {
+            localStorage.removeItem("thevillage-auth-storage");
+            localStorage.removeItem("mazwi-auth-storage");
+          }
         } catch (error) {
-          console.error('Sign out failed:', error);
+          console.error("Sign out failed:", error);
           throw error;
         }
       },
     }),
     {
-      name: 'mazwi-auth-storage',
-      // Only persist user data, not loading state or subscription
-      partialize: (state) => ({ 
+      name: "thevillage-auth-storage",
+      partialize: (state) => ({
         user: state.user,
-        isAuthenticated: state.isAuthenticated 
+        isAuthenticated: state.isAuthenticated,
       }),
     }
   )
 );
 
-// Usage hook (for convenience)
 export const useUser = () => {
-  const { user, isAuthenticated, isLoading, setUser, clearUser, signOut } = useAuthStore();
-  return { user, isAuthenticated, isLoading, setUser, clearUser, signOut };
+  const { user, isAuthenticated, isLoading, setUser, clearUser, signOut } =
+    useAuthStore();
+
+  return {
+    user,
+    isAuthenticated,
+    isLoading,
+    setUser,
+    clearUser,
+    signOut,
+  };
 };
 
-// Hook to ensure auth is initialized (call this in your root layout or app component)
 export const useInitializeAuth = () => {
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
   const isLoading = useAuthStore((state) => state.isLoading);
