@@ -9,6 +9,11 @@ export default function BrandDashboardPage() {
   const [brandName, setBrandName] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const handleLogout = async () => {
+  await supabase.auth.signOut();
+  window.location.href = "/login";
+};
+
   useEffect(() => {
     async function getUser() {
       const {
@@ -45,17 +50,26 @@ export default function BrandDashboardPage() {
   return (
     <main className="min-h-screen bg-black px-4 py-8 text-white sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8">
-          <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/40">
-            Brand Dashboard
-          </p>
-          <h1 className="mt-2 text-4xl font-black">
-            Welcome, {brandName}
-          </h1>
-          <p className="mt-2 text-sm text-white/50">
-            Manage your products, orders, and brand presence on The Village.
-          </p>
-        </div>
+        <div className="mb-8 flex items-start justify-between">
+  <div>
+    <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/40">
+      Brand Dashboard
+    </p>
+    <h1 className="mt-2 text-4xl font-black">
+      Welcome, {brandName}
+    </h1>
+    <p className="mt-2 text-sm text-white/50">
+      Manage your products, orders, and brand presence on The Village.
+    </p>
+  </div>
+
+  <button
+    onClick={handleLogout}
+    className="rounded-full border border-white/20 px-5 py-2 text-sm font-bold text-white hover:bg-white hover:text-black transition"
+  >
+    Logout
+  </button>
+</div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <DashboardCard
