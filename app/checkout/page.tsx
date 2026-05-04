@@ -71,81 +71,96 @@ function CheckoutPage() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsProcessing(true);
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setIsProcessing(true);
 
-    try {
-      // Prepare cart items for backend
-      const cartItems = items.map(item => {
-        const priceMatch = item.price.match(/[\d.,]+/);
-        const itemPrice = priceMatch ? parseFloat(priceMatch[0].replace(/,/g, '')) : 0;
-        
-        return {
-          id: item.id,
-          name: item.name,
-          price: itemPrice,
-          quantity: item.quantity,
-          imageurl: item.imageurl || "/noImage.jpg",
-          selectedSize: item.selectedSize || null,
-          selectedMaterial: item.selectedMaterial || null,
-        };
-      });
+  try {
+    const cartItems = items.map((item: any) => {
+      const priceMatch = item.price.match(/[\d.,]+/);
+      const itemPrice = priceMatch
+        ? parseFloat(priceMatch[0].replace(/,/g, ""))
+        : 0;
 
-      // Prepare shipping info based on delivery option
-      let shipping_method = deliveryOption;
-      let shipping_address = "";
-      let pickup_location = "";
-      
-      if (deliveryOption === 'delivery') {
-        shipping_address = `${formData.address}, ${formData.city}, ${formData.province}, ${formData.postalCode}`;
-      } else {
-        pickup_location = PICKUP_ADDRESS.name;
-      }
-
-      const requestBody = {
-        amount: total,
-        email: formData.email,
-        orderId: orderId,
-        customer_name: formData.fullName,
-        phone: formData.phone,
-        cartItems: cartItems,
-        shipping_method: shipping_method,
-        shipping_address: shipping_address,
-        pickup_location: pickup_location,
+      return {
+        product_id: item.id,
+        brand_id: item.brand_id || item.brandId || item.brand?.id,
+        product_name: item.name,
+        product_image: item.imageurl || "/noImage.jpg",
+        size: item.selectedSize || null,
+        material: item.selectedMaterial || null,
+        quantity: item.quantity,
+        unit_price: itemPrice,
+        total_price: itemPrice * item.quantity,
       };
+    });
 
-      console.log("Sending request:", requestBody);
+    const brandIds = Array.from(
+      new Set(cartItems.map((item) => item.brand_id).filter(Boolean))
+    );
 
-      const res = await fetch("/api/yoco/create-checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody),
-      });
+    if (brandIds.length !== 1) {
+      toast.error(
+        "Your cart contains items from multiple brands. Please order from one brand at a time."
+      );
+      setIsProcessing(false);
+      return;
+    }
 
-      const data = await res.json();
+    let shipping_method = deliveryOption;
+    let shipping_address = "";
+    let pickup_location = "";
 
-      if (!res.ok) {
-        console.error("Backend error:", data);
-        toast.error(data.error || "Payment error");
-        setIsProcessing(false);
-        return;
-      }
+    if (deliveryOption === "delivery") {
+      shipping_address = `${formData.address}, ${formData.city}, ${formData.province}, ${formData.postalCode}`;
+    } else {
+      pickup_location = PICKUP_ADDRESS.name;
+    }
 
-      // Redirect to Yoco payment page
-      if (data.redirectUrl) {
-        window.location.href = data.redirectUrl;
-      } else {
-        toast.warning("No redirect URL received from server");
-        setIsProcessing(false);
-      }
+    const requestBody = {
+      order_number: orderId,
+      brand_id: brandIds[0],
+      customer_id: user?.id,
+      customer_name: formData.fullName,
+      customer_email: formData.email,
+      customer_phone: formData.phone,
+      subtotal,
+      delivery_fee: shipping,
+      total_amount: total,
+      payment_status: "pending",
+      order_status: "pending_payment",
+      cartItems,
+      shipping_method,
+      shipping_address,
+      pickup_location,
+    };
 
-    } catch (err) {
-      console.error("Checkout error:", err);
-      toast.error("Something went wrong. Please try again.");
+    const res = await fetch("/api/yoco/create-checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      toast.error(data.error || "Payment error");
+      setIsProcessing(false);
+      return;
+    }
+
+    if (data.redirectUrl) {
+      window.location.href = data.redirectUrl;
+    } else {
+      toast.warning("No redirect URL received from server");
       setIsProcessing(false);
     }
-  };
+  } catch (err) {
+    console.error("Checkout error:", err);
+    toast.error("Something went wrong. Please try again.");
+    setIsProcessing(false);
+  }
+};
 
   // Redirect if cart is empty
   if (items.length === 0) {
