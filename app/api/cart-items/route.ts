@@ -104,8 +104,6 @@ export async function DELETE(request: Request) {
     const itemId = url.searchParams.get('itemId');
     const userId = url.searchParams.get('userId');
 
-    debugger;
-
   try {
     // First, fetch the cart item to get the preview URLs before deletion
     const { data: item, error: fetchError } = await supabase

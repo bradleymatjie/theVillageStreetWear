@@ -221,7 +221,7 @@ function CheckoutPage() {
                         required
                         value={formData.address}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
+                        className="w-full px-4 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
                         placeholder="Street address, apartment, suite, etc."
                       />
                     </div>
@@ -234,7 +234,7 @@ function CheckoutPage() {
                           required
                           value={formData.city}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
                           placeholder="City"
                         />
                       </div>
@@ -245,7 +245,7 @@ function CheckoutPage() {
                           required
                           value={formData.province}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
                         >
                           <option value="">Select Province</option>
                           {provinces.map(p => (
@@ -262,7 +262,7 @@ function CheckoutPage() {
                         required
                         value={formData.postalCode}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
                         placeholder="Postal code"
                       />
                     </div>

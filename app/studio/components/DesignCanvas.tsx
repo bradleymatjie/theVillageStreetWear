@@ -23,7 +23,7 @@ const tshirtColors: TShirtColor[] = [
 
 // Helper function to convert data URL to Blob
 const dataURLtoBlob = (dataUrl: string): Blob => {
-  debugger;
+  
   const arr = dataUrl.split(',');
   const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
   const bstr = atob(arr[1]);
@@ -72,9 +72,9 @@ export default function DesignCanvas() {
   };
 
   const handleAddToCart = async () => {
-    debugger;
+   
     if (!ToCaptureRef.current) return;
-    debugger;
+    
     setIsAddingToCart(true);
     const originalView = currentView;
     const prevId = selectedElementId;
@@ -82,7 +82,7 @@ export default function DesignCanvas() {
 
     let frontDataUrl: string | null = null;
     let backDataUrl: string | null = null;
-    debugger;
+
     try {
       // Generate unique ID for this design
       const itemUuid = uuidv4();
@@ -108,7 +108,7 @@ export default function DesignCanvas() {
 
       // Get user ID from store
       const userId = user?.id;
-      debugger;
+      
       if (!userId) throw new Error('Login required');
 
       // Upload to Supabase Storage

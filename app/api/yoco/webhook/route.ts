@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     const payload = await req.json();
 
     console.log("📦 Yoco webhook received:", payload);
-    debugger;
+    
     const eventType = payload.type;
     const payment = payload.payload || {};
 

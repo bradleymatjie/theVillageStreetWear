@@ -187,7 +187,6 @@ export default function DesignTools() {
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    debugger;
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -204,7 +203,6 @@ export default function DesignTools() {
     }
 
     setIsUploading(true);
-    debugger;
     try {
       // Generate unique file path
       const fileExt = file.name.split('.').pop();
