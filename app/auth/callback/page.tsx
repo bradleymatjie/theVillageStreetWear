@@ -16,7 +16,7 @@ import { supabase } from '@/lib/supabaseClient';
         const urlParams = new URLSearchParams(window.location.search);
         const errorParam = urlParams.get('error');
         const errorDescription = urlParams.get('error_description');
-        debugger
+        
 
         if (errorParam) {
           setError(errorDescription || errorParam);
@@ -31,7 +31,7 @@ import { supabase } from '@/lib/supabaseClient';
           setTimeout(() => router.push('/login?error=session_failed'), 3000);
           return;
         }
-        debugger;
+       
         if (!session) {
           console.error('No session found');
           setError('No active session found');
@@ -62,7 +62,7 @@ import { supabase } from '@/lib/supabaseClient';
 
           setUser(extendedUser);
         }
-        debugger;
+       
 
      const { data: brand, error: brandError } = await supabase
   .from("brands")

@@ -36,9 +36,9 @@ export default function RegisterBrandPage() {
             description: form.description,
             status: "pending",
         });
-        debugger;
+       
         if (error) {
-            debugger;
+            
             console.error(error);
             alert("Something went wrong. Please try again.");
             setLoading(false);
