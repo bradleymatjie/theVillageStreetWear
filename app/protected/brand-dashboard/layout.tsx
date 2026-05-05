@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Package,
   ShoppingCart,
@@ -23,7 +26,7 @@ const navItems = [
     icon: ShoppingCart,
   },
   {
-    href: "/protected/brand-dashboard/analytics",
+    href: "/protected/brand-dashboard/sales",
     label: "Sales",
     icon: BarChart3,
   },
@@ -34,6 +37,8 @@ export default function BrandDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+
   return (
     <main className="min-h-screen bg-black text-white">
       <div className="flex min-h-screen">
@@ -49,7 +54,11 @@ export default function BrandDashboardLayout({
 
           <nav className="mt-10 space-y-2">
             {navItems.map((item) => (
-              <DesktopNavLink key={item.href} {...item} />
+              <DesktopNavLink
+                key={item.href}
+                {...item}
+                active={pathname === item.href}
+              />
             ))}
           </nav>
         </aside>
@@ -64,7 +73,11 @@ export default function BrandDashboardLayout({
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-black/95 px-2 py-2 backdrop-blur-xl lg:hidden">
         <div className="grid grid-cols-4 gap-1">
           {navItems.map((item) => (
-            <MobileNavLink key={item.href} {...item} />
+            <MobileNavLink
+              key={item.href}
+              {...item}
+              active={pathname === item.href}
+            />
           ))}
         </div>
       </nav>
@@ -76,15 +89,21 @@ function DesktopNavLink({
   href,
   label,
   icon: Icon,
+  active,
 }: {
   href: string;
   label: string;
   icon: any;
+  active: boolean;
 }) {
   return (
     <Link
       href={href}
-      className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold text-white/60 transition hover:bg-white/10 hover:text-white"
+      className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition ${
+        active
+          ? "bg-white text-black"
+          : "text-white/60 hover:bg-white/10 hover:text-white"
+      }`}
     >
       <Icon className="h-5 w-5" />
       {label}
@@ -96,17 +115,27 @@ function MobileNavLink({
   href,
   label,
   icon: Icon,
+  active,
 }: {
   href: string;
   label: string;
   icon: any;
+  active: boolean;
 }) {
   return (
     <Link
       href={href}
-      className="flex flex-col items-center justify-center rounded-2xl px-2 py-2 text-[11px] font-bold text-white/60 transition hover:bg-white/10 hover:text-white"
+      className={`flex flex-col items-center justify-center rounded-2xl px-2 py-2 text-[11px] font-bold transition ${
+        active
+          ? "text-white"
+          : "text-white/60 hover:bg-white/10 hover:text-white"
+      }`}
     >
-      <Icon className="mb-1 h-5 w-5" />
+      <Icon
+        className={`mb-1 h-5 w-5 ${
+          active ? "text-white" : "text-white/60"
+        }`}
+      />
       {label}
     </Link>
   );

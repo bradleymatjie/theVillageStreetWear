@@ -1,6 +1,4 @@
 // app/api/yoco/create-checkout/route.ts
-
-import { createServerSupabaseClient } from "@/lib/supebase/server";
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 
@@ -10,6 +8,7 @@ const supabase = createClient(
 );
 
 export async function POST(req: Request) {
+  let createdOrderId: string | null = null;
 
   try {
     const {
@@ -76,9 +75,7 @@ export async function POST(req: Request) {
         shipping_method,
         shipping_address: shipping_address || "",
         pickup_location: pickup_location || "",
-        metadata: {
-          cartItems,
-        },
+        metadata: { cartItems },
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
@@ -92,6 +89,8 @@ export async function POST(req: Request) {
         { status: 500 }
       );
     }
+
+    createdOrderId = order.id;
 
     const amountInCents = Math.round(Number(total_amount) * 100);
 
@@ -124,13 +123,7 @@ export async function POST(req: Request) {
     if (!yocoRes.ok) {
       console.error("Yoco error:", yocoData);
 
-      await supabase
-        .from("orders")
-        .update({
-          payment_status: "failed",
-          order_status: "pending_payment",
-        })
-        .eq("id", order.id);
+      await supabase.from("orders").delete().eq("id", order.id);
 
       return NextResponse.json(
         { error: yocoData.message || "Checkout failed" },
@@ -155,6 +148,10 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error("Checkout handler error:", error);
+
+    if (createdOrderId) {
+      await supabase.from("orders").delete().eq("id", createdOrderId);
+    }
 
     return NextResponse.json({ error: "Checkout failed" }, { status: 500 });
   }

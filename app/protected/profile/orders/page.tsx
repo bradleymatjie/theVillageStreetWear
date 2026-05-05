@@ -46,7 +46,7 @@ export default function OrdersPage() {
       });
 
       const data = await res.json();
-
+      console.log("my orders: ", data)
       if (!res.ok) {
         console.error("Orders error:", data);
         setLoading(false);
