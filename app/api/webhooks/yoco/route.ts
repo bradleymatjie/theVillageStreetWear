@@ -60,7 +60,7 @@ export async function POST(req: Request) {
       .update({
         status: "paid",
         payment_status: "paid",
-        order_status: "paid",
+        order_status: "recieved",
         yoco_checkout_id: paymentId,
         paid_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
