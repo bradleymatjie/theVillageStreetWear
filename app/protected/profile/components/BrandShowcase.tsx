@@ -1,6 +1,8 @@
 import { supabase } from "@/lib/supabaseClient";
 import { Product } from "@/app/lib/types";
 import BrandShowcaseClient from "./BrandShowcaseClient";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function BrandShowcase() {
   const { data, error } = await supabase
