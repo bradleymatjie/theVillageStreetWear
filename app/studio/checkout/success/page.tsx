@@ -106,12 +106,12 @@ function CheckoutSuccessPage() {
           <p className="text-gray-600 mb-4">
             {error || 'Unable to load order details'}
           </p>
-          <button
+          {/* <button
             onClick={() => router.push('/studio/design')}
             className="bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 transition"
           >
             Return to Design Studio
-          </button>
+          </button> */}
         </div>
       </div>
     );

@@ -25,8 +25,8 @@ export default function Footer() {
             </h3>
             <ul className="space-y-2 text-sm text-white/45">
               <li><Link href="/products" className="hover:text-white">Explore Catalog</Link></li>
-              <li><Link href="/studio" className="hover:text-white">Design Studio</Link></li>
-              <li><Link href="/track-order" className="hover:text-white">Track Order</Link></li>
+              {/* <li><Link href="/studio" className="hover:text-white">Design Studio</Link></li> */}
+              {/* <li><Link href="/track-order" className="hover:text-white">Track Order</Link></li> */}
             </ul>
           </div>
 
