@@ -1,11 +1,26 @@
 import { Suspense } from "react";
-import ProfilePage from "./profilePage";
-export const dynamic = 'force-dynamic';
+import BrandShowcase from "./components/BrandShowcase";
+import BrandShowcaseSkeleton from "./components/BrandShowcaseSkeleton";
+import HomeTab from "./components/HomeTab";
+import HomeScreenOrder from "./components/HomeScreenOrder";
+import AnimatedProfileShell from "./components/AnimatedProfileShell";
 
-export default function Page() {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "force-no-store";
+
+export default function ProfilePage() {
   return (
-    <Suspense fallback="loading">
-      <ProfilePage />
-    </Suspense>
-  )
+    <AnimatedProfileShell>
+      <HomeTab />
+
+      <div className="px-4">
+        <Suspense fallback={<BrandShowcaseSkeleton />}>
+          <BrandShowcase />
+        </Suspense>
+
+        <HomeScreenOrder />
+      </div>
+    </AnimatedProfileShell>
+  );
 }

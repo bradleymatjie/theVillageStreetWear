@@ -29,7 +29,6 @@ function CheckoutPage() {
   const [deliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup'>('delivery');
   const [orderId, setOrderId] = useState<string>("");
 
-  // Generate order ID on component mount
   useEffect(() => {
     const generateOrderId = () => {
       const timestamp = Date.now();
@@ -72,81 +71,96 @@ function CheckoutPage() {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsProcessing(true);
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setIsProcessing(true);
 
-    try {
-      // Prepare cart items for backend
-      const cartItems = items.map(item => {
-        const priceMatch = item.price.match(/[\d.,]+/);
-        const itemPrice = priceMatch ? parseFloat(priceMatch[0].replace(/,/g, '')) : 0;
-        
-        return {
-          id: item.id,
-          name: item.name,
-          price: itemPrice,
-          quantity: item.quantity,
-          imageurl: item.imageurl || "/noImage.jpg",
-          selectedSize: item.selectedSize || null,
-          selectedMaterial: item.selectedMaterial || null,
-        };
-      });
+  try {
+    const cartItems = items.map((item: any) => {
+      const priceMatch = item.price.match(/[\d.,]+/);
+      const itemPrice = priceMatch
+        ? parseFloat(priceMatch[0].replace(/,/g, ""))
+        : 0;
 
-      // Prepare shipping info based on delivery option
-      let shipping_method = deliveryOption;
-      let shipping_address = "";
-      let pickup_location = "";
-      
-      if (deliveryOption === 'delivery') {
-        shipping_address = `${formData.address}, ${formData.city}, ${formData.province}, ${formData.postalCode}`;
-      } else {
-        pickup_location = PICKUP_ADDRESS.name;
-      }
-
-      const requestBody = {
-        amount: total,
-        email: formData.email,
-        orderId: orderId,
-        customer_name: formData.fullName,
-        phone: formData.phone,
-        cartItems: cartItems,
-        shipping_method: shipping_method,
-        shipping_address: shipping_address,
-        pickup_location: pickup_location,
+      return {
+        product_id: item.id,
+        brand_id: item.brand_id || item.brandId || item.brand?.id,
+        product_name: item.name,
+        product_image: item.imageurl || "/noImage.jpg",
+        size: item.selectedSize || null,
+        material: item.selectedMaterial || null,
+        quantity: item.quantity,
+        unit_price: itemPrice,
+        total_price: itemPrice * item.quantity,
       };
+    });
 
-      console.log("Sending request:", requestBody);
+    const brandIds = Array.from(
+      new Set(cartItems.map((item) => item.brand_id).filter(Boolean))
+    );
 
-      const res = await fetch("/api/yoco/create-checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(requestBody),
-      });
+    if (brandIds.length !== 1) {
+      toast.error(
+        "Your cart contains items from multiple brands. Please order from one brand at a time."
+      );
+      setIsProcessing(false);
+      return;
+    }
 
-      const data = await res.json();
+    let shipping_method = deliveryOption;
+    let shipping_address = "";
+    let pickup_location = "";
 
-      if (!res.ok) {
-        console.error("Backend error:", data);
-        toast.error(data.error || "Payment error");
-        setIsProcessing(false);
-        return;
-      }
+    if (deliveryOption === "delivery") {
+      shipping_address = `${formData.address}, ${formData.city}, ${formData.province}, ${formData.postalCode}`;
+    } else {
+      pickup_location = PICKUP_ADDRESS.name;
+    }
 
-      // Redirect to Yoco payment page
-      if (data.redirectUrl) {
-        window.location.href = data.redirectUrl;
-      } else {
-        toast.warning("No redirect URL received from server");
-        setIsProcessing(false);
-      }
+    const requestBody = {
+      order_number: orderId,
+      brand_id: brandIds[0],
+      customer_id: user?.id,
+      customer_name: formData.fullName,
+      customer_email: formData.email,
+      customer_phone: formData.phone,
+      subtotal,
+      delivery_fee: shipping,
+      total_amount: total,
+      payment_status: "pending",
+      order_status: "pending_payment",
+      cartItems,
+      shipping_method,
+      shipping_address,
+      pickup_location,
+    };
 
-    } catch (err) {
-      console.error("Checkout error:", err);
-      toast.error("Something went wrong. Please try again.");
+    const res = await fetch("/api/yoco/create-checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      toast.error(data.error || "Payment error");
+      setIsProcessing(false);
+      return;
+    }
+
+    if (data.redirectUrl) {
+      window.location.href = data.redirectUrl;
+    } else {
+      toast.warning("No redirect URL received from server");
       setIsProcessing(false);
     }
-  };
+  } catch (err) {
+    console.error("Checkout error:", err);
+    toast.error("Something went wrong. Please try again.");
+    setIsProcessing(false);
+  }
+};
 
   // Redirect if cart is empty
   if (items.length === 0) {
@@ -194,83 +208,6 @@ function CheckoutPage() {
           {/* Left Column - Forms */}
           <div className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Delivery Options */}
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Delivery Options</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <button
-                    type="button"
-                    onClick={() => setDeliveryOption('delivery')}
-                    className={`flex flex-col items-start p-4 border rounded-lg transition-colors ${
-                      deliveryOption === 'delivery' ? 'border-black ring-2 ring-black bg-gray-50' : 'border-gray-300 hover:border-gray-500'
-                    }`}
-                  >
-                    <Truck className="w-5 h-5 mb-2 text-black" />
-                    <span className="font-semibold text-gray-900">Ship to Address</span>
-                    <span className="text-xs text-gray-600 mt-1">
-                      {shipping === 0 ? "Free shipping" : `R${shipping.toFixed(2)} standard`}
-                    </span>
-                  </button>
-                  
-                  <button
-                    type="button"
-                    onClick={() => setDeliveryOption('pickup')}
-                    className={`flex flex-col items-start p-4 border rounded-lg transition-colors ${
-                      deliveryOption === 'pickup' ? 'border-black ring-2 ring-black bg-gray-50' : 'border-gray-300 hover:border-gray-500'
-                    }`}
-                  >
-                    <Package className="w-5 h-5 mb-2 text-black" />
-                    <span className="font-semibold text-gray-900">Free Pickup</span>
-                    <span className="text-xs text-gray-600 mt-1">Available in Johannesburg CBD</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Contact Information - Always Required */}
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Contact Information</h2>
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
-                      placeholder="you@example.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
-                    <input
-                      type="text"
-                      name="fullName"
-                      required
-                      value={formData.fullName}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
-                      placeholder="Your full name"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone *</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      required
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
-                      placeholder="+27 12 345 6789"
-                    />
-                  </div>
-                </div>
-              </div>
-
               {/* Conditional Shipping Address */}
               {deliveryOption === 'delivery' && (
                 <div className="bg-white rounded-lg shadow-sm p-6">
@@ -284,7 +221,7 @@ function CheckoutPage() {
                         required
                         value={formData.address}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
+                        className="w-full px-4 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
                         placeholder="Street address, apartment, suite, etc."
                       />
                     </div>
@@ -297,7 +234,7 @@ function CheckoutPage() {
                           required
                           value={formData.city}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
                           placeholder="City"
                         />
                       </div>
@@ -308,7 +245,7 @@ function CheckoutPage() {
                           required
                           value={formData.province}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
+                          className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
                         >
                           <option value="">Select Province</option>
                           {provinces.map(p => (
@@ -325,7 +262,7 @@ function CheckoutPage() {
                         required
                         value={formData.postalCode}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
+                        className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
                         placeholder="Postal code"
                       />
                     </div>
@@ -333,21 +270,8 @@ function CheckoutPage() {
                 </div>
               )}
 
-              {/* Pickup Info Display */}
-              {deliveryOption === 'pickup' && (
-                <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
-                  <div className="flex items-center gap-3 mb-4">
-                    <MapPin className="w-5 h-5 text-black" />
-                    <h2 className="text-lg font-bold text-gray-900">Pickup Location</h2>
-                  </div>
-                  <p className="text-gray-800 font-semibold">{PICKUP_ADDRESS.name}</p>
-                  <p className="text-gray-600 mt-1">{PICKUP_ADDRESS.address}</p>
-                  <p className="text-gray-600">{PICKUP_ADDRESS.city}, {PICKUP_ADDRESS.postalCode}, {PICKUP_ADDRESS.province}</p>
-                </div>
-              )}
-
               {/* Payment Button */}
-              <button
+              {user ? <button
                 type="submit"
                 disabled={isProcessing}
                 // disabled
@@ -362,7 +286,20 @@ function CheckoutPage() {
                 ) : (
                   `Pay R${total.toFixed(2)}`
                 )}
-              </button>
+              </button>:<Link
+              href={"/login"}
+                className="w-full py-4 bg-black text-white font-bold rounded-md hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              >
+                <LockIcon />
+                {isProcessing ? (
+                  <>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    Processing...
+                  </>
+                ) : (
+                  `LOGIN TO CONTINUE`
+                )}
+              </Link>}
 
               <p className="text-xs text-gray-500 text-center">
                 By completing your purchase, you agree to our Terms of Service

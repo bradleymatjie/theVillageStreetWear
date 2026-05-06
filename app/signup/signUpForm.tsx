@@ -77,7 +77,6 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
         throw error;
       }
 
-      // Note: For Google, profile creation happens post-redirect in auth callback
     } catch (err: unknown) {
       let errorMessage = 'An error occurred during Google sign-up. Please try again.';
       if (err instanceof Error) {

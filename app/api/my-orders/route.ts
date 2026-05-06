@@ -1,103 +1,102 @@
 // app/api/my-orders/route.ts
-import { createClient } from '@supabase/supabase-js';
-import { NextResponse } from 'next/server';
+
+import { createClient } from "@supabase/supabase-js";
+import { NextResponse } from "next/server";
 
 const supabase = createClient(
-  process.env.SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-interface TransformedOrder {
-  order_id: string;
-  created_at: string;
-  customer_name: string;
-  email: string;
-  phone: string;
-  total: number;
-  status: string;
-  shipping_method: "delivery" | "pickup";
-  shipping_address: string;
-  pickup_location: string;
-  order_items: {
-    name: string;
-    price: number;
-    quantity: number;
-    image_url: string;
-    selected_size?: string;
-    selected_material?: string;
-  }[];
-}
-
 export async function POST(request: Request) {
   try {
-    const { email } = await request.json();
+    const { customer_id, email } = await request.json();
 
-    if (!email) {
+    if (!customer_id && !email) {
       return NextResponse.json(
-        { error: 'Email is required' },
+        { error: "Customer ID or email is required" },
         { status: 400 }
       );
     }
 
-    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedEmail =
+      typeof email === "string" ? email.trim().toLowerCase() : "";
+
+    const filters: string[] = [];
+
+    if (customer_id) {
+      filters.push(`customer_id.eq.${customer_id}`);
+      filters.push(`metadata->>customer_id.eq.${customer_id}`);
+    }
+
+    if (normalizedEmail) {
+      filters.push(`email.eq.${normalizedEmail}`);
+    }
 
     const { data: orders, error } = await supabase
-      .from('orders')
-      .select('*')
-      .ilike('metadata->>email', normalizedEmail)
-      .order('created_at', { ascending: false });
+      .from("orders")
+      .select("*")
+      .or(filters.join(","))
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
 
-    if (!orders || orders.length === 0) {
-      return NextResponse.json([]);
-    }
-
-    const transformedOrders: TransformedOrder[] = orders.map((order: any) => {
+    const transformedOrders = (orders || []).map((order: any) => {
       const metadata = order.metadata || {};
+      const cartItems =
+        metadata.cartItems ||
+        metadata.cart_items ||
+        order.order_items ||
+        [];
 
-      // Parse cartItems (JSON string)
-      let order_items: TransformedOrder['order_items'] = [];
-      if (metadata.cartItems && typeof metadata.cartItems === 'string') {
-        try {
-          const parsed = JSON.parse(metadata.cartItems);
-          if (Array.isArray(parsed)) {
-            order_items = parsed.map((item: any) => ({
-              name: item.name,
-              price: Number(item.price) || 0,
-              quantity: Number(item.quantity) || 1,
-              image_url: item.imageurl || '/noImage.jpg',
-              selected_size: item.selectedSize,
-              selected_material: item.selectedMaterial,
-            }));
-          }
-        } catch (parseError) {
-          console.error('Failed to parse cartItems for order:', order.id, parseError);
-        }
-      }
-
-      const total = order_items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const order_items = Array.isArray(cartItems)
+        ? cartItems.map((item: any) => ({
+            name:
+              item.product_name ||
+              item.name ||
+              item.title ||
+              "Product",
+            price: Number(item.unit_price || item.price) || 0,
+            quantity: Number(item.quantity) || 1,
+            image_url:
+              item.product_image ||
+              item.image_url ||
+              item.imageurl ||
+              "/noImage.jpg",
+            selected_size:
+              item.size ||
+              item.selectedSize ||
+              item.selected_size,
+            selected_material:
+              item.material ||
+              item.selectedMaterial ||
+              item.selected_material,
+          }))
+        : [];
 
       return {
-        order_id: metadata.orderId || `ORD-${order.id}`,
+        id: order.id,
+        order_id: order.order_id,
         created_at: order.created_at,
-        customer_name: metadata.customer_name || 'Customer',
-        email: metadata.email || '',
-        phone: metadata.phone || '',
-        total,
-        status: order.status || 'pending',
-        shipping_method: (metadata.shipping_method || 'delivery') as "delivery" | "pickup",
-        shipping_address: metadata.shipping_address || '',
-        pickup_location: metadata.pickup_location || '',
+        customer_name: order.customer_name,
+        email: order.email,
+        phone: order.phone,
+        total: Number(order.total || order.total_amount || 0),
+        status: order.order_status || order.status || "pending",
+        payment_status: order.payment_status || "pending",
+        shipping_method: order.shipping_method || "delivery",
+        shipping_address: order.shipping_address || "",
+        pickup_location: order.pickup_location || "",
         order_items,
       };
     });
 
     return NextResponse.json(transformedOrders);
   } catch (error: any) {
-    console.error('My orders fetch error:', error);
+    console.error("My orders fetch error:", error);
+
     return NextResponse.json(
-      { error: error.message || 'Failed to fetch orders' },
+      { error: error.message || "Failed to fetch orders" },
       { status: 500 }
     );
   }

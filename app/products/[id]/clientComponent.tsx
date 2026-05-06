@@ -14,7 +14,6 @@ interface ProductPageClientProps {
 export default function ProductPageClient({ product }: ProductPageClientProps) {
   const addItem = useCartStore((state) => state.addItem);
 
-  debugger;
   console.log("product:", product);
 
   // Get available sizes and materials from product, with fallbacks

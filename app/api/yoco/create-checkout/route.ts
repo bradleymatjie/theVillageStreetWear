@@ -1,70 +1,99 @@
 // app/api/yoco/create-checkout/route.ts
-import { supabase } from "@/lib/supabaseClient";
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export async function POST(req: Request) {
+  let createdOrderId: string | null = null;
+
   try {
-    const { 
-      amount, 
-      email, 
-      orderId, 
-      customer_name, 
-      phone, 
-      cartItems, 
+    const {
+      order_number,
+      brand_id,
+      customer_id,
+      customer_name,
+      customer_email,
+      customer_phone,
+      subtotal,
+      delivery_fee,
+      total_amount,
+      cartItems,
       shipping_method,
-      shipping_address, 
-      pickup_location, 
+      shipping_address,
+      pickup_location,
     } = await req.json();
 
-    if (!orderId || !amount || !email || !customer_name || !Array.isArray(cartItems) || cartItems.length === 0) {
+    if (
+      !order_number ||
+      !brand_id ||
+      !customer_id ||
+      !customer_email ||
+      !customer_name ||
+      !total_amount ||
+      !Array.isArray(cartItems) ||
+      cartItems.length === 0
+    ) {
       return NextResponse.json(
-        { 
-          error: "Missing or invalid required fields",
-          received: {
-            email: !!email,
-            orderId: !!orderId,
-            customer_name: !!customer_name,
-            amount: !!amount,
-            cartItems: Array.isArray(cartItems) ? cartItems.length : "missing/invalid"
-          }
-        },
+        { error: "Missing or invalid required fields" },
         { status: 400 }
       );
     }
 
-    const amountInCents = Math.round(parseFloat(amount) * 100);
-    const params = new URLSearchParams({
-    orderId,
-    amount: amount.toString(),
-    email,
-    customer_name,
-    phone: phone || '',
-    cartItems: JSON.stringify(cartItems),
-    shipping_method,
-    shipping_address: shipping_address || '',
-    pickup_location: pickup_location || ''
-  });
+    const brandIds = Array.from(
+      new Set(cartItems.map((item) => item.brand_id).filter(Boolean))
+    );
 
-const successUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/success?${params.toString()}`;
+    if (brandIds.length !== 1 || brandIds[0] !== brand_id) {
+      return NextResponse.json(
+        { error: "Only one brand can be checked out at a time." },
+        { status: 400 }
+      );
+    }
 
-    console.log("Generated successUrl:", successUrl);
-    console.log("Order ID to send:", orderId);
+    const { data: order, error: orderError } = await supabase
+      .from("orders")
+      .insert({
+        order_id: order_number,
+        customer_id,
+        brand_id,
+        customer_name,
+        email: customer_email,
+        phone: customer_phone || "",
+        amount: subtotal,
+        shipping_cost: delivery_fee || 0,
+        total: total_amount,
+        subtotal,
+        delivery_fee,
+        total_amount,
+        payment_status: "pending",
+        order_status: "pending_payment",
+        status: "pending",
+        shipping_method,
+        shipping_address: shipping_address || "",
+        pickup_location: pickup_location || "",
+        metadata: { cartItems },
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .select()
+      .single();
 
-    const metadata = {
-      orderId: orderId,
-      email,
-      customer_name,
-      phone: phone || '',
-      shipping_method: shipping_method || '',
-      shipping_address: shipping_address || '',
-      pickup_location: pickup_location || '',
-      cartItems: JSON.stringify(cartItems)
-    };
+    if (orderError || !order) {
+      console.error("Order creation error:", orderError);
+      return NextResponse.json(
+        { error: "Failed to create pending order" },
+        { status: 500 }
+      );
+    }
 
-    console.log("Metadata being sent to Yoco:", JSON.stringify(metadata, null, 2));
+    createdOrderId = order.id;
 
-    // Create Yoco checkout
+    const amountInCents = Math.round(Number(total_amount) * 100);
+
     const yocoRes = await fetch("https://payments.yoco.com/api/checkouts", {
       method: "POST",
       headers: {
@@ -74,65 +103,56 @@ const successUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/success?${params.toStrin
       body: JSON.stringify({
         amount: amountInCents,
         currency: "ZAR",
-        successUrl,
+        successUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/success?order_id=${order.id}`,
         cancelUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout`,
-        customer: { 
-          email,
+        customer: {
+          email: customer_email,
           name: customer_name,
         },
-        metadata,
+        metadata: {
+          order_id: order.id,
+          order_number,
+          brand_id,
+          customer_id,
+        },
       }),
     });
 
-    const data = await yocoRes.json();
+    const yocoData = await yocoRes.json();
 
     if (!yocoRes.ok) {
-      console.error("Yoco API error:", data);
-      return NextResponse.json({ error: data.message || "Checkout failed" }, { status: 400 });
+      console.error("Yoco error:", yocoData);
+
+      await supabase.from("orders").delete().eq("id", order.id);
+
+      return NextResponse.json(
+        { error: yocoData.message || "Checkout failed" },
+        { status: 400 }
+      );
     }
 
-    console.log("✅ Yoco checkout created:", yocoRes);
+    const redirectUrl = yocoData.redirectUrl || yocoData.redirect_url;
 
-    const orderData = {
-      order_id: orderId,
-      yoco_checkout_id: data.id,
-      status: "pending",
-      total: parseFloat(amount),
-      email,
-      phone: phone || "",
-      customer_name,
-      amount,
-      metadata,
-      shipping_method: shipping_method || "",
-      shipping_address: shipping_address || "",
-      pickup_location: pickup_location || "",
-      created_at: new Date().toISOString(),
-    };
-
-    console.log("Creating pending order:", orderData);
-
-    const { data:newData, error: insertError } = await supabase
+    await supabase
       .from("orders")
-      .insert([orderData])
-      .select()
-      .single();
+      .update({
+        yoco_checkout_id: yocoData.id,
+      })
+      .eq("id", order.id);
 
-    if (insertError) {
-      console.error("❌ Failed to create pending order:", insertError);
+    return NextResponse.json({
+      redirectUrl,
+      orderId: order.id,
+      orderNumber: order_number,
+      yocoCheckoutId: yocoData.id,
+    });
+  } catch (error) {
+    console.error("Checkout handler error:", error);
+
+    if (createdOrderId) {
+      await supabase.from("orders").delete().eq("id", createdOrderId);
     }
 
-    return NextResponse.json({ 
-      redirectUrl: data.redirectUrl || data.redirect_url,
-      orderId,
-      yocoCheckoutId: data.id,
-      status: "redirecting_to_payment"
-    });
-    
-  } catch (error: unknown) {
-    console.error("Checkout handler error:", error);
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : "Checkout failed" }, 
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Checkout failed" }, { status: 500 });
   }
 }

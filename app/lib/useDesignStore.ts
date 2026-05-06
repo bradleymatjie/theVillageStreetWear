@@ -286,7 +286,7 @@ export const useDesignStore = create<DesignStoreState>((set, get) => ({
       const res = await fetch(`/api/cart-items?userId=${user.id}`, {
         method: 'GET'
       });
-      debugger;
+     
       if (!res.ok) {
         const err = await res.json();
         throw new Error(err.error || 'Failed to load cart');
