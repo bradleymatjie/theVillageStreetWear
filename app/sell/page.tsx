@@ -17,7 +17,7 @@ export default function SellPage() {
     {
       name: "Premium",
       price: "R1,199/month",
-      items: "Unlimited products",
+      items: "Up to 30 products",
     },
   ];
 
