@@ -105,9 +105,6 @@ export default function Header() {
             <Link href="/sell" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-black">
               SELL YOUR BRAND
             </Link>
-            <Link href="/track-order" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-black">
-              TRACK ORDER
-            </Link>
           </nav>
         </div>
       </header>

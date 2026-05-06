@@ -76,14 +76,14 @@ function SuccessContent() {
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Link
-            href={`/orders/${orderId}`}
+            href={`/protected/profile/orders`}
             className="flex-1 rounded-full bg-white px-6 py-3 text-sm font-black text-black"
           >
             Track Order
           </Link>
 
           <Link
-            href="/products"
+            href="/protected/profile/products"
             className="flex-1 rounded-full border border-white/20 px-6 py-3 text-sm font-black text-white"
           >
             Continue Shopping
