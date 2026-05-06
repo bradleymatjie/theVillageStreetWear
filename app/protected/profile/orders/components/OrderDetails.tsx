@@ -7,7 +7,7 @@ export function OrderDetails({ order }: { order: any }) {
   const status = String(order.status || "pending").toLowerCase();
 
   return (
-    <div className="bg-white text-black dark:bg-black dark:text-white">
+    <div className="bg-white text-black dark:bg-black dark:text-white opacity-100">
       <DrawerHeader className="px-0 md:hidden">
         <DrawerTitle>Order Details</DrawerTitle>
       </DrawerHeader>

@@ -19,30 +19,58 @@ export async function POST(request: Request) {
       );
     }
 
-    const normalizedEmail = email?.trim().toLowerCase();
+    const normalizedEmail =
+      typeof email === "string" ? email.trim().toLowerCase() : "";
+
+    const filters: string[] = [];
+
+    if (customer_id) {
+      filters.push(`customer_id.eq.${customer_id}`);
+      filters.push(`metadata->>customer_id.eq.${customer_id}`);
+    }
+
+    if (normalizedEmail) {
+      filters.push(`email.eq.${normalizedEmail}`);
+    }
 
     const { data: orders, error } = await supabase
       .from("orders")
       .select("*")
-      .or(
-        `customer_id.eq.${customer_id},email.eq.${normalizedEmail},metadata->>customer_id.eq.${customer_id}`
-      )
+      .or(filters.join(","))
       .order("created_at", { ascending: false });
 
     if (error) throw error;
 
     const transformedOrders = (orders || []).map((order: any) => {
       const metadata = order.metadata || {};
-      const cartItems = metadata.cartItems || [];
+      const cartItems =
+        metadata.cartItems ||
+        metadata.cart_items ||
+        order.order_items ||
+        [];
 
       const order_items = Array.isArray(cartItems)
         ? cartItems.map((item: any) => ({
-            name: item.product_name || item.name,
+            name:
+              item.product_name ||
+              item.name ||
+              item.title ||
+              "Product",
             price: Number(item.unit_price || item.price) || 0,
             quantity: Number(item.quantity) || 1,
-            image_url: item.product_image || item.imageurl || "/noImage.jpg",
-            selected_size: item.size || item.selectedSize,
-            selected_material: item.material || item.selectedMaterial,
+            image_url:
+              item.product_image ||
+              item.image_url ||
+              item.imageurl ||
+              "/noImage.jpg",
+            selected_size:
+              item.size ||
+              item.selectedSize ||
+              item.selected_size,
+            selected_material:
+              item.material ||
+              item.selectedMaterial ||
+              item.selected_material,
           }))
         : [];
 

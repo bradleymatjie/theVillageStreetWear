@@ -5,108 +5,216 @@ import { useRouter } from 'next/navigation';
 import { ExtendedUser, useUser } from '@/app/lib/user';
 import { supabase } from '@/lib/supabaseClient';
 
- export default function AuthCallbackPage() {
+export default function AuthCallbackPage() {
   const router = useRouter();
   const { setUser } = useUser();
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const handleAuthCallback = async () => {
-      try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const errorParam = urlParams.get('error');
-        const errorDescription = urlParams.get('error_description');
-        
+ useEffect(() => {
+  const handleAuthCallback = async () => {
+    try {
+      const urlParams = new URLSearchParams(
+        window.location.search
+      );
 
-        if (errorParam) {
-          setError(errorDescription || errorParam);
-          setTimeout(() => router.push('/login?error=verification_failed'), 3000);
-          return;
-        }
+      const errorParam = urlParams.get("error");
 
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        if (sessionError) {
-          console.error('Session error:', sessionError);
-          setError(sessionError.message);
-          setTimeout(() => router.push('/login?error=session_failed'), 3000);
-          return;
-        }
-       
-        if (!session) {
-          console.error('No session found');
-          setError('No active session found');
-          setTimeout(() => router.push('/login'), 3000);
-          return;
-        }
+      const errorDescription =
+        urlParams.get("error_description");
 
-        if (session.user && !session.user.email_confirmed_at) {
-          console.error('Email not confirmed');
-          setError('Email verification incomplete. Please check your email.');
-          setTimeout(() => router.push('/login?error=email_not_confirmed'), 3000);
-          return;
-        }
+      if (errorParam) {
+        setError(errorDescription || errorParam);
 
-        if (session.user) {
-          console.log("user in zustand", session);
-          const extendedUser: ExtendedUser = {
-            ...session.user,
-            user_metadata: {
-              email: session.user.user_metadata?.email ?? session.user.email ?? '',
-              email_verified: session.user.user_metadata?.email_verified ?? true,
-              full_name: session.user.user_metadata?.full_name ?? session.user.user_metadata?.name ?? '',
-              phone: session.user.user_metadata?.phone ?? '',
-              phone_verified: session.user.user_metadata?.phone_verified ?? false,
-              sub: session.user.user_metadata?.sub ?? '',
-            },
-          };
+        setTimeout(() => {
+          router.push(
+            "/login?error=verification_failed"
+          );
+        }, 3000);
 
-          setUser(extendedUser);
-        }
-       
-
-     const { data: brand, error: brandError } = await supabase
-  .from("brands")
-  .select("id")
-  .eq("id", session.user.id)
-  .maybeSingle();
-
-if (brandError) {
-  console.error("Brand check error:", brandError);
-}
-
-if (brand) {
-  router.push("/brand/dashboard");
-  router.refresh();
-  return;
-}
-
-const { data: customer, error: customerError } = await supabase
-  .from("customers")
-  .select("id")
-  .eq("id", session.user.id)
-  .maybeSingle();
-
-if (customerError) {
-  console.error("Customer check error:", customerError);
-}
-
-if (customer) {
-  router.push("/protected/profile");
-  router.refresh();
-  return;
-}
-
-setError("Account type not found. Please contact support.");
-setTimeout(() => router.push("/login"), 3000);
-      } catch (err) {
-        console.error('Unexpected error in auth callback:', err);
-        setError('An unexpected error occurred');
-        setTimeout(() => router.push('/login'), 3000);
+        return;
       }
-    };
 
-    handleAuthCallback();
-  }, [router, setUser]);
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      if (sessionError) {
+        console.error(
+          "Session error:",
+          sessionError
+        );
+
+        setError(sessionError.message);
+
+        setTimeout(() => {
+          router.push(
+            "/login?error=session_failed"
+          );
+        }, 3000);
+
+        return;
+      }
+
+      if (!session?.user) {
+        console.error("No session found");
+
+        setError("No active session found");
+
+        setTimeout(() => {
+          router.push("/login");
+        }, 3000);
+
+        return;
+      }
+
+      const user = session.user;
+
+      if (!user.email_confirmed_at) {
+        console.error("Email not confirmed");
+
+        setError(
+          "Email verification incomplete. Please check your email."
+        );
+
+        setTimeout(() => {
+          router.push(
+            "/login?error=email_not_confirmed"
+          );
+        }, 3000);
+
+        return;
+      }
+
+      // Zustand user
+      const extendedUser: ExtendedUser = {
+        ...user,
+        user_metadata: {
+          email:
+            user.user_metadata?.email ??
+            user.email ??
+            "",
+
+          email_verified:
+            user.user_metadata?.email_verified ??
+            true,
+
+          full_name:
+            user.user_metadata?.full_name ??
+            user.user_metadata?.name ??
+            "",
+
+          phone:
+            user.user_metadata?.phone ?? "",
+
+          phone_verified:
+            user.user_metadata
+              ?.phone_verified ?? false,
+
+          sub:
+            user.user_metadata?.sub ?? "",
+        },
+      };
+
+      setUser(extendedUser);
+
+      // BRAND CHECK
+      const {
+        data: brand,
+        error: brandError,
+      } = await supabase
+        .from("brands")
+        .select(`
+          id,
+          user_id,
+          email,
+          status
+        `)
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (brandError) {
+        console.error(
+          "Brand check error:",
+          brandError
+        );
+      }
+
+      if (brand) {
+        console.log(
+          "Brand account found:",
+          brand
+        );
+
+        router.push("/brand/dashboard");
+        router.refresh();
+
+        return;
+      }
+
+      // CUSTOMER CHECK
+      const {
+        data: customer,
+        error: customerError,
+      } = await supabase
+        .from("customers")
+        .select(`
+          id,
+          user_id,
+          email
+        `)
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (customerError) {
+        console.error(
+          "Customer check error:",
+          customerError
+        );
+      }
+
+      if (customer) {
+        console.log(
+          "Customer account found:",
+          customer
+        );
+
+        router.push("/protected/profile");
+        router.refresh();
+
+        return;
+      }
+
+      // FALLBACK
+      console.warn(
+        "No brand or customer account found"
+      );
+
+      setError(
+        "Account profile not found. Please contact support."
+      );
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 3000);
+    } catch (err) {
+      console.error(
+        "Unexpected error in auth callback:",
+        err
+      );
+
+      setError(
+        "An unexpected error occurred"
+      );
+
+      setTimeout(() => {
+        router.push("/login");
+      }, 3000);
+    }
+  };
+
+  handleAuthCallback();
+}, [router, setUser]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">

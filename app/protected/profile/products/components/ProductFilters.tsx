@@ -58,10 +58,10 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
     selectedBrand === "all"
       ? data
       : data.filter(
-          (product) =>
-            product.brand_name?.trim().toLowerCase() ===
-            selectedBrand.toLowerCase()
-        );
+        (product) =>
+          product.brand_name?.trim().toLowerCase() ===
+          selectedBrand.toLowerCase()
+      );
 
   if (searchTerm) {
     const lowerSearch = searchTerm.toLowerCase();
@@ -124,11 +124,10 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
               key={brand}
               onClick={() => setSelectedBrand(brand)}
               variant="ghost"
-              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${
-                active
+              className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${active
                   ? "bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90"
                   : "text-black/60 hover:bg-black/10 dark:text-white/60 dark:hover:bg-white/10"
-              }`}
+                }`}
             >
               {brand === "all" ? "All" : brand}
             </Button>
@@ -157,13 +156,16 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
 
       <button
         onClick={() => setIsCartOpen(true)}
-        className="fixed bottom-24 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-black text-white shadow-2xl transition hover:scale-105 active:scale-95 dark:bg-white dark:text-black lg:bottom-6"
+        className="fixed bottom-10 right-4 z-550 flex h-14 w-14 animate-[float_3s_ease-in-out_infinite] items-center justify-center rounded-full border border-white/30 bg-white/20 text-black shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-2xl transition hover:scale-110 active:scale-95 dark:border-white/15 dark:bg-white/10 dark:text-white lg:bottom-6"
         aria-label="Open cart"
       >
-        <ShoppingCart className="h-6 w-6" />
+        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/70 via-white/20 to-white/5 opacity-70" />
+        <div className="absolute inset-[1px] rounded-full border border-white/30" />
+
+        <ShoppingCart className="relative z-10 h-6 w-6 drop-shadow-sm" />
 
         {cartItemCount > 0 && (
-          <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-black text-white">
+          <span className="absolute -right-1 -top-1 z-20 flex h-5 min-w-5 items-center justify-center rounded-full border border-white/50 bg-red-600 px-1 text-[10px] font-black text-white shadow-lg">
             {cartItemCount > 9 ? "9+" : cartItemCount}
           </span>
         )}
