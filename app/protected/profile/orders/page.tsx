@@ -20,6 +20,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { OrderDetails } from "./components/OrderDetails";
+import OrderDetailsSkeleton from "./OderDetailsSkeleton";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
@@ -109,12 +110,41 @@ export default function OrdersPage() {
   const formatMoney = (value: any) => `R${Number(value || 0).toFixed(2)}`;
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        Loading orders...
+  return (
+    <div className="min-h-screen px-4 py-6">
+      <div className="mb-4 h-5 w-20 animate-pulse rounded-full bg-black/10 dark:bg-white/10" />
+
+      <div className="mb-6 h-10 w-48 animate-pulse rounded-2xl bg-black/10 dark:bg-white/10" />
+
+      <div className="space-y-4">
+        {[1, 2, 3].map((item) => (
+          <div
+            key={item}
+            className="animate-pulse rounded-3xl border border-black/10 p-5 dark:border-white/10"
+          >
+            <div className="flex items-start gap-4">
+              <div className="h-20 w-20 shrink-0 rounded-2xl bg-black/10 dark:bg-white/10" />
+
+              <div className="flex-1">
+                <div className="h-6 w-3/4 rounded-xl bg-black/10 dark:bg-white/10" />
+
+                <div className="mt-3 h-4 w-32 rounded-full bg-black/10 dark:bg-white/10" />
+
+                <div className="mt-4 h-5 w-24 rounded-xl bg-black/10 dark:bg-white/10" />
+
+                <div className="mt-4 flex gap-2">
+                  <div className="h-7 w-24 rounded-full bg-black/10 dark:bg-white/10" />
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-5 h-11 w-full rounded-2xl bg-black/10 dark:bg-white/10" />
+          </div>
+        ))}
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen px-4 py-6">
@@ -200,7 +230,7 @@ export default function OrdersPage() {
         open={!!selectedOrder}
         onOpenChange={(open) => !open && setSelectedOrder(null)}
       >
-        <DrawerContent className="max-h-[90vh] p-0 md:hidden">
+        <DrawerContent className="max-h-[90vh] p-0 md:hidden z-[99999999]">
           <div className="max-h-[85vh] overflow-y-auto px-5 pb-6">
             {selectedOrder && <OrderDetails order={selectedOrder} />}
           </div>

@@ -7,7 +7,7 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen bg-white text-black pb-24 transition-colors dark:bg-black dark:text-white lg:pb-0">
+    <main className="min-h-screen bg-white text-black pb-24 transition-colors dark:bg-black dark:text-white lg:pb-0 overflow-x-hidden">
       <Sidebar />
 
       <section className="lg:ml-72">

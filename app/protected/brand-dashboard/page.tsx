@@ -185,7 +185,7 @@ export default function BrandDashboardPage() {
           </div>
 
           <Link
-            href="/protected/brand-dashboard/products/new"
+            href="/protected/brand-dashboard/products"
             className="rounded-full bg-white px-5 py-3 text-center text-sm font-black text-black"
           >
             Add Product
