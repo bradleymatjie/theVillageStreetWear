@@ -146,7 +146,7 @@ export default function AuthCallbackPage() {
           brand
         );
 
-        router.push("/brand/dashboard");
+        router.push("/protected/brand-dashboard");
         router.refresh();
 
         return;
