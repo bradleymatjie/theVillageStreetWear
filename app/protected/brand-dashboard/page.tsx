@@ -10,6 +10,7 @@ import {
   BarChart3,
   LogOut,
 } from "lucide-react";
+import { useUser } from "@/app/lib/user";
 
 type Product = {
   id: string;
@@ -27,8 +28,11 @@ export default function BrandDashboardPage() {
   const [recentProducts, setRecentProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const {signOut } = useUser();
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
+    signOut();
     window.location.href = "/login";
   };
 

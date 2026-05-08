@@ -8,7 +8,7 @@ import { toast } from "sonner";
 import { supabase } from "@/lib/supabaseClient";
 
 export default function ProfilePage() {
-  const { user, clearUser } = useUser();
+  const { user, clearUser, signOut } = useUser();
   const router = useRouter();
 
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,7 @@ export default function ProfilePage() {
   const handleLogout = async () => {
     setLoading(true);
     await supabase.auth.signOut();
-    clearUser();
+    signOut();
     router.push("/login");
     router.refresh();
     setLoading(false);

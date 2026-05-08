@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { useUser } from "@/app/lib/user";
 
 interface Product {
   id: string;
@@ -50,6 +51,8 @@ type ImageItem = {
   const [loginForm, setLoginForm] = useState({ email: "", password: "" });
   const [adminProfile, setAdminProfile] = useState<any>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const {signOut } = useUser();
 
   const [form, setForm] = useState({
     name: "",
@@ -108,6 +111,7 @@ type ImageItem = {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     setIsAdmin(false);
+    signOut();
     setUser(null);
   };
 

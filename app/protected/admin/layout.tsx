@@ -13,6 +13,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
+import { useUser } from "@/app/lib/user";
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -32,11 +33,13 @@ const navItems = [
 ];
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
+  const {signOut } = useUser();
   const router = useRouter();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push("/login");
+    signOut();
     router.refresh();
   };
 

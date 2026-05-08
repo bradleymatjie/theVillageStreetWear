@@ -12,8 +12,6 @@ export interface ExtendedUser extends User {
     phone?: string;
     phone_verified: boolean;
     sub: string;
-
-    // The Village roles
     role?: "customer" | "brand" | "super_admin";
     brand_id?: string;
     brand_name?: string;
@@ -121,7 +119,6 @@ export const useAuthStore = create<AuthState>()(
 
           if (typeof window !== "undefined") {
             localStorage.removeItem("thevillage-auth-storage");
-            localStorage.removeItem("mazwi-auth-storage");
           }
         } catch (error) {
           console.error("Sign out failed:", error);

@@ -16,11 +16,11 @@ const navItems = [
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { clearUser } = useUser();
+  const { clearUser, signOut } = useUser();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    clearUser();
+    signOut();
     router.push("/login");
     router.refresh();
   };
