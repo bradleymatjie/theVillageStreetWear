@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { Product } from '@/app/lib/types';
 import { useCartStore } from '@/app/lib/cartStore';
 import { useState } from 'react';
@@ -55,13 +54,9 @@ export default function ProductCard({ product, className = '' }: ProductCardProp
 
         {/* IMAGE CONTAINER */}
         <div className="aspect-square relative overflow-hidden">
-          <Image
+          <img
             src={primaryImage}
-            alt={product.name}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-500"
-            sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 20vw"
-          />
+            alt={product.name}            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"          />
         </div>
 
         {/* DETAILS */}

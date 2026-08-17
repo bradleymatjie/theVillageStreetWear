@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useCartStore } from "@/app/lib/cartStore";
 import { ShoppingBag, Truck, MapPin, Package, LockIcon } from "lucide-react";
@@ -221,9 +220,7 @@ function CheckoutPage() {
                         required
                         value={formData.address}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
-                        placeholder="Street address, apartment, suite, etc."
-                      />
+                        className="w-full px-4 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"                      />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
@@ -234,9 +231,7 @@ function CheckoutPage() {
                           required
                           value={formData.city}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
-                          placeholder="City"
-                        />
+                          className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"                        />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Province *</label>
@@ -262,9 +257,7 @@ function CheckoutPage() {
                         required
                         value={formData.postalCode}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
-                        placeholder="Postal code"
-                      />
+                        className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"                      />
                     </div>
                   </div>
                 </div>
@@ -324,13 +317,9 @@ function CheckoutPage() {
                   return (
                     <div key={`${item.id}-${item.selectedSize}-${item.selectedMaterial}`} className="flex gap-3">
                       <div className="relative w-16 h-16 flex-shrink-0 rounded-md overflow-hidden border border-gray-200">
-                        <Image
+                        <img
                           src={item.imageurl || "/noImage.jpg"}
-                          alt={item.name}
-                          fill
-                          className="object-cover"
-                          sizes="64px"
-                        />
+                          alt={item.name}                          className="h-full w-full object-cover"                        />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="text-sm font-semibold text-gray-900 truncate">

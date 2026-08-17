@@ -2,7 +2,6 @@
 
 import { useCartStore } from "@/app/lib/cartStore";
 import { X, Minus, Plus, Trash2 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 interface CartSidebarProps {
@@ -64,13 +63,9 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                   <div key={item.cartItemId} className="flex gap-3 pb-4 border-b border-gray-200">
                     {/* Product Image */}
                     <div className="relative w-20 h-20 flex-shrink-0 rounded-md overflow-hidden border border-gray-200">
-                      <Image
+                      <img
                         src={item.imageurl||"/noImage.jpg"}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                        sizes="80px"
-                      />
+                        alt={item.name}                        className="h-full w-full object-cover"                      />
                     </div>
 
                     {/* Product Details */}

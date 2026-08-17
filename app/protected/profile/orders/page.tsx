@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowLeft, Eye, PackageCheck } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 
@@ -175,11 +174,9 @@ export default function OrdersPage() {
                 <div className="flex items-start gap-4">
                   {firstItem?.image_url && (
                     <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl">
-                      <Image
+                      <img
                         src={firstItem.image_url}
-                        alt={firstItem.name}
-                        fill
-                        className="object-cover"
+                        alt={firstItem.name}                        className="h-full w-full object-cover"
                       />
                     </div>
                   )}

@@ -3,7 +3,6 @@
 
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import Image from 'next/image';
 
 interface CartItem {
   name: string;
@@ -176,22 +175,18 @@ function CheckoutSuccessPage() {
                   <div>
                     <p className="font-semibold mb-3 text-center">Front Design</p>
                     <div className="relative aspect-square bg-white rounded-lg border border-gray-300 overflow-hidden">
-                      <Image
+                      <img
                         src={item.front || '/placeholder-front.jpg'}
-                        alt="Front design"
-                        fill
-                        className="object-contain p-4"
+                        alt="Front design"                        className="h-full w-full object-contain p-4"
                       />
                     </div>
                   </div>
                   <div>
                     <p className="font-semibold mb-3 text-center">Back Design</p>
                     <div className="relative aspect-square bg-white rounded-lg border border-gray-300 overflow-hidden">
-                      <Image
+                      <img
                         src={item.back || '/placeholder-back.jpg'}
-                        alt="Back design"
-                        fill
-                        className="object-contain p-4"
+                        alt="Back design"                        className="h-full w-full object-contain p-4"
                       />
                     </div>
                   </div>

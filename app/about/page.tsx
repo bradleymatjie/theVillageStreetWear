@@ -1,7 +1,6 @@
 // app/about/page.tsx
 import { MapPin, Mail, Phone, Store, Shirt, Users, PackageCheck } from "lucide-react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function AboutPage() {
   return (
@@ -54,7 +53,7 @@ export default function AboutPage() {
             </div>
 
             <div className="relative h-[400px] overflow-hidden rounded-2xl bg-white/5 md:h-[500px]">
-              <Image
+              <img
                 src="/jozi.jpg"
                 width={700}
                 height={700}
@@ -83,7 +82,7 @@ export default function AboutPage() {
         <div className="mx-auto max-w-6xl">
           <div className="grid items-center gap-12 md:grid-cols-2">
             <div className="relative order-2 h-[400px] overflow-hidden rounded-2xl bg-white/5 md:order-1">
-              <Image
+              <img
                 src="/leo.png"
                 width={700}
                 height={700}

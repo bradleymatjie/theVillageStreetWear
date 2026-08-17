@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { ChevronRight } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
 export const dynamic = 'force-dynamic';
@@ -25,14 +24,9 @@ export default async function Catalog() {
             <Link key={item.slug} href={`/products/${item.id}`} className="group block">
               <div className={`relative overflow-hidden rounded-md border border-white/20 hover:border-white/50 transition-colors ${item.soldOut ? 'opacity-50' : ''}`}>
                 <div className="aspect-square relative">
-                  <Image
+                  <img
                     src={item.imageurl}
-                    alt={item.name}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform"
-                    placeholder="blur"
-                      blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgZmlsbD0iIzFmMjkzNyIvPjwvc3ZnPg=="
-                  />
+                    alt={item.name}                    className="h-full w-full object-cover group-hover:scale-105 transition-transform"                  />
                   {item.soldOut && (
                     <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                       <span className="text-white font-bold text-sm">SOLD OUT</span>

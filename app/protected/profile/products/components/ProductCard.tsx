@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Product } from "@/app/lib/types";
 import { ArrowUpRight, ShoppingBag } from "lucide-react";
 
@@ -32,13 +31,9 @@ export default function ProductCard({
       <article className="overflow-hidden rounded-2xl border border-black/10 bg-black/5 shadow-lg transition duration-300 hover:-translate-y-1 hover:border-black/30 dark:border-white/10 dark:bg-white/5 dark:hover:border-white/30">
         {/* Image */}
         <div className="relative aspect-[4/5] overflow-hidden bg-white">
-          <Image
+          <img
             src={primaryImage}
-            alt={product.name}
-            fill
-            className="object-contain transition duration-500 group-hover:scale-105"
-            sizes="(max-width: 768px) 100vw, 25vw"
-          />
+            alt={product.name}            className="h-full w-full object-contain transition duration-500 group-hover:scale-105"          />
 
           {/* Badges */}
           <div className="absolute left-3 top-3 flex items-center gap-2">

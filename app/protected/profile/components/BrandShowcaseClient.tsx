@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/app/lib/types";
 
@@ -76,11 +75,9 @@ export default function BrandShowcaseClient({
             className="w-[160px] shrink-0 overflow-hidden rounded-3xl border border-black/10 bg-black/5 transition hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
           >
             <div className="relative aspect-[4/5] bg-white">
-              <Image
+              <img
                 src={product.imageurl || "/noImage.jpg"}
-                alt={product.name}
-                fill
-                className="object-cover"
+                alt={product.name}                className="h-full w-full object-cover"
               />
             </div>
 

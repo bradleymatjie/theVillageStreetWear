@@ -1,7 +1,6 @@
 // app/products/[id]/ProductPageClient.tsx
 'use client'
 
-import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useCartStore } from '@/app/lib/cartStore';
@@ -63,13 +62,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           <div>
             <div className="relative aspect-square rounded-md overflow-hidden border border-white/20 group">
-              <Image
+              <img
                 src={imageUrl || "/noImage.jpg"}
-                alt={product.name}
-                fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
+                alt={product.name}                className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"              />
               {isSoldOut && (
                 <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
                   <span className="text-white font-bold text-xl uppercase tracking-wide px-4 py-2 bg-black/30 rounded-full">
@@ -91,13 +86,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                         : "border-white/20 hover:border-white/40"
                     }`}
                   >
-                    <Image
+                    <img
                       src={img || "/noImage.jpg"}
-                      alt={`${product.name} - Image ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 25vw, 12vw"
-                    />
+                      alt={`${product.name} - Image ${index + 1}`}                      className="h-full w-full object-cover"                    />
                   </button>
                 ))}
               </div>

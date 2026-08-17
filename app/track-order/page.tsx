@@ -10,7 +10,6 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, Package, Truck, Mail } from "lucide-react";
-import Image from "next/image";
 import { useUser } from "@/app/lib/user";
 
 interface DesignOrder {
@@ -204,11 +203,9 @@ export default function TrackOrderPage() {
                               <div className="grid grid-cols-2 gap-4">
                                 {item.front && (
                                   <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                                    <Image
+                                    <img
                                       src={item.front}
-                                      alt="Front design"
-                                      fill
-                                      className="object-contain"
+                                      alt="Front design"                                      className="h-full w-full object-contain"
                                     />
                                     <span className="absolute bottom-0 left-0 bg-black text-white text-xs px-2 py-1">
                                       Front
@@ -217,11 +214,9 @@ export default function TrackOrderPage() {
                                 )}
                                 {item.back && (
                                   <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                                    <Image
+                                    <img
                                       src={item.back}
-                                      alt="Back design"
-                                      fill
-                                      className="object-contain"
+                                      alt="Back design"                                      className="h-full w-full object-contain"
                                     />
                                     <span className="absolute bottom-0 left-0 bg-black text-white text-xs px-2 py-1">
                                       Back

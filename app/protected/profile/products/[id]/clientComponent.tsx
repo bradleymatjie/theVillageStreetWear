@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useCartStore } from "@/app/lib/cartStore";
@@ -58,11 +57,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           {/* IMAGE */}
           <div>
             <div className="group relative aspect-square overflow-hidden rounded-xl border border-black/10 bg-white dark:border-white/10">
-              <Image
+              <img
                 src={imageUrl}
-                alt={product.name}
-                fill
-                className="object-contain transition duration-300 group-hover:scale-105"
+                alt={product.name}                className="h-full w-full object-contain transition duration-300 group-hover:scale-105"
               />
 
               {isSoldOut && (
@@ -87,11 +84,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                         : "border-black/10 dark:border-white/10"
                     }`}
                   >
-                    <Image
+                    <img
                       src={img}
-                      alt="product"
-                      fill
-                      className="object-cover"
+                      alt="product"                      className="h-full w-full object-cover"
                     />
                   </button>
                 ))}

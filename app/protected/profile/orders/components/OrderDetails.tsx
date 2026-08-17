@@ -1,6 +1,5 @@
 import { DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import Image from "next/image";
 
 export function OrderDetails({ order }: { order: any }) {
   const items = order.order_items || [];
@@ -43,11 +42,9 @@ export function OrderDetails({ order }: { order: any }) {
             <div className="flex gap-4">
               {item.image_url && (
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl">
-                  <Image
+                  <img
                     src={item.image_url}
-                    alt={item.name}
-                    fill
-                    className="object-cover"
+                    alt={item.name}                    className="h-full w-full object-cover"
                   />
                 </div>
               )}

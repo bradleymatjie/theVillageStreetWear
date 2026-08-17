@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect, Suspense } from "react";
-import Image from "next/image";
 import { Package, Truck, MapPin, Phone, Mail, Clock } from "lucide-react";
 
 
@@ -124,11 +123,9 @@ function OrderCard({
                   className="flex gap-4 py-4 border-b border-[#1A1A1A] last:border-0"
                 >
                   <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-[#1A1A1A] flex-shrink-0">
-                    <Image
+                    <img
                       src={item.image_url || "/noImage.jpg"}
-                      alt={item.name}
-                      fill
-                      className="object-cover"
+                      alt={item.name}                      className="h-full w-full object-cover"
                     />
                   </div>
                   <div className="flex-1">

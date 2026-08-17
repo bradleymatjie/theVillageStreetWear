@@ -24,9 +24,11 @@ export default function Footer() {
               Marketplace
             </h3>
             <ul className="space-y-2 text-sm text-white/45">
-              <li><Link href="/products" className="hover:text-white">Explore Catalog</Link></li>
-              {/* <li><Link href="/studio" className="hover:text-white">Design Studio</Link></li> */}
-              {/* <li><Link href="/track-order" className="hover:text-white">Track Order</Link></li> */}
+              <li>
+                <Link href="/products" className="hover:text-white">
+                  Explore Catalog
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -35,10 +37,26 @@ export default function Footer() {
               For Brands
             </h3>
             <ul className="space-y-2 text-sm text-white/45">
-              <li><Link href="/sell" className="hover:text-white">Join as a Brand</Link></li>
-              <li><Link href="/brands/login" className="hover:text-white">Login in as a Brand</Link></li>
-              <li><Link href="/sell#pricing" className="hover:text-white">Pricing</Link></li>
-              <li><Link href="/sell#onboarding" className="hover:text-white">Onboarding</Link></li>
+              <li>
+                <Link href="/sell" className="hover:text-white">
+                  Join as a Brand
+                </Link>
+              </li>
+              <li>
+                <Link href="/brands/login" className="hover:text-white">
+                  Log in as a Brand
+                </Link>
+              </li>
+              <li>
+                <Link href="/sell#pricing" className="hover:text-white">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link href="/sell#onboarding" className="hover:text-white">
+                  Onboarding
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -47,10 +65,26 @@ export default function Footer() {
               Company
             </h3>
             <ul className="space-y-2 text-sm text-white/45">
-              <li><Link href="/about" className="hover:text-white">About</Link></li>
-              <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
-              <li><Link href="/privacy" className="hover:text-white">Privacy Policy</Link></li>
-              <li><Link href="/terms" className="hover:text-white">Terms</Link></li>
+              <li>
+                <Link href="/about" className="hover:text-white">
+                  About
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-white">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="hover:text-white">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="hover:text-white">
+                  Terms
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -59,7 +93,8 @@ export default function Footer() {
               Location
             </h3>
             <p className="text-sm leading-6 text-white/45">
-              Johannesburg, Gauteng<br />
+              Johannesburg, Gauteng
+              <br />
               South Africa
             </p>
           </div>
@@ -68,14 +103,14 @@ export default function Footer() {
         <div className="border-t border-white/10 pt-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
             <p className="text-xs text-white/40">
-              © 2025 The Village Marketplace. All rights reserved.
+              Copyright 2026 The Village Marketplace. All rights reserved.
             </p>
 
             <div className="flex flex-wrap items-center gap-2">
               {["YOCO", "APPLE PAY", "GOOGLE PAY", "CARD"].map((item) => (
                 <span
                   key={item}
-                  className="rounded-full bg-white/10 px-3 py-1 text-[10px] font-black text-white/70"
+                  className="rounded-md bg-white/10 px-3 py-1 text-[10px] font-black text-white/70"
                 >
                   {item}
                 </span>
