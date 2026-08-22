@@ -66,8 +66,6 @@ export default async function BrandOrdersPage({
 
   const { data: ordersData } = await query;
 
-  console.log("data: ", ordersData)
-
   const orders = (ordersData || []) as Order[];
 
   const totalOrders = orders.length;

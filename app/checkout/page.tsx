@@ -1,19 +1,19 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, useEffect, Suspense, useMemo } from "react";
 import Link from "next/link";
 import { useCartStore } from "@/app/lib/cartStore";
-import { ShoppingBag, Truck, MapPin, Package, LockIcon } from "lucide-react";
+import { ShoppingBag, Truck, MapPin, LockIcon } from "lucide-react";
 import { useUser } from "../lib/user";
+import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 
-
-const PICKUP_ADDRESS = {
-  name: "The Village CBD Pickup Point",
-  address: "Joburg Central",
-  city: "Johannesburg",
-  postalCode: "2000",
-  province: "Gauteng",
+type PickupDetails = {
+  brandName: string;
+  address: string;
+  city: string;
+  province: string;
+  country?: string | null;
 };
 
 const provinces = [
@@ -23,10 +23,12 @@ const provinces = [
 
 function CheckoutPage() {
   const { user } = useUser();
-  const { items, getTotalPrice,hasHydrated } = useCartStore();
+  const { items, hasHydrated } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
   const [deliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup'>('delivery');
   const [orderId, setOrderId] = useState<string>("");
+  const [pickupDetails, setPickupDetails] = useState<PickupDetails | null>(null);
+  const [selectedBrandKey, setSelectedBrandKey] = useState<string>("");
 
   useEffect(() => {
     const generateOrderId = () => {
@@ -59,7 +61,103 @@ function CheckoutPage() {
     }
   }, [user]);
 
-  const subtotal = getTotalPrice();
+  const checkoutGroups = useMemo(() => {
+    const brandGroups = items.reduce((groups, item: any) => {
+      const brandId = item.brand_id || item.brandId || item.brand?.id || "";
+      const brandName = item.brand_name || item.brand?.name || "The Village";
+      const key = brandId || `unknown-${brandName}`;
+      const existing = groups.get(key);
+
+      if (existing) {
+        existing.items.push(item);
+      } else {
+        groups.set(key, {
+          key,
+          brandId,
+          brandName,
+          items: [item],
+        });
+      }
+
+      return groups;
+    }, new Map<string, { key: string; brandId: string; brandName: string; items: typeof items }>());
+
+    return Array.from(brandGroups.values());
+  }, [items]);
+  const selectedGroup =
+    checkoutGroups.find((group) => group.key === selectedBrandKey) ||
+    checkoutGroups[0];
+  const checkoutItems = selectedGroup?.items || [];
+  const selectedBrandId = selectedGroup?.brandId || "";
+  const pickupLocation = pickupDetails
+    ? [
+        pickupDetails.address,
+        pickupDetails.city,
+        pickupDetails.province,
+        pickupDetails.country,
+      ]
+        .filter(Boolean)
+        .join(", ")
+    : "";
+
+  useEffect(() => {
+    if (!hasHydrated || checkoutGroups.length === 0) {
+      return;
+    }
+
+    if (
+      !selectedBrandKey ||
+      !checkoutGroups.some((group) => group.key === selectedBrandKey)
+    ) {
+      setSelectedBrandKey(checkoutGroups[0].key);
+    }
+  }, [hasHydrated, checkoutGroups, selectedBrandKey]);
+
+  useEffect(() => {
+    async function loadPickupDetails() {
+      if (!hasHydrated || !selectedBrandId) {
+        setPickupDetails(null);
+        setDeliveryOption("delivery");
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("brands")
+        .select("name, street_address, location_city, location_province, location_country")
+        .eq("id", selectedBrandId)
+        .maybeSingle();
+
+      if (
+        error ||
+        !data?.street_address ||
+        !data?.location_city ||
+        !data?.location_province
+      ) {
+        setPickupDetails(null);
+        setDeliveryOption("delivery");
+        return;
+      }
+
+      setPickupDetails({
+        brandName: data.name,
+        address: data.street_address,
+        city: data.location_city,
+        province: data.location_province,
+        country: data.location_country,
+      });
+    }
+
+    loadPickupDetails();
+  }, [hasHydrated, selectedBrandId]);
+
+  const subtotal = checkoutItems.reduce((total, item) => {
+    const priceMatch = item.price.match(/[\d.,]+/);
+    const itemPrice = priceMatch
+      ? parseFloat(priceMatch[0].replace(/,/g, ""))
+      : 0;
+
+    return total + itemPrice * item.quantity;
+  }, 0);
   const shipping = deliveryOption === 'delivery' && subtotal < 500 ? 75 : 0;
   const total = subtotal + shipping;
 
@@ -75,7 +173,7 @@ function CheckoutPage() {
   setIsProcessing(true);
 
   try {
-    const cartItems = items.map((item: any) => {
+    const cartItems = checkoutItems.map((item: any) => {
       const priceMatch = item.price.match(/[\d.,]+/);
       const itemPrice = priceMatch
         ? parseFloat(priceMatch[0].replace(/,/g, ""))
@@ -100,7 +198,7 @@ function CheckoutPage() {
 
     if (brandIds.length !== 1) {
       toast.error(
-        "Your cart contains items from multiple brands. Please order from one brand at a time."
+        "Choose a brand order to check out."
       );
       setIsProcessing(false);
       return;
@@ -113,7 +211,7 @@ function CheckoutPage() {
     if (deliveryOption === "delivery") {
       shipping_address = `${formData.address}, ${formData.city}, ${formData.province}, ${formData.postalCode}`;
     } else {
-      pickup_location = PICKUP_ADDRESS.name;
+      pickup_location = pickupLocation;
     }
 
     const requestBody = {
@@ -161,6 +259,14 @@ function CheckoutPage() {
   }
 };
 
+  if (!hasHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        Loading cart...
+      </div>
+    );
+  }
+
   // Redirect if cart is empty
   if (items.length === 0) {
     return (
@@ -176,14 +282,6 @@ function CheckoutPage() {
             Continue Shopping
           </Link>
         </div>
-      </div>
-    );
-  }
-
-    if (!hasHydrated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Loading cart…
       </div>
     );
   }
@@ -207,6 +305,123 @@ function CheckoutPage() {
           {/* Left Column - Forms */}
           <div className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-6">
+              {checkoutGroups.length > 1 && (
+                <div className="bg-white rounded-lg shadow-sm p-6">
+                  <h2 className="text-lg font-bold text-gray-900 mb-2">
+                    Checkout by brand
+                  </h2>
+                  <p className="mb-4 text-sm text-gray-500">
+                    Complete one brand order at a time. Each brand can have its own delivery or pickup options.
+                  </p>
+                  <div className="space-y-3">
+                    {checkoutGroups.map((group) => {
+                      const groupSubtotal = group.items.reduce((sum, item) => {
+                        const priceMatch = item.price.match(/[\d.,]+/);
+                        const itemPrice = priceMatch
+                          ? parseFloat(priceMatch[0].replace(/,/g, ""))
+                          : 0;
+
+                        return sum + itemPrice * item.quantity;
+                      }, 0);
+
+                      return (
+                        <button
+                          key={group.key}
+                          type="button"
+                          onClick={() => {
+                            setSelectedBrandKey(group.key);
+                            setDeliveryOption("delivery");
+                          }}
+                          className={`flex w-full items-center justify-between rounded-lg border p-4 text-left transition ${
+                            selectedGroup?.key === group.key
+                              ? "border-black bg-gray-50"
+                              : "border-gray-200 hover:border-gray-400"
+                          }`}
+                        >
+                          <span>
+                            <span className="block font-bold text-gray-900">
+                              {group.brandName}
+                            </span>
+                            <span className="mt-1 block text-sm text-gray-500">
+                              {group.items.length} item{group.items.length === 1 ? "" : "s"}
+                            </span>
+                          </span>
+                          <span className="font-bold text-gray-900">
+                            R{groupSubtotal.toFixed(2)}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h2 className="text-lg font-bold text-gray-900 mb-4">Delivery Method</h2>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <label
+                    className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition ${
+                      deliveryOption === "delivery"
+                        ? "border-black bg-gray-50"
+                        : "border-gray-200 hover:border-gray-400"
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="deliveryOption"
+                      value="delivery"
+                      checked={deliveryOption === "delivery"}
+                      onChange={() => setDeliveryOption("delivery")}
+                      className="mt-1"
+                    />
+                    <span>
+                      <span className="flex items-center gap-2 font-bold text-gray-900">
+                        <Truck className="h-4 w-4" />
+                        Delivery
+                      </span>
+                      <span className="mt-1 block text-sm text-gray-500">
+                        Ship to your address.
+                      </span>
+                    </span>
+                  </label>
+
+                  {pickupDetails && (
+                    <label
+                      className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition ${
+                        deliveryOption === "pickup"
+                          ? "border-black bg-gray-50"
+                          : "border-gray-200 hover:border-gray-400"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="deliveryOption"
+                        value="pickup"
+                        checked={deliveryOption === "pickup"}
+                        onChange={() => setDeliveryOption("pickup")}
+                        className="mt-1"
+                      />
+                      <span>
+                        <span className="flex items-center gap-2 font-bold text-gray-900">
+                          <MapPin className="h-4 w-4" />
+                          Pick up
+                        </span>
+                        <span className="mt-1 block text-sm text-gray-500">
+                          Collect from {pickupDetails.brandName}. Delivery fee R0.
+                        </span>
+                      </span>
+                    </label>
+                  )}
+                </div>
+
+                {deliveryOption === "pickup" && pickupDetails && (
+                  <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
+                    <p className="font-bold text-gray-900">Pickup address</p>
+                    <p className="mt-1">{pickupLocation}</p>
+                  </div>
+                )}
+              </div>
+
               {/* Conditional Shipping Address */}
               {deliveryOption === 'delivery' && (
                 <div className="bg-white rounded-lg shadow-sm p-6">
@@ -303,14 +518,19 @@ function CheckoutPage() {
           {/* Right Column - Order Summary */}
           <div>
             <div className="bg-white rounded-lg shadow-sm p-6 sticky top-4">
-              <h2 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h2>
+              <h2 className="text-lg font-bold text-gray-900 mb-1">Order Summary</h2>
+              {selectedGroup && (
+                <p className="mb-4 text-sm text-gray-500">
+                  {selectedGroup.brandName} order
+                </p>
+              )}
               <div className="text-xs text-gray-500 mb-4">
                 Order ID: {orderId}
               </div>
               
               {/* Cart Items */}
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2">
-                {items.map((item) => {
+                {checkoutItems.map((item) => {
                   const priceMatch = item.price.match(/[\d.,]+/);
                   const itemPrice = priceMatch ? parseFloat(priceMatch[0].replace(',', '')) : 0;
 

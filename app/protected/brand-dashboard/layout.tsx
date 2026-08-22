@@ -7,6 +7,8 @@ import {
   ShoppingCart,
   BarChart3,
   LayoutDashboard,
+  Store,
+  type LucideIcon,
 } from "lucide-react";
 
 const navItems = [
@@ -19,6 +21,11 @@ const navItems = [
     href: "/protected/brand-dashboard/products",
     label: "Products",
     icon: Package,
+  },
+  {
+    href: "/protected/brand-dashboard/profile",
+    label: "Profile",
+    icon: Store,
   },
   {
     href: "/protected/brand-dashboard/orders",
@@ -57,7 +64,11 @@ export default function BrandDashboardLayout({
               <DesktopNavLink
                 key={item.href}
                 {...item}
-                active={pathname === item.href}
+                active={
+                  pathname === item.href ||
+                  (item.href !== "/protected/brand-dashboard" &&
+                    pathname.startsWith(`${item.href}/`))
+                }
               />
             ))}
           </nav>
@@ -71,12 +82,16 @@ export default function BrandDashboardLayout({
 
       {/* Mobile Bottom Nav */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-black/95 px-2 py-2 backdrop-blur-xl lg:hidden">
-        <div className="grid grid-cols-4 gap-1">
+        <div className="grid grid-cols-5 gap-1">
           {navItems.map((item) => (
             <MobileNavLink
               key={item.href}
               {...item}
-              active={pathname === item.href}
+              active={
+                pathname === item.href ||
+                (item.href !== "/protected/brand-dashboard" &&
+                  pathname.startsWith(`${item.href}/`))
+              }
             />
           ))}
         </div>
@@ -93,7 +108,7 @@ function DesktopNavLink({
 }: {
   href: string;
   label: string;
-  icon: any;
+  icon: LucideIcon;
   active: boolean;
 }) {
   return (
@@ -119,7 +134,7 @@ function MobileNavLink({
 }: {
   href: string;
   label: string;
-  icon: any;
+  icon: LucideIcon;
   active: boolean;
 }) {
   return (

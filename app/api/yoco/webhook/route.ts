@@ -12,8 +12,6 @@ export async function POST(req: Request) {
   try {
     const payload = await req.json();
 
-    console.log("📦 Yoco webhook received:", payload);
-    
     const eventType = payload.type;
     const payment = payload.payload || {};
 
@@ -25,7 +23,6 @@ export async function POST(req: Request) {
       eventType === "payment.succeeded" && payment.status === "succeeded";
 
     if (!isSuccess) {
-      console.log("ℹ️ Ignored webhook event:", eventType);
       return NextResponse.json({ received: true });
     }
 
@@ -59,7 +56,6 @@ export async function POST(req: Request) {
     }
 
     if (order.payment_status === "paid" || order.status === "paid") {
-      console.log("✅ Order already paid:", order.id);
       return NextResponse.json({ received: true });
     }
 
@@ -82,8 +78,6 @@ export async function POST(req: Request) {
         { status: 500 }
       );
     }
-
-    console.log("✅ Order marked as paid:", order.id);
 
     return NextResponse.json({ received: true });
   } catch (error) {

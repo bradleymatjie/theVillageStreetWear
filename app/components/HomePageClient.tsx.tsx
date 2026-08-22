@@ -168,15 +168,6 @@ export default function HomePageClient({
                   discovery, checkout and delivery easier from the first drop.
                 </motion.p>
 
-                <motion.div variants={dropIn}>
-                  <Link
-                    href="/products"
-                    className="mt-8 inline-flex items-center gap-2 rounded-md bg-white px-6 py-3 text-xs font-black uppercase tracking-wide text-black transition hover:-translate-y-0.5 hover:bg-gray-200 sm:px-8 sm:text-sm"
-                  >
-                    Explore Designs
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </motion.div>
               </motion.div>
             </div>
           </div>

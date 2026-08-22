@@ -54,6 +54,41 @@ export async function POST(req: Request) {
       );
     }
 
+    let resolvedDeliveryFee = Number(delivery_fee || 0);
+    let resolvedTotalAmount = Number(total_amount);
+    let resolvedPickupLocation = pickup_location || "";
+
+    if (shipping_method === "pickup") {
+      const { data: brand, error: brandError } = await supabase
+        .from("brands")
+        .select("name, street_address, location_city, location_province, location_country")
+        .eq("id", brand_id)
+        .maybeSingle();
+
+      if (
+        brandError ||
+        !brand?.street_address ||
+        !brand?.location_city ||
+        !brand?.location_province
+      ) {
+        return NextResponse.json(
+          { error: "Pickup is not available for this brand." },
+          { status: 400 }
+        );
+      }
+
+      resolvedDeliveryFee = 0;
+      resolvedTotalAmount = Number(subtotal);
+      resolvedPickupLocation = [
+        brand.street_address,
+        brand.location_city,
+        brand.location_province,
+        brand.location_country,
+      ]
+        .filter(Boolean)
+        .join(", ");
+    }
+
     const { data: order, error: orderError } = await supabase
       .from("orders")
       .insert({
@@ -64,17 +99,17 @@ export async function POST(req: Request) {
         email: customer_email,
         phone: customer_phone || "",
         amount: subtotal,
-        shipping_cost: delivery_fee || 0,
-        total: total_amount,
+        shipping_cost: resolvedDeliveryFee,
+        total: resolvedTotalAmount,
         subtotal,
-        delivery_fee,
-        total_amount,
+        delivery_fee: resolvedDeliveryFee,
+        total_amount: resolvedTotalAmount,
         payment_status: "pending",
         order_status: "pending_payment",
         status: "pending",
         shipping_method,
         shipping_address: shipping_address || "",
-        pickup_location: pickup_location || "",
+        pickup_location: resolvedPickupLocation,
         metadata: { cartItems },
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -92,7 +127,7 @@ export async function POST(req: Request) {
 
     createdOrderId = order.id;
 
-    const amountInCents = Math.round(Number(total_amount) * 100);
+    const amountInCents = Math.round(Number(resolvedTotalAmount) * 100);
 
     const yocoRes = await fetch("https://payments.yoco.com/api/checkouts", {
       method: "POST",

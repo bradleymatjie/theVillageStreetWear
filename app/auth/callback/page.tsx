@@ -141,11 +141,6 @@ export default function AuthCallbackPage() {
       }
 
       if (brand) {
-        console.log(
-          "Brand account found:",
-          brand
-        );
-
         router.push("/protected/brand-dashboard");
         router.refresh();
 
@@ -174,11 +169,6 @@ export default function AuthCallbackPage() {
       }
 
       if (customer) {
-        console.log(
-          "Customer account found:",
-          customer
-        );
-
         router.push("/protected/profile");
         router.refresh();
 

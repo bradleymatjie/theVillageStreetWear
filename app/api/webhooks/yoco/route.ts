@@ -10,8 +10,6 @@ export async function POST(req: Request) {
   try {
     const payload = await req.json();
 
-    console.log("🎯 Webhook endpoint hit!");
-    console.log("- Event type:", payload.type);
     const payment = payload.payload || {};
     const metadata = payment.metadata || {};
 
@@ -74,8 +72,6 @@ export async function POST(req: Request) {
         { status: 500 }
       );
     }
-
-    console.log("✅ Order marked as paid:", order.id);
 
     return NextResponse.json({ received: true });
   } catch (error) {

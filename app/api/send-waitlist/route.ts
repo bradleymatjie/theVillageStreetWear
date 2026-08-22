@@ -32,8 +32,6 @@ export async function POST() {
       });
     }
 
-    console.log(`Found ${waitlist.length} emails`);
-
     let sentCount = 0;
     let failedCount = 0;
 
@@ -211,8 +209,6 @@ Elevating local. Building culture.
 
       if (error) {
         console.error(`Failed for ${email}:`, error);
-      } else {
-        console.log(`Sent to ${email}`);
       }
 
       results.push({

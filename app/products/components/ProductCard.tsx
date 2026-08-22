@@ -1,18 +1,21 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Product } from '@/app/lib/types';
-import { useCartStore } from '@/app/lib/cartStore';
-import { useState } from 'react';
-import { Check, ShoppingCart } from 'lucide-react';
+import Link from "next/link";
+import { Product } from "@/app/lib/types";
+import { useCartStore } from "@/app/lib/cartStore";
+import { useState } from "react";
+import { ArrowUpRight, Check, ShoppingCart } from "lucide-react";
+import { getBrandPath } from "@/app/lib/brandSlug";
 
 interface ProductCardProps {
   product: Product;
   className?: string;
 }
 
-export default function ProductCard({ product, className = '' }: ProductCardProps) {
- 
+export default function ProductCard({
+  product,
+  className = "",
+}: ProductCardProps) {
   const addItem = useCartStore((state) => state.addItem);
   const [isAdded, setIsAdded] = useState(false);
 
@@ -20,84 +23,107 @@ export default function ProductCard({ product, className = '' }: ProductCardProp
     e.preventDefault();
     e.stopPropagation();
 
-    // Get default options from product or use fallbacks
-    const defaultSize = product.availableSizes?.[0] || 'M';
-    const defaultMaterial = product.availableMaterials?.[0] || 'Cotton';
+    const defaultSize = product.availableSizes?.[0] || "M";
+    const defaultMaterial = product.availableMaterials?.[0] || "Cotton";
 
     addItem(product, defaultSize, defaultMaterial);
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
   };
 
-  // Prioritize images array (full gallery), fallback to single imageurl
-  const primaryImage = product.imageurl;
-  const extraImages = product.images?? [];
-
-  // Handle sold out (database uses lowercase soldout)
+  const primaryImage = product.imageurl || product.images?.[0] || "/noImage.jpg";
   const isSoldOut = product.soldOut ?? false;
-
-  // Format price
-  const formattedPrice = typeof product.price === 'string'
-    ? product.price.startsWith('R') ? product.price : `R${product.price}`
-    : `R${product.price}`;
+  const formattedPrice =
+    typeof product.price === "string"
+      ? product.price.startsWith("R")
+        ? product.price
+        : `R${product.price}`
+      : `R${product.price}`;
 
   return (
-    <Link href={`/products/${product.id}`} className={`block group ${className}`}>
-      <div className="relative overflow-hidden rounded-md border border-white/20 hover:border-white/50 transition-all bg-white/10">
-        
-        {/* SOLD OUT BADGE */}
-        {isSoldOut && (
-          <div className="absolute top-2 left-2 z-20 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-            SOLD OUT
-          </div>
-        )}
+    <article
+      className={`group relative overflow-hidden border border-white/10 bg-white/[0.04] transition-all duration-300 hover:-translate-y-1 hover:border-white/35 hover:bg-white/[0.07] ${className}`}
+    >
+      {isSoldOut && (
+        <div className="absolute left-3 top-3 z-20 bg-white px-3 py-1 text-xs font-black uppercase text-black">
+          Sold out
+        </div>
+      )}
 
-        {/* IMAGE CONTAINER */}
-        <div className="aspect-square relative overflow-hidden">
+      {product.category && (
+        <div className="absolute right-3 top-3 z-20 bg-black/70 px-3 py-1 text-[10px] font-black uppercase tracking-wide text-white backdrop-blur">
+          {product.category}
+        </div>
+      )}
+
+      <Link href={`/products/${product.id}`} className="block">
+        <div className="relative aspect-[4/5] overflow-hidden bg-white/5">
           <img
             src={primaryImage}
-            alt={product.name}            className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"          />
+            alt={product.name}
+            className={`h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 ${
+              isSoldOut ? "opacity-45 grayscale" : ""
+            }`}
+          />
+          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/70 to-transparent" />
         </div>
+      </Link>
 
-        {/* DETAILS */}
-        <div className="p-3 sm:p-4 space-y-2">
-          <h3 className="font-bold text-white text-xs sm:text-sm leading-tight">
-            {product.name}
-          </h3>
-          {product.category && (
-            <p className="text-gray-400 text-xs uppercase tracking-wide">
-              {product.category}
+      <div className="space-y-4 p-4">
+        <div>
+          {product.brand_id ? (
+            <Link
+              href={getBrandPath({
+                id: product.brand_id,
+                name: product.brand_name,
+              })}
+              className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.18em] text-white/60 underline underline-offset-4 transition hover:text-white focus-visible:outline focus-visible:outline-1 focus-visible:outline-white"
+            >
+              {product.brand_name || "The Village"}
+              <ArrowUpRight className="h-3 w-3" />
+            </Link>
+          ) : (
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/35">
+              {product.brand_name || "The Village"}
             </p>
           )}
-          <div className="flex justify-between items-end pt-1">
-            <p className="text-white font-bold text-lg sm:text-xl leading-none">
-              {formattedPrice}
-            </p>
-            {!isSoldOut && (
-              <button
-                onClick={(e) => handleAddToCart(e, product)}
-                className={`py-1.5 px-3 rounded-md font-semibold text-xs transition-all duration-300 flex items-center justify-center gap-1.5 whitespace-nowrap ${
-                  isAdded
-                    ? 'bg-green-600 text-white hover:bg-green-700'
-                    : 'bg-white text-black hover:bg-gray-200'
-                }`}
-              >
-                {isAdded ? (
-                  <>
-                    <Check className="w-4 h-4" />
-                    Added
-                  </>
-                ) : (
-                  <>
-                    <ShoppingCart className="w-4 h-4" />
-                    Add
-                  </>
-                )}
-              </button>
-            )}
-          </div>
+
+          <Link href={`/products/${product.id}`} className="block">
+            <h3 className="mt-2 min-h-10 text-sm font-black leading-5 text-white transition hover:text-white/75">
+              {product.name}
+            </h3>
+          </Link>
+        </div>
+
+        <div className="flex items-center justify-between gap-3">
+          <p className="text-xl font-black leading-none text-white">
+            {formattedPrice}
+          </p>
+
+          {!isSoldOut && (
+            <button
+              onClick={(e) => handleAddToCart(e, product)}
+              className={`flex h-10 min-w-10 items-center justify-center gap-2 px-3 text-xs font-black uppercase transition-all duration-300 ${
+                isAdded
+                  ? "bg-emerald-500 text-black"
+                  : "bg-white text-black hover:bg-white/85"
+              }`}
+            >
+              {isAdded ? (
+                <>
+                  <Check className="h-4 w-4" />
+                  <span className="hidden sm:inline">Added</span>
+                </>
+              ) : (
+                <>
+                  <ShoppingCart className="h-4 w-4" />
+                  <span className="hidden sm:inline">Add</span>
+                </>
+              )}
+            </button>
+          )}
         </div>
       </div>
-    </Link>
+    </article>
   );
 }

@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 import Link from "next/link";
 import {
+  X,
   Package,
   Plus,
   ShoppingCart,
   BarChart3,
   LogOut,
+  Store,
+  type LucideIcon,
 } from "lucide-react";
 import { useUser } from "@/app/lib/user";
 
@@ -20,12 +23,41 @@ type Product = {
   soldout: boolean | null;
 };
 
+type BrandProfileStatus = {
+  tagline?: string | null;
+  story?: string | null;
+  street_address?: string | null;
+  location_city?: string | null;
+  location_province?: string | null;
+  instagram?: string | null;
+  tiktok?: string | null;
+  logo_url?: string | null;
+  cover_image_url?: string | null;
+};
+
+function hasUsefulProfileInfo(brand: BrandProfileStatus) {
+  const hasIdentity = Boolean(brand.tagline || brand.story);
+  const hasLocation = Boolean(
+    brand.street_address && brand.location_city && brand.location_province
+  );
+  const hasSocials = Boolean(brand.instagram || brand.tiktok);
+  const hasVisuals = Boolean(brand.logo_url || brand.cover_image_url);
+
+  return hasIdentity && hasLocation && (hasSocials || hasVisuals);
+}
+
+function getProfilePromptKey(brandId: string) {
+  return `brand-profile-prompt-dismissed:${brandId}`;
+}
+
 export default function BrandDashboardPage() {
   const [brandName, setBrandName] = useState("");
   const [productsCount, setProductsCount] = useState(0);
   const [ordersCount, setOrdersCount] = useState(0);
   const [salesTotal, setSalesTotal] = useState(0);
   const [recentProducts, setRecentProducts] = useState<Product[]>([]);
+  const [brandId, setBrandId] = useState("");
+  const [showProfilePrompt, setShowProfilePrompt] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const {signOut } = useUser();
@@ -34,6 +66,14 @@ export default function BrandDashboardPage() {
     await supabase.auth.signOut();
     signOut();
     window.location.href = "/login";
+  };
+
+  const dismissProfilePrompt = () => {
+    if (brandId) {
+      sessionStorage.setItem(getProfilePromptKey(brandId), "true");
+    }
+
+    setShowProfilePrompt(false);
   };
 
   useEffect(() => {
@@ -56,7 +96,9 @@ export default function BrandDashboardPage() {
 
       const { data: brand } = await supabase
         .from("brands")
-        .select("id, name")
+        .select(
+          "id, name, tagline, story, street_address, location_city, location_province, instagram, tiktok, logo_url, cover_image_url"
+        )
         .eq("user_id", user.id)
         .single();
 
@@ -67,6 +109,12 @@ export default function BrandDashboardPage() {
       }
 
       setBrandName(brand.name);
+      setBrandId(brand.id);
+
+      const promptDismissed = sessionStorage.getItem(
+        getProfilePromptKey(brand.id)
+      );
+      setShowProfilePrompt(!promptDismissed && !hasUsefulProfileInfo(brand));
 
       const { count: productCount } = await supabase
         .from("thevillageproducts")
@@ -118,6 +166,65 @@ export default function BrandDashboardPage() {
 
   return (
     <div className="mx-auto max-w-7xl">
+      {showProfilePrompt && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-[#0b0b0b] p-6 text-white shadow-2xl sm:p-7">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.24em] text-white/35">
+                  Brand profile
+                </p>
+                <h2 className="mt-3 text-3xl font-black leading-tight">
+                  Help customers trust your brand
+                </h2>
+              </div>
+
+              <button
+                type="button"
+                onClick={dismissProfilePrompt}
+                className="rounded-full border border-white/10 p-2 text-white/50 transition hover:bg-white hover:text-black"
+                aria-label="Close profile reminder"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <p className="mt-4 text-sm leading-6 text-white/60">
+              Your profile is what buyers see before they decide to support you.
+              Add your story, logo, location, address, and socials so customers
+              know who they are buying from and whether pickup is available.
+            </p>
+
+            <div className="mt-6 grid gap-3 text-sm text-white/65 sm:grid-cols-2">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                <p className="font-black text-white">Build trust</p>
+                <p className="mt-1">Tell people what your brand stands for.</p>
+              </div>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                <p className="font-black text-white">Enable pickup</p>
+                <p className="mt-1">A complete address can unlock R0 pickup.</p>
+              </div>
+            </div>
+
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <Link
+                href="/protected/brand-dashboard/profile"
+                className="flex-1 rounded-full bg-white px-5 py-3 text-center text-sm font-black text-black"
+              >
+                Complete profile
+              </Link>
+              <button
+                type="button"
+                onClick={dismissProfilePrompt}
+                className="flex-1 rounded-full border border-white/15 px-5 py-3 text-sm font-black text-white transition hover:bg-white/10"
+              >
+                Later
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/40">
@@ -142,7 +249,7 @@ export default function BrandDashboardPage() {
         </button>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <DashboardCard
           href="/protected/brand-dashboard/products"
           icon={Package}
@@ -165,6 +272,14 @@ export default function BrandDashboardPage() {
           title="Sales"
           value={`R${salesTotal.toFixed(2)}`}
           text="Delivered paid sales"
+        />
+
+        <DashboardCard
+          href="/protected/brand-dashboard/profile"
+          icon={Store}
+          title="Profile"
+          value="Edit"
+          text="Story, location, socials"
         />
 
         <Link
@@ -246,7 +361,7 @@ function DashboardCard({
   text,
 }: {
   href: string;
-  icon: any;
+  icon: LucideIcon;
   title: string;
   value: string;
   text: string;

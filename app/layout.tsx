@@ -9,6 +9,7 @@ import Script from "next/script";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { Suspense } from "react";
 import { ThemeProvider } from "next-themes";
+import { siteConfig } from "@/app/lib/seo";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -17,40 +18,42 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
-    default: "The Village | Custom Streetwear",
+    default: siteConfig.title,
     template: "%s | The Village",
   },
-  description:
-    "The Village is a South African streetwear brand offering custom-designed apparel. Create your style with premium quality street fashion.",
+  description: siteConfig.description,
 
   keywords: [
-    "The Village Streetwear",
+    "The Village",
+    "South African streetwear marketplace",
     "South African streetwear",
-    "custom streetwear",
-    "urban fashion",
-    "custom t-shirts",
-    "street fashion SA",
+    "local fashion brands",
+    "independent clothing brands",
+    "street fashion South Africa",
+    "streetwear drops",
+    "Johannesburg streetwear",
   ],
 
-  authors: [{ name: "The Village Streetwear" }],
-  creator: "The Village Streetwear",
-  publisher: "The Village Streetwear",
-
-  metadataBase: new URL("https://thevillagestreetwear.com"),
+  authors: [{ name: siteConfig.name }],
+  creator: siteConfig.name,
+  publisher: siteConfig.name,
+  alternates: {
+    canonical: "/",
+  },
 
   openGraph: {
-    title: "The Village - Custom Streetwear",
-    description:
-      "Design and wear premium custom streetwear from The Village. Built for the culture.",
-    url: "https://thevillagestreetwear.com",
-    siteName: "The Village - streetwear",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    url: "/",
+    siteName: siteConfig.name,
     images: [
       {
-        url: "/og-image.png",
+        url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: "The Village Streetwear",
+        alt: "The Village streetwear marketplace",
       },
     ],
     locale: "en_ZA",
@@ -66,6 +69,13 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
+  },
+
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.title,
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
   },
 
   category: "fashion",

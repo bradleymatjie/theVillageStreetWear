@@ -41,12 +41,6 @@ export async function POST(request: NextRequest) {
   try {
     const orderData: OrderData = await request.json();
 
-    console.log('Received order data:', {
-      orderId: orderData.orderId,
-      email: orderData.email,
-      itemCount: orderData.cartItems?.length
-    });
-
     if (
       !orderData.email ||
       !orderData.orderId ||
@@ -81,8 +75,6 @@ export async function POST(request: NextRequest) {
       : 0;
     
     const total = subtotal + shippingCost;
-
-    console.log('Calculated totals:', { subtotal, shippingCost, total });
 
     // Check if order already exists
     const { data: existingOrder } = await supabaseAdmin
@@ -139,8 +131,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Order created successfully:', order.id);
-
     // 2. Insert order items
     const orderItems = orderData.cartItems.map(item => ({
       order_id: order.id,
@@ -175,8 +165,6 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
-
-    console.log('Order items saved successfully:', orderItems.length, 'items');
 
     return NextResponse.json({
       success: true,

@@ -180,8 +180,6 @@ export async function DELETE(request: Request) {
 
             if (storageError) {
                 console.error('Error deleting storage files:', storageError);
-            } else {
-                console.log(`Successfully deleted ${filesToDelete.length} file(s) from storage`);
             }
         }
 

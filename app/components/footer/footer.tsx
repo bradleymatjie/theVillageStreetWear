@@ -49,7 +49,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/sell#pricing" className="hover:text-white">
-                  Pricing
+                  Commission
                 </Link>
               </li>
               <li>

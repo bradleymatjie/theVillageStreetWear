@@ -143,12 +143,9 @@ export async function POST(request: Request) {
                     html,
                 });
 
-                console.log(`Status update email sent to ${customerEmail} for order #${orderId}`);
             } catch (emailError) {
                 console.error('Failed to send status update email:', emailError);
             }
-        } else {
-            console.log(`No email address found for order #${orderId} – skipping notification`);
         }
 
         return NextResponse.json(order);

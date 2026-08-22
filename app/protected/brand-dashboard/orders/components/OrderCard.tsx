@@ -33,6 +33,9 @@ export function OrderCard({ order }: { order: Order }) {
           </div>
 
           <div className="w-full sm:w-auto">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-white/35 sm:text-right">
+              Update status
+            </p>
             <OrderStatusSelect
               orderId={order.id}
               currentStatus={order.status}

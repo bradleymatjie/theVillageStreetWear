@@ -26,8 +26,6 @@ export async function GET(
 ) {
   const { orderId } = await params;
 
-  console.log('✅ Order ID from params:', orderId);
-
   if (!orderId) {
     return NextResponse.json(
       { error: 'Order ID is required' },

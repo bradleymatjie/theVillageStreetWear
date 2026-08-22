@@ -43,7 +43,7 @@ export async function sendOrderStatusEmail({
     badge: status,
   };
 
-  const res = await resend.emails.send({
+  await resend.emails.send({
     from: "updates@thevillagestreetwear.com",
     to: email,
     subject: `${content.badge} — Order ${orderId}`,
@@ -109,6 +109,4 @@ export async function sendOrderStatusEmail({
       </div>
     `,
   });
-
-  console.log("email res: ", res);
 }

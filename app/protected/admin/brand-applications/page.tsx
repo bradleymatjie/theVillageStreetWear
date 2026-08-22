@@ -16,6 +16,13 @@ type BrandApplication = {
   created_at: string;
 };
 
+const planLabels: Record<string, string> = {
+  commission: "Commission partnership",
+  starter: "Starter",
+  growth: "Growth",
+  premium: "Premium",
+};
+
 export default async function BrandApplicationsPage() {
  const { data, error } = await supabase
   .from("brand_applications")
@@ -78,7 +85,7 @@ export default async function BrandApplicationsPage() {
                   </div>
 
                   <div className="rounded-2xl bg-white px-4 py-2 text-sm font-black text-black">
-                    {app.plan}
+                    {planLabels[app.plan] || app.plan}
                   </div>
                 </div>
 

@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { productCategories, productMaterials } from "@/app/lib/productOptions";
 
 type Product = {
     id: string;
@@ -136,7 +137,7 @@ export default function BrandProductsPage() {
     };
 
     const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
         const { name, value, type, checked } = e.target as HTMLInputElement;
 
@@ -212,8 +213,16 @@ export default function BrandProductsPage() {
     };
 
     const handleSubmit = async () => {
-        if (!form.name || !form.price) {
-            toast.error("Product name and price are required.");
+        if (
+            !form.name.trim() ||
+            !form.price.trim() ||
+            !form.category ||
+            !form.description.trim() ||
+            !form.sizes.trim() ||
+            !form.materials ||
+            !mainImage
+        ) {
+            toast.error("Please complete all required product fields.");
             return;
         }
 
@@ -416,8 +425,8 @@ export default function BrandProductsPage() {
             </section>
 
             <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
-                <SheetContent className="w-full overflow-y-auto border-white/10 bg-black text-white sm:max-w-lg m-4">
-                    <SheetHeader>
+                <SheetContent className="inset-y-4 right-4 flex h-[calc(100vh-2rem)] w-[calc(100vw-2rem)] max-w-none flex-col overflow-hidden rounded-3xl border border-white/10 bg-black p-0 text-white sm:w-[46rem] sm:max-w-none lg:w-[56rem]">
+                    <SheetHeader className="border-b border-white/10 px-6 py-5 sm:px-8">
                         <SheetTitle className="text-white">
                             {editingProduct ? "Edit Product" : "Add Product"}
                         </SheetTitle>
@@ -426,83 +435,98 @@ export default function BrandProductsPage() {
                         </SheetDescription>
                     </SheetHeader>
 
-                    <div className="my-6 mx-4 space-y-5">
-                        <Field label="Product Name" name="name" value={form.name} onChange={handleChange} />
-                        <Field label="Price" name="price" value={form.price} onChange={handleChange} />
-                        <Field label="Category" name="category" value={form.category} onChange={handleChange} />
+                    <div className="overflow-y-auto px-6 py-6 sm:px-8">
+                        <div className="grid gap-5 lg:grid-cols-2">
+                            <Field label="Product Name" name="name" value={form.name} onChange={handleChange} required />
+                            <PriceField value={form.price} onChange={handleChange} />
+                            <CategoryField value={form.category} onChange={handleChange} />
+                            <Field label="Sizes" name="sizes" value={form.sizes} onChange={handleChange} placeholder="S, M, L, XL" required />
+                            <MaterialField value={form.materials} onChange={handleChange} />
+                        </div>
 
-                        <div>
-                            <Label>Description</Label>
+                        <div className="mt-5">
+                            <RequiredLabel>Description</RequiredLabel>
                             <Textarea
                                 name="description"
                                 value={form.description}
                                 onChange={handleChange}
-                                className="mt-2 border-white/10 bg-white/5 text-white"
+                                className="mt-2 min-h-32 border-white/10 bg-white/5 text-white"
                             />
                         </div>
 
-                        <Field label="Sizes" name="sizes" value={form.sizes} onChange={handleChange} placeholder="S, M, L, XL" />
-                        <Field label="Materials" name="materials" value={form.materials} onChange={handleChange} placeholder="Cotton" />
+                        <div className="mt-6 grid gap-5 lg:grid-cols-2">
+                            <div className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                                <div>
+                                    <RequiredLabel>Main Image</RequiredLabel>
+                                    <Input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleMainImageChange}
+                                        className="mt-2 border-white/10 bg-white/5 text-white"
+                                    />
+                                </div>
 
-                        <div>
-                            <Label>Main Image</Label>
-                            <Input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleMainImageChange}
-                                className="mt-2 border-white/10 bg-white/5 text-white"
-                            />
-                        </div>
-
-                        {mainImage && (
-                            <div className="relative overflow-hidden rounded-xl border border-white/10">
-                                <img src={mainImage.url} className="h-64 w-full object-cover" />
-                                <Button
-                                    size="icon"
-                                    variant="destructive"
-                                    className="absolute right-2 top-2"
-                                    onClick={() => setMainImage(null)}
-                                >
-                                    <X className="h-4 w-4" />
-                                </Button>
-                            </div>
-                        )}
-
-                        <div>
-                            <Label>Additional Images</Label>
-                            <Input
-                                type="file"
-                                accept="image/*"
-                                multiple
-                                onChange={handleAdditionalImagesChange}
-                                className="mt-2 border-white/10 bg-white/5 text-white"
-                            />
-                        </div>
-
-                        {additionalImages.length > 0 && (
-                            <div className="grid grid-cols-3 gap-3">
-                                {additionalImages.map((img, index) => (
-                                    <div
-                                        key={index}
-                                        className="relative overflow-hidden rounded-xl border border-white/10"
-                                    >
-                                        <img src={img.url} className="h-28 w-full object-cover" />
-                                        <button
-                                            onClick={() =>
-                                                setAdditionalImages((prev) =>
-                                                    prev.filter((_, i) => i !== index)
-                                                )
-                                            }
-                                            className="absolute right-1 top-1 rounded-full bg-red-600 p-1"
+                                {mainImage ? (
+                                    <div className="relative overflow-hidden rounded-xl border border-white/10">
+                                        <img src={mainImage.url} className="h-64 w-full object-cover" />
+                                        <Button
+                                            size="icon"
+                                            variant="destructive"
+                                            className="absolute right-2 top-2"
+                                            onClick={() => setMainImage(null)}
                                         >
-                                            <X className="h-3 w-3" />
-                                        </button>
+                                            <X className="h-4 w-4" />
+                                        </Button>
                                     </div>
-                                ))}
+                                ) : (
+                                    <div className="flex h-64 items-center justify-center rounded-xl border border-dashed border-white/10 bg-black/40 text-sm text-white/35">
+                                        Main image preview
+                                    </div>
+                                )}
                             </div>
-                        )}
 
-                        <div className="flex items-center gap-2">
+                            <div className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                                <div>
+                                    <Label>Additional Images</Label>
+                                    <Input
+                                        type="file"
+                                        accept="image/*"
+                                        multiple
+                                        onChange={handleAdditionalImagesChange}
+                                        className="mt-2 border-white/10 bg-white/5 text-white"
+                                    />
+                                </div>
+
+                                {additionalImages.length > 0 ? (
+                                    <div className="grid grid-cols-3 gap-3">
+                                        {additionalImages.map((img, index) => (
+                                            <div
+                                                key={index}
+                                                className="relative overflow-hidden rounded-xl border border-white/10"
+                                            >
+                                                <img src={img.url} className="h-28 w-full object-cover" />
+                                                <button
+                                                    onClick={() =>
+                                                        setAdditionalImages((prev) =>
+                                                            prev.filter((_, i) => i !== index)
+                                                        )
+                                                    }
+                                                    className="absolute right-1 top-1 rounded-full bg-red-600 p-1"
+                                                >
+                                                    <X className="h-3 w-3" />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="flex h-64 items-center justify-center rounded-xl border border-dashed border-white/10 bg-black/40 text-sm text-white/35">
+                                        Additional image previews
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="mt-6 flex items-center gap-2">
                             <Checkbox
                                 checked={form.soldout}
                                 onCheckedChange={(checked) =>
@@ -512,11 +536,11 @@ export default function BrandProductsPage() {
                             <Label>Mark as sold out</Label>
                         </div>
 
-                        <div className="flex gap-3 pt-4">
+                        <div className="sticky bottom-0 -mx-6 mt-6 flex gap-3 border-t border-white/10 bg-black/95 px-6 py-4 sm:-mx-8 sm:px-8">
                             <Button
                                 variant="outline"
                                 onClick={resetForm}
-                                className="flex-1 border-white/10 text-white"
+                                className="flex-1 border-white/15 bg-black text-white hover:bg-white/10 hover:text-white"
                             >
                                 Cancel
                             </Button>
@@ -524,7 +548,7 @@ export default function BrandProductsPage() {
                             <Button
                                 onClick={handleSubmit}
                                 disabled={loading}
-                                className="flex-1 bg-white text-black hover:bg-white/80"
+                                className="flex-1 bg-white font-black text-black hover:bg-white/80"
                             >
                                 {loading
                                     ? "Saving..."
@@ -546,23 +570,122 @@ function Field({
     value,
     onChange,
     placeholder,
+    required,
 }: {
     label: string;
     name: string;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     placeholder?: string;
+    required?: boolean;
 }) {
     return (
         <div>
-            <Label>{label}</Label>
+            {required ? <RequiredLabel>{label}</RequiredLabel> : <Label>{label}</Label>}
             <Input
                 name={name}
                 value={value}
                 onChange={onChange}
                 placeholder={placeholder}
+                required={required}
                 className="mt-2 border-white/10 bg-white/5 text-white"
             />
         </div>
+    );
+}
+
+function PriceField({
+    value,
+    onChange,
+}: {
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
+    return (
+        <div>
+            <RequiredLabel>Price</RequiredLabel>
+            <div className="mt-2 flex overflow-hidden rounded-md border border-white/10 bg-white/5 focus-within:ring-2 focus-within:ring-white/30">
+                <span className="flex items-center border-r border-white/10 px-3 text-sm font-black text-white/60">
+                    R
+                </span>
+                <Input
+                    name="price"
+                    value={value}
+                    onChange={onChange}
+                    required
+                    inputMode="decimal"
+                    placeholder="399"
+                    className="border-0 bg-transparent text-white focus-visible:ring-0"
+                />
+            </div>
+        </div>
+    );
+}
+
+function CategoryField({
+    value,
+    onChange,
+}: {
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}) {
+    return (
+        <div>
+            <RequiredLabel>Category</RequiredLabel>
+            <select
+                name="category"
+                value={value}
+                onChange={onChange}
+                required
+                className="mt-2 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-white/30"
+            >
+                <option value="" className="bg-black">
+                    Select category
+                </option>
+                {productCategories.map((category) => (
+                    <option key={category} value={category} className="bg-black">
+                        {category}
+                    </option>
+                ))}
+            </select>
+        </div>
+    );
+}
+
+function MaterialField({
+    value,
+    onChange,
+}: {
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}) {
+    return (
+        <div>
+            <RequiredLabel>Material</RequiredLabel>
+            <select
+                name="materials"
+                value={value}
+                onChange={onChange}
+                required
+                className="mt-2 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-white/30"
+            >
+                <option value="" className="bg-black">
+                    Select material
+                </option>
+                {productMaterials.map((material) => (
+                    <option key={material} value={material} className="bg-black">
+                        {material}
+                    </option>
+                ))}
+            </select>
+        </div>
+    );
+}
+
+function RequiredLabel({ children }: { children: React.ReactNode }) {
+    return (
+        <Label>
+            {children} <span className="text-red-400">*</span>
+        </Label>
     );
 }

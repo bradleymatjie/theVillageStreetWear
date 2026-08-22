@@ -5,13 +5,16 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CheckCircle, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
+import { useCartStore } from "@/app/lib/cartStore";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
+  const { removeItem } = useCartStore();
 
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [removedPaidItems, setRemovedPaidItems] = useState(false);
 
   useEffect(() => {
     async function fetchOrder() {
@@ -30,6 +33,23 @@ function SuccessContent() {
 
     fetchOrder();
   }, [orderId]);
+
+  useEffect(() => {
+    if (!order || removedPaidItems) {
+      return;
+    }
+
+    const paidItems = order.metadata?.cartItems;
+
+    if (!Array.isArray(paidItems)) {
+      return;
+    }
+
+    paidItems.forEach((item: any) => {
+      removeItem(`${item.product_id}-${item.size}-${item.material}`);
+    });
+    setRemovedPaidItems(true);
+  }, [order, removeItem, removedPaidItems]);
 
   if (loading) {
     return (
