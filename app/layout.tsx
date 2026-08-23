@@ -1,5 +1,5 @@
 import { Analytics } from "@vercel/analytics/next"
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "./components/header/header";
@@ -10,6 +10,7 @@ import GoogleAnalytics from "./components/GoogleAnalytics";
 import { Suspense } from "react";
 import { ThemeProvider } from "next-themes";
 import { siteConfig } from "@/app/lib/seo";
+import PwaRegistration from "./components/PwaRegistration";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -19,6 +20,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
+  applicationName: siteConfig.name,
   title: {
     default: siteConfig.title,
     template: "%s | The Village",
@@ -39,6 +41,14 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,
   publisher: siteConfig.name,
+  appleWebApp: {
+    capable: true,
+    title: siteConfig.name,
+    statusBarStyle: "black-translucent",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   icons: {
     icon: [
       { url: "/brand/favicon.ico" },
@@ -91,6 +101,14 @@ export const metadata: Metadata = {
   category: "fashion",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#000000",
+  colorScheme: "dark light",
+};
+
 
 
 export default function RootLayout({
@@ -130,6 +148,7 @@ export default function RootLayout({
         </div>
          </ThemeProvider>
         <Toaster />
+        <PwaRegistration />
         <Analytics />
       </body>
     </html>
