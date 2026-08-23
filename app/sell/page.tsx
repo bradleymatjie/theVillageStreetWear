@@ -597,36 +597,6 @@ export default async function SellPage() {
               ]}
             />
           </div>
-
-          <div className="border border-white/10 bg-white/[0.04] p-6">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-white/35">
-                  Seller wallet preview
-                </p>
-                <h3 className="mt-2 text-3xl font-black">Your money. Clearly tracked.</h3>
-              </div>
-              <Wallet className="h-8 w-8 text-white/60" />
-            </div>
-            <p className="mt-4 text-sm leading-6 text-white/55">
-              This wallet view should only be marketed as live once the payout
-              ledger and withdrawal infrastructure are operational.
-            </p>
-            <div className="mt-6 grid gap-3">
-              {[
-                ["Available", "R8,420"],
-                ["Pending", "R3,900"],
-                ["Payout processing", "R2,000"],
-                ["Lifetime sales", "R28,450"],
-                ["Village commission", "R2,845"],
-              ].map(([label, value]) => (
-                <div key={label} className="flex justify-between border border-white/10 bg-black px-4 py-3">
-                  <p className="text-sm text-white/45">{label}</p>
-                  <p className="font-black">{value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
       </section>
 
