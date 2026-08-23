@@ -69,9 +69,7 @@ export default function PrivacyPolicy() {
                 </p>
                 <ul className="space-y-2 text-gray-700 ml-6">
                   <li>• Web browser type</li>
-                  <li>• IP address</li>
-                  <li>• Time zone</li>
-                  <li>• Cookies and similar tracking technologies</li>
+                  <li>• Cookies</li>
                   <li>• Information about how you interact with our website</li>
                 </ul>
               </div>
