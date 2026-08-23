@@ -6,16 +6,12 @@ import {
   Boxes,
   CheckCircle,
   CreditCard,
-  Handshake,
   MapPin,
   Package,
-  Percent,
-  Receipt,
   ShieldCheck,
   ShoppingBag,
   Store,
   Truck,
-  Wallet,
 } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { Product } from "@/app/lib/types";
