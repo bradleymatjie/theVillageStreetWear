@@ -10,7 +10,7 @@ export const siteConfig = {
   description:
     "Shop independent South African streetwear brands, discover local drops, and choose delivery or pickup from brands near you.",
   url: siteUrl,
-  ogImage: "/og-image.png",
+  ogImage: "/brand/logo-primary-dark.png",
 };
 
 export function absoluteUrl(path: string) {

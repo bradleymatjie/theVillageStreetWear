@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ShoppingCart, User, Menu, X } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@/app/lib/user";
 import { useCartStore } from "@/app/lib/cartStore";
@@ -30,9 +31,25 @@ export default function Header() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
           <Link
             href="/"
-            className="text-xl font-black text-black dark:text-white sm:text-2xl"
+            className="relative block h-10 w-40 shrink-0 sm:w-48"
+            aria-label="The Village home"
           >
-            The Village
+            <Image
+              src="/brand/logo-horizontal-light.png"
+              alt="The Village"
+              fill
+              priority
+              sizes="(min-width: 640px) 192px, 160px"
+              className="object-contain object-left dark:hidden"
+            />
+            <Image
+              src="/brand/logo-horizontal-dark.png"
+              alt="The Village"
+              fill
+              priority
+              sizes="(min-width: 640px) 192px, 160px"
+              className="hidden object-contain object-left dark:block"
+            />
           </Link>
 
           <nav className="hidden items-center gap-8 lg:flex">

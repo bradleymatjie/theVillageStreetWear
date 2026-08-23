@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -10,10 +11,9 @@ export default function Footer() {
 
   return (
     <footer className="bg-black text-white">
-      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="mb-10 max-w-2xl">
-          <h2 className="text-4xl font-black sm:text-5xl">The Village</h2>
-          <p className="mt-3 text-sm leading-6 text-white/50">
+          <p className="text-sm leading-6 text-white/50">
             A marketplace helping streetwear brands launch, sell, and grow online.
           </p>
         </div>
@@ -30,6 +30,13 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
+            <Image
+              src="/brand/logo-horizontal-dark.png"
+              alt="The Village"
+              width={518}
+              height={157}
+              className="mt-6 h-auto w-44 sm:w-56"
+            />
           </div>
 
           <div>
