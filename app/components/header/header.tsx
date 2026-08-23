@@ -56,6 +56,9 @@ export default function Header() {
             <Link href="/products" className="text-sm font-black text-black/70 hover:text-black dark:text-white/70 dark:hover:text-white">
               MARKETPLACE
             </Link>
+            <Link href="/brands" className="text-sm font-black text-black/70 hover:text-black dark:text-white/70 dark:hover:text-white">
+              BRANDS
+            </Link>
             {/* <Link href="/studio" className="text-sm font-black text-black/70 hover:text-black dark:text-white/70 dark:hover:text-white">
               STUDIO
             </Link> */}
@@ -115,6 +118,9 @@ export default function Header() {
           <nav className="flex flex-col gap-2 px-4 py-4">
             <Link href="/products" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-black">
               MARKETPLACE
+            </Link>
+            <Link href="/brands" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-black">
+              BRANDS
             </Link>
             {/* <Link href="/studio" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-black">
               STUDIO

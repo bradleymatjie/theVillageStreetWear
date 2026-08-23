@@ -177,6 +177,54 @@ export default function HomePageClient({
           variants={sectionReveal}
           initial="hidden"
           whileInView="show"
+          viewport={{ once: true, amount: 0.25 }}
+          className="bg-white px-4 py-12 text-black sm:px-6 sm:py-16"
+        >
+          <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1fr_0.75fr]">
+            <div>
+              <p className="mb-4 text-xs font-black uppercase tracking-[0.22em] text-black/40">
+                Browse the labels
+              </p>
+              <h2 className="max-w-3xl text-4xl font-black leading-none sm:text-5xl lg:text-6xl">
+                DISCOVER THE BRANDS BUILDING IN THE VILLAGE.
+              </h2>
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-black/60 sm:text-base">
+                Explore independent South African streetwear labels, read their
+                stories, and shop products directly from each brand storefront.
+              </p>
+            </div>
+
+            <div className="border border-black/10 bg-black p-5 text-white">
+              <div className="grid gap-3">
+                {["Brand storefronts", "Location filters", "Category filters"].map(
+                  (item) => (
+                    <div
+                      key={item}
+                      className="flex items-center justify-between border border-white/10 bg-white/[0.04] px-4 py-3"
+                    >
+                      <span className="text-sm font-bold text-white/65">
+                        {item}
+                      </span>
+                      <ArrowRight className="h-4 w-4 text-white/45" />
+                    </div>
+                  )
+                )}
+              </div>
+              <Link
+                href="/brands"
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-white px-6 py-4 text-sm font-black uppercase tracking-wide text-black transition hover:bg-white/85"
+              >
+                Explore Brands
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </motion.section>
+
+        <motion.section
+          variants={sectionReveal}
+          initial="hidden"
+          whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
           className="bg-black px-4 py-8 sm:px-6 sm:py-12 lg:py-16"
         >

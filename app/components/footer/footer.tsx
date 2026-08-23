@@ -29,6 +29,11 @@ export default function Footer() {
                   Explore Catalog
                 </Link>
               </li>
+              <li>
+                <Link href="/brands" className="hover:text-white">
+                  Explore Brands
+                </Link>
+              </li>
             </ul>
             <Image
               src="/brand/logo-horizontal-dark.png"

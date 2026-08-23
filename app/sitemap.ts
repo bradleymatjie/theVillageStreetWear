@@ -22,6 +22,7 @@ type SitemapBrand = {
 const staticRoutes = [
   { path: "/", priority: 1 },
   { path: "/products", priority: 0.95 },
+  { path: "/brands", priority: 0.9 },
   { path: "/sell", priority: 0.8 },
   { path: "/about", priority: 0.55 },
   { path: "/contact", priority: 0.45 },

@@ -235,7 +235,7 @@ export default async function SellPage() {
                 Apply to The Village <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <Link
-                href="#brands"
+                href="/brands"
                 className="inline-flex items-center justify-center border border-white/20 px-7 py-4 text-sm font-black uppercase text-white transition hover:bg-white hover:text-black"
               >
                 Explore brands
@@ -290,42 +290,50 @@ export default async function SellPage() {
               </p>
             </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {brands.slice(0, 4).map((brand) => (
-                <Link
-                  key={brand.id}
-                  href={getBrandPath({ id: brand.id, name: brand.name })}
-                  className="group border border-white/10 bg-white/[0.04] p-5 transition hover:-translate-y-1 hover:border-white/40"
-                >
-                  <div className="mb-5 flex h-16 w-16 items-center justify-center overflow-hidden border border-white/10 bg-black">
-                    {brand.logo_url ? (
-                      <img
-                        src={brand.logo_url}
-                        alt={`${brand.name} logo`}
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-3xl font-black text-white/45">
-                        {brand.name.slice(0, 1)}
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-xl font-black">{brand.name}</p>
-                  <p className="mt-2 text-sm text-white/50">
-                    {brand.productCount} products live
-                  </p>
-                  {getLocation(brand) && (
-                    <p className="mt-3 flex items-center gap-2 text-xs text-white/40">
-                      <MapPin className="h-3.5 w-3.5" />
-                      {getLocation(brand)}
+            <>
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {brands.slice(0, 4).map((brand) => (
+                  <Link
+                    key={brand.id}
+                    href={getBrandPath({ id: brand.id, name: brand.name })}
+                    className="group border border-white/10 bg-white/[0.04] p-5 transition hover:-translate-y-1 hover:border-white/40"
+                  >
+                    <div className="mb-5 flex h-16 w-16 items-center justify-center overflow-hidden border border-white/10 bg-black">
+                      {brand.logo_url ? (
+                        <img
+                          src={brand.logo_url}
+                          alt={`${brand.name} logo`}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-3xl font-black text-white/45">
+                          {brand.name.slice(0, 1)}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xl font-black">{brand.name}</p>
+                    <p className="mt-2 text-sm text-white/50">
+                      {brand.productCount} products live
                     </p>
-                  )}
-                  <p className="mt-5 inline-flex items-center text-xs font-black uppercase tracking-wide text-white/50 group-hover:text-white">
-                    View storefront <ArrowRight className="ml-2 h-3.5 w-3.5" />
-                  </p>
-                </Link>
-              ))}
-            </div>
+                    {getLocation(brand) && (
+                      <p className="mt-3 flex items-center gap-2 text-xs text-white/40">
+                        <MapPin className="h-3.5 w-3.5" />
+                        {getLocation(brand)}
+                      </p>
+                    )}
+                    <p className="mt-5 inline-flex items-center text-xs font-black uppercase tracking-wide text-white/50 group-hover:text-white">
+                      View storefront <ArrowRight className="ml-2 h-3.5 w-3.5" />
+                    </p>
+                  </Link>
+                ))}
+              </div>
+              <Link
+                href="/brands"
+                className="mt-6 inline-flex items-center border border-white/20 px-6 py-4 text-sm font-black uppercase text-white transition hover:bg-white hover:text-black"
+              >
+                Explore all brands <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </>
           )}
         </div>
       </section>
