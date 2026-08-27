@@ -9,6 +9,7 @@ import { useCartStore } from "@/app/lib/cartStore";
 import CartSidebar from "./CartSidebar";
 import { usePathname } from "next/navigation";
 import DesignHeader from "@/app/studio/components/Designheader";
+import { getUserProfileBase } from "@/app/lib/profileRoutes";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -20,6 +21,7 @@ export default function Header() {
 
   const firstName = user?.user_metadata?.full_name?.split(" ")[0] || "";
   const isLoggedIn = !!user;
+  const profileHref = isLoggedIn ? getUserProfileBase(user) : "/login";
 
   if (pathname.includes("admin") || pathname.includes("protected")) return null;
 
@@ -70,7 +72,7 @@ export default function Header() {
           <div className="flex items-center gap-3">
             {isLoggedIn ? (
               <Link
-                href="/protected/profile"
+                href={profileHref}
                 className="hidden rounded-full bg-black px-4 py-2 text-sm font-black text-white dark:bg-white dark:text-black lg:block"
               >
                 Hi, {firstName || "Dashboard"}
@@ -97,7 +99,7 @@ export default function Header() {
               )}
             </button>
 
-            <Link href={isLoggedIn ? "/protected/profile" : "/login"} className="lg:hidden">
+            <Link href={profileHref} className="lg:hidden">
               <User className="h-5 w-5 text-black dark:text-white" />
             </Link>
 

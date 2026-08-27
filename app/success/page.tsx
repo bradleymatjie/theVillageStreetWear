@@ -6,11 +6,15 @@ import { useSearchParams } from "next/navigation";
 import { CheckCircle, Loader2 } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
 import { useCartStore } from "@/app/lib/cartStore";
+import { useUser } from "@/app/lib/user";
+import { getUserProfileBase, joinProfilePath } from "@/app/lib/profileRoutes";
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
   const { removeItem } = useCartStore();
+  const { user } = useUser();
+  const profileBase = getUserProfileBase(user);
 
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -96,14 +100,14 @@ function SuccessContent() {
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Link
-            href={`/protected/profile/orders`}
+            href={joinProfilePath(profileBase, "orders")}
             className="flex-1 rounded-full bg-white px-6 py-3 text-sm font-black text-black"
           >
             Track Order
           </Link>
 
           <Link
-            href="/protected/profile/products"
+            href={joinProfilePath(profileBase, "products")}
             className="flex-1 rounded-full border border-white/20 px-6 py-3 text-sm font-black text-white"
           >
             Continue Shopping

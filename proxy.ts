@@ -1,6 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
+function slugifyUserName(value?: string | null) {
+  return (
+    value
+      ?.normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/@.*$/, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "user"
+  );
+}
+
+function getUserProfileBase(user: {
+  email?: string | null;
+  user_metadata?: Record<string, string | null | undefined>;
+}) {
+  const displayName =
+    user?.user_metadata?.full_name ||
+    user?.user_metadata?.name ||
+    user?.email ||
+    user?.user_metadata?.email;
+
+  return `/profile/${slugifyUserName(displayName)}`;
+}
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
@@ -37,21 +62,33 @@ export async function proxy(request: NextRequest) {
 
   const role = user?.user_metadata?.role;
   const isProtectedRoute =
-    pathname.startsWith("/protected") || pathname.startsWith("/profile");
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/brand-dashboard") ||
+    pathname.startsWith("/profile") ||
+    pathname.startsWith("/protected");
 
-  const isBrandRoute = pathname.startsWith("/protected/brand-dashboard");
-  const isCustomerRoute = pathname.startsWith("/protected/profile");
-  const isAdminRoute = pathname.startsWith("/protected/admin");
+  const isBrandRoute =
+    pathname.startsWith("/brand-dashboard") ||
+    pathname.startsWith("/protected/brand-dashboard");
+  const isCustomerRoute =
+    pathname.startsWith("/protected/profile") || pathname.startsWith("/profile");
+  const isAdminRoute =
+    pathname.startsWith("/admin") || pathname.startsWith("/protected/admin");
 
   const isAuthRoute =
     pathname === "/login" ||
     pathname === "/signup" ||
     pathname === "/brands/login"
 
-  if (user && role === "super_admin" && !pathname.startsWith("/protected/admin")) {
-    if (pathname.startsWith("/protected")) {
+  if (
+    user &&
+    role === "super_admin" &&
+    !pathname.startsWith("/admin") &&
+    !pathname.startsWith("/protected/admin")
+  ) {
+    if (isProtectedRoute) {
       return NextResponse.redirect(
-        new URL("/protected/admin", request.url)
+        new URL("/admin", request.url)
       );
     }
   }
@@ -60,32 +97,49 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
+  if (user && pathname.startsWith("/protected/profile")) {
+    const suffix = pathname.replace(/^\/protected\/profile/, "");
+    return NextResponse.redirect(
+      new URL(`${getUserProfileBase(user)}${suffix}`, request.url)
+    );
+  }
+
+  if (user && pathname.startsWith("/protected/brand-dashboard")) {
+    const suffix = pathname.replace(/^\/protected\/brand-dashboard/, "");
+    return NextResponse.redirect(new URL(`/brand-dashboard${suffix}`, request.url));
+  }
+
+  if (user && pathname.startsWith("/protected/admin")) {
+    const suffix = pathname.replace(/^\/protected\/admin/, "");
+    return NextResponse.redirect(new URL(`/admin${suffix}`, request.url));
+  }
+
   if (user && role === "brand" && isCustomerRoute) {
     return NextResponse.redirect(
-      new URL("/protected/brand-dashboard", request.url)
+      new URL("/brand-dashboard", request.url)
     );
   }
 
   if (user && role !== "brand" && isBrandRoute) {
-    return NextResponse.redirect(new URL("/protected/profile", request.url));
+    return NextResponse.redirect(new URL(getUserProfileBase(user), request.url));
   }
 
   if (user && isAdminRoute && role !== "super_admin") {
-    return NextResponse.redirect(new URL("/protected/profile", request.url));
+    return NextResponse.redirect(new URL(getUserProfileBase(user), request.url));
   }
 
   if (user && isAuthRoute) {
     if (role === "brand") {
       return NextResponse.redirect(
-        new URL("/protected/brand-dashboard", request.url)
+        new URL("/brand-dashboard", request.url)
       );
     }
 
     if (role === "super_admin") {
-      return NextResponse.redirect(new URL("/protected/admin", request.url));
+      return NextResponse.redirect(new URL("/admin", request.url));
     }
 
-    return NextResponse.redirect(new URL("/protected/profile", request.url));
+    return NextResponse.redirect(new URL(getUserProfileBase(user), request.url));
   }
 
   return supabaseResponse;
@@ -94,6 +148,8 @@ export async function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     "/protected/:path*",
+    "/admin/:path*",
+    "/brand-dashboard/:path*",
     "/profile/:path*",
     "/login",
     "/signup",

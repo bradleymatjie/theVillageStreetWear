@@ -10,6 +10,7 @@ import Link from 'next/link';
 import { ExtendedUser, useUser } from '../lib/user';
 import { Mail, Lock, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { supabase } from '@/lib/supabaseClient';
+import { getUserProfileBase } from '../lib/profileRoutes';
 
 export function LoginForm({
   className,
@@ -83,9 +84,9 @@ export function LoginForm({
       const role = data.user?.user_metadata?.role;
 
       if (role === "brand") {
-        router.push("/protected/brand-dashboard");
+        router.push("/brand-dashboard");
       } else {
-        router.push("/protected/profile");
+        router.push(getUserProfileBase(data.user));
       }
 
       router.refresh();

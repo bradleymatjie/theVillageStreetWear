@@ -39,7 +39,7 @@ export default function BrandLoginPage() {
       return;
     }
 
-    router.push("/protected/brand-dashboard");
+    router.push("/brand-dashboard");
     router.refresh();
   };
 

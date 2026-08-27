@@ -137,7 +137,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${poppins.variable} antialiased`}>
-         <ThemeProvider attribute="class" defaultTheme="dark">
+         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <div>
           <Suspense fallback={null}>
           <Header />

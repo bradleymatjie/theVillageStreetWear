@@ -1,4 +1,3 @@
-import React from 'react';
 import { Shield, ArrowLeft, Lock, Eye, Database, Mail } from 'lucide-react';
 import Link from 'next/link';
 
@@ -21,9 +20,7 @@ export default function PrivacyPolicy() {
         </div>
       </div>
 
-      {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        {/* Introduction */}
         <div className="bg-black text-white rounded-lg p-6 sm:p-8 mb-12">
           <div className="flex items-center gap-3 mb-4">
             <Shield className="w-8 h-8" />
@@ -34,10 +31,7 @@ export default function PrivacyPolicy() {
             disclose, and safeguard your information when you visit our website or make a purchase from us.
           </p>
         </div>
-
-        {/* Detailed Sections */}
         <div className="space-y-12">
-          {/* Information We Collect */}
           <section>
             <div className="flex items-center gap-3 mb-4">
               <div className="p-3 bg-gray-100 rounded-lg">
@@ -76,7 +70,6 @@ export default function PrivacyPolicy() {
             </div>
           </section>
 
-          {/* How We Use Your Information */}
           <section>
             <div className="flex items-center gap-3 mb-4">
               <div className="p-3 bg-gray-100 rounded-lg">

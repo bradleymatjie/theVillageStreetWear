@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ExtendedUser, useUser } from '@/app/lib/user';
 import { supabase } from '@/lib/supabaseClient';
+import { getUserProfileBase } from '@/app/lib/profileRoutes';
 
 export default function AuthCallbackPage() {
   const router = useRouter();
@@ -141,7 +142,7 @@ export default function AuthCallbackPage() {
       }
 
       if (brand) {
-        router.push("/protected/brand-dashboard");
+        router.push("/brand-dashboard");
         router.refresh();
 
         return;
@@ -169,7 +170,7 @@ export default function AuthCallbackPage() {
       }
 
       if (customer) {
-        router.push("/protected/profile");
+        router.push(getUserProfileBase(user));
         router.refresh();
 
         return;

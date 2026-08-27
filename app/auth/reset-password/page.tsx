@@ -72,7 +72,7 @@ export default function ResetPasswordPage() {
       return;
     }
 
-    router.push("/protected/brand-dashboard");
+    router.push("/brand-dashboard");
   };
 
   return (
