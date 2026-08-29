@@ -151,7 +151,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <section className="relative border-b border-white/10">
-        <div className="relative h-[320px] overflow-hidden bg-white/5 sm:h-[420px]">
+        <div className="relative h-[400px] overflow-hidden bg-white/5 sm:h-[420px] lg:h-[500px]">
           {brandProfile.cover_image_url ? (
             <img
               src={brandProfile.cover_image_url}
@@ -166,11 +166,11 @@ export default async function BrandPage({ params }: BrandPageProps) {
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/65 to-black/10" />
         </div>
 
-        <div className="absolute inset-x-0 bottom-0">
-          <div className="mx-auto max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
+        <div className="absolute inset-x-0 bottom-0 top-10">
+          <div className="mx-auto flex h-full max-w-7xl flex-col justify-between px-4 pb-8 sm:px-6 lg:px-8">
             <Link
               href="/products"
-              className="mb-6 inline-flex items-center gap-2 border border-white/15 bg-black/35 px-4 py-2 text-xs font-black uppercase tracking-wide text-white/70 backdrop-blur transition hover:bg-white hover:text-black"
+              className="inline-flex w-fit items-center gap-2 border border-white/15 bg-black/35 px-4 py-2 text-xs font-black uppercase tracking-wide text-white/70 backdrop-blur transition hover:bg-white hover:text-black"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to marketplace
@@ -182,7 +182,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
                   <img
                     src={brandProfile.logo_url}
                     alt={`${brandProfile.name} logo`}
-                    className="h-full w-full object-cover"
+                    className="h-full w-full object-contain"
                   />
                 ) : (
                   <span className="text-5xl font-black">
