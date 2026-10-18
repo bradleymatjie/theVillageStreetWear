@@ -314,17 +314,17 @@ export default function HomePageClient({
   }
 
   return (
-    <section className="relative min-h-[calc(100dvh-72px)] overflow-hidden bg-black px-4 py-10 text-white sm:px-6 sm:py-16 lg:px-8 lg:py-24">
+    <section className="relative min-h-[calc(100dvh-68px)] overflow-hidden bg-black text-white lg:min-h-[calc(100dvh-82px)]">
       <motion.div
         initial={{ scale: 1.15, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.32 }}
+        animate={{ scale: 1, opacity: 0.78 }}
         transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-[center_28%] lg:bg-center"
         style={{ backgroundImage: "url('/joziHome.jpg')" }}
       />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.92)_0%,rgba(0,0,0,0.72)_46%,rgba(0,0,0,0.38)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(0,0,0,0.92)_0%,rgba(0,0,0,0.16)_58%,rgba(0,0,0,0.1)_100%)] lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.5)_50%,rgba(0,0,0,0.15)_100%)]" />
 
-      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2">
+      <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-68px)] max-w-[1480px] items-end px-5 pb-28 pt-12 sm:px-8 lg:min-h-[calc(100dvh-82px)] lg:items-center lg:px-10 lg:pb-16">
         <motion.div
           initial="hidden"
           animate="show"
@@ -333,50 +333,48 @@ export default function HomePageClient({
         >
           <motion.p
             variants={dropIn}
-            className="mb-5 inline-flex rounded-md border border-white/20 bg-black/25 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.25em] text-white/70 backdrop-blur sm:text-xs"
+            className="mb-3 text-[10px] font-medium uppercase tracking-[0.24em] text-white/75 sm:text-xs"
           >
-            Streetwear marketplace for South Africa
+            Independent streetwear
           </motion.p>
 
           <motion.h1
             variants={dropIn}
-            className="text-4xl font-black leading-[0.94] sm:text-6xl lg:text-7xl"
+            className="text-[50px] font-black uppercase leading-[0.86] tracking-[-0.06em] sm:text-7xl lg:text-8xl"
           >
-            THE VILLAGE
-            <br />
-            STREETWEAR.
+            CULTURE
+            <br />IS WORN.
           </motion.h1>
 
           <motion.p
             variants={dropIn}
-            className="mt-5 max-w-2xl text-base font-semibold leading-7 text-white/78 sm:text-lg lg:text-xl"
+            className="mt-5 hidden max-w-xl text-base font-medium leading-7 text-white/70 sm:block lg:text-lg"
           >
-            Discover local labels, shop new drops, and give your brand a
-            storefront that feels as sharp as the product.
+            Discover independent South African labels, shop new drops, and wear the culture shaping the streets.
           </motion.p>
 
           <motion.div
             variants={dropIn}
-            className="mt-8 grid grid-cols-1 gap-3 sm:flex sm:flex-row"
+            className="mt-6 flex flex-wrap gap-3"
           >
             <Link
               href="/products"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-7 py-4 text-sm font-black uppercase tracking-wide text-black transition hover:-translate-y-0.5 hover:bg-white/90"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-xs font-black uppercase tracking-wide text-black transition hover:-translate-y-0.5 hover:bg-white/90"
             >
-              Explore Catalog
+              Explore the drop
               <ArrowRight className="h-4 w-4" />
             </Link>
 
             <Link
               href="/sell"
-              className="inline-flex items-center justify-center gap-2 rounded-md border border-white/30 bg-black/25 px-7 py-4 text-sm font-black uppercase tracking-wide text-white backdrop-blur-xl transition hover:-translate-y-0.5 hover:bg-white hover:text-black"
+              className="hidden items-center justify-center gap-2 rounded-md border border-white/30 bg-black/25 px-5 py-3 text-xs font-black uppercase tracking-wide text-white backdrop-blur-xl transition hover:bg-white hover:text-black sm:inline-flex"
             >
               Join as a Brand
               <Store className="h-4 w-4" />
             </Link>
           </motion.div>
 
-          <motion.div variants={stagger} className="mt-10 grid grid-cols-2 gap-3 lg:hidden">
+          <motion.div variants={stagger} className="hidden">
             {mobileCards.map(([eyebrow, title, text], index) => (
               <motion.div
                 key={title}
@@ -400,7 +398,7 @@ export default function HomePageClient({
           initial="hidden"
           animate="show"
           variants={stagger}
-          className="relative hidden h-[520px] lg:block"
+          className="hidden"
         >
           {desktopCards.map((card, index) => (
             <motion.div

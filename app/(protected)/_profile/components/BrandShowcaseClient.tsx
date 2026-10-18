@@ -1,9 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Product } from "@/app/lib/types";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Heart } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useUser } from "@/app/lib/user";
 import { getCurrentProfileBase, joinProfilePath } from "@/app/lib/profileRoutes";
@@ -12,100 +11,42 @@ interface BrandShowcaseClientProps {
   products: Product[];
 }
 
-export default function BrandShowcaseClient({
-  products,
-}: BrandShowcaseClientProps) {
-  const [activeBrand, setActiveBrand] = useState("all");
+export default function BrandShowcaseClient({ products }: BrandShowcaseClientProps) {
   const pathname = usePathname();
   const { user } = useUser();
   const profileBase = getCurrentProfileBase(pathname, user);
-  const brands = useMemo(() => {
-    const uniqueBrands = Array.from(
-      new Set(
-        products
-          .map((product) => product.brand_name?.trim())
-          .filter(Boolean)
-      )
-    ) as string[];
-
-    return [
-      { id: "all", name: "All" },
-      ...uniqueBrands.map((brand) => ({
-        id: brand.toLowerCase(),
-        name: brand,
-      })),
-    ];
-  }, [products]);
-
-  const filteredProducts =
-    activeBrand === "all"
-      ? products
-      : products.filter(
-          (product) =>
-            product.brand_name?.trim().toLowerCase() === activeBrand
-        );
 
   return (
-    <section className="space-y-4">
-      <div className="flex items-start justify-between gap-4">
+    <section>
+      <div className="mb-4 flex items-end justify-between gap-4">
         <div>
-          <Link
-            href="/brands"
-            className="inline-flex items-center gap-2 text-xl font-black transition hover:text-black/70 dark:hover:text-white/70"
-          >
-            Discover Brands
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-          <p className="mt-1 text-sm text-black/50 dark:text-white/50">
-            Browse brands and their latest drops.
-          </p>
+          <div className="flex items-center gap-3">
+            <h2 className="text-xl font-black sm:text-2xl">New from local brands</h2>
+            <span className="hidden h-px w-10 bg-black/30 dark:bg-white/30 sm:block" />
+          </div>
+          <p className="mt-1 text-sm text-black/50 dark:text-white/50">Fresh drops from across The Village.</p>
         </div>
+        <Link href="/products" className="flex shrink-0 items-center gap-2 text-xs font-bold underline underline-offset-4 sm:text-sm">
+          View all <ArrowRight className="h-4 w-4" />
+        </Link>
       </div>
 
-      <div className="no-scrollbar flex gap-3 overflow-x-auto scroll-smooth pb-2">
-        {brands.map((brand) => {
-          const active = activeBrand === brand.id;
-
-          return (
-            <button
-              key={brand.id}
-              onClick={() => setActiveBrand(brand.id)}
-              className={`shrink-0 rounded-2xl px-5 py-3 text-sm font-black transition ${
-                active
-                  ? "bg-black text-white dark:bg-white dark:text-black"
-                  : "border border-black/10 bg-black/5 text-black/60 hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:text-white/60 dark:hover:bg-white/10"
-              }`}
-            >
-              {brand.name}
-            </button>
-          );
-        })}
-      </div>
-
-      <div className="no-scrollbar flex gap-4 overflow-x-auto scroll-smooth pb-2">
-        {filteredProducts.map((product) => (
+      <div className="no-scrollbar flex snap-x gap-3 overflow-x-auto pb-2 sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-4">
+        {products.map((product) => (
           <Link
             key={product.id}
             href={joinProfilePath(profileBase, `products/${product.id}`)}
-            className="w-[160px] shrink-0 overflow-hidden rounded-3xl border border-black/10 bg-black/5 transition hover:bg-black/10 dark:border-white/10 dark:bg-white/5 dark:hover:bg-white/10"
+            className="group w-[76vw] max-w-[310px] shrink-0 snap-start overflow-hidden rounded-2xl border border-black/10 bg-black/[0.025] transition hover:-translate-y-1 hover:bg-black/5 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06] sm:w-auto sm:max-w-none"
           >
-            <div className="relative aspect-[4/5] bg-white">
-              <img
-                src={product.imageurl || "/noImage.jpg"}
-                alt={product.name}                className="h-full w-full object-cover"
-              />
+            <div className="relative aspect-[4/3] overflow-hidden bg-white sm:aspect-[4/5]">
+              <img src={product.imageurl || "/noImage.jpg"} alt={product.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+              <span className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur">
+                <Heart className="h-5 w-5" />
+              </span>
             </div>
-
-            <div className="p-3">
-              <p className="line-clamp-2 text-xs font-black leading-snug text-black dark:text-white">
-                {product.name}
-              </p>
-
-              <p className="mt-2 text-sm font-black text-black dark:text-white">
-                {product.price?.startsWith("R")
-                  ? product.price
-                  : `R${product.price}`}
-              </p>
+            <div className="p-4">
+              <p className="truncate text-sm font-black">{product.name}</p>
+              <p className="mt-2 text-base font-black">{product.price?.startsWith("R") ? product.price : `R${product.price}`}</p>
             </div>
           </Link>
         ))}

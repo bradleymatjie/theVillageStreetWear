@@ -118,8 +118,11 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-poppins), Arial, sans-serif;
   }
 }
+
+::selection { background: #111; color: #fff; }
 
 .no-scrollbar {
   -ms-overflow-style: none;
