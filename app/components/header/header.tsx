@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { Heart, Home, Menu, Search, ShoppingBag, ShoppingCart, User, X } from "lucide-react";
+import { Home, Menu, Search, ShoppingBag, ShoppingCart, User, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useUser } from "@/app/lib/user";
@@ -20,13 +20,14 @@ export default function Header() {
     () => false
   );
 
-  const { user } = useUser();
+  const { user, isLoading } = useUser();
   const pathname = usePathname();
   const cartItemCount = useCartStore((state) => state.getTotalItems());
 
   const firstName = user?.user_metadata?.full_name?.split(" ")[0] || "";
   const isLoggedIn = !!user;
   const profileHref = isLoggedIn ? getUserProfileBase(user) : "/login";
+  const homeHref = isLoggedIn ? getUserProfileBase(user) : "/";
 
   if (pathname.includes("admin") || pathname.includes("protected")) return null;
 
@@ -34,7 +35,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-black/10 bg-white/95 text-black backdrop-blur-xl lg:border-white/10 lg:bg-[#090909]/95 lg:text-white">
+      <header className="sticky top-0 z-50 border-b border-black/10 bg-white/95 text-black backdrop-blur-xl lg:border-white/10 lg:bg-[var(--palette-surface-header)]/95 lg:text-white">
         <div className="mx-auto flex h-[68px] max-w-[1480px] items-center justify-between px-4 sm:px-6 lg:h-[82px] lg:px-8">
           <Link
             href="/"
@@ -135,15 +136,15 @@ export default function Header() {
         </div>
       </header>
 
-      <nav className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-5 rounded-2xl border border-white/10 bg-[#101010]/95 px-1 pb-[env(safe-area-inset-bottom)] text-white shadow-2xl backdrop-blur-xl lg:hidden">
+      {isMounted && !isLoading && isLoggedIn && (
+      <nav className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-4 rounded-2xl border border-white/10 bg-[var(--palette-surface-pill)]/95 px-1 pb-[env(safe-area-inset-bottom)] text-white shadow-2xl backdrop-blur-xl lg:hidden">
         {[
-          { label: "Home", href: "/", icon: Home },
+          { label: "Home", href: homeHref, icon: Home },
           { label: "Shop", href: "/products", icon: ShoppingBag },
           { label: "Discover", href: "/brands", icon: Search },
-          { label: "Saved", href: isLoggedIn ? profileHref : "/login", icon: Heart },
-          { label: "Account", href: profileHref, icon: User },
+          { label: "Account", href: isLoggedIn ? `${profileHref}/profile` : "/login", icon: User },
         ].map(({ label, href, icon: Icon }) => {
-          const active = pathname === href || (href !== "/" && pathname.startsWith(href));
+          const active = pathname === href || (label !== "Home" && href !== "/" && pathname.startsWith(`${href}/`));
           return (
             <Link key={label} href={href} className={`flex min-h-14 flex-col items-center justify-center gap-1 text-[9px] ${active ? "text-white" : "text-white/45"}`}>
               <span className={active ? "flex h-6 w-6 items-center justify-center rounded-full bg-white text-black" : "flex h-6 w-6 items-center justify-center"}>
@@ -154,6 +155,7 @@ export default function Header() {
           );
         })}
       </nav>
+      )}
 
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>

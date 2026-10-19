@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { v4 as uuidv4 } from 'uuid';
 import { supabase } from '@/lib/supabaseClient';
 import { useUser } from '@/app/lib/user';
+import { resolveCssColor } from '@/lib/browser-colors';
 
 interface TShirtColor {
   name: string;
@@ -16,9 +17,9 @@ interface TShirtColor {
 }
 
 const tshirtColors: TShirtColor[] = [
-  { name: 'white', hex: '#FFFFFF', frontImage: '/assets/white_front.png', backImage: '/assets/white_back.png' },
-  { name: 'black', hex: '#000000', frontImage: '/assets/black_front.png', backImage: '/assets/black_back.png' },
-  { name: 'red', hex: '#FF0000', frontImage: '/assets/red_front.png', backImage: '/assets/red_back.png' },
+  { name: 'white', hex: 'var(--palette-white)', frontImage: '/assets/white_front.png', backImage: '/assets/white_back.png' },
+  { name: 'black', hex: 'var(--palette-black)', frontImage: '/assets/black_front.png', backImage: '/assets/black_back.png' },
+  { name: 'red', hex: 'var(--palette-design-red)', frontImage: '/assets/red_front.png', backImage: '/assets/red_back.png' },
 ];
 
 // Helper function to convert data URL to Blob
@@ -59,14 +60,14 @@ export default function DesignCanvas() {
   // High quality PNG for downloads
   const highQualityOptions = {
     cacheBust: true,
-    backgroundColor: '#ffffff',
+    backgroundColor: resolveCssColor('var(--palette-white)'),
     pixelRatio: 2,
   };
 
   // Compressed JPEG for cart previews (much smaller size to avoid localStorage quota issues)
   const cartPreviewOptions = {
     cacheBust: true,
-    backgroundColor: '#ffffff',
+    backgroundColor: resolveCssColor('var(--palette-white)'),
     pixelRatio: 1,
     quality: 0.8,
   };

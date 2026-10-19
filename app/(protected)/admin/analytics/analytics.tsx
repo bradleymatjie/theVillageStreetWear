@@ -338,7 +338,7 @@ export function AnalyticsPage() {
                           className="absolute top-0 left-0 h-full rounded-full transition-all duration-300"
                           style={{
                             width: `${device.percentage}%`,
-                            backgroundColor: index === 0 ? '#3b82f6' : index === 1 ? '#10b981' : '#8b5cf6'
+                            backgroundColor: index === 0 ? 'var(--palette-chart-blue)' : index === 1 ? 'var(--palette-chart-emerald)' : 'var(--palette-chart-purple)'
                           }}
                         />
                       </div>
@@ -411,17 +411,17 @@ export function AnalyticsPage() {
                     data={data.countryStats}
                     margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#2A2A2A" />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--palette-chart-grid)" />
                     <XAxis
                       dataKey="country"
                       angle={-45}
                       textAnchor="end"
                       height={60}
-                      stroke="#666"
+                      stroke="var(--palette-ink-subtle)"
                       fontSize={12}
                     />
                     <YAxis
-                      stroke="#666"
+                      stroke="var(--palette-ink-subtle)"
                       fontSize={12}
                       tickFormatter={(value) => formatNumber(value)}
                     />
@@ -429,14 +429,14 @@ export function AnalyticsPage() {
                       formatter={(value) => [value, 'Users']}
                       labelFormatter={(label) => `Country: ${label}`}
                       contentStyle={{
-                        backgroundColor: '#0D0D0D',
-                        borderColor: '#333',
+                        backgroundColor: 'var(--palette-surface-admin)',
+                        borderColor: 'var(--palette-ink-secondary)',
                         borderRadius: '6px',
                       }}
                     />
                     <Bar
                       dataKey="users"
-                      fill="#f59e0b"
+                      fill="var(--palette-chart-amber)"
                       radius={[4, 4, 0, 0]}
                       name="Users"
                     />
@@ -505,10 +505,10 @@ export function AnalyticsPage() {
                     margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
                     layout="vertical"
                   >
-                    <CartesianGrid strokeDasharray="3 3" stroke="#2A2A2A" horizontal={true} vertical={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--palette-chart-grid)" horizontal={true} vertical={false} />
                     <XAxis
                       type="number"
-                      stroke="#666"
+                      stroke="var(--palette-ink-subtle)"
                       fontSize={12}
                       tickFormatter={(value) => formatNumber(value)}
                     />
@@ -516,28 +516,28 @@ export function AnalyticsPage() {
                       type="category"
                       dataKey="pageTitle"
                       width={150}
-                      stroke="#666"
+                      stroke="var(--palette-ink-subtle)"
                       fontSize={12}
                       tickFormatter={(value) => value.length > 20 ? value.substring(0, 20) + '...' : value}
                     />
                     <Tooltip
                       formatter={(value) => [value, 'Page Views']}
                       contentStyle={{
-                        backgroundColor: '#0D0D0D',
-                        borderColor: '#333',
+                        backgroundColor: 'var(--palette-surface-admin)',
+                        borderColor: 'var(--palette-ink-secondary)',
                         borderRadius: '6px',
                       }}
                     />
                     <Legend />
                     <Bar
                       dataKey="pageViews"
-                      fill="#10b981"
+                      fill="var(--palette-chart-emerald)"
                       radius={[0, 4, 4, 0]}
                       name="Page Views"
                     />
                     <Bar
                       dataKey="users"
-                      fill="#3b82f6"
+                      fill="var(--palette-chart-blue)"
                       radius={[0, 4, 4, 0]}
                       name="Users"
                     />
@@ -626,7 +626,7 @@ export function AnalyticsPage() {
                         return `${deviceData.device}: ${deviceData.percentage}%`;
                       }}
                       outerRadius={80}
-                      fill="#8884d8"
+                      fill="var(--palette-chart-violet)"
                       dataKey="percentage"
                       nameKey="device"
                     >
@@ -634,8 +634,8 @@ export function AnalyticsPage() {
                         <Cell
                           key={`cell-${index}`}
                           fill={
-                            index === 0 ? '#3b82f6' :
-                              index === 1 ? '#10b981' : '#8b5cf6'
+                            index === 0 ? 'var(--palette-chart-blue)' :
+                              index === 1 ? 'var(--palette-chart-emerald)' : 'var(--palette-chart-purple)'
                           }
                         />
                       ))}
@@ -643,8 +643,8 @@ export function AnalyticsPage() {
                     <Tooltip
                       formatter={(value) => [`${value}%`, 'Percentage']}
                       contentStyle={{
-                        backgroundColor: '#0D0D0D',
-                        borderColor: '#333',
+                        backgroundColor: 'var(--palette-surface-admin)',
+                        borderColor: 'var(--palette-ink-secondary)',
                         borderRadius: '6px',
                       }}
                     />
@@ -688,7 +688,7 @@ export function AnalyticsPage() {
                         className="absolute top-0 left-0 h-full rounded-full transition-all duration-300"
                         style={{
                           width: `${device.percentage}%`,
-                          backgroundColor: index === 0 ? '#3b82f6' : index === 1 ? '#10b981' : '#8b5cf6'
+                          backgroundColor: index === 0 ? 'var(--palette-chart-blue)' : index === 1 ? 'var(--palette-chart-emerald)' : 'var(--palette-chart-purple)'
                         }}
                       />
                     </div>

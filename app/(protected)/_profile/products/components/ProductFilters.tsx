@@ -12,9 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ShoppingCart } from "lucide-react";
-import { useCartStore } from "@/app/lib/cartStore";
-import CartSidebar from "../../components/CartItems";
 import { usePathname } from "next/navigation";
 import { useUser } from "@/app/lib/user";
 import { getCurrentProfileBase, joinProfilePath } from "@/app/lib/profileRoutes";
@@ -26,7 +23,6 @@ interface ProductFiltersProps {
 export default function ProductFilters({ data }: ProductFiltersProps) {
   const [selectedBrand, setSelectedBrand] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [sortBy, setSortBy] = useState<
     "featured" | "price-low" | "price-high" | "name-az"
   >("featured");
@@ -34,7 +30,6 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
   const { user } = useUser();
   const profileBase = getCurrentProfileBase(pathname, user);
 
-  const cartItemCount = useCartStore((state) => state.getTotalItems());
 
   const brands = useMemo(() => {
     if (!data) return ["all"];
@@ -165,24 +160,6 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
         </div>
       )}
 
-      <button
-        onClick={() => setIsCartOpen(true)}
-        className="fixed bottom-10 right-4 z-550 flex h-14 w-14 animate-[float_3s_ease-in-out_infinite] items-center justify-center rounded-full border border-white/30 bg-white/20 text-black shadow-[0_20px_60px_rgba(0,0,0,0.25)] backdrop-blur-2xl transition hover:scale-110 active:scale-95 dark:border-white/15 dark:bg-white/10 dark:text-white lg:bottom-6"
-        aria-label="Open cart"
-      >
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/70 via-white/20 to-white/5 opacity-70" />
-        <div className="absolute inset-[1px] rounded-full border border-white/30" />
-
-        <ShoppingCart className="relative z-10 h-6 w-6 drop-shadow-sm" />
-
-        {cartItemCount > 0 && (
-          <span className="absolute -right-1 -top-1 z-20 flex h-5 min-w-5 items-center justify-center rounded-full border border-white/50 bg-red-600 px-1 text-[10px] font-black text-white shadow-lg">
-            {cartItemCount > 9 ? "9+" : cartItemCount}
-          </span>
-        )}
-      </button>
-
-      <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </div>
   );
 }

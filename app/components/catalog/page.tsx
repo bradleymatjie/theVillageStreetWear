@@ -11,7 +11,7 @@ export default async function Catalog() {
     }
 
   return (
-    <section className="bg-[#f6f5f2] px-4 py-10 text-black sm:px-6 sm:py-14 lg:py-16">
+    <section className="bg-[var(--palette-surface-catalog)] px-4 py-10 text-black sm:px-6 sm:py-14 lg:py-16">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
           <div><p className="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">Shop the latest</p><h2 className="text-3xl font-black tracking-[-0.04em] sm:text-4xl">LATEST DROPS</h2></div>

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import HeroVideoBackground from "./HeroVideoBackground";
 import { ReactNode } from "react";
 import { motion, type Transition, type Variants } from "framer-motion";
 import {
@@ -315,14 +316,8 @@ export default function HomePageClient({
 
   return (
     <section className="relative min-h-[calc(100dvh-68px)] overflow-hidden bg-black text-white lg:min-h-[calc(100dvh-82px)]">
-      <motion.div
-        initial={{ scale: 1.15, opacity: 0 }}
-        animate={{ scale: 1, opacity: 0.78 }}
-        transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-0 bg-cover bg-[center_28%] lg:bg-center"
-        style={{ backgroundImage: "url('/joziHome.jpg')" }}
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(0,0,0,0.92)_0%,rgba(0,0,0,0.16)_58%,rgba(0,0,0,0.1)_100%)] lg:bg-[linear-gradient(90deg,rgba(0,0,0,0.9)_0%,rgba(0,0,0,0.5)_50%,rgba(0,0,0,0.15)_100%)]" />
+      <HeroVideoBackground />
+      <div className="absolute inset-0 bg-[linear-gradient(0deg,var(--palette-black-92)_0%,var(--palette-black-16)_58%,var(--palette-black-10)_100%)] lg:bg-[linear-gradient(90deg,var(--palette-black-90)_0%,var(--palette-black-50)_50%,var(--palette-black-15)_100%)]" />
 
       <div className="relative z-10 mx-auto flex min-h-[calc(100dvh-68px)] max-w-[1480px] items-end px-5 pb-28 pt-12 sm:px-8 lg:min-h-[calc(100dvh-82px)] lg:items-center lg:px-10 lg:pb-16">
         <motion.div
@@ -422,7 +417,7 @@ export default function HomePageClient({
                 delay: 0.2 + index * 0.12,
               }}
               whileHover={{ y: -14, scale: 1.04 }}
-              className={`${card.className} rounded-lg border border-white/10 bg-white/[0.08] p-6 shadow-[0_25px_80px_rgba(0,0,0,0.45)] backdrop-blur-2xl`}
+              className={`${card.className} rounded-lg border border-white/10 bg-white/[0.08] p-6 shadow-[0_25px_80px_var(--palette-black-45)] backdrop-blur-2xl`}
             >
               <p className="text-sm font-bold text-white/40">{card.eyebrow}</p>
               <h3 className="mt-3 text-2xl font-black">{card.title}</h3>

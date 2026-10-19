@@ -1,3 +1,4 @@
+import { getColorValue } from "@/lib/server-colors";
 // app/api/order-confirmation/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
@@ -88,7 +89,7 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
         top: 40px !important;
         bottom: -30px !important;
         width: 2px !important;
-        background: #e5e7eb !important;
+        background: ${getColorValue("--palette-border-email-soft")} !important;
       }
       .mobile-timeline-vertical > div:last-child:before {
         display: none !important;
@@ -96,8 +97,8 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
     }
   </style>
 </head>
-<body style="margin:0; padding:20px; background:#f9fafb; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;">
-  <div style="display:none; color:#f9fafb;">Thank you for your order #${orderId} at The Village Streetwear!</div>
+<body style="margin:0; padding:20px; background:${getColorValue("--palette-surface-email-subtle")}; font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;">
+  <div style="display:none; color:${getColorValue("--palette-surface-email-subtle")};">Thank you for your order #${orderId} at The Village Streetwear!</div>
 
   <table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width:1200px; margin:0 auto;">
     <tr>
@@ -106,50 +107,50 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px;">
           <tr>
             <td align="center" style="padding:40px 20px;">
-              <div style="width:80px; height:80px; background:#f0fdf4; border-radius:50%; margin:0 auto 24px; display:flex; align-items:center; justify-content:center; font-size:48px; color:#16a34a;">✓</div>
-              <h1 style="font-size:40px; font-weight:bold; margin:0 0 12px; color:#111827; letter-spacing:-0.025em;">Order Confirmed!</h1>
-              <p style="font-size:20px; margin:0 0 8px; color:#4b5563;">Thank you for your purchase, ${firstName}!</p>
-              <p style="margin:0; color:#6b7280; font-size:16px;">Order #${orderId} • ${date}</p>
+              <div style="width:80px; height:80px; background:${getColorValue("--palette-status-success-bg")}; border-radius:50%; margin:0 auto 24px; display:flex; align-items:center; justify-content:center; font-size:48px; color:${getColorValue("--palette-success-strong")};">✓</div>
+              <h1 style="font-size:40px; font-weight:bold; margin:0 0 12px; color:${getColorValue("--palette-text-email")}; letter-spacing:-0.025em;">Order Confirmed!</h1>
+              <p style="font-size:20px; margin:0 0 8px; color:${getColorValue("--palette-text-email-secondary")};">Thank you for your purchase, ${firstName}!</p>
+              <p style="margin:0; color:${getColorValue("--palette-text-email-muted")}; font-size:16px;">Order #${orderId} • ${date}</p>
             </td>
           </tr>
         </table>
 
         <!-- Order Timeline -->
-        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px; background:#ffffff; border-radius:12px; border:1px solid #e5e7eb; overflow:hidden;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:32px; background:${getColorValue("--palette-white")}; border-radius:12px; border:1px solid ${getColorValue("--palette-border-email-soft")}; overflow:hidden;">
           <tr>
             <td style="padding:32px;">
-              <h2 style="font-size:24px; font-weight:bold; margin:0 0 24px; color:#111827; letter-spacing:-0.025em;">Order Timeline</h2>
+              <h2 style="font-size:24px; font-weight:bold; margin:0 0 24px; color:${getColorValue("--palette-text-email")}; letter-spacing:-0.025em;">Order Timeline</h2>
               
               <!-- Desktop Timeline -->
               <table width="100%" cellpadding="0" cellspacing="0" style="display:none;" class="mobile-hide">
                 <tr>
                   <td align="center" style="width:25%; padding:0 12px;">
-                    <div style="width:48px; height:48px; background:#f0fdf4; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#16a34a;">✓</div>
-                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:#111827;">Order Placed</p>
-                    <p style="margin:0; font-size:14px; color:#6b7280;">Now</p>
+                    <div style="width:48px; height:48px; background:${getColorValue("--palette-status-success-bg")}; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-size:24px; color:${getColorValue("--palette-success-strong")};">✓</div>
+                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:${getColorValue("--palette-text-email")};">Order Placed</p>
+                    <p style="margin:0; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">Now</p>
                   </td>
                   <td align="center" style="width:25%; padding:0 12px;">
-                    <div style="width:48px; height:48px; background:#f3f4f6; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#9ca3af;">📦</div>
-                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:#111827;">Processing</p>
-                    <p style="margin:0; font-size:14px; color:#6b7280;">Soon</p>
+                    <div style="width:48px; height:48px; background:${getColorValue("--palette-surface-email-muted")}; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-size:24px; color:${getColorValue("--palette-text-email-subtle")};">📦</div>
+                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:${getColorValue("--palette-text-email")};">Processing</p>
+                    <p style="margin:0; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">Soon</p>
                   </td>
                   <td align="center" style="width:25%; padding:0 12px;">
-                    <div style="width:48px; height:48px; background:#f3f4f6; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#9ca3af;">
+                    <div style="width:48px; height:48px; background:${getColorValue("--palette-surface-email-muted")}; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-size:24px; color:${getColorValue("--palette-text-email-subtle")};">
                       ${shipping_method === 'delivery' ? '🚚' : '📍'}
                     </div>
-                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:#111827;">
+                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:${getColorValue("--palette-text-email")};">
                       ${shipping_method === 'delivery' ? 'Shipped' : 'Ready for Pickup'}
                     </p>
-                    <p style="margin:0; font-size:14px; color:#6b7280;">
+                    <p style="margin:0; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">
                       ${shipping_method === 'delivery' ? '3-4 Days' : '2-3 days'}
                     </p>
                   </td>
                   <td align="center" style="width:25%; padding:0 12px;">
-                    <div style="width:48px; height:48px; background:#f3f4f6; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-size:24px; color:#9ca3af;">✓</div>
-                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:#111827;">
+                    <div style="width:48px; height:48px; background:${getColorValue("--palette-surface-email-muted")}; border-radius:50%; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-size:24px; color:${getColorValue("--palette-text-email-subtle")};">✓</div>
+                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:${getColorValue("--palette-text-email")};">
                       ${shipping_method === 'delivery' ? 'Delivered' : 'Picked Up'}
                     </p>
-                    <p style="margin:0; font-size:14px; color:#6b7280;">
+                    <p style="margin:0; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">
                       ${shipping_method === 'delivery' ? '4-5 Days' : 'Today'}
                     </p>
                   </td>
@@ -159,39 +160,39 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
               <!-- Mobile Timeline -->
               <div class="mobile-timeline-vertical" style="display:none;">
                 <div style="display:flex; align-items:flex-start; margin-bottom:30px; position:relative;">
-                  <div style="width:32px; height:32px; background:#f0fdf4; border-radius:50%; flex-shrink:0; margin-right:16px; display:flex; align-items:center; justify-content:center; font-size:16px; color:#16a34a; position:absolute; left:0;">✓</div>
+                  <div style="width:32px; height:32px; background:${getColorValue("--palette-status-success-bg")}; border-radius:50%; flex-shrink:0; margin-right:16px; display:flex; align-items:center; justify-content:center; font-size:16px; color:${getColorValue("--palette-success-strong")}; position:absolute; left:0;">✓</div>
                   <div style="padding-left:40px;">
-                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:#111827;">Order Placed</p>
-                    <p style="margin:0; font-size:14px; color:#6b7280;">Now</p>
+                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:${getColorValue("--palette-text-email")};">Order Placed</p>
+                    <p style="margin:0; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">Now</p>
                   </div>
                 </div>
                 <div style="display:flex; align-items:flex-start; margin-bottom:30px; position:relative;">
-                  <div style="width:32px; height:32px; background:#f3f4f6; border-radius:50%; flex-shrink:0; margin-right:16px; display:flex; align-items:center; justify-content:center; font-size:16px; color:#9ca3af; position:absolute; left:0;">📦</div>
+                  <div style="width:32px; height:32px; background:${getColorValue("--palette-surface-email-muted")}; border-radius:50%; flex-shrink:0; margin-right:16px; display:flex; align-items:center; justify-content:center; font-size:16px; color:${getColorValue("--palette-text-email-subtle")}; position:absolute; left:0;">📦</div>
                   <div style="padding-left:40px;">
-                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:#111827;">Processing</p>
-                    <p style="margin:0; font-size:14px; color:#6b7280;">Soon</p>
+                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:${getColorValue("--palette-text-email")};">Processing</p>
+                    <p style="margin:0; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">Soon</p>
                   </div>
                 </div>
                 <div style="display:flex; align-items:flex-start; margin-bottom:30px; position:relative;">
-                  <div style="width:32px; height:32px; background:#f3f4f6; border-radius:50%; flex-shrink:0; margin-right:16px; display:flex; align-items:center; justify-content:center; font-size:16px; color:#9ca3af; position:absolute; left:0;">
+                  <div style="width:32px; height:32px; background:${getColorValue("--palette-surface-email-muted")}; border-radius:50%; flex-shrink:0; margin-right:16px; display:flex; align-items:center; justify-content:center; font-size:16px; color:${getColorValue("--palette-text-email-subtle")}; position:absolute; left:0;">
                     ${shipping_method === 'delivery' ? '🚚' : '📍'}
                   </div>
                   <div style="padding-left:40px;">
-                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:#111827;">
+                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:${getColorValue("--palette-text-email")};">
                       ${shipping_method === 'delivery' ? 'Shipped' : 'Ready for Pickup'}
                     </p>
-                    <p style="margin:0; font-size:14px; color:#6b7280;">
+                    <p style="margin:0; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">
                       ${shipping_method === 'delivery' ? '1-2 Days' : '2-3 days'}
                     </p>
                   </div>
                 </div>
                 <div style="display:flex; align-items:flex-start; position:relative;">
-                  <div style="width:32px; height:32px; background:#f3f4f6; border-radius:50%; flex-shrink:0; margin-right:16px; display:flex; align-items:center; justify-content:center; font-size:16px; color:#9ca3af; position:absolute; left:0;">✓</div>
+                  <div style="width:32px; height:32px; background:${getColorValue("--palette-surface-email-muted")}; border-radius:50%; flex-shrink:0; margin-right:16px; display:flex; align-items:center; justify-content:center; font-size:16px; color:${getColorValue("--palette-text-email-subtle")}; position:absolute; left:0;">✓</div>
                   <div style="padding-left:40px;">
-                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:#111827;">
+                    <p style="margin:0 0 4px; font-size:16px; font-weight:600; color:${getColorValue("--palette-text-email")};">
                       ${shipping_method === 'delivery' ? 'Delivered' : 'Picked Up'}
                     </p>
-                    <p style="margin:0; font-size:14px; color:#6b7280;">
+                    <p style="margin:0; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">
                       ${shipping_method === 'delivery' ? '3-5 Days' : 'Today'}
                     </p>
                   </div>
@@ -209,10 +210,10 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                 <tr>
                   <td align="left" valign="top" style="width:66%; padding-right:24px;" class="mobile-stack">
                     <!-- Order Details Card -->
-                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; background:#ffffff; border-radius:12px; border:1px solid #e5e7eb; overflow:hidden;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; background:${getColorValue("--palette-white")}; border-radius:12px; border:1px solid ${getColorValue("--palette-border-email-soft")}; overflow:hidden;">
                       <tr>
-                        <td style="padding:24px; background:#f9fafb; border-bottom:1px solid #e5e7eb;">
-                          <h2 style="font-size:20px; font-weight:600; margin:0; color:#111827; display:flex; align-items:center; gap:8px;">
+                        <td style="padding:24px; background:${getColorValue("--palette-surface-email-subtle")}; border-bottom:1px solid ${getColorValue("--palette-border-email-soft")};">
+                          <h2 style="font-size:20px; font-weight:600; margin:0; color:${getColorValue("--palette-text-email")}; display:flex; align-items:center; gap:8px;">
                             <span style="font-size:20px;">📦</span> Order Details
                           </h2>
                         </td>
@@ -220,36 +221,36 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                       <tr>
                         <td style="padding:24px;">
                           ${cartItems.map((item) => `
-                          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; padding-bottom:24px; border-bottom:1px solid #e5e7eb; ${cartItems.indexOf(item) === cartItems.length - 1 ? 'border-bottom:0; margin-bottom:0; padding-bottom:0;' : ''}">
+                          <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; padding-bottom:24px; border-bottom:1px solid ${getColorValue("--palette-border-email-soft")}; ${cartItems.indexOf(item) === cartItems.length - 1 ? 'border-bottom:0; margin-bottom:0; padding-bottom:0;' : ''}">
                             <tr>
                               <td style="width:80px; vertical-align:top;">
-                                <img src="${item.imageurl || 'https://via.placeholder.com/100'}" alt="${item.name}" width="80" height="80" style="border-radius:8px; border:1px solid #e5e7eb; object-fit:cover;" />
+                                <img src="${item.imageurl || 'https://via.placeholder.com/100'}" alt="${item.name}" width="80" height="80" style="border-radius:8px; border:1px solid ${getColorValue("--palette-border-email-soft")}; object-fit:cover;" />
                               </td>
                               <td style="padding-left:16px; vertical-align:top;">
-                                <p style="margin:0 0 8px; font-size:16px; font-weight:600; color:#111827;">${item.name}</p>
-                                ${(item.selectedSize || item.selectedMaterial) ? `<p style="margin:0 0 8px; font-size:14px; color:#6b7280;">${[item.selectedSize, item.selectedMaterial].filter(Boolean).join(' / ')}</p>` : ''}
-                                <p style="margin:0; font-size:14px; color:#6b7280;">Qty: ${item.quantity}</p>
+                                <p style="margin:0 0 8px; font-size:16px; font-weight:600; color:${getColorValue("--palette-text-email")};">${item.name}</p>
+                                ${(item.selectedSize || item.selectedMaterial) ? `<p style="margin:0 0 8px; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">${[item.selectedSize, item.selectedMaterial].filter(Boolean).join(' / ')}</p>` : ''}
+                                <p style="margin:0; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">Qty: ${item.quantity}</p>
                               </td>
                               <td style="vertical-align:top; text-align:right;">
-                                <p style="margin:0; font-size:16px; font-weight:600; color:#111827;">R${(item.price * item.quantity).toFixed(2)}</p>
+                                <p style="margin:0; font-size:16px; font-weight:600; color:${getColorValue("--palette-text-email")};">R${(item.price * item.quantity).toFixed(2)}</p>
                               </td>
                             </tr>
                           </table>
                           `).join('')}
 
                           <!-- Order Total -->
-                          <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:24px; background:#f9fafb; border-radius:8px; padding:16px;">
+                          <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:24px; background:${getColorValue("--palette-surface-email-subtle")}; border-radius:8px; padding:16px;">
                             <tr>
-                              <td style="padding:4px 0; text-align:right; color:#6b7280; font-size:14px;">Subtotal</td>
+                              <td style="padding:4px 0; text-align:right; color:${getColorValue("--palette-text-email-muted")}; font-size:14px;">Subtotal</td>
                               <td style="padding:4px 0 4px 32px; text-align:right; font-size:14px; font-weight:500;">R${subtotal.toFixed(2)}</td>
                             </tr>
                             <tr>
-                              <td style="padding:4px 0; text-align:right; color:#6b7280; font-size:14px;">${shipping_method === 'delivery' ? 'Shipping' : 'Pickup'}</td>
+                              <td style="padding:4px 0; text-align:right; color:${getColorValue("--palette-text-email-muted")}; font-size:14px;">${shipping_method === 'delivery' ? 'Shipping' : 'Pickup'}</td>
                               <td style="padding:4px 0 4px 32px; text-align:right; font-size:14px; font-weight:500;">${shippingCost === 0 ? 'Free' : `R${shippingCost.toFixed(2)}`}</td>
                             </tr>
-                            <tr style="border-top:1px solid #e5e7eb;">
-                              <td style="padding:12px 0 0; text-align:right; font-size:18px; font-weight:600; color:#111827;">Total Paid</td>
-                              <td style="padding:12px 0 0 32px; text-align:right; font-size:18px; font-weight:600; color:#111827;">R${total.toFixed(2)}</td>
+                            <tr style="border-top:1px solid ${getColorValue("--palette-border-email-soft")};">
+                              <td style="padding:12px 0 0; text-align:right; font-size:18px; font-weight:600; color:${getColorValue("--palette-text-email")};">Total Paid</td>
+                              <td style="padding:12px 0 0 32px; text-align:right; font-size:18px; font-weight:600; color:${getColorValue("--palette-text-email")};">R${total.toFixed(2)}</td>
                             </tr>
                           </table>
                         </td>
@@ -257,10 +258,10 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                     </table>
 
                     <!-- Contact Information Card -->
-                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; background:#ffffff; border-radius:12px; border:1px solid #e5e7eb; overflow:hidden;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; background:${getColorValue("--palette-white")}; border-radius:12px; border:1px solid ${getColorValue("--palette-border-email-soft")}; overflow:hidden;">
                       <tr>
-                        <td style="padding:24px; background:#f9fafb; border-bottom:1px solid #e5e7eb;">
-                          <h2 style="font-size:20px; font-weight:600; margin:0; color:#111827; display:flex; align-items:center; gap:8px;">
+                        <td style="padding:24px; background:${getColorValue("--palette-surface-email-subtle")}; border-bottom:1px solid ${getColorValue("--palette-border-email-soft")};">
+                          <h2 style="font-size:20px; font-weight:600; margin:0; color:${getColorValue("--palette-text-email")}; display:flex; align-items:center; gap:8px;">
                             <span style="font-size:20px;">📧</span> Contact Information
                           </h2>
                         </td>
@@ -270,22 +271,22 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                           <table width="100%" cellpadding="0" cellspacing="0">
                             <tr>
                               <td style="width:50%; padding-bottom:16px;">
-                                <p style="margin:0 0 4px; font-size:14px; color:#6b7280;">Name</p>
-                                <p style="margin:0; font-size:16px; font-weight:500; color:#111827;">${customer_name}</p>
+                                <p style="margin:0 0 4px; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">Name</p>
+                                <p style="margin:0; font-size:16px; font-weight:500; color:${getColorValue("--palette-text-email")};">${customer_name}</p>
                               </td>
                               <td style="width:50%; padding-bottom:16px;">
-                                <p style="margin:0 0 4px; font-size:14px; color:#6b7280;">Email</p>
-                                <p style="margin:0; font-size:16px; font-weight:500; color:#111827;">${email}</p>
+                                <p style="margin:0 0 4px; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">Email</p>
+                                <p style="margin:0; font-size:16px; font-weight:500; color:${getColorValue("--palette-text-email")};">${email}</p>
                               </td>
                             </tr>
                             <tr>
                               <td style="width:50%;">
-                                <p style="margin:0 0 4px; font-size:14px; color:#6b7280;">Phone</p>
-                                <p style="margin:0; font-size:16px; font-weight:500; color:#111827;">${phone || 'Not provided'}</p>
+                                <p style="margin:0 0 4px; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">Phone</p>
+                                <p style="margin:0; font-size:16px; font-weight:500; color:${getColorValue("--palette-text-email")};">${phone || 'Not provided'}</p>
                               </td>
                               <td style="width:50%;">
-                                <p style="margin:0 0 4px; font-size:14px; color:#6b7280;">Order Number</p>
-                                <p style="margin:0; font-size:16px; font-weight:500; color:#111827; font-family:monospace;">${orderId}</p>
+                                <p style="margin:0 0 4px; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">Order Number</p>
+                                <p style="margin:0; font-size:16px; font-weight:500; color:${getColorValue("--palette-text-email")}; font-family:monospace;">${orderId}</p>
                               </td>
                             </tr>
                           </table>
@@ -296,10 +297,10 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
 
                   <td align="left" valign="top" style="width:34%;" class="mobile-stack">
                     <!-- Delivery/Pickup Card -->
-                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; background:#ffffff; border-radius:12px; border:1px solid #e5e7eb; overflow:hidden;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; background:${getColorValue("--palette-white")}; border-radius:12px; border:1px solid ${getColorValue("--palette-border-email-soft")}; overflow:hidden;">
                       <tr>
-                        <td style="padding:24px; background:#f9fafb; border-bottom:1px solid #e5e7eb;">
-                          <h2 style="font-size:20px; font-weight:600; margin:0; color:#111827; display:flex; align-items:center; gap:8px;">
+                        <td style="padding:24px; background:${getColorValue("--palette-surface-email-subtle")}; border-bottom:1px solid ${getColorValue("--palette-border-email-soft")};">
+                          <h2 style="font-size:20px; font-weight:600; margin:0; color:${getColorValue("--palette-text-email")}; display:flex; align-items:center; gap:8px;">
                             <span style="font-size:20px;">${shipping_method === 'delivery' ? '🚚' : '📍'}</span>
                             ${shipping_method === 'delivery' ? 'Delivery Details' : 'Pickup Details'}
                           </h2>
@@ -307,13 +308,13 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                       </tr>
                       <tr>
                         <td style="padding:24px;">
-                          <p style="margin:0 0 8px; font-size:14px; color:#6b7280;">${shipping_method === 'delivery' ? 'Shipping Address' : 'Pickup Location'}</p>
-                          <p style="margin:0 0 20px; font-size:16px; font-weight:500; color:#111827; white-space:pre-line;">${shipping_method === 'delivery' ? shipping_address : pickup_location}</p>
+                          <p style="margin:0 0 8px; font-size:14px; color:${getColorValue("--palette-text-email-muted")};">${shipping_method === 'delivery' ? 'Shipping Address' : 'Pickup Location'}</p>
+                          <p style="margin:0 0 20px; font-size:16px; font-weight:500; color:${getColorValue("--palette-text-email")}; white-space:pre-line;">${shipping_method === 'delivery' ? shipping_address : pickup_location}</p>
                           
-                          <div style="background:${shipping_method === 'delivery' ? '#eff6ff' : '#f0fdf4'}; border:1px solid ${shipping_method === 'delivery' ? '#dbeafe' : '#dcfce7'}; border-radius:12px; padding:20px;">
+                          <div style="background:${shipping_method === 'delivery' ? getColorValue("--palette-status-processing-bg") : getColorValue("--palette-status-success-bg")}; border:1px solid ${shipping_method === 'delivery' ? getColorValue("--palette-status-info-border") : getColorValue("--palette-status-success-border")}; border-radius:12px; padding:20px;">
                             <div style="font-size:32px; margin-bottom:12px; text-align:center;">${shipping_method === 'delivery' ? '📦' : '✅'}</div>
-                            <p style="margin:0 0 12px; font-size:16px; font-weight:600; text-align:center; color:${shipping_method === 'delivery' ? '#1e40af' : '#15803d'};">${shipping_method === 'delivery' ? 'Delivery Information' : 'Pickup Instructions'}</p>
-                            <ul style="margin:0; padding-left:20px; color:${shipping_method === 'delivery' ? '#1e40af' : '#15803d'}; line-height:1.6; font-size:14px;">
+                            <p style="margin:0 0 12px; font-size:16px; font-weight:600; text-align:center; color:${shipping_method === 'delivery' ? getColorValue("--palette-status-info-text") : getColorValue("--palette-status-success-text")};">${shipping_method === 'delivery' ? 'Delivery Information' : 'Pickup Instructions'}</p>
+                            <ul style="margin:0; padding-left:20px; color:${shipping_method === 'delivery' ? getColorValue("--palette-status-info-text") : getColorValue("--palette-status-success-text")}; line-height:1.6; font-size:14px;">
                               ${shipping_method === 'delivery' ? `
                               <li style="margin-bottom:4px;">• Your order will be shipped within 2-3 business days</li>
                               <li style="margin-bottom:4px;">• You'll receive a tracking number via email once shipped</li>
@@ -331,10 +332,10 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                     </table>
 
                     <!-- What's Next Card -->
-                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; background:#ffffff; border-radius:12px; border:1px solid #e5e7eb; overflow:hidden;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px; background:${getColorValue("--palette-white")}; border-radius:12px; border:1px solid ${getColorValue("--palette-border-email-soft")}; overflow:hidden;">
                       <tr>
-                        <td style="padding:24px; background:#f9fafb; border-bottom:1px solid #e5e7eb;">
-                          <h2 style="font-size:20px; font-weight:600; margin:0; color:#111827;">What's Next?</h2>
+                        <td style="padding:24px; background:${getColorValue("--palette-surface-email-subtle")}; border-bottom:1px solid ${getColorValue("--palette-border-email-soft")};">
+                          <h2 style="font-size:20px; font-weight:600; margin:0; color:${getColorValue("--palette-text-email")};">What's Next?</h2>
                         </td>
                       </tr>
                       <tr>
@@ -343,11 +344,11 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
                             <tr>
                               <td width="32" valign="top">
-                                <div style="width:32px; height:32px; background:#dbeafe; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#2563eb; font-weight:600; font-size:14px;text-align:center;">1</div>
+                                <div style="width:32px; height:32px; background:${getColorValue("--palette-status-info-border")}; border-radius:50%; display:flex; align-items:center; justify-content:center; color:${getColorValue("--palette-link-blue")}; font-weight:600; font-size:14px;text-align:center;">1</div>
                               </td>
                               <td valign="top">
-                                <p style="margin:0 0 4px; font-size:16px; font-weight:500; color:#111827;">Order Confirmation Email</p>
-                                <p style="margin:0; font-size:14px; color:#4b5563;">Sent to ${email}</p>
+                                <p style="margin:0 0 4px; font-size:16px; font-weight:500; color:${getColorValue("--palette-text-email")};">Order Confirmation Email</p>
+                                <p style="margin:0; font-size:14px; color:${getColorValue("--palette-text-email-secondary")};">Sent to ${email}</p>
                               </td>
                             </tr>
                           </table>
@@ -356,11 +357,11 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                           <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:16px;">
                             <tr>
                               <td width="32" valign="top">
-                                <div style="width:32px; height:32px; background:#dbeafe; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#2563eb; font-weight:600; font-size:14px;text-align:center;">2</div>
+                                <div style="width:32px; height:32px; background:${getColorValue("--palette-status-info-border")}; border-radius:50%; display:flex; align-items:center; justify-content:center; color:${getColorValue("--palette-link-blue")}; font-weight:600; font-size:14px;text-align:center;">2</div>
                               </td>
                               <td valign="top">
-                                <p style="margin:0 0 4px; font-size:16px; font-weight:500; color:#111827;">${shipping_method === 'delivery' ? 'Shipping Update' : 'Pickup Notification'}</p>
-                                <p style="margin:0; font-size:14px; color:#4b5563;">${shipping_method === 'delivery' ? "You'll receive tracking information within 48 hours" : "We'll notify you when your order is ready (usually 2-3 days)"}</p>
+                                <p style="margin:0 0 4px; font-size:16px; font-weight:500; color:${getColorValue("--palette-text-email")};">${shipping_method === 'delivery' ? 'Shipping Update' : 'Pickup Notification'}</p>
+                                <p style="margin:0; font-size:14px; color:${getColorValue("--palette-text-email-secondary")};">${shipping_method === 'delivery' ? "You'll receive tracking information within 48 hours" : "We'll notify you when your order is ready (usually 2-3 days)"}</p>
                               </td>
                             </tr>
                           </table>
@@ -372,23 +373,23 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
                     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
                       <tr>
                         <td style="padding-bottom:12px;">
-                          <a href="https://thevillagestreetwear.com/products" style="display:block; width:100%; padding:16px; background:#000000; color:#ffffff; text-align:center; text-decoration:none; border-radius:8px; font-weight:600; font-size:16px;">🛍️ Continue Shopping</a>
+                          <a href="https://thevillagestreetwear.com/products" style="display:block; width:100%; padding:16px; background:${getColorValue("--palette-black")}; color:${getColorValue("--palette-white")}; text-align:center; text-decoration:none; border-radius:8px; font-weight:600; font-size:16px;">🛍️ Continue Shopping</a>
                         </td>
                       </tr>
                       <tr>
                         <td>
-                          <a href="https://thevillagestreetwear.com" style="display:block; width:100%; padding:16px; color:#4b5563; text-align:center; text-decoration:none; border-radius:8px; font-weight:600; font-size:16px; border:1px solid #e5e7eb;">🏠 Back to Home</a>
+                          <a href="https://thevillagestreetwear.com" style="display:block; width:100%; padding:16px; color:${getColorValue("--palette-text-email-secondary")}; text-align:center; text-decoration:none; border-radius:8px; font-weight:600; font-size:16px; border:1px solid ${getColorValue("--palette-border-email-soft")};">🏠 Back to Home</a>
                         </td>
                       </tr>
                     </table>
 
                     <!-- Support Info -->
-                    <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9fafb; border-radius:12px; border:1px solid #e5e7eb; padding:20px;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background:${getColorValue("--palette-surface-email-subtle")}; border-radius:12px; border:1px solid ${getColorValue("--palette-border-email-soft")}; padding:20px;">
                       <tr>
                         <td align="center">
-                          <p style="margin:0; font-size:14px; color:#6b7280; line-height:1.5;">
+                          <p style="margin:0; font-size:14px; color:${getColorValue("--palette-text-email-muted")}; line-height:1.5;">
                             Questions about your order?<br>
-                            <a href="mailto:support@thevillage.com" style="color:#2563eb; text-decoration:none; font-weight:500;">support@thevillage.com</a>
+                            <a href="mailto:support@thevillage.com" style="color:${getColorValue("--palette-link-blue")}; text-decoration:none; font-weight:500;">support@thevillage.com</a>
                           </p>
                         </td>
                       </tr>
@@ -404,7 +405,7 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
         <table width="100%" cellpadding="0" cellspacing="0" style="margin-top:48px; text-align:center;">
           <tr>
             <td>
-              <p style="margin:0; font-size:12px; color:#9ca3af;">© ${new Date().getFullYear()} The Village Streetwear. All rights reserved.</p>
+              <p style="margin:0; font-size:12px; color:${getColorValue("--palette-text-email-subtle")};">© ${new Date().getFullYear()} The Village Streetwear. All rights reserved.</p>
             </td>
           </tr>
         </table>

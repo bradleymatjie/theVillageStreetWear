@@ -1,35 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient } from "@supabase/ssr";
-
-function slugifyUserName(value?: string | null) {
-  return (
-    value
-      ?.normalize("NFKD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .replace(/@.*$/, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "") || "user"
-  );
-}
-
-function getUserProfileBase(user: {
-  email?: string | null;
-  user_metadata?: Record<string, string | null | undefined>;
-}) {
-  const displayName =
-    user?.user_metadata?.full_name ||
-    user?.user_metadata?.name ||
-    user?.email ||
-    user?.user_metadata?.email;
-
-  return `/profile/${slugifyUserName(displayName)}`;
-}
+import { getUserProfileBase } from "@/app/lib/profileRoutes";
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   let supabaseResponse = NextResponse.next({ request });
+
+  function redirect(url: URL) {
+    const response = NextResponse.redirect(url);
+    supabaseResponse.cookies.getAll().forEach((cookie) => response.cookies.set(cookie));
+    response.headers.set("Cache-Control", "private, no-store");
+    return response;
+  }
 
   if (pathname === "/api/webhook-yoco") {
     const response = NextResponse.next();
@@ -46,8 +29,12 @@ export async function proxy(request: NextRequest) {
           return request.cookies.getAll();
         },
         setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) => {
+          cookiesToSet.forEach(({ name, value }) => {
             request.cookies.set(name, value);
+          });
+          // Forward refreshed cookies to both server rendering and the browser.
+          supabaseResponse = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) => {
             supabaseResponse.cookies.set(name, value, options);
           });
         },
@@ -87,59 +74,59 @@ export async function proxy(request: NextRequest) {
     !pathname.startsWith("/protected/admin")
   ) {
     if (isProtectedRoute) {
-      return NextResponse.redirect(
+      return redirect(
         new URL("/admin", request.url)
       );
     }
   }
 
   if (isProtectedRoute && (!user || error)) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return redirect(new URL("/login", request.url));
   }
 
   if (user && pathname.startsWith("/protected/profile")) {
     const suffix = pathname.replace(/^\/protected\/profile/, "");
-    return NextResponse.redirect(
+    return redirect(
       new URL(`${getUserProfileBase(user)}${suffix}`, request.url)
     );
   }
 
   if (user && pathname.startsWith("/protected/brand-dashboard")) {
     const suffix = pathname.replace(/^\/protected\/brand-dashboard/, "");
-    return NextResponse.redirect(new URL(`/brand-dashboard${suffix}`, request.url));
+    return redirect(new URL(`/brand-dashboard${suffix}`, request.url));
   }
 
   if (user && pathname.startsWith("/protected/admin")) {
     const suffix = pathname.replace(/^\/protected\/admin/, "");
-    return NextResponse.redirect(new URL(`/admin${suffix}`, request.url));
+    return redirect(new URL(`/admin${suffix}`, request.url));
   }
 
   if (user && role === "brand" && isCustomerRoute) {
-    return NextResponse.redirect(
+    return redirect(
       new URL("/brand-dashboard", request.url)
     );
   }
 
   if (user && role !== "brand" && isBrandRoute) {
-    return NextResponse.redirect(new URL(getUserProfileBase(user), request.url));
+    return redirect(new URL(getUserProfileBase(user), request.url));
   }
 
   if (user && isAdminRoute && role !== "super_admin") {
-    return NextResponse.redirect(new URL(getUserProfileBase(user), request.url));
+    return redirect(new URL(getUserProfileBase(user), request.url));
   }
 
-  if (user && isAuthRoute) {
+  if (user && !error && (pathname === "/" || isAuthRoute)) {
     if (role === "brand") {
-      return NextResponse.redirect(
+      return redirect(
         new URL("/brand-dashboard", request.url)
       );
     }
 
     if (role === "super_admin") {
-      return NextResponse.redirect(new URL("/admin", request.url));
+      return redirect(new URL("/admin", request.url));
     }
 
-    return NextResponse.redirect(new URL(getUserProfileBase(user), request.url));
+    return redirect(new URL(getUserProfileBase(user), request.url));
   }
 
   return supabaseResponse;
@@ -147,6 +134,7 @@ export async function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
+    "/",
     "/protected/:path*",
     "/admin/:path*",
     "/brand-dashboard/:path*",

@@ -22,15 +22,12 @@ export default function HomeTab() {
 
   return (
     <section className="relative isolate min-h-[460px] overflow-hidden border-b border-white/10 bg-black text-white sm:min-h-[500px] lg:min-h-[520px]">
-      <img
-        src="/joziHome.jpg"
-        alt="Johannesburg skyline"
-        className="absolute inset-0 -z-20 h-full w-full object-cover object-center"
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-[url('/joziHome.jpg')] bg-cover bg-[center_28%] lg:bg-center"
       />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-black via-black/85 to-black/30" />
-      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
 
-      <div className="mx-auto flex min-h-[460px] max-w-7xl items-end px-4 py-10 sm:min-h-[500px] sm:items-center sm:px-6 lg:min-h-[520px] lg:px-8">
+      <div className="relative z-10 mx-auto flex min-h-[460px] max-w-7xl items-end px-4 py-10 sm:min-h-[500px] sm:items-center sm:px-6 lg:min-h-[520px] lg:px-8">
         <div className="max-w-2xl">
           <p className="mb-4 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.32em] text-white/70 sm:text-xs">
             Streetwear lives here

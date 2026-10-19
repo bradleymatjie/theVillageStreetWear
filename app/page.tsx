@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export default function Page() {
   return (
-    <div className="min-h-screen bg-[#f6f5f2] pb-16 lg:pb-0">
+    <div className="min-h-screen bg-[var(--palette-surface-catalog)] pb-16 lg:pb-0">
       <HomePageClient />
 
       <Suspense fallback={<CatalogLoading />}>

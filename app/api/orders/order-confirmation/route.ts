@@ -1,3 +1,4 @@
+import { getColorValue } from "@/lib/server-colors";
 // app/api/order-confirmation/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
@@ -78,7 +79,7 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Order Confirmation #${orderId}</title>
   <style>
-    body { margin: 0; padding: 20px; background: #f9fafb; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    body { margin: 0; padding: 20px; background: ${getColorValue("--palette-surface-email-subtle")}; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     @media (max-width: 600px) {
       .preview-grid td { display: block !important; width: 100% !important; padding: 0 0 24px 0 !important; }
       .preview-grid td:last-child { padding-bottom: 0 !important; }
@@ -86,9 +87,9 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
   </style>
 </head>
 <body>
-  <table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width:800px; margin:0 auto; background:#ffffff; border-radius:12px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.1);">
+  <table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width:800px; margin:0 auto; background:${getColorValue("--palette-white")}; border-radius:12px; overflow:hidden; box-shadow:0 4px 20px ${getColorValue("--palette-black-10")};">
     <tr>
-      <td style="padding:40px 32px; text-align:center; background:#000000; color:#ffffff;">
+      <td style="padding:40px 32px; text-align:center; background:${getColorValue("--palette-black")}; color:${getColorValue("--palette-white")};">
         <h1 style="font-size:32px; font-weight:bold; margin:0;">Order Confirmed!</h1>
         <p style="font-size:18px; margin:8px 0 0;">Thank you for your purchase, ${firstName}!</p>
         <p style="margin:8px 0 0; opacity:0.8;">Order #${orderId} • ${date}</p>
@@ -103,13 +104,13 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
           const capitalizedColor = item.tshirt_color?.charAt(0).toUpperCase() + item.tshirt_color?.slice(1) || 'Unknown';
 
           return `
-          <div style="margin-bottom:32px; padding:24px; background:#f9fafb; border-radius:12px; border:1px solid #e5e7eb;">
+          <div style="margin-bottom:32px; padding:24px; background:${getColorValue("--palette-surface-email-subtle")}; border-radius:12px; border:1px solid ${getColorValue("--palette-border-email-soft")};">
             <div style="display:flex; justify-content:space-between; margin-bottom:16px;">
               <div>
                 <p style="font-size:18px; font-weight:600; margin:0;">${item.name || 'Custom T-Shirt'}</p>
-                <p style="margin:8px 0 0; color:#6b7280;">Color: ${capitalizedColor}</p>
-                ${(item.selectedSize || item.selectedMaterial) ? `<p style="margin:4px 0 0; color:#6b7280;">${[item.selectedSize, item.selectedMaterial].filter(Boolean).join(' / ')}</p>` : ''}
-                <p style="margin:4px 0 0; color:#6b7280;">Quantity: ${item.quantity || 1}</p>
+                <p style="margin:8px 0 0; color:${getColorValue("--palette-text-email-muted")};">Color: ${capitalizedColor}</p>
+                ${(item.selectedSize || item.selectedMaterial) ? `<p style="margin:4px 0 0; color:${getColorValue("--palette-text-email-muted")};">${[item.selectedSize, item.selectedMaterial].filter(Boolean).join(' / ')}</p>` : ''}
+                <p style="margin:4px 0 0; color:${getColorValue("--palette-text-email-muted")};">Quantity: ${item.quantity || 1}</p>
               </div>
               <div style="text-align:right;">
                 <p style="font-size:18px; font-weight:600; margin:0;">R${((item.price || 0) * (item.quantity || 1)).toFixed(2)}</p>
@@ -121,11 +122,11 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
               <tr>
                 <td style="padding-right:12px;">
                   <p style="font-size:14px; font-weight:600; margin:0 0 8px; text-align:center;">Front</p>
-                  <img src="${item.front || 'https://via.placeholder.com/400x500?text=No+Front+Design'}" alt="Front design" style="width:100%; border-radius:8px; border:1px solid #e5e7eb;" />
+                  <img src="${item.front || 'https://via.placeholder.com/400x500?text=No+Front+Design'}" alt="Front design" style="width:100%; border-radius:8px; border:1px solid ${getColorValue("--palette-border-email-soft")};" />
                 </td>
                 <td style="padding-left:12px;">
                   <p style="font-size:14px; font-weight:600; margin:0 0 8px; text-align:center;">Back</p>
-                  <img src="${item.back || 'https://via.placeholder.com/400x500?text=No+Back+Design'}" alt="Back design" style="width:100%; border-radius:8px; border:1px solid #e5e7eb;" />
+                  <img src="${item.back || 'https://via.placeholder.com/400x500?text=No+Back+Design'}" alt="Back design" style="width:100%; border-radius:8px; border:1px solid ${getColorValue("--palette-border-email-soft")};" />
                 </td>
               </tr>
             </table>
@@ -134,16 +135,16 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
         }).join('') || '<p>No items found in order.</p>'}
 
         <!-- Totals -->
-        <div style="background:#f3f4f6; border-radius:12px; padding:24px;">
+        <div style="background:${getColorValue("--palette-surface-email-muted")}; border-radius:12px; padding:24px;">
           <div style="display:flex; justify-content:space-between; padding:8px 0;">
-            <span style="color:#4b5563;">Subtotal: </span>
+            <span style="color:${getColorValue("--palette-text-email-secondary")};">Subtotal: </span>
             <span style="font-weight:600;">R${subtotal.toFixed(2)}</span>
           </div>
           <div style="display:flex; justify-content:space-between; padding:8px 0;">
-            <span style="color:#4b5563;">${shipping_method === 'delivery' ? 'Delivery' : 'Pickup'}: </span>
+            <span style="color:${getColorValue("--palette-text-email-secondary")};">${shipping_method === 'delivery' ? 'Delivery' : 'Pickup'}: </span>
             <span style="font-weight:600;">${shippingCost === 0 ? 'Free' : `R${shippingCost.toFixed(2)}`}</span>
           </div>
-          <div style="display:flex; justify-content:space-between; padding:16px 0 0; border-top:2px solid #e5e7eb; margin-top:16px;">
+          <div style="display:flex; justify-content:space-between; padding:16px 0 0; border-top:2px solid ${getColorValue("--palette-border-email-soft")}; margin-top:16px;">
             <span style="font-size:20px; font-weight:bold;">Total Paid: </span>
             <span style="font-size:20px; font-weight:bold;">R${total.toFixed(2)}</span>
           </div>
@@ -161,8 +162,8 @@ const generateOrderConfirmationHtml = (orderData: OrderData): string => {
         <p style="margin:4px 0;">Email: ${email}</p>
         <p style="margin:4px 0;">Phone: ${phone || 'Not provided'}</p>
 
-        <p style="text-align:center; margin:48px 0 0; color:#9ca3af; font-size:14px;">
-          Questions? Email <a href="mailto:support@thevillagestreetwear.com" style="color:#2563eb;">support@thevillagestreetwear.com</a><br>
+        <p style="text-align:center; margin:48px 0 0; color:${getColorValue("--palette-text-email-subtle")}; font-size:14px;">
+          Questions? Email <a href="mailto:support@thevillagestreetwear.com" style="color:${getColorValue("--palette-link-blue")};">support@thevillagestreetwear.com</a><br>
           © ${new Date().getFullYear()} The Village Streetwear
         </p>
       </td>

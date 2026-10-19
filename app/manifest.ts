@@ -1,3 +1,4 @@
+import { getColorValue } from "@/lib/server-colors";
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/app/lib/seo";
 
@@ -11,8 +12,8 @@ export default function manifest(): MetadataRoute.Manifest {
     scope: "/",
     display: "standalone",
     orientation: "portrait",
-    background_color: "#000000",
-    theme_color: "#000000",
+    background_color: getColorValue("--palette-black"),
+    theme_color: getColorValue("--palette-black"),
     categories: ["shopping", "fashion", "lifestyle"],
     icons: [
       {

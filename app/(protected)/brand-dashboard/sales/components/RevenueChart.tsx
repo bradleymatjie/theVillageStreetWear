@@ -31,22 +31,22 @@ export function RevenueChart({
           <BarChart data={data}>
             {/* Grid */}
             <CartesianGrid
-              stroke="rgba(255,255,255,0.08)"
+              stroke="var(--palette-white-8)"
               strokeDasharray="3 3"
             />
 
             {/* X Axis */}
             <XAxis
               dataKey="label"
-              tick={{ fontSize: 12, fill: "#9CA3AF" }}
-              axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
+              tick={{ fontSize: 12, fill: "var(--palette-text-email-subtle)" }}
+              axisLine={{ stroke: "var(--palette-white-10)" }}
               tickLine={false}
             />
 
             {/* Y Axis */}
             <YAxis
-              tick={{ fontSize: 12, fill: "#9CA3AF" }}
-              axisLine={{ stroke: "rgba(255,255,255,0.1)" }}
+              tick={{ fontSize: 12, fill: "var(--palette-text-email-subtle)" }}
+              axisLine={{ stroke: "var(--palette-white-10)" }}
               tickLine={false}
             />
 
@@ -57,20 +57,20 @@ export function RevenueChart({
                 "Revenue",
               ]}
               contentStyle={{
-                background: "#0A0A0A",
-                border: "1px solid rgba(255,255,255,0.1)",
+                background: "var(--palette-surface-chart-tooltip)",
+                border: "1px solid var(--palette-white-10)",
                 borderRadius: "12px",
-                color: "#fff",
+                color: "var(--palette-white)",
               }}
-              cursor={{ fill: "rgba(255,255,255,0.05)" }}
+              cursor={{ fill: "var(--palette-white-5)" }}
             />
 
             {/* Bars */}
             <Bar
               dataKey="revenue"
               radius={[10, 10, 0, 0]}
-              fill="#22C55E" // green
-              stroke="#16A34A"
+              fill="var(--palette-revenue-fill)" // green
+              stroke="var(--palette-success-strong)"
               strokeWidth={1}
             />
           </BarChart>

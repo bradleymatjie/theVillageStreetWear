@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./theme/colors.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -122,7 +123,7 @@
   }
 }
 
-::selection { background: #111; color: #fff; }
+::selection { background: var(--palette-ink-strong); color: var(--palette-white); }
 
 .no-scrollbar {
   -ms-overflow-style: none;

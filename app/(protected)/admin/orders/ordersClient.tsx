@@ -78,11 +78,11 @@ function OrderCard({
   };
 
   return (
-    <div className="bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg overflow-hidden">
+    <div className="bg-[var(--palette-surface-admin)] border border-[var(--palette-border-admin)] rounded-lg overflow-hidden">
       {/* Summary Row - Click to Expand */}
       <button
         onClick={() => setExpanded(!expanded)}
-        className="w-full p-6 text-left flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-[#1A1A1A] transition-colors"
+        className="w-full p-6 text-left flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-[var(--palette-border-admin)] transition-colors"
       >
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           <span className="font-bold text-lg">#{order.order_id}</span>
@@ -109,7 +109,7 @@ function OrderCard({
 
       {/* Expanded Details */}
       {expanded && (
-        <div className="p-6 border-t border-[#1A1A1A] space-y-8">
+        <div className="p-6 border-t border-[var(--palette-border-admin)] space-y-8">
           {/* Order Items */}
           <div>
             <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
@@ -120,9 +120,9 @@ function OrderCard({
               {order.order_items.map((item) => (
                 <div
                   key={item.id}
-                  className="flex gap-4 py-4 border-b border-[#1A1A1A] last:border-0"
+                  className="flex gap-4 py-4 border-b border-[var(--palette-border-admin)] last:border-0"
                 >
-                  <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-[#1A1A1A] flex-shrink-0">
+                  <div className="relative w-20 h-20 rounded-lg overflow-hidden border border-[var(--palette-border-admin)] flex-shrink-0">
                     <img
                       src={item.image_url || "/noImage.jpg"}
                       alt={item.name}                      className="h-full w-full object-cover"
@@ -185,14 +185,14 @@ function OrderCard({
           </div>
 
           {/* Status Update Form */}
-          <div className="pt-6 border-t border-[#1A1A1A]">
+          <div className="pt-6 border-t border-[var(--palette-border-admin)]">
             <h3 className="font-bold text-lg mb-4">Update Fulfillment Status</h3>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <select
                 value={localStatus}
                 onChange={(e) => setLocalStatus(e.target.value)}
                 disabled={updating}
-                className="bg-[#1A1A1A] border border-[#333] text-white px-4 py-2 rounded-lg focus:outline-none focus:border-white"
+                className="bg-[var(--palette-border-admin)] border border-[var(--palette-ink-secondary)] text-white px-4 py-2 rounded-lg focus:outline-none focus:border-white"
               >
                 {statusOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -291,7 +291,7 @@ export default function OrdersPage() {
     return (
       <div>
         <h1 className="text-3xl font-bold uppercase mb-6">Orders</h1>
-        <div className="p-6 bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg">
+        <div className="p-6 bg-[var(--palette-surface-admin)] border border-[var(--palette-border-admin)] rounded-lg">
           <p className="text-gray-400">You have no orders yet.</p>
         </div>
       </div>
