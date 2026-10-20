@@ -5,6 +5,9 @@ import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 
 const videoId = "IDQw22fZf0s";
+// This clip is portrait. Cover the hero using the video's actual proportions
+// so YouTube does not add landscape-player pillarboxing around it.
+const videoAspectRatio = 9 / 16;
 
 type Player = {
   mute: () => void;
@@ -106,8 +109,11 @@ export default function HeroVideoBackground() {
       )}
       <div
         ref={container}
-        className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-1000 [&_iframe]:h-full [&_iframe]:w-full [&_iframe]:border-0 ${playing && reducedMotion === false ? "opacity-100" : "opacity-0"}`}
-        style={{ width: "max(100cqw, 177.78cqh)", height: "max(100cqh, 56.25cqw)" }}
+        className={`absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-1000 [&_iframe]:block [&_iframe]:h-full [&_iframe]:w-full [&_iframe]:border-0 ${playing && reducedMotion === false ? "opacity-100" : "opacity-0"}`}
+        style={{
+          width: `max(100cqw, ${100 * videoAspectRatio}cqh)`,
+          height: `max(100cqh, ${100 / videoAspectRatio}cqw)`,
+        }}
       />
     </div>
   );
