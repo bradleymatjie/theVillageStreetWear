@@ -26,17 +26,21 @@ export default function HomeTab() {
         aria-hidden="true"
         className="absolute inset-0 bg-[url('/joziHome.jpg')] bg-cover bg-[center_28%] lg:bg-center"
       />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/30 lg:bg-gradient-to-r lg:from-black/80 lg:via-black/55 lg:to-black/20"
+      />
 
       <div className="relative z-10 mx-auto flex min-h-[460px] max-w-7xl items-end px-4 py-10 sm:min-h-[500px] sm:items-center sm:px-6 lg:min-h-[520px] lg:px-8">
         <div className="max-w-2xl">
-          <p className="mb-4 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.32em] text-theme-ink/70 sm:text-xs">
+          <p className="mb-4 flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.32em] text-theme-ink/90 sm:text-xs">
             Streetwear lives here
             <span className="h-px w-10 bg-theme-ink/50" />
           </p>
           <h1 className="max-w-xl text-5xl font-black leading-[0.92] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
             Welcome back,<br />{firstName}
           </h1>
-          <p className="mt-5 max-w-md text-sm leading-6 text-theme-ink/70 sm:text-base">
+          <p className="mt-5 max-w-md text-sm leading-6 text-theme-ink/90 sm:text-base">
             New drops. Fresh brands. Same culture. Discover what&apos;s next at The Village.
           </p>
           <div className="mt-7 flex flex-col gap-3 sm:flex-row">
