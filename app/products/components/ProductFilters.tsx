@@ -46,7 +46,7 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
   if (!data) {
     return (
       <div className="py-12 text-center">
-        <p className="text-gray-400">Loading products...</p>
+        <p className="text-theme-muted">Loading products...</p>
       </div>
     );
   }
@@ -87,25 +87,25 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
 
   return (
     <div className="space-y-8">
-      <div className="border border-white/10 bg-white/[0.03] p-4">
+      <div className="border border-theme-ink/10 bg-theme-ink/[0.03] p-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-white/35">
+            <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-muted">
               Browse drops
             </p>
-            <p className="mt-1 text-sm text-white/55">
+            <p className="mt-1 text-sm text-theme-muted">
               {sortedProducts.length} of {data.length} products showing
             </p>
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <div className="relative w-full sm:w-80">
-              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/35" />
+              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-theme-muted" />
               <Input
                 placeholder="Search product, brand, category..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="h-12 w-full rounded-none border-white/10 bg-black pl-11 text-white placeholder:text-white/35 focus-visible:ring-1 focus-visible:ring-white focus-visible:ring-offset-0"
+                className="h-12 w-full rounded-none border-theme-ink/10 bg-theme-base pl-11 text-theme-ink placeholder:text-theme-muted focus-visible:ring-1 focus-visible:ring-theme-ink focus-visible:ring-offset-0"
               />
             </div>
 
@@ -113,11 +113,11 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
               value={sortBy}
               onValueChange={(value) => setSortBy(value as typeof sortBy)}
             >
-              <SelectTrigger className="h-12 w-full rounded-none border-white/10 bg-black text-white focus:ring-1 focus:ring-white sm:w-[220px]">
-                <SlidersHorizontal className="mr-2 h-4 w-4 text-white/45" />
+              <SelectTrigger className="h-12 w-full rounded-none border-theme-ink/10 bg-theme-base text-theme-ink focus:ring-1 focus:ring-theme-ink sm:w-[220px]">
+                <SlidersHorizontal className="mr-2 h-4 w-4 text-theme-muted" />
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
-              <SelectContent className="border-white/10 bg-black text-white">
+              <SelectContent className="border-theme-ink/10 bg-theme-base text-theme-ink">
                 <SelectItem value="featured">Latest</SelectItem>
                 <SelectItem value="price-low">Price: Low to High</SelectItem>
                 <SelectItem value="price-high">Price: High to Low</SelectItem>
@@ -136,8 +136,8 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
             variant="ghost"
             className={`h-10 rounded-none border px-4 text-xs font-black uppercase tracking-wide whitespace-nowrap transition-colors ${
               selectedCategory === cat
-                ? "border-white bg-white text-black hover:bg-white/90"
-                : "border-white/10 text-white/60 hover:bg-white/10 hover:text-white"
+                ? "border-theme-ink bg-theme-ink text-theme-base hover:bg-theme-ink/90"
+                : "border-theme-ink/10 text-theme-muted hover:bg-theme-ink/10 hover:text-theme-ink"
             }`}
           >
             {getCategoryLabel(cat)}
@@ -152,9 +152,9 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
       </div>
 
       {sortedProducts.length === 0 && (
-        <div className="border border-white/10 bg-white/[0.03] py-12 text-center">
-          <p className="mb-2 text-lg text-gray-400">No products found</p>
-          <p className="text-sm text-gray-500">
+        <div className="border border-theme-ink/10 bg-theme-ink/[0.03] py-12 text-center">
+          <p className="mb-2 text-lg text-theme-muted">No products found</p>
+          <p className="text-sm text-theme-muted">
             {searchTerm || selectedCategory !== "all"
               ? "Try adjusting your filters"
               : "Check back soon for new drops"}

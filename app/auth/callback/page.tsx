@@ -208,19 +208,19 @@ export default function AuthCallbackPage() {
 }, [router, setUser]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
+    <div className="flex min-h-screen items-center justify-center bg-theme-soft">
       <div className="text-center space-y-4">
         {error ? (
           <>
-            <div className="text-red-600 text-lg font-semibold">Authentication Error</div>
-            <p className="text-gray-600">{error}</p>
-            <p className="text-sm text-gray-500">Redirecting to login...</p>
+            <div className="text-theme-error-ink text-lg font-semibold">Authentication Error</div>
+            <p className="text-theme-muted">{error}</p>
+            <p className="text-sm text-theme-muted">Redirecting to login...</p>
           </>
         ) : (
           <>
             <div className="flex justify-center">
               <svg
-                className="animate-spin h-10 w-10 text-black"
+                className="animate-spin h-10 w-10 text-theme-ink"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -241,7 +241,7 @@ export default function AuthCallbackPage() {
               </svg>
             </div>
             <div className="text-lg font-semibold">Completing authentication...</div>
-            <p className="text-sm text-gray-500">Please wait while we log you in</p>
+            <p className="text-sm text-theme-muted">Please wait while we log you in</p>
           </>
         )}
       </div>

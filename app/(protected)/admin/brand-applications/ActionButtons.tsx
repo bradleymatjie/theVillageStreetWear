@@ -27,7 +27,7 @@ export default function ActionButtons({ id }: { id: string }) {
       <button
         onClick={() => updateStatus("approved")}
         disabled={loading}
-        className="rounded-2xl bg-white px-5 py-3 text-sm font-black text-black"
+        className="rounded-2xl bg-theme-ink px-5 py-3 text-sm font-black text-theme-base"
       >
         {loading ? "..." : "Approve"}
       </button>
@@ -35,7 +35,7 @@ export default function ActionButtons({ id }: { id: string }) {
       <button
         onClick={() => updateStatus("rejected")}
         disabled={loading}
-        className="rounded-2xl border border-white/10 px-5 py-3 text-sm font-black text-white/70"
+        className="rounded-2xl border border-theme-ink/10 px-5 py-3 text-sm font-black text-theme-ink/70"
       >
         Reject
       </button>

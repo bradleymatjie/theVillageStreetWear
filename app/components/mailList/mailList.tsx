@@ -48,7 +48,7 @@ export default function NewsletterSignup() {
   };
 
   return (
-    <section className="bg-black text-white py-20 px-4 text-center font-sans">
+    <section className="bg-theme-base text-theme-ink py-20 px-4 text-center font-sans">
       <div className="max-w-2xl mx-auto">
         <h2 className="text-4xl font-black uppercase tracking-wider mb-4">
           Join The Village
@@ -65,7 +65,7 @@ export default function NewsletterSignup() {
             placeholder="Enter your email"
             required
             autoComplete="email"
-            className="w-full sm:flex-1 min-w-0 px-6 py-5 text-base rounded-lg bg-white text-black shadow-lg focus:outline-none focus:ring-4 focus:ring-orange-500/50"
+            className="w-full sm:flex-1 min-w-0 px-6 py-5 text-base rounded-lg bg-theme-ink text-theme-base shadow-lg focus:outline-none focus:ring-4 focus:ring-orange-500/50"
           />
           <button
             type="submit"
@@ -77,7 +77,7 @@ export default function NewsletterSignup() {
         </form>
 
         {(message || error) && (
-          <div className={`mt-8 text-sm font-medium ${message ? 'text-green-400' : 'text-orange-500'}`}>
+          <div className={`mt-8 text-sm font-medium ${message ? 'text-theme-success-ink' : 'text-theme-warning-ink'}`}>
             {message || error}
           </div>
         )}

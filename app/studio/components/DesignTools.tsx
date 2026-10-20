@@ -317,10 +317,10 @@ export default function DesignTools() {
                 <Button
                   key={color.name}
                   variant={currentDesign.tshirtColor === color.name ? 'default' : 'outline'}
-                  className="aspect-square h-2 border border-gray-500"
+                  className="aspect-square h-2 border border-theme-ink/15"
                   style={{
                     backgroundColor: color.hex,
-                    borderColor: currentDesign.tshirtColor === color.name ? 'var(--palette-black)':'var(--palette-design-border)',
+                    borderColor: currentDesign.tshirtColor === color.name ? 'var(--theme-ink)':'var(--palette-design-border)',
                     scale: currentDesign.tshirtColor === color.name ? '1.1':'.8'
                   }}
                   onClick={() => setCurrentTshirtColor(color.name)}
@@ -349,7 +349,7 @@ export default function DesignTools() {
                 <Dialog open={uploadModalOpen} onOpenChange={setUploadModalOpen}>
                   <DialogTrigger asChild>
                     <Button size="lg" className="w-full h-12" disabled={isUploading}>
-                      <Upload className="w-5 h-5 mr-2" /> 
+                      <Upload className="w-5 h-5 mr-2" />
                       {isUploading ? 'Uploading...' : 'Upload New Image'}
                     </Button>
                   </DialogTrigger>

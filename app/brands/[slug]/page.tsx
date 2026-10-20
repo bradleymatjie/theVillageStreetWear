@@ -145,13 +145,13 @@ export default async function BrandPage({ params }: BrandPageProps) {
   };
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-theme-base text-theme-ink">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <section className="relative border-b border-white/10">
-        <div className="relative h-[400px] overflow-hidden bg-white/5 sm:h-[420px] lg:h-[500px]">
+      <section className="relative border-b border-theme-ink/10">
+        <div className="theme-media relative h-[400px] overflow-hidden bg-theme-ink/5 sm:h-[420px] lg:h-[500px]">
           {brandProfile.cover_image_url ? (
             <img
               src={brandProfile.cover_image_url}
@@ -159,7 +159,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
               className="h-full w-full object-cover"
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-8xl font-black text-white/10">
+            <div className="flex h-full items-center justify-center text-8xl font-black text-theme-ink/10">
               {brandProfile.name.slice(0, 1)}
             </div>
           )}
@@ -170,14 +170,14 @@ export default async function BrandPage({ params }: BrandPageProps) {
           <div className="mx-auto flex h-full max-w-7xl flex-col justify-between px-4 pb-8 sm:px-6 lg:px-8">
             <Link
               href="/products"
-              className="inline-flex w-fit items-center gap-2 border border-white/15 bg-black/35 px-4 py-2 text-xs font-black uppercase tracking-wide text-white/70 backdrop-blur transition hover:bg-white hover:text-black"
+              className="inline-flex w-fit items-center gap-2 border border-theme-ink/15 bg-theme-base/35 px-4 py-2 text-xs font-black uppercase tracking-wide text-theme-ink/70 backdrop-blur transition hover:bg-theme-ink hover:text-theme-base"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to marketplace
             </Link>
 
             <div className="flex flex-col gap-5 sm:flex-row sm:items-end">
-              <div className="flex h-28 w-28 shrink-0 items-center justify-center overflow-hidden border border-white/20 bg-black">
+              <div className="flex h-28 w-28 shrink-0 items-center justify-center overflow-hidden border border-theme-ink/20 bg-theme-base">
                 {brandProfile.logo_url ? (
                   <img
                     src={brandProfile.logo_url}
@@ -192,14 +192,14 @@ export default async function BrandPage({ params }: BrandPageProps) {
               </div>
 
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.24em] text-white/45">
+                <p className="text-xs font-black uppercase tracking-[0.24em] text-theme-muted">
                   {brandProfile.style_category || "Streetwear brand"}
                 </p>
                 <h1 className="mt-2 text-5xl font-black leading-none sm:text-7xl">
                   {brandProfile.name}
                 </h1>
                 {brandProfile.tagline && (
-                  <p className="mt-4 max-w-2xl text-base font-bold leading-7 text-white/75 sm:text-lg">
+                  <p className="mt-4 max-w-2xl text-base font-bold leading-7 text-theme-ink/75 sm:text-lg">
                     {brandProfile.tagline}
                   </p>
                 )}
@@ -213,14 +213,14 @@ export default async function BrandPage({ params }: BrandPageProps) {
         <div className="mx-auto max-w-7xl">
           <div className="grid items-stretch gap-8 lg:grid-cols-[0.85fr_1.15fr]">
             <aside className="space-y-4">
-              <div className="flex h-full flex-col border border-white/10 bg-white/[0.04] p-5">
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-white/35">
+              <div className="flex h-full flex-col border border-theme-ink/10 bg-theme-ink/[0.04] p-5">
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-muted">
                   Brand details
                 </p>
-                <div className="mt-5 space-y-4 text-sm text-white/65">
+                <div className="mt-5 space-y-4 text-sm text-theme-ink/65">
                   {brandProfile.street_address && (
                     <p className="flex items-start gap-3">
-                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/45" />
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-theme-muted" />
                       <span>{brandProfile.street_address}</span>
                     </p>
                   )}
@@ -228,7 +228,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
                     brandProfile.location_province ||
                     brandProfile.location_country) && (
                     <p className="flex items-start gap-3">
-                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-white/45" />
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-theme-muted" />
                       <span>
                         {[
                           brandProfile.location_city,
@@ -242,7 +242,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
                   )}
                   {brandProfile.founded_year && (
                     <p className="flex items-center gap-3">
-                      <Calendar className="h-4 w-4 text-white/45" />
+                      <Calendar className="h-4 w-4 text-theme-muted" />
                       Founded {brandProfile.founded_year}
                     </p>
                   )}
@@ -251,11 +251,11 @@ export default async function BrandPage({ params }: BrandPageProps) {
                       href={getSocialHref(brandProfile.instagram, "instagram")}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center gap-3 transition hover:text-white"
+                      className="flex items-center gap-3 transition hover:text-theme-ink"
                     >
-                      <Instagram className="h-4 w-4 text-white/45" />
+                      <Instagram className="h-4 w-4 text-theme-muted" />
                       <span>{getSocialLabel(brandProfile.instagram)}</span>
-                      <ExternalLink className="ml-auto h-3.5 w-3.5 text-white/35" />
+                      <ExternalLink className="ml-auto h-3.5 w-3.5 text-theme-muted" />
                     </a>
                   )}
                   {brandProfile.tiktok && (
@@ -263,27 +263,27 @@ export default async function BrandPage({ params }: BrandPageProps) {
                       href={getSocialHref(brandProfile.tiktok, "tiktok")}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex items-center gap-3 transition hover:text-white"
+                      className="flex items-center gap-3 transition hover:text-theme-ink"
                     >
-                      <Shirt className="h-4 w-4 text-white/45" />
+                      <Shirt className="h-4 w-4 text-theme-muted" />
                       <span>{getSocialLabel(brandProfile.tiktok)}</span>
-                      <ExternalLink className="ml-auto h-3.5 w-3.5 text-white/35" />
+                      <ExternalLink className="ml-auto h-3.5 w-3.5 text-theme-muted" />
                     </a>
                   )}
                   <p className="flex items-center gap-3">
-                    <Package className="h-4 w-4 text-white/45" />
+                    <Package className="h-4 w-4 text-theme-muted" />
                     {brandProducts.length} products live
                   </p>
                 </div>
               </div>
             </aside>
 
-            <section className="h-full border border-white/10 bg-white/[0.04] p-5 sm:p-6">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-white/35">
+            <section className="h-full border border-theme-ink/10 bg-theme-ink/[0.04] p-5 sm:p-6">
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-muted">
                 Story
               </p>
               <h2 className="mt-2 text-3xl font-black">About {brandProfile.name}</h2>
-              <p className="mt-5 whitespace-pre-line text-sm leading-7 text-white/65 sm:text-base">
+              <p className="mt-5 whitespace-pre-line text-sm leading-7 text-theme-ink/65 sm:text-base">
                 {brandProfile.story ||
                   "This brand is still building out their story. Check back soon for more about who they are and what they stand for."}
               </p>
@@ -293,20 +293,20 @@ export default async function BrandPage({ params }: BrandPageProps) {
           <section className="mt-10">
             <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-white/35">
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-muted">
                   Products
                 </p>
                 <h2 className="mt-2 text-3xl font-black">Latest drops</h2>
               </div>
-              <p className="text-sm text-white/45">
+              <p className="text-sm text-theme-muted">
                 Shop pieces listed by {brandProfile.name}.
               </p>
             </div>
 
             {brandProducts.length === 0 ? (
-              <div className="border border-white/10 bg-white/[0.03] p-8 text-center">
+              <div className="border border-theme-ink/10 bg-theme-ink/[0.03] p-8 text-center">
                 <p className="font-black">No products live yet</p>
-                <p className="mt-2 text-sm text-white/50">
+                <p className="mt-2 text-sm text-theme-muted">
                   This brand has not listed products yet.
                 </p>
               </div>

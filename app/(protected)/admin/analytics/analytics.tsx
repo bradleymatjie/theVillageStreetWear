@@ -130,18 +130,18 @@ export function AnalyticsPage() {
       <div className="space-y-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-white">Analytics Dashboard</h1>
-            <p className="text-gray-400 mt-1">Real-time insights into your website performance</p>
+            <h1 className="text-3xl font-bold text-theme-ink">Analytics Dashboard</h1>
+            <p className="text-theme-muted mt-1">Real-time insights into your website performance</p>
           </div>
         </div>
 
         <Card className="border-red-500/30 bg-red-500/5">
           <CardContent className="p-6 text-center">
             <div className="mx-auto w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mb-4">
-              <TrendingDown className="w-6 h-6 text-red-400" />
+              <TrendingDown className="w-6 h-6 text-theme-error-ink" />
             </div>
-            <h3 className="text-lg font-semibold text-white mb-2">Failed to Load Data</h3>
-            <p className="text-gray-400 mb-4">{error || "Unknown error occurred"}</p>
+            <h3 className="text-lg font-semibold text-theme-ink mb-2">Failed to Load Data</h3>
+            <p className="text-theme-muted mb-4">{error || "Unknown error occurred"}</p>
             <button
               onClick={() => window.location.reload()}
               className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
@@ -159,18 +159,18 @@ export function AnalyticsPage() {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">Analytics Dashboard</h1>
-          <p className="text-gray-400 mt-1">Real-time insights into your website performance</p>
+          <h1 className="text-3xl font-bold text-theme-ink">Analytics Dashboard</h1>
+          <p className="text-theme-muted mt-1">Real-time insights into your website performance</p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 text-sm text-green-400">
+          <div className="flex items-center gap-2 text-sm text-theme-success-ink">
             <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
             <span>Live Data</span>
           </div>
 
           <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger className="w-40 bg-gray-900 border-gray-700">
+            <SelectTrigger className="w-40 bg-theme-surface border-theme-ink/15">
               <SelectValue placeholder="Select range" />
             </SelectTrigger>
             <SelectContent>
@@ -187,7 +187,7 @@ export function AnalyticsPage() {
       {/* Main Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
-          icon={<Users className="w-5 h-5 text-blue-400" />}
+          icon={<Users className="w-5 h-5 text-theme-info-ink" />}
           title="Active Users"
           value={formatNumber(data.summary.activeUsers)}
           trend={data.trends.activeUsers}
@@ -196,7 +196,7 @@ export function AnalyticsPage() {
         />
 
         <StatCard
-          icon={<Eye className="w-5 h-5 text-purple-400" />}
+          icon={<Eye className="w-5 h-5 text-theme-purple-ink" />}
           title="Page Views"
           value={formatNumber(data.summary.screenPageViews)}
           trend={data.trends.screenPageViews}
@@ -205,7 +205,7 @@ export function AnalyticsPage() {
         />
 
         <StatCard
-          icon={<Clock className="w-5 h-5 text-green-400" />}
+          icon={<Clock className="w-5 h-5 text-theme-success-ink" />}
           title="Avg. Session"
           value={formatTime(data.summary.averageSessionDuration)}
           trend={data.trends.averageSessionDuration}
@@ -214,7 +214,7 @@ export function AnalyticsPage() {
         />
 
         <StatCard
-          icon={<BarChart3 className="w-5 h-5 text-amber-400" />}
+          icon={<BarChart3 className="w-5 h-5 text-theme-warning-ink" />}
           title="Bounce Rate"
           value={`${data.summary.bounceRate.toFixed(1)}%`}
           trend={data.trends.bounceRate}
@@ -225,73 +225,73 @@ export function AnalyticsPage() {
 
       {/* Secondary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+        <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-blue-500/10 rounded-lg">
-                <Activity className="w-5 h-5 text-blue-400" />
+                <Activity className="w-5 h-5 text-theme-info-ink" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">{formatNumber(data.summary.sessions)}</p>
+                <p className="text-2xl font-bold text-theme-ink">{formatNumber(data.summary.sessions)}</p>
               </div>
               <div className="ml-auto">
                 <TrendIndicator value={data.trends.sessions} />
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-3">Total visits to your site</p>
+            <p className="text-xs text-theme-muted mt-3">Total visits to your site</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+        <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-green-500/10 rounded-lg">
-                <UserPlus className="w-5 h-5 text-green-400" />
+                <UserPlus className="w-5 h-5 text-theme-success-ink" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">{formatNumber(data.summary.newUsers)}</p>
+                <p className="text-2xl font-bold text-theme-ink">{formatNumber(data.summary.newUsers)}</p>
               </div>
               <div className="ml-auto">
                 <TrendIndicator value={data.trends.newUsers} />
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-3">First-time visitors</p>
+            <p className="text-xs text-theme-muted mt-3">First-time visitors</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+        <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
           <CardContent className="p-6">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-purple-500/10 rounded-lg">
-                <Zap className="w-5 h-5 text-purple-400" />
+                <Zap className="w-5 h-5 text-theme-purple-ink" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-white">{formatNumber(data.summary.engagedSessions)}</p>
+                <p className="text-2xl font-bold text-theme-ink">{formatNumber(data.summary.engagedSessions)}</p>
               </div>
               <div className="ml-auto">
                 <TrendIndicator value={data.trends.engagedSessions} />
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-3">Sessions lasting 10+ seconds</p>
+            <p className="text-xs text-theme-muted mt-3">Sessions lasting 10+ seconds</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Charts & Detailed Analytics */}
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid grid-cols-4 w-full max-w-md bg-gray-900 border border-gray-800">
-          <TabsTrigger value="overview" className="data-[state=active]:bg-gray-800">Overview</TabsTrigger>
-          <TabsTrigger value="audience" className="data-[state=active]:bg-gray-800">Audience</TabsTrigger>
-          <TabsTrigger value="content" className="data-[state=active]:bg-gray-800">Content</TabsTrigger>
-          <TabsTrigger value="devices" className="data-[state=active]:bg-gray-800">Devices</TabsTrigger>
+        <TabsList className="grid grid-cols-4 w-full max-w-md bg-theme-surface border border-theme-ink/15">
+          <TabsTrigger value="overview" className="data-[state=active]:bg-theme-surface">Overview</TabsTrigger>
+          <TabsTrigger value="audience" className="data-[state=active]:bg-theme-surface">Audience</TabsTrigger>
+          <TabsTrigger value="content" className="data-[state=active]:bg-theme-surface">Content</TabsTrigger>
+          <TabsTrigger value="devices" className="data-[state=active]:bg-theme-surface">Devices</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
           {/* Main Trend Chart */}
-          <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+          <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
             <CardHeader>
-              <CardTitle className="text-white">User Activity Trend</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardTitle className="text-theme-ink">User Activity Trend</CardTitle>
+              <CardDescription className="text-theme-muted">
                 Daily performance over the selected period
               </CardDescription>
             </CardHeader>
@@ -303,13 +303,13 @@ export function AnalyticsPage() {
           {/* Device & Top Content */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Device Category */}
-            <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+            <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <Smartphone className="w-5 h-5 text-blue-400" />
-                  <CardTitle className="text-white">Device Category</CardTitle>
+                  <Smartphone className="w-5 h-5 text-theme-info-ink" />
+                  <CardTitle className="text-theme-ink">Device Category</CardTitle>
                 </div>
-                <CardDescription className="text-gray-400">
+                <CardDescription className="text-theme-muted">
                   Distribution of users by device type
                 </CardDescription>
               </CardHeader>
@@ -322,18 +322,18 @@ export function AnalyticsPage() {
                           <div className={`w-3 h-3 rounded-full ${index === 0 ? 'bg-blue-500' :
                               index === 1 ? 'bg-green-500' : 'bg-purple-500'
                             }`} />
-                          <span className="text-sm font-medium text-gray-300">{device.device}</span>
+                          <span className="text-sm font-medium text-theme-ink/75">{device.device}</span>
                         </div>
                         <div className="flex items-center gap-4">
-                          <span className="text-sm font-medium text-white">
+                          <span className="text-sm font-medium text-theme-ink">
                             {formatNumber(device.users)}
                           </span>
-                          <span className="text-sm text-gray-400 w-12 text-right">
+                          <span className="text-sm text-theme-muted w-12 text-right">
                             {device.percentage}%
                           </span>
                         </div>
                       </div>
-                      <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                      <div className="relative w-full h-2 bg-theme-surface rounded-full overflow-hidden">
                         <div
                           className="absolute top-0 left-0 h-full rounded-full transition-all duration-300"
                           style={{
@@ -349,13 +349,13 @@ export function AnalyticsPage() {
             </Card>
 
             {/* Top Pages */}
-            <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+            <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
               <CardHeader>
                 <div className="flex items-center gap-2">
-                  <Globe className="w-5 h-5 text-green-400" />
-                  <CardTitle className="text-white">Top Pages</CardTitle>
+                  <Globe className="w-5 h-5 text-theme-success-ink" />
+                  <CardTitle className="text-theme-ink">Top Pages</CardTitle>
                 </div>
-                <CardDescription className="text-gray-400">
+                <CardDescription className="text-theme-muted">
                   Most visited pages on your site
                 </CardDescription>
               </CardHeader>
@@ -364,22 +364,22 @@ export function AnalyticsPage() {
                   {data.topPages.map((page, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between p-3 rounded-lg bg-gray-800/30 hover:bg-gray-800/50 transition-colors"
+                      className="flex items-center justify-between p-3 rounded-lg bg-theme-surface/30 hover:bg-theme-surface/50 transition-colors"
                     >
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-white truncate">
+                        <p className="text-sm font-medium text-theme-ink truncate">
                           {page.pageTitle}
                         </p>
                         <div className="flex items-center gap-2 mt-1">
-                          <Users className="w-3 h-3 text-gray-400" />
-                          <p className="text-xs text-gray-400">
+                          <Users className="w-3 h-3 text-theme-muted" />
+                          <p className="text-xs text-theme-muted">
                             {formatNumber(page.users)} users
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Eye className="w-4 h-4 text-gray-400" />
-                        <span className="text-sm font-medium text-white">
+                        <Eye className="w-4 h-4 text-theme-muted" />
+                        <span className="text-sm font-medium text-theme-ink">
                           {formatNumber(page.pageViews)}
                         </span>
                       </div>
@@ -394,13 +394,13 @@ export function AnalyticsPage() {
         {/* AUDIENCE TAB with Graphs */}
         <TabsContent value="audience" className="space-y-6">
           {/* Geographic Distribution Chart */}
-          <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+          <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Globe className="w-5 h-5 text-amber-400" />
-                <CardTitle className="text-white">Geographic Distribution</CardTitle>
+                <Globe className="w-5 h-5 text-theme-warning-ink" />
+                <CardTitle className="text-theme-ink">Geographic Distribution</CardTitle>
               </div>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-theme-muted">
                 Top countries by user count
               </CardDescription>
             </CardHeader>
@@ -430,7 +430,7 @@ export function AnalyticsPage() {
                       labelFormatter={(label) => `Country: ${label}`}
                       contentStyle={{
                         backgroundColor: 'var(--palette-surface-admin)',
-                        borderColor: 'var(--palette-ink-secondary)',
+                        borderColor: 'var(--border)',
                         borderRadius: '6px',
                       }}
                     />
@@ -447,10 +447,10 @@ export function AnalyticsPage() {
           </Card>
 
           {/* Country List with Progress Bars */}
-          <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+          <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
             <CardHeader>
-              <CardTitle className="text-white">Country Statistics</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardTitle className="text-theme-ink">Country Statistics</CardTitle>
+              <CardDescription className="text-theme-muted">
                 Detailed breakdown by country
               </CardDescription>
             </CardHeader>
@@ -460,21 +460,21 @@ export function AnalyticsPage() {
                   <div key={country.country} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <span className="text-sm font-medium text-gray-400 w-6">
+                        <span className="text-sm font-medium text-theme-muted w-6">
                           {index + 1}
                         </span>
-                        <span className="text-sm font-medium text-white">{country.country}</span>
+                        <span className="text-sm font-medium text-theme-ink">{country.country}</span>
                       </div>
                       <div className="flex items-center gap-4">
-                        <span className="text-sm font-medium text-white">
+                        <span className="text-sm font-medium text-theme-ink">
                           {formatNumber(country.users)}
                         </span>
-                        <span className="text-sm text-gray-400 w-12 text-right">
+                        <span className="text-sm text-theme-muted w-12 text-right">
                           {country.percentage}%
                         </span>
                       </div>
                     </div>
-                    <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                    <div className="relative w-full h-2 bg-theme-surface rounded-full overflow-hidden">
                       <div
                         className="absolute top-0 left-0 h-full rounded-full transition-all duration-300 bg-amber-500"
                         style={{ width: `${country.percentage}%` }}
@@ -490,10 +490,10 @@ export function AnalyticsPage() {
         {/* CONTENT TAB with Graphs */}
         <TabsContent value="content" className="space-y-6">
           {/* Page Views Bar Chart */}
-          <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+          <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
             <CardHeader>
-              <CardTitle className="text-white">Top Pages Performance</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardTitle className="text-theme-ink">Top Pages Performance</CardTitle>
+              <CardDescription className="text-theme-muted">
                 Page views comparison across top pages
               </CardDescription>
             </CardHeader>
@@ -524,7 +524,7 @@ export function AnalyticsPage() {
                       formatter={(value) => [value, 'Page Views']}
                       contentStyle={{
                         backgroundColor: 'var(--palette-surface-admin)',
-                        borderColor: 'var(--palette-ink-secondary)',
+                        borderColor: 'var(--border)',
                         borderRadius: '6px',
                       }}
                     />
@@ -548,10 +548,10 @@ export function AnalyticsPage() {
           </Card>
 
           {/* Page Details List */}
-          <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+          <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
             <CardHeader>
-              <CardTitle className="text-white">Content Performance</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardTitle className="text-theme-ink">Content Performance</CardTitle>
+              <CardDescription className="text-theme-muted">
                 Detailed page analytics and engagement metrics
               </CardDescription>
             </CardHeader>
@@ -565,19 +565,19 @@ export function AnalyticsPage() {
                   return (
                     <div
                       key={index}
-                      className="p-4 rounded-lg bg-gray-800/30 border border-gray-700/50"
+                      className="p-4 rounded-lg bg-theme-surface/30 border border-theme-ink/15"
                     >
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
-                          <h4 className="font-medium text-white mb-1">{page.pageTitle}</h4>
+                          <h4 className="font-medium text-theme-ink mb-1">{page.pageTitle}</h4>
                           <div className="flex items-center gap-4 text-sm">
                             <div className="flex items-center gap-1">
-                              <Eye className="w-4 h-4 text-gray-400" />
-                              <span className="text-gray-300">{formatNumber(page.pageViews)} views</span>
+                              <Eye className="w-4 h-4 text-theme-muted" />
+                              <span className="text-theme-ink/75">{formatNumber(page.pageViews)} views</span>
                             </div>
                             <div className="flex items-center gap-1">
-                              <Users className="w-4 h-4 text-gray-400" />
-                              <span className="text-gray-300">{formatNumber(page.users)} users</span>
+                              <Users className="w-4 h-4 text-theme-muted" />
+                              <span className="text-theme-ink/75">{formatNumber(page.users)} users</span>
                             </div>
                           </div>
                         </div>
@@ -585,7 +585,7 @@ export function AnalyticsPage() {
                           #{index + 1}
                         </Badge>
                       </div>
-                      <div className="relative w-full h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                      <div className="relative w-full h-1.5 bg-theme-surface rounded-full overflow-hidden">
                         <div
                           className="absolute top-0 left-0 h-full rounded-full transition-all duration-300 bg-green-500"
                           style={{ width: `${percentage}%` }}
@@ -602,13 +602,13 @@ export function AnalyticsPage() {
         {/* DEVICES TAB with Graphs */}
         <TabsContent value="devices" className="space-y-6">
           {/* Device Distribution Pie/Doughnut Chart */}
-          <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+          <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Smartphone className="w-5 h-5 text-blue-400" />
-                <CardTitle className="text-white">Device Distribution</CardTitle>
+                <Smartphone className="w-5 h-5 text-theme-info-ink" />
+                <CardTitle className="text-theme-ink">Device Distribution</CardTitle>
               </div>
-              <CardDescription className="text-gray-400">
+              <CardDescription className="text-theme-muted">
                 Percentage breakdown by device type
               </CardDescription>
             </CardHeader>
@@ -644,7 +644,7 @@ export function AnalyticsPage() {
                       formatter={(value) => [`${value}%`, 'Percentage']}
                       contentStyle={{
                         backgroundColor: 'var(--palette-surface-admin)',
-                        borderColor: 'var(--palette-ink-secondary)',
+                        borderColor: 'var(--border)',
                         borderRadius: '6px',
                       }}
                     />
@@ -656,10 +656,10 @@ export function AnalyticsPage() {
           </Card>
 
           {/* Device Category Details */}
-          <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+          <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
             <CardHeader>
-              <CardTitle className="text-white">Device Category Analytics</CardTitle>
-              <CardDescription className="text-gray-400">
+              <CardTitle className="text-theme-ink">Device Category Analytics</CardTitle>
+              <CardDescription className="text-theme-muted">
                 Detailed breakdown by device type
               </CardDescription>
             </CardHeader>
@@ -672,18 +672,18 @@ export function AnalyticsPage() {
                         <div className={`w-3 h-3 rounded-full ${index === 0 ? 'bg-blue-500' :
                             index === 1 ? 'bg-green-500' : 'bg-purple-500'
                           }`} />
-                        <span className="text-sm font-medium text-gray-300">{device.device}</span>
+                        <span className="text-sm font-medium text-theme-ink/75">{device.device}</span>
                       </div>
                       <div className="flex items-center gap-4">
-                        <span className="text-sm font-medium text-white">
+                        <span className="text-sm font-medium text-theme-ink">
                           {formatNumber(device.users)}
                         </span>
-                        <span className="text-sm text-gray-400 w-12 text-right">
+                        <span className="text-sm text-theme-muted w-12 text-right">
                           {device.percentage}%
                         </span>
                       </div>
                     </div>
-                    <div className="relative w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                    <div className="relative w-full h-2 bg-theme-surface rounded-full overflow-hidden">
                       <div
                         className="absolute top-0 left-0 h-full rounded-full transition-all duration-300"
                         style={{
@@ -701,22 +701,22 @@ export function AnalyticsPage() {
           {/* Device Performance Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {data.deviceCategory.map((device, index) => (
-              <Card key={device.device} className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+              <Card key={device.device} className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3 mb-3">
                     <div className={`p-2 rounded-lg ${index === 0 ? 'bg-blue-500/10' :
                         index === 1 ? 'bg-green-500/10' : 'bg-purple-500/10'
                       }`}>
-                      <Smartphone className={`w-5 h-5 ${index === 0 ? 'text-blue-400' :
-                          index === 1 ? 'text-green-400' : 'text-purple-400'
+                      <Smartphone className={`w-5 h-5 ${index === 0 ? 'text-theme-info-ink' :
+                          index === 1 ? 'text-theme-success-ink' : 'text-theme-purple-ink'
                         }`} />
                     </div>
                     <div>
-                      <p className="font-medium text-white">{device.device}</p>
+                      <p className="font-medium text-theme-ink">{device.device}</p>
                       <p className="text-2xl font-bold mt-1">{formatNumber(device.users)}</p>
                     </div>
                   </div>
-                  <div className="text-sm text-gray-400">
+                  <div className="text-sm text-theme-muted">
                     {device.percentage}% of total users
                   </div>
                 </CardContent>
@@ -727,10 +727,10 @@ export function AnalyticsPage() {
       </Tabs>
 
       {/* Performance Summary */}
-      <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800">
+      <Card className="bg-gradient-to-br from-theme-surface/50 to-black border-theme-ink/15">
         <CardHeader>
-          <CardTitle className="text-white">Performance Summary</CardTitle>
-          <CardDescription className="text-gray-400">
+          <CardTitle className="text-theme-ink">Performance Summary</CardTitle>
+          <CardDescription className="text-theme-muted">
             Key metrics compared to previous period
           </CardDescription>
         </CardHeader>
@@ -742,10 +742,10 @@ export function AnalyticsPage() {
               { label: "Sessions", value: data.summary.sessions, trend: data.trends.sessions },
               { label: "New Users", value: data.summary.newUsers, trend: data.trends.newUsers },
             ].map((metric, index) => (
-              <div key={index} className="p-4 rounded-lg bg-gray-800/30">
-                <p className="text-sm text-gray-400 mb-1">{metric.label}</p>
+              <div key={index} className="p-4 rounded-lg bg-theme-surface/30">
+                <p className="text-sm text-theme-muted mb-1">{metric.label}</p>
                 <div className="flex items-end justify-between">
-                  <p className="text-2xl font-bold text-white">{formatNumber(metric.value)}</p>
+                  <p className="text-2xl font-bold text-theme-ink">{formatNumber(metric.value)}</p>
                   <TrendIndicator value={metric.trend} />
                 </div>
               </div>

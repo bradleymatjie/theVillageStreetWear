@@ -14,7 +14,7 @@ export default function StudioCheckout() {
 
   const [processing, setProcessing] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  
+
   const baseDeliveryFee = 90; // Fixed delivery fee when delivery is selected
 
   // Form data
@@ -44,19 +44,19 @@ export default function StudioCheckout() {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
+
     if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
     if (!formData.email.trim()) newErrors.email = 'Email is required';
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Please enter a valid email address';
     if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
     else if (!/^\+?[\d\s\-()]+$/.test(formData.phone.replace(/\s/g, ''))) newErrors.phone = 'Please enter a valid phone number';
-    
+
     if (formData.deliveryMethod === 'delivery' && !formData.address.trim()) {
       newErrors.address = 'Shipping address is required for delivery';
     }
-    
+
     if (!formData.agreeToTerms) newErrors.agreeToTerms = 'You must agree to the terms and conditions';
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -64,12 +64,12 @@ export default function StudioCheckout() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     const checked = type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
-    
+
     setFormData(prev => ({
       ...prev,
       [name]: checked !== undefined ? checked : value,
     }));
-    
+
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -77,9 +77,9 @@ export default function StudioCheckout() {
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
+
     setProcessing(true);
     setErrors({});
 
@@ -134,7 +134,7 @@ export default function StudioCheckout() {
         created_at: new Date().toISOString(),
         status: 'pending',
       }));
-      
+
       if (data.redirectUrl) {
         window.location.href = data.redirectUrl;
       } else {
@@ -151,24 +151,24 @@ export default function StudioCheckout() {
 
   if (getCartItemCount() === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-theme-soft flex flex-col items-center justify-center p-4">
         <div className="text-center max-w-md">
-          <div className="w-32 h-32 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Shirt className="w-20 h-20 text-gray-400" />
+          <div className="w-32 h-32 bg-theme-soft rounded-full flex items-center justify-center mx-auto mb-6">
+            <Shirt className="w-20 h-20 text-theme-muted" />
           </div>
           <h1 className="text-3xl font-black mb-4">Your cart is empty</h1>
-          <p className="text-gray-600 mb-8">
+          <p className="text-theme-muted mb-8">
             You haven't added any custom t-shirts to your cart yet.
           </p>
           <div className="space-y-4">
-            <Link 
-              href="/studio" 
-              className="inline-block bg-black text-white px-8 py-3 rounded-lg font-bold hover:bg-gray-800 transition-colors text-lg"
+            <Link
+              href="/studio"
+              className="inline-block bg-theme-ink text-theme-base px-8 py-3 rounded-lg font-bold hover:bg-theme-ink/85 transition-colors text-lg"
             >
               Back to Designer
             </Link>
-            <p className="text-gray-500 text-sm">
-              Need help? <a href="/contact" className="text-blue-600 hover:underline">Contact our support team</a>
+            <p className="text-theme-muted text-sm">
+              Need help? <a href="/contact" className="text-theme-info-ink hover:underline">Contact our support team</a>
             </p>
           </div>
         </div>
@@ -177,71 +177,71 @@ export default function StudioCheckout() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 md:py-12">
+    <div className="min-h-screen bg-theme-soft py-8 md:py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <Link 
-          href="/studio" 
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-black transition-colors mb-8 group"
+        <Link
+          href="/studio"
+          className="inline-flex items-center gap-2 text-theme-muted hover:text-theme-ink transition-colors mb-8 group"
         >
-          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" /> 
+          <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
           Back to Designer
         </Link>
 
         <h1 className="text-3xl md:text-4xl font-black mb-8 md:mb-12 text-center">Checkout - Custom T-Shirts</h1>
 
         {errors.submit && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
-            <p className="text-red-700 font-medium">{errors.submit}</p>
+          <div className="mb-6 p-4 bg-theme-error-bg border border-theme-error-ink/25 rounded-lg">
+            <p className="text-theme-error-ink font-medium">{errors.submit}</p>
           </div>
         )}
 
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
           {/* Order Summary */}
-          <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 order-2 lg:order-1">
+          <div className="bg-theme-surface rounded-xl shadow-lg p-6 md:p-8 order-2 lg:order-1">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl md:text-2xl font-bold">Order Summary</h2>
-              <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
+              <span className="bg-theme-soft text-theme-ink px-3 py-1 rounded-full text-sm font-medium">
                 {getCartItemCount()} {getCartItemCount() === 1 ? 'item' : 'items'}
               </span>
             </div>
-            
+
             <div className="space-y-8">
               {cart.map((item) => {
                 const totalElements = item.elements.front.length + item.elements.back.length;
                 const capitalizedColor = item.tshirtColor.charAt(0).toUpperCase() + item.tshirtColor.slice(1);
 
                 return (
-                  <div key={item.id} className="pb-6 border-b border-gray-200 last:border-0">
+                  <div key={item.id} className="pb-6 border-b border-theme-ink/15 last:border-0">
                     <div className="flex flex-col md:flex-row gap-6 mb-4">
                       {/* Previews - Front & Back */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full md:w-96 flex-shrink-0">
                         {/* Front */}
                         <div>
-                          <p className="text-sm font-medium text-gray-600 mb-2 text-center">Front</p>
-                          <div className="h-48 bg-gray-100 rounded-lg overflow-hidden shadow-sm">
-                            <img 
-                              src={item.front} 
-                              alt="Front design" 
+                          <p className="text-sm font-medium text-theme-muted mb-2 text-center">Front</p>
+                          <div className="h-48 bg-theme-soft rounded-lg overflow-hidden shadow-sm">
+                            <img
+                              src={item.front}
+                              alt="Front design"
                               className="w-full h-full object-contain"
                             />
                           </div>
                           {item.elements.front.length === 0 && (
-                            <p className="text-center text-sm text-gray-500 mt-2">Blank front</p>
+                            <p className="text-center text-sm text-theme-muted mt-2">Blank front</p>
                           )}
                         </div>
 
                         {/* Back */}
                         <div>
-                          <p className="text-sm font-medium text-gray-600 mb-2 text-center">Back</p>
-                          <div className="h-48 bg-gray-100 rounded-lg overflow-hidden shadow-sm">
-                            <img 
-                              src={item.back} 
-                              alt="Back design" 
+                          <p className="text-sm font-medium text-theme-muted mb-2 text-center">Back</p>
+                          <div className="h-48 bg-theme-soft rounded-lg overflow-hidden shadow-sm">
+                            <img
+                              src={item.back}
+                              alt="Back design"
                               className="w-full h-full object-contain"
                             />
                           </div>
                           {item.elements.back.length === 0 && (
-                            <p className="text-center text-sm text-gray-500 mt-2">Blank back</p>
+                            <p className="text-center text-sm text-theme-muted mt-2">Blank back</p>
                           )}
                         </div>
                       </div>
@@ -254,19 +254,19 @@ export default function StudioCheckout() {
                             R{(item.price * item.quantity).toFixed(2)}
                           </p>
                         </div>
-                        
+
                         <div className="space-y-2 mb-4">
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-theme-muted">
                             <span className="font-medium">Color:</span> {capitalizedColor}
                           </p>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-theme-muted">
                             <span className="font-medium">Design elements:</span> {totalElements} ({item.elements.front.length} front, {item.elements.back.length} back)
                           </p>
                         </div>
-                        
+
                         {/* Quantity Controls */}
                         <div className="flex flex-wrap items-center gap-3">
-                          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                          <div className="flex items-center border border-theme-ink/15 rounded-lg overflow-hidden">
                             <button
                               onClick={() => {
                                 if (!userId) return;
@@ -277,12 +277,12 @@ export default function StudioCheckout() {
                                 }
                               }}
                               disabled={!userId}
-                              className="px-3 py-2 hover:bg-gray-100 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="px-3 py-2 hover:bg-theme-soft text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                               aria-label="Decrease quantity"
                             >
                               -
                             </button>
-                            <span className="px-4 py-2 border-x border-gray-300 text-sm font-bold min-w-[3rem] text-center">
+                            <span className="px-4 py-2 border-x border-theme-ink/15 text-sm font-bold min-w-[3rem] text-center">
                               {item.quantity}
                             </span>
                             <button
@@ -291,13 +291,13 @@ export default function StudioCheckout() {
                                 updateCartItemQuantity(item.id, userId, item.quantity + 1);
                               }}
                               disabled={!userId}
-                              className="px-3 py-2 hover:bg-gray-100 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="px-3 py-2 hover:bg-theme-soft text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                               aria-label="Increase quantity"
                             >
                               +
                             </button>
                           </div>
-                          
+
                           <button
                             onClick={() => {
                               if (!userId) return;
@@ -306,7 +306,7 @@ export default function StudioCheckout() {
                               }
                             }}
                             disabled={!userId}
-                            className="text-red-500 hover:text-red-700 text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ml-auto"
+                            className="text-theme-error-ink hover:text-theme-error-ink text-sm font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ml-auto"
                           >
                             Remove
                           </button>
@@ -316,10 +316,10 @@ export default function StudioCheckout() {
 
                     {/* Elements List */}
                     {totalElements > 0 && (
-                      <div className="bg-gray-50 rounded-lg p-4 mt-4 space-y-6">
+                      <div className="bg-theme-soft rounded-lg p-4 mt-4 space-y-6">
                         {item.elements.front.length > 0 && (
                           <div>
-                            <h4 className="text-sm font-bold mb-3 text-gray-700 flex items-center gap-2">
+                            <h4 className="text-sm font-bold mb-3 text-theme-ink/85 flex items-center gap-2">
                               Front Elements ({item.elements.front.length})
                             </h4>
                             <ul className="space-y-3">
@@ -327,18 +327,18 @@ export default function StudioCheckout() {
                                 <li key={element.id} className="flex items-start gap-3 text-sm">
                                   {element.type === 'image' ? (
                                     <>
-                                      <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center flex-shrink-0">
-                                        <ImageIcon className="w-4 h-4 text-blue-600" />
+                                      <div className="w-8 h-8 bg-theme-info-bg rounded flex items-center justify-center flex-shrink-0">
+                                        <ImageIcon className="w-4 h-4 text-theme-info-ink" />
                                       </div>
                                       <div className="flex-1 min-w-0">
                                         <div className="flex flex-wrap items-center gap-2">
-                                          <span className="font-medium text-gray-800">Image {idx + 1}</span>
-                                          <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded">
+                                          <span className="font-medium text-theme-ink">Image {idx + 1}</span>
+                                          <span className="text-xs text-theme-muted px-2 py-1 bg-theme-soft rounded">
                                             {Math.round(element.width)}×{Math.round(element.height)}px
                                           </span>
                                         </div>
                                         {element.src && (
-                                          <p className="text-xs text-gray-500 truncate mt-1">
+                                          <p className="text-xs text-theme-muted truncate mt-1">
                                             {element.src.split('/').pop()}
                                           </p>
                                         )}
@@ -346,24 +346,24 @@ export default function StudioCheckout() {
                                     </>
                                   ) : (
                                     <>
-                                      <div className="w-8 h-8 bg-purple-100 rounded flex items-center justify-center flex-shrink-0">
-                                        <Type className="w-4 h-4 text-purple-600" />
+                                      <div className="w-8 h-8 bg-theme-purple-bg rounded flex items-center justify-center flex-shrink-0">
+                                        <Type className="w-4 h-4 text-theme-purple-ink" />
                                       </div>
                                       <div className="flex-1 min-w-0">
                                         <div className="flex flex-wrap items-center gap-2 mb-1">
-                                          <span className="font-medium text-gray-800">Text Element</span>
-                                          <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded">
+                                          <span className="font-medium text-theme-ink">Text Element</span>
+                                          <span className="text-xs text-theme-muted px-2 py-1 bg-theme-soft rounded">
                                             {element.fontSize}px
                                           </span>
-                                          <div 
-                                            className="w-4 h-4 rounded-full border border-gray-300 flex-shrink-0" 
+                                          <div
+                                            className="w-4 h-4 rounded-full border border-theme-ink/15 flex-shrink-0"
                                             style={{ backgroundColor: element.color }}
                                             title={element.color}
                                           />
                                         </div>
-                                        <p className="text-gray-600 truncate">"{element.text}"</p>
+                                        <p className="text-theme-muted truncate">"{element.text}"</p>
                                         {element.fontFamily && (
-                                          <p className="text-xs text-gray-500 mt-1">
+                                          <p className="text-xs text-theme-muted mt-1">
                                             Font: {element.fontFamily}
                                           </p>
                                         )}
@@ -378,7 +378,7 @@ export default function StudioCheckout() {
 
                         {item.elements.back.length > 0 && (
                           <div>
-                            <h4 className="text-sm font-bold mb-3 text-gray-700 flex items-center gap-2">
+                            <h4 className="text-sm font-bold mb-3 text-theme-ink/85 flex items-center gap-2">
                               Back Elements ({item.elements.back.length})
                             </h4>
                             <ul className="space-y-3">
@@ -386,18 +386,18 @@ export default function StudioCheckout() {
                                 <li key={element.id} className="flex items-start gap-3 text-sm">
                                   {element.type === 'image' ? (
                                     <>
-                                      <div className="w-8 h-8 bg-blue-100 rounded flex items-center justify-center flex-shrink-0">
-                                        <ImageIcon className="w-4 h-4 text-blue-600" />
+                                      <div className="w-8 h-8 bg-theme-info-bg rounded flex items-center justify-center flex-shrink-0">
+                                        <ImageIcon className="w-4 h-4 text-theme-info-ink" />
                                       </div>
                                       <div className="flex-1 min-w-0">
                                         <div className="flex flex-wrap items-center gap-2">
-                                          <span className="font-medium text-gray-800">Image {idx + 1}</span>
-                                          <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded">
+                                          <span className="font-medium text-theme-ink">Image {idx + 1}</span>
+                                          <span className="text-xs text-theme-muted px-2 py-1 bg-theme-soft rounded">
                                             {Math.round(element.width)}×{Math.round(element.height)}px
                                           </span>
                                         </div>
                                         {element.src && (
-                                          <p className="text-xs text-gray-500 truncate mt-1">
+                                          <p className="text-xs text-theme-muted truncate mt-1">
                                             {element.src.split('/').pop()}
                                           </p>
                                         )}
@@ -405,24 +405,24 @@ export default function StudioCheckout() {
                                     </>
                                   ) : (
                                     <>
-                                      <div className="w-8 h-8 bg-purple-100 rounded flex items-center justify-center flex-shrink-0">
-                                        <Type className="w-4 h-4 text-purple-600" />
+                                      <div className="w-8 h-8 bg-theme-purple-bg rounded flex items-center justify-center flex-shrink-0">
+                                        <Type className="w-4 h-4 text-theme-purple-ink" />
                                       </div>
                                       <div className="flex-1 min-w-0">
                                         <div className="flex flex-wrap items-center gap-2 mb-1">
-                                          <span className="font-medium text-gray-800">Text Element</span>
-                                          <span className="text-xs text-gray-500 px-2 py-1 bg-gray-100 rounded">
+                                          <span className="font-medium text-theme-ink">Text Element</span>
+                                          <span className="text-xs text-theme-muted px-2 py-1 bg-theme-soft rounded">
                                             {element.fontSize}px
                                           </span>
-                                          <div 
-                                            className="w-4 h-4 rounded-full border border-gray-300 flex-shrink-0" 
+                                          <div
+                                            className="w-4 h-4 rounded-full border border-theme-ink/15 flex-shrink-0"
                                             style={{ backgroundColor: element.color }}
                                             title={element.color}
                                           />
                                         </div>
-                                        <p className="text-gray-600 truncate">"{element.text}"</p>
+                                        <p className="text-theme-muted truncate">"{element.text}"</p>
                                         {element.fontFamily && (
-                                          <p className="text-xs text-gray-500 mt-1">
+                                          <p className="text-xs text-theme-muted mt-1">
                                             Font: {element.fontFamily}
                                           </p>
                                         )}
@@ -442,23 +442,23 @@ export default function StudioCheckout() {
             </div>
 
             {/* Order Totals */}
-            <div className="mt-8 pt-6 border-t border-gray-200">
+            <div className="mt-8 pt-6 border-t border-theme-ink/15">
               <div className="space-y-3">
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-theme-muted">
                   <span>Subtotal ({getCartItemCount()} items)</span>
                   <span className="font-medium">R{getCartTotal().toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-theme-muted">
                   <span>{formData.deliveryMethod === 'delivery' ? 'Delivery' : 'Pickup'}</span>
                   <span className="font-medium">
                     {formData.deliveryMethod === 'delivery' ? `R${baseDeliveryFee.toFixed(2)}` : 'Free'}
                   </span>
                 </div>
-                <div className="flex justify-between text-xl md:text-2xl font-black pt-4 border-t border-gray-300">
+                <div className="flex justify-between text-xl md:text-2xl font-black pt-4 border-t border-theme-ink/15">
                   <span>Total</span>
                   <span>R{totalAmount.toFixed(2)}</span>
                 </div>
-                <p className="text-sm text-gray-500 pt-2">
+                <p className="text-sm text-theme-muted pt-2">
                   All prices include VAT where applicable
                 </p>
               </div>
@@ -466,82 +466,82 @@ export default function StudioCheckout() {
           </div>
 
           {/* Checkout Form */}
-          <div className="bg-white rounded-xl shadow-lg p-6 md:p-8 order-1 lg:order-2">
+          <div className="bg-theme-surface rounded-xl shadow-lg p-6 md:p-8 order-1 lg:order-2">
             <h2 className="text-xl md:text-2xl font-bold mb-6">Shipping & Payment Details</h2>
             <form onSubmit={handlePlaceOrder} className="space-y-6">
               <div>
-                <label className="block font-bold mb-2 text-gray-800">
-                  Full Name <span className="text-red-500">*</span>
+                <label className="block font-bold mb-2 text-theme-ink">
+                  Full Name <span className="text-theme-error-ink">*</span>
                 </label>
-                <input 
-                  required 
+                <input
+                  required
                   type="text"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all ${
-                    errors.fullName ? 'border-red-500 ring-red-200' : 'border-gray-300'
-                  }`} 
-                  placeholder="John Doe" 
+                  className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-ink transition-all ${
+                    errors.fullName ? 'border-red-500 ring-red-200' : 'border-theme-ink/15'
+                  }`}
+                  placeholder="John Doe"
                 />
                 {errors.fullName && (
-                  <p className="mt-1 text-sm text-red-600">{errors.fullName}</p>
+                  <p className="mt-1 text-sm text-theme-error-ink">{errors.fullName}</p>
                 )}
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block font-bold mb-2 text-gray-800">
-                    Email Address <span className="text-red-500">*</span>
+                  <label className="block font-bold mb-2 text-theme-ink">
+                    Email Address <span className="text-theme-error-ink">*</span>
                   </label>
-                  <input 
-                    required 
+                  <input
+                    required
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
                     readOnly={!!user}
-                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all ${
-                      errors.email ? 'border-red-500 ring-red-200' : 'border-gray-300'
-                    } ${!!user ? 'bg-gray-100 cursor-not-allowed' : ''}`} 
-                    placeholder="john@example.com" 
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-ink transition-all ${
+                      errors.email ? 'border-red-500 ring-red-200' : 'border-theme-ink/15'
+                    } ${!!user ? 'bg-theme-soft cursor-not-allowed' : ''}`}
+                    placeholder="john@example.com"
                   />
                   {errors.email && (
-                    <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                    <p className="mt-1 text-sm text-theme-error-ink">{errors.email}</p>
                   )}
                   {!!user && (
-                    <p className="mt-1 text-sm text-gray-600">Using your account email</p>
+                    <p className="mt-1 text-sm text-theme-muted">Using your account email</p>
                   )}
                 </div>
 
                 <div>
-                  <label className="block font-bold mb-2 text-gray-800">
-                    Phone Number <span className="text-red-500">*</span>
+                  <label className="block font-bold mb-2 text-theme-ink">
+                    Phone Number <span className="text-theme-error-ink">*</span>
                   </label>
-                  <input 
-                    required 
+                  <input
+                    required
                     type="tel"
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all ${
-                      errors.phone ? 'border-red-500 ring-red-200' : 'border-gray-300'
-                    }`} 
-                    placeholder="+27 12 345 6789" 
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-ink transition-all ${
+                      errors.phone ? 'border-red-500 ring-red-200' : 'border-theme-ink/15'
+                    }`}
+                    placeholder="+27 12 345 6789"
                   />
                   {errors.phone && (
-                    <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
+                    <p className="mt-1 text-sm text-theme-error-ink">{errors.phone}</p>
                   )}
                 </div>
               </div>
 
               {/* Delivery Method Selection */}
               <div>
-                <label className="block font-bold mb-3 text-gray-800">
-                  Delivery Method <span className="text-red-500">*</span>
+                <label className="block font-bold mb-3 text-theme-ink">
+                  Delivery Method <span className="text-theme-error-ink">*</span>
                 </label>
                 <div className="space-y-4">
-                  <label className="flex items-center justify-between cursor-pointer rounded-lg border-2 p-4 transition-all hover:border-black ${formData.deliveryMethod === 'delivery' ? 'border-black bg-gray-50' : 'border-gray-300'}">
+                  <label className="flex items-center justify-between cursor-pointer rounded-lg border-2 p-4 transition-all hover:border-theme-ink ${formData.deliveryMethod === 'delivery' ? 'border-theme-ink bg-theme-soft' : 'border-theme-ink/15'}">
                     <div className="flex items-center gap-4">
                       <input
                         type="radio"
@@ -549,17 +549,17 @@ export default function StudioCheckout() {
                         value="delivery"
                         checked={formData.deliveryMethod === 'delivery'}
                         onChange={handleInputChange}
-                        className="h-5 w-5 text-black focus:ring-black"
+                        className="h-5 w-5 text-theme-ink focus:ring-theme-ink"
                       />
                       <div>
                         <p className="font-bold">Door-to-Door Delivery</p>
-                        <p className="text-sm text-gray-600">Nationwide courier</p>
+                        <p className="text-sm text-theme-muted">Nationwide courier</p>
                       </div>
                     </div>
                     <span className="font-bold">R{baseDeliveryFee.toFixed(2)}</span>
                   </label>
 
-                  <label className="flex items-center justify-between cursor-pointer rounded-lg border-2 p-4 transition-all hover:border-black ${formData.deliveryMethod === 'pickup' ? 'border-black bg-green-50' : 'border-gray-300'}">
+                  <label className="flex items-center justify-between cursor-pointer rounded-lg border-2 p-4 transition-all hover:border-theme-ink ${formData.deliveryMethod === 'pickup' ? 'border-theme-ink bg-theme-success-bg' : 'border-theme-ink/15'}">
                     <div className="flex items-center gap-4">
                       <input
                         type="radio"
@@ -567,14 +567,14 @@ export default function StudioCheckout() {
                         value="pickup"
                         checked={formData.deliveryMethod === 'pickup'}
                         onChange={handleInputChange}
-                        className="h-5 w-5 text-black focus:ring-black"
+                        className="h-5 w-5 text-theme-ink focus:ring-theme-ink"
                       />
                       <div>
-                        <p className="font-bold text-green-700">Free Pickup</p>
-                        <p className="text-sm text-gray-600">Collect in Johannesburg CBD</p>
+                        <p className="font-bold text-theme-success-ink">Free Pickup</p>
+                        <p className="text-sm text-theme-muted">Collect in Johannesburg CBD</p>
                       </div>
                     </div>
-                    <span className="font-bold text-green-600">Free</span>
+                    <span className="font-bold text-theme-success-ink">Free</span>
                   </label>
                 </div>
               </div>
@@ -582,32 +582,32 @@ export default function StudioCheckout() {
               {/* Conditional Address or Pickup Info */}
               {formData.deliveryMethod === 'delivery' ? (
                 <div>
-                  <label className="block font-bold mb-2 text-gray-800">
-                    Shipping Address <span className="text-red-500">*</span>
+                  <label className="block font-bold mb-2 text-theme-ink">
+                    Shipping Address <span className="text-theme-error-ink">*</span>
                   </label>
-                  <textarea 
+                  <textarea
                     required
                     name="address"
                     value={formData.address}
                     onChange={handleInputChange}
-                    rows={4} 
-                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all resize-none ${
-                      errors.address ? 'border-red-500 ring-red-200' : 'border-gray-300'
-                    }`} 
-                    placeholder="Street Address, City, Province, Postal Code" 
+                    rows={4}
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-theme-ink transition-all resize-none ${
+                      errors.address ? 'border-red-500 ring-red-200' : 'border-theme-ink/15'
+                    }`}
+                    placeholder="Street Address, City, Province, Postal Code"
                   />
                   {errors.address && (
-                    <p className="mt-1 text-sm text-red-600">{errors.address}</p>
+                    <p className="mt-1 text-sm text-theme-error-ink">{errors.address}</p>
                   )}
-                  <p className="mt-2 text-sm text-gray-500">
+                  <p className="mt-2 text-sm text-theme-muted">
                     Please provide your complete shipping address for delivery
                   </p>
                 </div>
               ) : (
-                <div className="bg-green-50 border-2 border-green-300 rounded-xl p-6">
-                  <h3 className="font-bold text-lg mb-3 text-green-800">Pickup Location</h3>
-                  <p className="font-medium text-gray-800">Johannesburg CBD</p>
-                  <p className="text-sm text-gray-700 mt-3">
+                <div className="bg-theme-success-bg border-2 border-theme-success-ink/25 rounded-xl p-6">
+                  <h3 className="font-bold text-lg mb-3 text-theme-success-ink">Pickup Location</h3>
+                  <p className="font-medium text-theme-ink">Johannesburg CBD</p>
+                  <p className="text-sm text-theme-ink/85 mt-3">
                     Save on shipping! We'll send the exact pickup address, map link, and collection instructions to your email once your order is ready (typically 3–5 business days).
                   </p>
                 </div>
@@ -622,43 +622,43 @@ export default function StudioCheckout() {
                     name="agreeToTerms"
                     checked={formData.agreeToTerms}
                     onChange={handleInputChange}
-                    className="mt-1 h-5 w-5 rounded border-gray-300 text-black focus:ring-black"
+                    className="mt-1 h-5 w-5 rounded border-theme-ink/15 text-theme-ink focus:ring-theme-ink"
                   />
-                  <label htmlFor="agreeToTerms" className="text-sm text-gray-700">
+                  <label htmlFor="agreeToTerms" className="text-sm text-theme-ink/85">
                     I agree to the{' '}
-                    <a href="/terms" className="text-blue-600 hover:underline font-medium">
+                    <a href="/terms" className="text-theme-info-ink hover:underline font-medium">
                       Terms & Conditions
                     </a>{' '}
                     and{' '}
-                    <a href="/privacy" className="text-blue-600 hover:underline font-medium">
+                    <a href="/privacy" className="text-theme-info-ink hover:underline font-medium">
                       Privacy Policy
                     </a>
-                    <span className="text-red-500 ml-1">*</span>
+                    <span className="text-theme-error-ink ml-1">*</span>
                   </label>
                 </div>
                 {errors.agreeToTerms && (
-                  <p className="text-sm text-red-600">{errors.agreeToTerms}</p>
+                  <p className="text-sm text-theme-error-ink">{errors.agreeToTerms}</p>
                 )}
               </div>
 
               {/* Payment Info */}
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-6">
-                <h3 className="font-bold mb-3 flex items-center gap-2 text-blue-800">
+              <div className="bg-theme-info-bg border border-theme-info-ink/25 rounded-xl p-6">
+                <h3 className="font-bold mb-3 flex items-center gap-2 text-theme-info-ink">
                   Secure Payment via Yoco
                 </h3>
-                <p className="text-sm text-blue-700 mb-4">
+                <p className="text-sm text-theme-info-ink mb-4">
                   Your payment is processed securely through Yoco. We never store your payment details.
                 </p>
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-blue-200 gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-4 border-t border-theme-info-ink/25 gap-2">
                   <div className="flex items-center gap-2">
-                    <Check className="w-5 h-5 text-green-600" />
-                    <span className="font-bold text-gray-800">Total Amount:</span>
+                    <Check className="w-5 h-5 text-theme-success-ink" />
+                    <span className="font-bold text-theme-ink">Total Amount:</span>
                   </div>
                   <div className="text-right">
-                    <div className="text-2xl md:text-3xl font-black text-gray-900">
+                    <div className="text-2xl md:text-3xl font-black text-theme-ink">
                       R{totalAmount.toFixed(2)}
                     </div>
-                    <p className="text-sm text-gray-500">ZAR - South African Rand</p>
+                    <p className="text-sm text-theme-muted">ZAR - South African Rand</p>
                   </div>
                 </div>
               </div>
@@ -666,7 +666,7 @@ export default function StudioCheckout() {
               <button
                 type="submit"
                 disabled={processing || getCartItemCount() === 0}
-                className="w-full bg-black text-white py-4 rounded-xl font-bold text-lg hover:bg-gray-800 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
+                className="w-full bg-theme-ink text-theme-base py-4 rounded-xl font-bold text-lg hover:bg-theme-ink/85 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
               >
                 {processing ? (
                   <>
@@ -680,41 +680,41 @@ export default function StudioCheckout() {
                 )}
               </button>
 
-              <div className="pt-4 border-t border-gray-200">
-                <p className="text-center text-sm text-gray-500 mb-4">
+              <div className="pt-4 border-t border-theme-ink/15">
+                <p className="text-center text-sm text-theme-muted mb-4">
                   Your payment is secure and encrypted
                 </p>
                 <div className="flex justify-center gap-6">
                   <div className="flex flex-col items-center">
-                    <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-2">
-                      <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-10 h-10 bg-theme-soft rounded-full flex items-center justify-center mb-2">
+                      <svg className="w-5 h-5 text-theme-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                       </svg>
                     </div>
-                    <span className="text-xs text-gray-600">SSL Secure</span>
+                    <span className="text-xs text-theme-muted">SSL Secure</span>
                   </div>
                   <div className="flex flex-col items-center">
-                    <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-2">
-                      <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-10 h-10 bg-theme-soft rounded-full flex items-center justify-center mb-2">
+                      <svg className="w-5 h-5 text-theme-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                       </svg>
                     </div>
-                    <span className="text-xs text-gray-600">PCI DSS</span>
+                    <span className="text-xs text-theme-muted">PCI DSS</span>
                   </div>
                   <div className="flex flex-col items-center">
-                    <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center mb-2">
-                      <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div className="w-10 h-10 bg-theme-soft rounded-full flex items-center justify-center mb-2">
+                      <svg className="w-5 h-5 text-theme-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                       </svg>
                     </div>
-                    <span className="text-xs text-gray-600">3D Secure</span>
+                    <span className="text-xs text-theme-muted">3D Secure</span>
                   </div>
                 </div>
               </div>
 
-              <p className="text-sm text-gray-500 text-center pt-4 border-t border-gray-200">
+              <p className="text-sm text-theme-muted text-center pt-4 border-t border-theme-ink/15">
                 Need help?{' '}
-                <a href="/contact" className="text-blue-600 hover:underline font-medium">
+                <a href="/contact" className="text-theme-info-ink hover:underline font-medium">
                   Contact our support team
                 </a>
               </p>

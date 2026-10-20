@@ -16,7 +16,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-            <Card key={i} className="border-gray-800">
+            <Card key={i} className="border-theme-ink/15">
             <CardContent className="p-6">
               <Skeleton className="h-6 w-24 mb-4" />
               <Skeleton className="h-8 w-16" />
@@ -25,7 +25,7 @@ import { Skeleton } from "@/components/ui/skeleton";
         ))}
       </div>
 
-      <Card className="border-gray-800">
+      <Card className="border-theme-ink/15">
         <CardContent className="p-6">
           <Skeleton className="h-6 w-48 mb-4" />
           <Skeleton className="h-64 w-full" />

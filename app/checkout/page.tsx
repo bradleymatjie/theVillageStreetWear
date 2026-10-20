@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useCartStore } from "@/app/lib/cartStore";
 import { ShoppingBag, Truck, MapPin, LockIcon } from "lucide-react";
 import { useUser } from "../lib/user";
-import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
+import { getShippingFeeCents } from "@/app/lib/checkout-pricing";
 
 type PickupDetails = {
   brandName: string;
@@ -25,19 +25,10 @@ function CheckoutPage() {
   const { user } = useUser();
   const { items, hasHydrated } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [deliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup'>('delivery');
-  const [orderId, setOrderId] = useState<string>("");
-  const [pickupDetails, setPickupDetails] = useState<PickupDetails | null>(null);
+  const [requestedDeliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup'>('delivery');
+  const [pickupResult, setPickupResult] = useState<{ productId: string; details: PickupDetails | null; error: boolean } | null>(null);
+  const [pickupRetry, setPickupRetry] = useState(0);
   const [selectedBrandKey, setSelectedBrandKey] = useState<string>("");
-
-  useEffect(() => {
-    const generateOrderId = () => {
-      const timestamp = Date.now();
-      const random = Math.floor(Math.random() * 10000);
-      return `ORD-${timestamp}-${random}`;
-    };
-    setOrderId(generateOrderId());
-  }, []);
 
   // Initialize form data with user info
   const [formData, setFormData] = useState({
@@ -88,7 +79,11 @@ function CheckoutPage() {
     checkoutGroups.find((group) => group.key === selectedBrandKey) ||
     checkoutGroups[0];
   const checkoutItems = selectedGroup?.items || [];
-  const selectedBrandId = selectedGroup?.brandId || "";
+  const selectedProductId = checkoutItems[0]?.id || "";
+  const currentPickup = pickupResult?.productId === selectedProductId ? pickupResult : null;
+  const pickupDetails = currentPickup?.details || null;
+  const pickupLoading = Boolean(selectedProductId && !currentPickup);
+  const deliveryOption = requestedDeliveryOption === "pickup" && pickupDetails ? "pickup" : "delivery";
   const pickupLocation = pickupDetails
     ? [
         pickupDetails.address,
@@ -114,41 +109,23 @@ function CheckoutPage() {
   }, [hasHydrated, checkoutGroups, selectedBrandKey]);
 
   useEffect(() => {
+    if (!hasHydrated || !selectedProductId) return;
+    let cancelled = false;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
     async function loadPickupDetails() {
-      if (!hasHydrated || !selectedBrandId) {
-        setPickupDetails(null);
-        setDeliveryOption("delivery");
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from("brands")
-        .select("name, street_address, location_city, location_province, location_country")
-        .eq("id", selectedBrandId)
-        .maybeSingle();
-
-      if (
-        error ||
-        !data?.street_address ||
-        !data?.location_city ||
-        !data?.location_province
-      ) {
-        setPickupDetails(null);
-        setDeliveryOption("delivery");
-        return;
-      }
-
-      setPickupDetails({
-        brandName: data.name,
-        address: data.street_address,
-        city: data.location_city,
-        province: data.location_province,
-        country: data.location_country,
-      });
+      try {
+        const response = await fetch(`/api/checkout/pickup?productId=${encodeURIComponent(selectedProductId)}`, { cache: "no-store", signal: controller.signal });
+        if (!response.ok) throw new Error("Pickup lookup failed");
+        const data = await response.json();
+        if (!cancelled) setPickupResult({ productId: selectedProductId, details: data.pickup || null, error: false });
+      } catch {
+        if (!cancelled) setPickupResult({ productId: selectedProductId, details: null, error: true });
+      } finally { clearTimeout(timeout); }
     }
-
-    loadPickupDetails();
-  }, [hasHydrated, selectedBrandId]);
+    void loadPickupDetails();
+    return () => { cancelled = true; controller.abort(); clearTimeout(timeout); };
+  }, [hasHydrated, selectedProductId, pickupRetry]);
 
   const subtotal = checkoutItems.reduce((total, item) => {
     const priceMatch = item.price.match(/[\d.,]+/);
@@ -158,7 +135,7 @@ function CheckoutPage() {
 
     return total + itemPrice * item.quantity;
   }, 0);
-  const shipping = deliveryOption === 'delivery' && subtotal < 500 ? 75 : 0;
+  const shipping = getShippingFeeCents(Math.round(subtotal * 100), deliveryOption) / 100;
   const total = subtotal + shipping;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -170,6 +147,12 @@ function CheckoutPage() {
 
  const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
+  if (isProcessing) return;
+  if (!user) {
+    toast.error("Please sign in before checking out.");
+    window.location.href = "/login";
+    return;
+  }
   setIsProcessing(true);
 
   try {
@@ -196,7 +179,7 @@ function CheckoutPage() {
       new Set(cartItems.map((item) => item.brand_id).filter(Boolean))
     );
 
-    if (brandIds.length !== 1) {
+    if (brandIds.length > 1) {
       toast.error(
         "Choose a brand order to check out."
       );
@@ -215,7 +198,6 @@ function CheckoutPage() {
     }
 
     const requestBody = {
-      order_number: orderId,
       brand_id: brandIds[0],
       customer_id: user?.id,
       customer_name: formData.fullName,
@@ -270,14 +252,14 @@ function CheckoutPage() {
   // Redirect if cart is empty
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-theme-soft flex items-center justify-center px-4">
         <div className="text-center">
-          <ShoppingBag className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Your cart is empty</h2>
-          <p className="text-gray-600 mb-6">Add some items to checkout</p>
+          <ShoppingBag className="w-16 h-16 text-theme-muted mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-theme-ink mb-2">Your cart is empty</h2>
+          <p className="text-theme-muted mb-6">Add some items to checkout</p>
           <Link
             href="/products"
-            className="inline-block px-6 py-3 bg-black text-white font-semibold rounded-md hover:bg-gray-800 transition-colors"
+            className="inline-block px-6 py-3 bg-theme-ink text-theme-base font-semibold rounded-md hover:bg-theme-ink/85 transition-colors"
           >
             Continue Shopping
           </Link>
@@ -287,17 +269,17 @@ function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-theme-soft py-8 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/" className="text-2xl font-black text-gray-900">
+          <Link href="/" className="text-2xl font-black text-theme-ink">
             The Village
           </Link>
-          <div className="flex items-center gap-2 mt-4 text-sm text-gray-600">
-            <Link href="/products" className="hover:text-gray-900">Products</Link>
+          <div className="flex items-center gap-2 mt-4 text-sm text-theme-muted">
+            <Link href="/products" className="hover:text-theme-ink">Products</Link>
             <span>/</span>
-            <span className="text-gray-900 font-medium">Checkout</span>
+            <span className="text-theme-ink font-medium">Checkout</span>
           </div>
         </div>
 
@@ -306,11 +288,11 @@ function CheckoutPage() {
           <div className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-6">
               {checkoutGroups.length > 1 && (
-                <div className="bg-white rounded-lg shadow-sm p-6">
-                  <h2 className="text-lg font-bold text-gray-900 mb-2">
+                <div className="bg-theme-surface rounded-lg shadow-sm p-6">
+                  <h2 className="text-lg font-bold text-theme-ink mb-2">
                     Checkout by brand
                   </h2>
-                  <p className="mb-4 text-sm text-gray-500">
+                  <p className="mb-4 text-sm text-theme-muted">
                     Complete one brand order at a time. Each brand can have its own delivery or pickup options.
                   </p>
                   <div className="space-y-3">
@@ -334,19 +316,19 @@ function CheckoutPage() {
                           }}
                           className={`flex w-full items-center justify-between rounded-lg border p-4 text-left transition ${
                             selectedGroup?.key === group.key
-                              ? "border-black bg-gray-50"
-                              : "border-gray-200 hover:border-gray-400"
+                              ? "border-theme-ink bg-theme-soft"
+                              : "border-theme-ink/15 hover:border-theme-ink/15"
                           }`}
                         >
                           <span>
-                            <span className="block font-bold text-gray-900">
+                            <span className="block font-bold text-theme-ink">
                               {group.brandName}
                             </span>
-                            <span className="mt-1 block text-sm text-gray-500">
+                            <span className="mt-1 block text-sm text-theme-muted">
                               {group.items.length} item{group.items.length === 1 ? "" : "s"}
                             </span>
                           </span>
-                          <span className="font-bold text-gray-900">
+                          <span className="font-bold text-theme-ink">
                             R{groupSubtotal.toFixed(2)}
                           </span>
                         </button>
@@ -356,14 +338,14 @@ function CheckoutPage() {
                 </div>
               )}
 
-              <div className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-lg font-bold text-gray-900 mb-4">Delivery Method</h2>
+              <div className="bg-theme-surface rounded-lg shadow-sm p-6">
+                <h2 className="text-lg font-bold text-theme-ink mb-4">Delivery Method</h2>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <label
                     className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition ${
                       deliveryOption === "delivery"
-                        ? "border-black bg-gray-50"
-                        : "border-gray-200 hover:border-gray-400"
+                        ? "border-theme-ink bg-theme-soft"
+                        : "border-theme-ink/15 hover:border-theme-ink/15"
                     }`}
                   >
                     <input
@@ -375,22 +357,22 @@ function CheckoutPage() {
                       className="mt-1"
                     />
                     <span>
-                      <span className="flex items-center gap-2 font-bold text-gray-900">
+                      <span className="flex items-center gap-2 font-bold text-theme-ink">
                         <Truck className="h-4 w-4" />
                         Delivery
                       </span>
-                      <span className="mt-1 block text-sm text-gray-500">
+                      <span className="mt-1 block text-sm text-theme-muted">
                         Ship to your address.
                       </span>
                     </span>
                   </label>
 
-                  {pickupDetails && (
+                  {pickupDetails ? (
                     <label
                       className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition ${
                         deliveryOption === "pickup"
-                          ? "border-black bg-gray-50"
-                          : "border-gray-200 hover:border-gray-400"
+                          ? "border-theme-ink bg-theme-soft"
+                          : "border-theme-ink/15 hover:border-theme-ink/15"
                       }`}
                     >
                       <input
@@ -402,21 +384,29 @@ function CheckoutPage() {
                         className="mt-1"
                       />
                       <span>
-                        <span className="flex items-center gap-2 font-bold text-gray-900">
+                        <span className="flex items-center gap-2 font-bold text-theme-ink">
                           <MapPin className="h-4 w-4" />
                           Pick up
                         </span>
-                        <span className="mt-1 block text-sm text-gray-500">
+                        <span className="mt-1 block text-sm text-theme-muted">
                           Collect from {pickupDetails.brandName}. Delivery fee R0.
                         </span>
                       </span>
                     </label>
+                  ) : (
+                    <div className="rounded-lg border border-theme-ink/15 p-4 text-sm" aria-live="polite">
+                      <p className="flex items-center gap-2 font-bold"><MapPin className="h-4 w-4" /> Pick up</p>
+                      <p className="mt-1 text-theme-muted">
+                        {pickupLoading ? "Checking pickup availability…" : currentPickup?.error ? "We couldn't load this brand's pickup address." : "Pickup is not available for this brand yet."}
+                      </p>
+                      {currentPickup?.error && <button type="button" onClick={() => { setPickupResult(null); setPickupRetry(value => value + 1); }} className="mt-2 min-h-10 font-semibold underline underline-offset-4">Try again</button>}
+                    </div>
                   )}
                 </div>
 
                 {deliveryOption === "pickup" && pickupDetails && (
-                  <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
-                    <p className="font-bold text-gray-900">Pickup address</p>
+                  <div className="mt-4 rounded-lg border border-theme-ink/15 bg-theme-soft p-4 text-sm text-theme-ink/85">
+                    <p className="font-bold text-theme-ink">Pickup address</p>
                     <p className="mt-1">{pickupLocation}</p>
                   </div>
                 )}
@@ -424,38 +414,38 @@ function CheckoutPage() {
 
               {/* Conditional Shipping Address */}
               {deliveryOption === 'delivery' && (
-                <div className="bg-white rounded-lg shadow-sm p-6">
-                  <h2 className="text-lg font-bold text-gray-900 mb-4">Shipping Address</h2>
+                <div className="bg-theme-surface rounded-lg shadow-sm p-6">
+                  <h2 className="text-lg font-bold text-theme-ink mb-4">Shipping Address</h2>
                   <div className="space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Address *</label>
+                      <label className="block text-sm font-medium text-theme-ink/85 mb-1">Address *</label>
                       <input
                         type="text"
                         name="address"
                         required
                         value={formData.address}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 text-black border border-gray-300 rounded-md focus:ring-2 focus:ring-black focus:border-transparent"                      />
+                        className="w-full px-4 py-2 text-theme-ink border border-theme-ink/15 rounded-md focus:ring-2 focus:ring-theme-ink focus:border-transparent"                      />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">City *</label>
+                        <label className="block text-sm font-medium text-theme-ink/85 mb-1">City *</label>
                         <input
                           type="text"
                           name="city"
                           required
                           value={formData.city}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"                        />
+                          className="w-full px-4 py-2 border border-theme-ink/15 text-theme-ink rounded-md focus:ring-2 focus:ring-theme-ink focus:border-transparent"                        />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Province *</label>
+                        <label className="block text-sm font-medium text-theme-ink/85 mb-1">Province *</label>
                         <select
                           name="province"
                           required
                           value={formData.province}
                           onChange={handleInputChange}
-                          className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"
+                          className="w-full px-4 py-2 border border-theme-ink/15 text-theme-ink rounded-md focus:ring-2 focus:ring-theme-ink focus:border-transparent"
                         >
                           <option value="">Select Province</option>
                           {provinces.map(p => (
@@ -465,14 +455,14 @@ function CheckoutPage() {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Postal Code *</label>
+                      <label className="block text-sm font-medium text-theme-ink/85 mb-1">Postal Code *</label>
                       <input
                         type="text"
                         name="postalCode"
                         required
                         value={formData.postalCode}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 text-black rounded-md focus:ring-2 focus:ring-black focus:border-transparent"                      />
+                        className="w-full px-4 py-2 border border-theme-ink/15 text-theme-ink rounded-md focus:ring-2 focus:ring-theme-ink focus:border-transparent"                      />
                     </div>
                   </div>
                 </div>
@@ -483,12 +473,12 @@ function CheckoutPage() {
                 type="submit"
                 disabled={isProcessing}
                 // disabled
-                className="w-full py-4 bg-black text-white font-bold rounded-md hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-4 bg-theme-ink text-theme-base font-bold rounded-md hover:bg-theme-ink/85 transition-colors disabled:bg-theme-ink/20 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 <LockIcon />
                 {isProcessing ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-theme-ink"></div>
                     Processing...
                   </>
                 ) : (
@@ -496,12 +486,12 @@ function CheckoutPage() {
                 )}
               </button>:<Link
               href={"/login"}
-                className="w-full py-4 bg-black text-white font-bold rounded-md hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="w-full py-4 bg-theme-ink text-theme-base font-bold rounded-md hover:bg-theme-ink/85 transition-colors disabled:bg-theme-ink/20 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
                 <LockIcon />
                 {isProcessing ? (
                   <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-theme-ink"></div>
                     Processing...
                   </>
                 ) : (
@@ -509,7 +499,7 @@ function CheckoutPage() {
                 )}
               </Link>}
 
-              <p className="text-xs text-gray-500 text-center">
+              <p className="text-xs text-theme-muted text-center">
                 By completing your purchase, you agree to our Terms of Service
               </p>
             </form>
@@ -517,17 +507,15 @@ function CheckoutPage() {
 
           {/* Right Column - Order Summary */}
           <div>
-            <div className="bg-white rounded-lg shadow-sm p-6 sticky top-4">
-              <h2 className="text-lg font-bold text-gray-900 mb-1">Order Summary</h2>
+            <div className="bg-theme-surface rounded-lg shadow-sm p-6 sticky top-4">
+              <h2 className="text-lg font-bold text-theme-ink mb-1">Order Summary</h2>
               {selectedGroup && (
-                <p className="mb-4 text-sm text-gray-500">
+                <p className="mb-4 text-sm text-theme-muted">
                   {selectedGroup.brandName} order
                 </p>
               )}
-              <div className="text-xs text-gray-500 mb-4">
-                Order ID: {orderId}
-              </div>
-              
+              <p className="text-xs text-theme-muted mb-4">Your order number is created when you continue to payment.</p>
+
               {/* Cart Items */}
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2">
                 {checkoutItems.map((item) => {
@@ -536,23 +524,23 @@ function CheckoutPage() {
 
                   return (
                     <div key={`${item.id}-${item.selectedSize}-${item.selectedMaterial}`} className="flex gap-3">
-                      <div className="relative w-16 h-16 flex-shrink-0 rounded-md overflow-hidden border border-gray-200">
+                      <div className="relative w-16 h-16 flex-shrink-0 rounded-md overflow-hidden border border-theme-ink/15">
                         <img
                           src={item.imageurl || "/noImage.jpg"}
                           alt={item.name}                          className="h-full w-full object-cover"                        />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-semibold text-gray-900 truncate">
+                        <h3 className="text-sm font-semibold text-theme-ink truncate">
                           {item.name}
                         </h3>
                         {item.selectedSize && item.selectedMaterial && (
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-theme-muted">
                             {item.selectedSize} / {item.selectedMaterial}
                           </p>
                         )}
-                        <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
+                        <p className="text-sm text-theme-muted">Qty: {item.quantity}</p>
                       </div>
-                      <div className="text-sm font-semibold text-gray-900">
+                      <div className="text-sm font-semibold text-theme-ink">
                         R{(itemPrice * item.quantity).toFixed(2)}
                       </div>
                     </div>
@@ -561,25 +549,25 @@ function CheckoutPage() {
               </div>
 
               {/* Pricing */}
-              <div className="border-t border-gray-200 pt-4 space-y-2">
+              <div className="border-t border-theme-ink/15 pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span className="font-medium text-gray-900">R{subtotal.toFixed(2)}</span>
+                  <span className="text-theme-muted">Subtotal</span>
+                  <span className="font-medium text-theme-ink">R{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm">
-                  <span className="text-gray-600">
+                  <span className="text-theme-muted">
                     {deliveryOption === 'delivery' ? 'Shipping' : 'Pickup'}
                   </span>
-                  <span className="font-medium text-gray-900">
+                  <span className="font-medium text-theme-ink">
                     {shipping === 0 ? "Free" : `R${shipping.toFixed(2)}`}
                   </span>
                 </div>
                 {deliveryOption === 'delivery' && subtotal < 500 && (
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-theme-muted">
                     Add R{(500 - subtotal).toFixed(2)} more for free shipping
                   </p>
                 )}
-                <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-200">
+                <div className="flex justify-between text-lg font-bold pt-2 border-t border-theme-ink/15">
                   <span>Total</span>
                   <span>R{total.toFixed(2)}</span>
                 </div>

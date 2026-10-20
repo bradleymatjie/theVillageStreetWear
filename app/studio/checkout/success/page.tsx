@@ -77,7 +77,7 @@ function CheckoutSuccessPage() {
       (sum, item) => sum + item.price * item.quantity,
       0
     );
-    
+
     const shippingCost = orderData.shipping_method === 'delivery' ? 90 : 0;
     const total = subtotal + shippingCost;
 
@@ -88,10 +88,10 @@ function CheckoutSuccessPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-theme-soft flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading your order details...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-theme-ink mx-auto"></div>
+          <p className="mt-4 text-theme-muted">Loading your order details...</p>
         </div>
       </div>
     );
@@ -99,10 +99,10 @@ function CheckoutSuccessPage() {
 
   if (error || !orderData) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center max-w-md p-6 bg-white rounded-lg shadow">
-          <h2 className="text-2xl font-bold text-red-600 mb-2">Oops!</h2>
-          <p className="text-gray-600 mb-4">
+      <div className="min-h-screen bg-theme-soft flex items-center justify-center">
+        <div className="text-center max-w-md p-6 bg-theme-surface rounded-lg shadow">
+          <h2 className="text-2xl font-bold text-theme-error-ink mb-2">Oops!</h2>
+          <p className="text-theme-muted mb-4">
             {error || 'Unable to load order details'}
           </p>
           {/* <button
@@ -125,44 +125,44 @@ function CheckoutSuccessPage() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-theme-soft py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="bg-black text-white rounded-t-2xl p-8 text-center">
+        <div className="bg-theme-ink text-theme-base rounded-t-2xl p-8 text-center">
           <div className="mb-4">
-            <svg className="h-12 w-12 text-green-400 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="h-12 w-12 text-theme-success-ink mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
           <h1 className="text-4xl font-bold mb-2">Order Confirmed!</h1>
           <p className="text-xl mb-4">Thank you for your purchase, {firstName}!</p>
-          <p className="text-gray-300">
+          <p className="text-theme-muted">
             Order #{orderData.orderId} • {formattedDate}
           </p>
         </div>
 
         {/* Main Content */}
-        <div className="bg-white rounded-b-2xl shadow-xl p-6 md:p-8">
+        <div className="bg-theme-surface rounded-b-2xl shadow-xl p-6 md:p-8">
           {/* Order Items */}
           <h2 className="text-3xl font-bold mb-6">Your Custom T-Shirts</h2>
-          
+
           {orderData.cartItems.map((item, index) => {
             const capitalizedColor = item.tshirt_color?.charAt(0).toUpperCase() + item.tshirt_color?.slice(1) || 'Unknown';
             const itemTotal = item.price * item.quantity;
 
             return (
-              <div key={index} className="mb-8 p-6 bg-gray-50 rounded-xl border border-gray-200">
+              <div key={index} className="mb-8 p-6 bg-theme-soft rounded-xl border border-theme-ink/15">
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
                   <div>
                     <h3 className="text-xl font-semibold mb-2">{item.name || 'Custom T-Shirt'}</h3>
                     <div className="space-y-1">
-                      <p className="text-gray-600">Color: {capitalizedColor}</p>
+                      <p className="text-theme-muted">Color: {capitalizedColor}</p>
                       {(item.selectedSize || item.selectedMaterial) && (
-                        <p className="text-gray-600">
+                        <p className="text-theme-muted">
                           {[item.selectedSize, item.selectedMaterial].filter(Boolean).join(' / ')}
                         </p>
                       )}
-                      <p className="text-gray-600">Quantity: {item.quantity}</p>
+                      <p className="text-theme-muted">Quantity: {item.quantity}</p>
                     </div>
                   </div>
                   <div className="mt-4 md:mt-0">
@@ -174,7 +174,7 @@ function CheckoutSuccessPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <p className="font-semibold mb-3 text-center">Front Design</p>
-                    <div className="relative aspect-square bg-white rounded-lg border border-gray-300 overflow-hidden">
+                    <div className="relative aspect-square bg-theme-surface rounded-lg border border-theme-ink/15 overflow-hidden">
                       <img
                         src={item.front || '/placeholder-front.jpg'}
                         alt="Front design"                        className="h-full w-full object-contain p-4"
@@ -183,7 +183,7 @@ function CheckoutSuccessPage() {
                   </div>
                   <div>
                     <p className="font-semibold mb-3 text-center">Back Design</p>
-                    <div className="relative aspect-square bg-white rounded-lg border border-gray-300 overflow-hidden">
+                    <div className="relative aspect-square bg-theme-surface rounded-lg border border-theme-ink/15 overflow-hidden">
                       <img
                         src={item.back || '/placeholder-back.jpg'}
                         alt="Back design"                        className="h-full w-full object-contain p-4"
@@ -196,22 +196,22 @@ function CheckoutSuccessPage() {
           })}
 
           {/* Order Summary */}
-          <div className="bg-gray-100 rounded-xl p-6 mb-8">
+          <div className="bg-theme-soft rounded-xl p-6 mb-8">
             <h3 className="text-2xl font-bold mb-4">Order Summary</h3>
             <div className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-gray-700">Subtotal</span>
+                <span className="text-theme-ink/85">Subtotal</span>
                 <span className="font-semibold">R{subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-700">
+                <span className="text-theme-ink/85">
                   {orderData.shipping_method === 'delivery' ? 'Delivery' : 'Pickup'}
                 </span>
                 <span className="font-semibold">
                   {shipping === 0 ? 'Free' : `R${shipping.toFixed(2)}`}
                 </span>
               </div>
-              <div className="border-t border-gray-300 pt-4 mt-4">
+              <div className="border-t border-theme-ink/15 pt-4 mt-4">
                 <div className="flex justify-between">
                   <span className="text-2xl font-bold">Total Paid</span>
                   <span className="text-2xl font-bold">R{total.toFixed(2)}</span>
@@ -225,7 +225,7 @@ function CheckoutSuccessPage() {
             <h3 className="text-2xl font-bold mb-4">
               {orderData.shipping_method === 'delivery' ? 'Delivery Address' : 'Pickup Location'}
             </h3>
-            <p className="text-gray-700 whitespace-pre-line">
+            <p className="text-theme-ink/85 whitespace-pre-line">
               {orderData.shipping_method === 'delivery'
                 ? orderData.shipping_address
                 : orderData.pickup_location || 'Johannesburg CBD'}
@@ -236,14 +236,14 @@ function CheckoutSuccessPage() {
           <div className="mb-8">
             <h3 className="text-2xl font-bold mb-4">Contact Information</h3>
             <div className="space-y-2">
-              <p className="text-gray-700">
+              <p className="text-theme-ink/85">
                 <span className="font-semibold">Name:</span> {orderData.customer_name}
               </p>
-              <p className="text-gray-700">
+              <p className="text-theme-ink/85">
                 <span className="font-semibold">Email:</span> {orderData.email}
               </p>
               {orderData.phone && (
-                <p className="text-gray-700">
+                <p className="text-theme-ink/85">
                   <span className="font-semibold">Phone:</span> {orderData.phone}
                 </p>
               )}
@@ -251,10 +251,10 @@ function CheckoutSuccessPage() {
           </div>
 
           {/* Next Steps */}
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
-            <h3 className="text-xl font-bold text-blue-900 mb-2">What Happens Next?</h3>
+          <div className="bg-theme-info-bg border border-theme-info-ink/25 rounded-xl p-6 mb-8">
+            <h3 className="text-xl font-bold text-theme-info-ink mb-2">What Happens Next?</h3>
             {orderData.shipping_method === 'delivery' ? (
-              <ul className="space-y-2 text-blue-800">
+              <ul className="space-y-2 text-theme-info-ink">
                 <li className="flex items-start">
                   <span className="mr-2">📦</span>
                   <span>Your order is being processed and will be shipped within 3-5 business days</span>
@@ -269,7 +269,7 @@ function CheckoutSuccessPage() {
                 </li>
               </ul>
             ) : (
-              <ul className="space-y-2 text-blue-800">
+              <ul className="space-y-2 text-theme-info-ink">
                 <li className="flex items-start">
                   <span className="mr-2">🏪</span>
                   <span>Your order is being prepared for pickup</span>
@@ -287,10 +287,10 @@ function CheckoutSuccessPage() {
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 border-t border-gray-200">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6 border-t border-theme-ink/15">
             <button
               onClick={() => window.print()}
-              className="bg-gray-100 hover:bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-medium transition flex items-center justify-center"
+              className="bg-theme-soft hover:bg-theme-matte text-theme-ink px-6 py-3 rounded-lg font-medium transition flex items-center justify-center"
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -299,19 +299,19 @@ function CheckoutSuccessPage() {
             </button>
             <button
               onClick={() => router.push('/studio/design')}
-              className="bg-black hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-medium transition"
+              className="bg-theme-ink hover:bg-theme-ink/85 text-theme-base px-6 py-3 rounded-lg font-medium transition"
             >
               Design Another T-Shirt
             </button>
           </div>
 
           {/* Footer */}
-          <div className="text-center mt-12 pt-8 border-t border-gray-200 text-gray-500 text-sm">
+          <div className="text-center mt-12 pt-8 border-t border-theme-ink/15 text-theme-muted text-sm">
             <p>
               Questions? Email{' '}
               <a
                 href="mailto:support@thevillagestreetwear.com"
-                className="text-blue-600 hover:text-blue-800"
+                className="text-theme-info-ink hover:text-theme-info-ink"
               >
                 support@thevillagestreetwear.com
               </a>

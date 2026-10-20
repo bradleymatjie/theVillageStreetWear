@@ -61,12 +61,12 @@ export default function DesignLayers() {
   );
 
   return (
-    <div className="w-full lg:w-120 bg-white border-t lg:border-l border-gray-200 p-4 overflow-y-auto">
+    <div className="w-full lg:w-120 bg-theme-surface border-t lg:border-l border-theme-ink/15 p-4 overflow-y-auto">
       <h2 className="text-lg font-black mb-4">LAYERS ({currentView.toUpperCase()})</h2>
-      <p className="text-xs text-gray-500 mb-4">Drag to reorder (top = frontmost)</p>
+      <p className="text-xs text-theme-muted mb-4">Drag to reorder (top = frontmost)</p>
 
       {sortedElements.length === 0 ? (
-        <p className="text-sm text-gray-500 text-center py-8">No elements added yet</p>
+        <p className="text-sm text-theme-muted text-center py-8">No elements added yet</p>
       ) : (
         <div className="space-y-2" onDragOver={handleDragOver}>
           {sortedElements.map((element, index) => (
@@ -74,8 +74,8 @@ export default function DesignLayers() {
               key={element.id}
               className={`p-3 rounded-lg border-2 cursor-pointer transition-all draggable group ${
                 selectedElementId === element.id
-                  ? 'border-black bg-gray-50 shadow-md'
-                  : 'border-gray-200 hover:border-gray-400 hover:bg-gray-50'
+                  ? 'border-theme-ink bg-theme-soft shadow-md'
+                  : 'border-theme-ink/15 hover:border-theme-ink/15 hover:bg-theme-soft'
               }`}
               draggable
               onDragStart={(e) => handleDragStart(e, element.id)}
@@ -84,7 +84,7 @@ export default function DesignLayers() {
             >
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 flex-1 min-w-0">
-                  <GripVertical className="w-5 h-5 text-gray-400 flex-shrink-0" />
+                  <GripVertical className="w-5 h-5 text-theme-muted flex-shrink-0" />
 
                   {element.type === 'image' ? (
                     <img
@@ -93,13 +93,13 @@ export default function DesignLayers() {
                       className="w-10 h-10 object-cover rounded flex-shrink-0"
                     />
                   ) : (
-                    <div className="w-10 h-10 bg-gray-200 rounded flex items-center justify-center flex-shrink-0">
-                      <Type className="w-6 h-6 text-gray-500" />
+                    <div className="w-10 h-10 bg-theme-matte rounded flex items-center justify-center flex-shrink-0">
+                      <Type className="w-6 h-6 text-theme-muted" />
                     </div>
                   )}
 
                   <div className="min-w-0">
-                    <p className="text-xs font-bold text-gray-600">
+                    <p className="text-xs font-bold text-theme-muted">
                       {element.type === 'image' ? 'Image' : 'Text'} Layer {index + 1}
                     </p>
                     {element.type === 'text' ? (
@@ -107,7 +107,7 @@ export default function DesignLayers() {
                         {(element as TextElement).text || 'Empty text'}
                       </p>
                     ) : (
-                      <p className="text-xs text-gray-500">Uploaded Image</p>
+                      <p className="text-xs text-theme-muted">Uploaded Image</p>
                     )}
                   </div>
                 </div>
@@ -117,7 +117,7 @@ export default function DesignLayers() {
                     e.stopPropagation();
                     deleteElement(element.id);
                   }}
-                  className="text-red-500 hover:text-red-700 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                  className="text-theme-error-ink hover:text-theme-error-ink opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                 >
                   <Trash2 className="w-5 h-5" />
                 </button>

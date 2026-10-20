@@ -6,7 +6,7 @@ export function OrderDetails({ order }: { order: any }) {
   const status = String(order.status || "pending").toLowerCase();
 
   return (
-    <div className="bg-white text-black dark:bg-black dark:text-white opacity-100">
+    <div className="bg-theme-base text-theme-ink opacity-100">
       <DrawerHeader className="px-0 md:hidden">
         <DrawerTitle>Order Details</DrawerTitle>
       </DrawerHeader>
@@ -17,15 +17,15 @@ export function OrderDetails({ order }: { order: any }) {
 
       <h2 className="mt-4 break-all text-xl font-black">{order.order_id}</h2>
 
-      <div className="mt-3 rounded-2xl border border-black/10 bg-black/[0.03] p-4 dark:border-white/10 dark:bg-white/[0.05]">
-        <p className="text-xs font-bold uppercase text-black/50 dark:text-white/50">
+      <div className="mt-3 rounded-2xl border p-4 border-theme-ink/10 bg-theme-ink/[0.05]">
+        <p className="text-xs font-bold uppercase text-theme-muted">
           Order Status
         </p>
         <p className="mt-1 font-black capitalize">
           {status.replaceAll("_", " ")}
         </p>
 
-        <p className="mt-3 text-xs font-bold uppercase text-black/50 dark:text-white/50">
+        <p className="mt-3 text-xs font-bold uppercase text-theme-muted">
           Payment Status
         </p>
         <p className="mt-1 font-black capitalize">
@@ -37,7 +37,7 @@ export function OrderDetails({ order }: { order: any }) {
         {items.map((item: any, i: number) => (
           <div
             key={i}
-            className="rounded-2xl border border-black/10 bg-black/[0.03] p-4 dark:border-white/10 dark:bg-white/[0.05]"
+            className="rounded-2xl border p-4 border-theme-ink/10 bg-theme-ink/[0.05]"
           >
             <div className="flex gap-4">
               {item.image_url && (
@@ -51,10 +51,10 @@ export function OrderDetails({ order }: { order: any }) {
 
               <div className="min-w-0">
                 <p className="break-words font-black">{item.name}</p>
-                <p className="text-sm text-black/60 dark:text-white/60">
+                <p className="text-sm text-theme-muted">
                   Size: {item.selected_size}
                 </p>
-                <p className="text-sm text-black/60 dark:text-white/60">
+                <p className="text-sm text-theme-muted">
                   Material: {item.selected_material}
                 </p>
                 <p className="mt-1 text-sm font-medium">

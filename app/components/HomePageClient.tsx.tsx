@@ -124,7 +124,7 @@ export default function HomePageClient({
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.25 }}
-          className="bg-black px-4 py-12 text-white sm:px-6 sm:py-16 lg:py-20"
+          className="bg-theme-base px-4 py-12 text-theme-ink sm:px-6 sm:py-16 lg:py-20"
         >
           <div className="mx-auto max-w-7xl">
             <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-[1.05fr_0.95fr]">
@@ -137,11 +137,11 @@ export default function HomePageClient({
                   alt="Featured Design"
                   className="h-full w-full object-cover"
                 />
-                <div className="absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 bg-black/70 p-4 backdrop-blur-md">
-                  <p className="text-xs font-black uppercase tracking-[0.18em] text-white/70">
+                <div className="theme-media absolute inset-x-0 bottom-0 flex items-center justify-between gap-4 bg-theme-base/70 p-4 backdrop-blur-md">
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-theme-ink/70">
                     Johannesburg streetwear
                   </p>
-                  <BadgeCheck className="h-5 w-5 text-white" />
+                  <BadgeCheck className="h-5 w-5 text-theme-ink" />
                 </div>
               </motion.div>
 
@@ -151,7 +151,7 @@ export default function HomePageClient({
               >
                 <motion.p
                   variants={dropIn}
-                  className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-white/45"
+                  className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-theme-muted"
                 >
                   Streetwear, sharpened
                 </motion.p>
@@ -163,7 +163,7 @@ export default function HomePageClient({
                 </motion.h2>
                 <motion.p
                   variants={dropIn}
-                  className="mt-5 max-w-xl text-sm leading-7 text-white/60 sm:text-base"
+                  className="mt-5 max-w-xl text-sm leading-7 text-theme-muted sm:text-base"
                 >
                   The Village connects shoppers with independent brands, making
                   discovery, checkout and delivery easier from the first drop.
@@ -179,41 +179,41 @@ export default function HomePageClient({
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.25 }}
-          className="bg-white px-4 py-12 text-black sm:px-6 sm:py-16"
+          className="bg-theme-base px-4 py-12 text-theme-ink sm:px-6 sm:py-16"
         >
           <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1fr_0.75fr]">
             <div>
-              <p className="mb-4 text-xs font-black uppercase tracking-[0.22em] text-black/40">
+              <p className="mb-4 text-xs font-black uppercase tracking-[0.22em] text-theme-muted">
                 Browse the labels
               </p>
               <h2 className="max-w-3xl text-4xl font-black leading-none sm:text-5xl lg:text-6xl">
                 DISCOVER THE BRANDS BUILDING IN THE VILLAGE.
               </h2>
-              <p className="mt-5 max-w-2xl text-sm leading-7 text-black/60 sm:text-base">
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-theme-muted sm:text-base">
                 Explore independent South African streetwear labels, read their
                 stories, and shop products directly from each brand storefront.
               </p>
             </div>
 
-            <div className="border border-black/10 bg-black p-5 text-white">
+            <div className="border border-theme-ink/10 bg-theme-ink p-5 text-theme-base">
               <div className="grid gap-3">
                 {["Brand storefronts", "Location filters", "Category filters"].map(
                   (item) => (
                     <div
                       key={item}
-                      className="flex items-center justify-between border border-white/10 bg-white/[0.04] px-4 py-3"
+                      className="flex items-center justify-between border border-theme-base/10 bg-theme-base/[0.04] px-4 py-3"
                     >
-                      <span className="text-sm font-bold text-white/65">
+                      <span className="text-sm font-bold text-theme-base/65">
                         {item}
                       </span>
-                      <ArrowRight className="h-4 w-4 text-white/45" />
+                      <ArrowRight className="h-4 w-4 text-theme-base/70" />
                     </div>
                   )
                 )}
               </div>
               <Link
                 href="/brands"
-                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-white px-6 py-4 text-sm font-black uppercase tracking-wide text-black transition hover:bg-white/85"
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-theme-base px-6 py-4 text-sm font-black uppercase tracking-wide text-theme-ink transition hover:bg-theme-base/85"
               >
                 Explore Brands
                 <ArrowRight className="h-4 w-4" />
@@ -227,16 +227,16 @@ export default function HomePageClient({
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.2 }}
-          className="bg-black px-4 py-8 sm:px-6 sm:py-12 lg:py-16"
+          className="bg-theme-base px-4 py-8 sm:px-6 sm:py-12 lg:py-16"
         >
           <div className="mx-auto max-w-7xl">
-            <div className="mb-8 flex flex-col justify-between gap-4 border-y border-white/10 py-5 sm:flex-row sm:items-center">
+            <div className="mb-8 flex flex-col justify-between gap-4 border-y border-theme-ink/10 py-5 sm:flex-row sm:items-center">
               {trustPoints.map(({ icon: Icon, label }) => (
-                <div key={label} className="flex items-center gap-3 text-white">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-md border border-white/15 bg-white/5">
+                <div key={label} className="flex items-center gap-3 text-theme-ink">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-md border border-theme-ink/15 bg-theme-ink/5">
                     <Icon className="h-4 w-4" />
                   </span>
-                  <span className="text-xs font-black uppercase tracking-[0.18em] text-white/60">
+                  <span className="text-xs font-black uppercase tracking-[0.18em] text-theme-muted">
                     {label}
                   </span>
                 </div>
@@ -273,7 +273,7 @@ export default function HomePageClient({
                   whileHover={{ y: -10 }}
                   className="group cursor-pointer"
                 >
-                  <div className="relative h-[300px] overflow-hidden rounded-lg sm:h-[350px] lg:h-[400px]">
+                  <div className="theme-media relative h-[300px] overflow-hidden rounded-lg sm:h-[350px] lg:h-[400px]">
                     <img
                       src={item.image}
                       alt={item.text}
@@ -283,13 +283,13 @@ export default function HomePageClient({
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
 
                     <div className="absolute bottom-0 left-0 p-6 text-left sm:p-8 lg:p-12">
-                      <p className="mb-8 text-lg font-bold uppercase text-white opacity-90 drop-shadow-lg sm:text-xl">
+                      <p className="mb-8 text-lg font-bold uppercase text-theme-ink opacity-90 drop-shadow-lg sm:text-xl">
                         {item.text}
                       </p>
 
                       <Link
                         href={item.href}
-                        className="inline-flex items-center gap-2 rounded-md bg-white px-6 py-3 text-sm font-black uppercase tracking-wide text-black"
+                        className="inline-flex items-center gap-2 rounded-md bg-theme-ink px-6 py-3 text-sm font-black uppercase tracking-wide text-theme-base"
                       >
                         {item.button}
                         <ArrowRight className="h-4 w-4" />
@@ -315,7 +315,7 @@ export default function HomePageClient({
   }
 
   return (
-    <section className="relative min-h-[calc(100dvh-68px)] overflow-hidden bg-black text-white lg:min-h-[calc(100dvh-82px)]">
+    <section className="theme-media relative min-h-[calc(100dvh-68px)] overflow-hidden bg-theme-base text-theme-ink lg:min-h-[calc(100dvh-82px)]">
       <HeroVideoBackground />
       <div className="absolute inset-0 bg-[linear-gradient(0deg,var(--palette-black-92)_0%,var(--palette-black-16)_58%,var(--palette-black-10)_100%)] lg:bg-[linear-gradient(90deg,var(--palette-black-90)_0%,var(--palette-black-50)_50%,var(--palette-black-15)_100%)]" />
 
@@ -328,7 +328,7 @@ export default function HomePageClient({
         >
           <motion.p
             variants={dropIn}
-            className="mb-3 text-[10px] font-medium uppercase tracking-[0.24em] text-white/75 sm:text-xs"
+            className="mb-3 text-[10px] font-medium uppercase tracking-[0.24em] text-theme-ink/75 sm:text-xs"
           >
             Independent streetwear
           </motion.p>
@@ -343,7 +343,7 @@ export default function HomePageClient({
 
           <motion.p
             variants={dropIn}
-            className="mt-5 hidden max-w-xl text-base font-medium leading-7 text-white/70 sm:block lg:text-lg"
+            className="mt-5 hidden max-w-xl text-base font-medium leading-7 text-theme-ink/70 sm:block lg:text-lg"
           >
             Discover independent South African labels, shop new drops, and wear the culture shaping the streets.
           </motion.p>
@@ -354,7 +354,7 @@ export default function HomePageClient({
           >
             <Link
               href="/products"
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-white px-5 py-3 text-xs font-black uppercase tracking-wide text-black transition hover:-translate-y-0.5 hover:bg-white/90"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-theme-ink px-5 py-3 text-xs font-black uppercase tracking-wide text-theme-base transition hover:-translate-y-0.5 hover:bg-theme-ink/90"
             >
               Explore the drop
               <ArrowRight className="h-4 w-4" />
@@ -362,7 +362,7 @@ export default function HomePageClient({
 
             <Link
               href="/sell"
-              className="hidden items-center justify-center gap-2 rounded-md border border-white/30 bg-black/25 px-5 py-3 text-xs font-black uppercase tracking-wide text-white backdrop-blur-xl transition hover:bg-white hover:text-black sm:inline-flex"
+              className="hidden items-center justify-center gap-2 rounded-md border border-theme-ink/30 bg-theme-base/25 px-5 py-3 text-xs font-black uppercase tracking-wide text-theme-ink backdrop-blur-xl transition hover:bg-theme-ink hover:text-theme-base sm:inline-flex"
             >
               Join as a Brand
               <Store className="h-4 w-4" />
@@ -375,15 +375,15 @@ export default function HomePageClient({
                 key={title}
                 variants={dropIn}
                 whileHover={{ y: -8, scale: 1.03 }}
-                className={`rounded-lg border border-white/10 bg-white/10 p-4 shadow-2xl backdrop-blur-2xl ${
+                className={`rounded-lg border border-theme-ink/10 bg-theme-ink/10 p-4 shadow-2xl backdrop-blur-2xl ${
                   index % 2 === 1 ? "translate-y-5" : ""
                 }`}
               >
-                <p className="text-[10px] font-bold uppercase tracking-wide text-white/45">
+                <p className="text-[10px] font-bold uppercase tracking-wide text-theme-muted">
                   {eyebrow}
                 </p>
                 <h3 className="mt-2 text-base font-black">{title}</h3>
-                <p className="mt-2 text-xs leading-5 text-white/60">{text}</p>
+                <p className="mt-2 text-xs leading-5 text-theme-muted">{text}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -417,11 +417,11 @@ export default function HomePageClient({
                 delay: 0.2 + index * 0.12,
               }}
               whileHover={{ y: -14, scale: 1.04 }}
-              className={`${card.className} rounded-lg border border-white/10 bg-white/[0.08] p-6 shadow-[0_25px_80px_var(--palette-black-45)] backdrop-blur-2xl`}
+              className={`${card.className} rounded-lg border border-theme-ink/10 bg-theme-ink/[0.08] p-6 shadow-[0_25px_80px_var(--palette-black-45)] backdrop-blur-2xl`}
             >
-              <p className="text-sm font-bold text-white/40">{card.eyebrow}</p>
+              <p className="text-sm font-bold text-theme-muted">{card.eyebrow}</p>
               <h3 className="mt-3 text-2xl font-black">{card.title}</h3>
-              <p className="mt-4 text-sm leading-6 text-white/55">
+              <p className="mt-4 text-sm leading-6 text-theme-muted">
                 {card.text}
               </p>
 
@@ -429,7 +429,7 @@ export default function HomePageClient({
                 {card.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-md bg-white/10 px-3 py-1 text-xs font-bold text-white/70"
+                    className="rounded-md bg-theme-ink/10 px-3 py-1 text-xs font-bold text-theme-ink/70"
                   >
                     {tag}
                   </span>

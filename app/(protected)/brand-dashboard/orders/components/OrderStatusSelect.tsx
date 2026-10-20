@@ -88,28 +88,28 @@ export default function OrderStatusSelect({
         type="button"
         disabled={pending || isDelivered || !hasUpcomingStatuses}
         onClick={() => setOpen((value) => !value)}
-        className="flex w-full items-center justify-between rounded-xl border border-white/10 bg-black px-4 py-3 text-left text-sm font-black text-white outline-none transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex w-full items-center justify-between rounded-xl border border-theme-ink/10 bg-theme-base px-4 py-3 text-left text-sm font-black text-theme-ink outline-none transition hover:bg-theme-ink/10 disabled:cursor-not-allowed disabled:opacity-50"
       >
         <span>{hasUpcomingStatuses ? "Update status" : activeStatus.label}</span>
         {pending ? (
-          <Loader2 className="h-4 w-4 animate-spin text-white/60" />
+          <Loader2 className="h-4 w-4 animate-spin text-theme-muted" />
         ) : (
-          <ChevronDown className="h-4 w-4 text-white/60" />
+          <ChevronDown className="h-4 w-4 text-theme-muted" />
         )}
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-[var(--palette-surface-dialog)] p-5 shadow-2xl sm:p-6">
+        <div className="fixed inset-0 z-[70] flex items-center justify-center bg-theme-base/75 px-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg rounded-3xl border border-theme-ink/10 bg-[var(--palette-surface-dialog)] p-5 shadow-2xl sm:p-6">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-white/35">
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-muted">
                   Update customer
                 </p>
-                <h3 className="mt-2 text-2xl font-black text-white">
+                <h3 className="mt-2 text-2xl font-black text-theme-ink">
                   Choose next status
                 </h3>
-                <p className="mt-2 text-sm leading-5 text-white/60">
+                <p className="mt-2 text-sm leading-5 text-theme-muted">
                   Completed stages are greyed out. Pick the next stage when it
                   is true for this order.
                 </p>
@@ -121,7 +121,7 @@ export default function OrderStatusSelect({
                   setSelectedStatus("");
                   setOpen(false);
                 }}
-                className="rounded-full border border-white/10 p-2 text-white/50 transition hover:bg-white hover:text-black"
+                className="rounded-full border border-theme-ink/10 p-2 text-theme-muted transition hover:bg-theme-ink hover:text-theme-base"
                 aria-label="Close status picker"
               >
                 <X className="h-5 w-5" />
@@ -143,41 +143,41 @@ export default function OrderStatusSelect({
                     onClick={() => stageStatus(item.value)}
                     className={`flex w-full gap-3 rounded-2xl border p-4 text-left transition disabled:cursor-not-allowed ${
                       locked
-                        ? "border-white/5 bg-white/[0.03] opacity-45"
+                        ? "border-theme-ink/5 bg-theme-ink/[0.03] opacity-45"
                         : selected
-                          ? "border-white bg-white/15"
-                        : "border-white/15 bg-white/[0.05] hover:border-white/30 hover:bg-white/10"
+                          ? "border-theme-ink bg-theme-ink/15"
+                        : "border-theme-ink/15 bg-theme-ink/[0.05] hover:border-theme-ink/30 hover:bg-theme-ink/10"
                     }`}
                   >
-                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/20">
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-theme-ink/20">
                       {completed || active || selected ? (
                         <Check className="h-4 w-4" />
                       ) : (
-                        <Circle className="h-3 w-3 fill-white" />
+                        <Circle className="h-3 w-3 fill-theme-ink" />
                       )}
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="flex flex-wrap items-center gap-2">
-                        <span className="text-sm font-black text-white">
+                        <span className="text-sm font-black text-theme-ink">
                           {item.label}
                         </span>
                         {completed && (
-                          <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-white/50">
+                          <span className="rounded-full bg-theme-ink/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-theme-muted">
                             Completed
                           </span>
                         )}
                         {active && (
-                          <span className="rounded-full bg-white/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-white/50">
+                          <span className="rounded-full bg-theme-ink/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-theme-muted">
                             Current
                           </span>
                         )}
                         {!locked && (
-                          <span className="rounded-full bg-white px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-black">
+                          <span className="rounded-full bg-theme-ink px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-theme-base">
                             {selected ? "Selected" : "Upcoming"}
                           </span>
                         )}
                       </span>
-                      <span className="mt-1 block text-xs leading-5 text-white/50">
+                      <span className="mt-1 block text-xs leading-5 text-theme-muted">
                         {item.message}
                       </span>
                     </span>
@@ -186,8 +186,8 @@ export default function OrderStatusSelect({
               })}
             </div>
 
-            <div className="mt-5 border-t border-white/10 pt-5">
-              <p className="text-xs leading-5 text-white/50">
+            <div className="mt-5 border-t border-theme-ink/10 pt-5">
+              <p className="text-xs leading-5 text-theme-muted">
                 {selectedStatus
                   ? `Confirm ${selectedStatusLabel} when you are ready to notify the customer.`
                   : "Pick an upcoming status to continue."}
@@ -198,7 +198,7 @@ export default function OrderStatusSelect({
                   type="button"
                   disabled={!selectedStatus || pending}
                   onClick={confirmStatusUpdate}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-black text-black transition hover:bg-white/85 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex flex-1 items-center justify-center gap-2 rounded-full bg-theme-ink px-5 py-3 text-sm font-black text-theme-base transition hover:bg-theme-ink/85 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   {pending && <Loader2 className="h-4 w-4 animate-spin" />}
                   Confirm update
@@ -210,7 +210,7 @@ export default function OrderStatusSelect({
                     setSelectedStatus("");
                     setOpen(false);
                   }}
-                  className="flex-1 rounded-full border border-white/15 px-5 py-3 text-sm font-black text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex-1 rounded-full border border-theme-ink/15 px-5 py-3 text-sm font-black text-theme-ink transition hover:bg-theme-ink/10 disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Cancel
                 </button>

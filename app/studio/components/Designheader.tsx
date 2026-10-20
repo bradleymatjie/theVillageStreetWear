@@ -29,7 +29,7 @@ export default function DesignHeader() {
 
   // Use the selector to get cart items
   const cart = useCartItems();
-  
+
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [showCartModal, setShowCartModal] = useState(false);
   const [designName, setDesignName] = useState('');
@@ -58,20 +58,20 @@ export default function DesignHeader() {
       setSaveMessage('Please log in to save designs');
       return;
     }
-    
+
     addDesign({
       name: designName,
       elements: currentDesign.elements,
       tshirtColor: currentDesign.tshirtColor,
     },userId!);
-    
+
     toast.success('Design saved successfully!');
     setDesignName('');
     setTimeout(() => {
       setSaveMessage('');
     }, 2000);
   };
-  
+
   const handleLoadDesign = (design: any) => {
     loadCurrentFromSaved(design);
     toast.success('Design loaded successfully!');
@@ -90,22 +90,22 @@ export default function DesignHeader() {
 
   return (
     <>
-      <header className="bg-black text-white px-4 sm:px-6 py-4">
+      <header className="bg-theme-base text-theme-ink px-4 sm:px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center gap-4">
             <a href="/" className="text-xl sm:text-2xl font-black">🎨</a>
-            <span className="text-xs sm:text-sm text-gray-400">Design Studio</span>
+            <span className="text-xs sm:text-sm text-theme-muted">Design Studio</span>
           </div>
           <div className="flex gap-2 sm:gap-4">
-            <button 
+            <button
               onClick={() => setShowSaveModal(true)}
-              className="px-3 sm:px-4 py-2 border border-white text-xs sm:text-sm font-bold hover:bg-white hover:text-black transition-colors rounded"
+              className="px-3 sm:px-4 py-2 border border-theme-ink text-xs sm:text-sm font-bold hover:bg-theme-surface hover:text-theme-ink transition-colors rounded"
             >
               SAVE
             </button>
-            <button 
+            <button
               onClick={handleOpenCartModal}
-              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold hover:bg-white hover:text-black transition-colors relative rounded"
+              className="px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold hover:bg-theme-surface hover:text-theme-ink transition-colors relative rounded"
             >
               <ShoppingCart className="w-5 h-5" />
               {getCartItemCount() > 0 && (
@@ -120,16 +120,16 @@ export default function DesignHeader() {
 
       {/* Save Modal */}
       {showSaveModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-theme-surface text-theme-ink rounded-lg p-6 max-w-md w-full max-h-[90vh] overflow-y-auto">
             <h2 className="text-xl font-black mb-4">Save Design</h2>
             {saveMessage && (
-              <div className={`mb-4 p-3 rounded ${saveMessage.includes('successfully') ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+              <div className={`mb-4 p-3 rounded ${saveMessage.includes('successfully') ? 'bg-theme-success-bg text-theme-success-ink' : 'bg-theme-error-bg text-theme-error-ink'}`}>
                 {saveMessage}
               </div>
             )}
             {loadMessage && (
-              <div className="mb-4 p-3 rounded bg-green-100 text-green-800">
+              <div className="mb-4 p-3 rounded bg-theme-success-bg text-theme-success-ink">
                 {loadMessage}
               </div>
             )}
@@ -140,13 +140,13 @@ export default function DesignHeader() {
                 value={designName}
                 onChange={(e) => setDesignName(e.target.value)}
                 placeholder="Enter design name"
-                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-black"
+                className="w-full px-3 py-2 border border-theme-ink/15 rounded focus:outline-none focus:ring-2 focus:ring-theme-ink"
               />
             </div>
             <div className="flex gap-2">
               <button
                 onClick={saveDesign}
-                className="flex-1 bg-black text-white py-2 rounded font-bold hover:bg-gray-800 transition-colors"
+                className="flex-1 bg-theme-ink text-theme-base py-2 rounded font-bold hover:bg-theme-ink/85 transition-colors"
               >
                 Save design
               </button>
@@ -157,28 +157,28 @@ export default function DesignHeader() {
                   setLoadMessage('');
                   setDesignName('');
                 }}
-                className="flex-1 border border-gray-300 py-2 rounded font-bold hover:bg-gray-100 transition-colors"
+                className="flex-1 border border-theme-ink/15 py-2 rounded font-bold hover:bg-theme-soft transition-colors"
               >
                 Cancel
               </button>
             </div>
 
             {savedDesigns.length > 0 && (
-              <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="mt-6 pt-6 border-t border-theme-ink/15">
                 <h3 className="text-sm font-black mb-3">Saved Designs ({savedDesigns.length})</h3>
                 <div className="space-y-2 max-h-64 overflow-y-auto">
                   {savedDesigns.map((design) => (
-                    <div key={design.id} className="flex items-center justify-between p-3 border border-gray-200 rounded hover:bg-gray-50 transition-colors">
+                    <div key={design.id} className="flex items-center justify-between p-3 border border-theme-ink/15 rounded hover:bg-theme-soft transition-colors">
                       <div className="flex-1 min-w-0">
                         <p className="font-bold text-sm truncate">{design.name}</p>
-                        <p className="text-xs text-gray-500">
+                        <p className="text-xs text-theme-muted">
                           {design.tshirtColor.charAt(0).toUpperCase() + design.tshirtColor.slice(1)} • {new Date(design.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                       <div className="flex gap-2 ml-4">
                         <button
                           onClick={() => handleLoadDesign(design)}
-                          className="px-3 py-1 bg-black text-white text-xs font-bold rounded hover:bg-gray-800 transition-colors"
+                          className="px-3 py-1 bg-theme-ink text-theme-base text-xs font-bold rounded hover:bg-theme-ink/85 transition-colors"
                         >
                           Load
                         </button>
@@ -201,21 +201,21 @@ export default function DesignHeader() {
 
       {/* Cart Modal */}
       {showCartModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-theme-surface text-theme-ink rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-black">Shopping Cart</h2>
               <button
                 onClick={() => setShowCartModal(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-theme-muted hover:text-theme-ink/85"
               >
                 ✕
               </button>
             </div>
             {!user ? (
-              <p className="text-center text-gray-500 py-8">Please log in to view your cart</p>
+              <p className="text-center text-theme-muted py-8">Please log in to view your cart</p>
             ) : cart.length === 0 ? (
-              <p className="text-center text-gray-500 py-8">Your cart is empty</p>
+              <p className="text-center text-theme-muted py-8">Your cart is empty</p>
             ) : (
               <>
                 <div className="space-y-6 mb-6">
@@ -226,36 +226,36 @@ export default function DesignHeader() {
                     const capitalizedColor = item.tshirtColor.charAt(0).toUpperCase() + item.tshirtColor.slice(1);
 
                     return (
-                      <div key={item.id} className="p-4 border border-gray-200 rounded-lg">
+                      <div key={item.id} className="p-4 border border-theme-ink/15 rounded-lg">
                         <div className="flex flex-col sm:flex-row gap-6">
                           {/* Previews */}
                           <div className="grid grid-cols-2 gap-3 sm:gap-4 flex-shrink-0">
                             <div>
-                              <p className="text-xs font-medium text-gray-600 text-center mb-1">Front</p>
-                              <div className="relative w-32 h-32 bg-gray-100 rounded-lg overflow-hidden shadow-sm">
-                                <img 
-                                  src={item.front} 
-                                  alt="Front design" 
+                              <p className="text-xs font-medium text-theme-muted text-center mb-1">Front</p>
+                              <div className="relative w-32 h-32 bg-theme-soft rounded-lg overflow-hidden shadow-sm">
+                                <img
+                                  src={item.front}
+                                  alt="Front design"
                                   className="w-full h-full object-contain"
                                 />
                                 {frontElements === 0 && (
-                                  <div className="absolute inset-0 flex items-center justify-center bg-gray-50 bg-opacity-75">
-                                    <span className="text-xs text-gray-500">Blank</span>
+                                  <div className="absolute inset-0 flex items-center justify-center bg-theme-soft bg-opacity-75">
+                                    <span className="text-xs text-theme-muted">Blank</span>
                                   </div>
                                 )}
                               </div>
                             </div>
                             <div>
-                              <p className="text-xs font-medium text-gray-600 text-center mb-1">Back</p>
-                              <div className="relative w-32 h-32 bg-gray-100 rounded-lg overflow-hidden shadow-sm">
-                                <img 
-                                  src={item.back} 
-                                  alt="Back design" 
+                              <p className="text-xs font-medium text-theme-muted text-center mb-1">Back</p>
+                              <div className="relative w-32 h-32 bg-theme-soft rounded-lg overflow-hidden shadow-sm">
+                                <img
+                                  src={item.back}
+                                  alt="Back design"
                                   className="w-full h-full object-contain"
                                 />
                                 {backElements === 0 && (
-                                  <div className="absolute inset-0 flex items-center justify-center bg-gray-50 bg-opacity-75">
-                                    <span className="text-xs text-gray-500">Blank</span>
+                                  <div className="absolute inset-0 flex items-center justify-center bg-theme-soft bg-opacity-75">
+                                    <span className="text-xs text-theme-muted">Blank</span>
                                   </div>
                                 )}
                               </div>
@@ -266,16 +266,16 @@ export default function DesignHeader() {
                           <div className="flex-1 flex flex-col justify-between">
                             <div>
                               <h3 className="font-bold text-lg">{item.name}</h3>
-                              <p className="text-sm text-gray-600 mt-1">Color: {capitalizedColor}</p>
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm text-theme-muted mt-1">Color: {capitalizedColor}</p>
+                              <p className="text-sm text-theme-muted">
                                 Design elements: {totalElements} ({frontElements} front, {backElements} back)
                               </p>
                             </div>
 
                             <div className="flex items-center justify-between mt-4">
                               <div className="flex items-center gap-3">
-                                <span className="text-sm text-gray-600">Qty:</span>
-                                <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                                <span className="text-sm text-theme-muted">Qty:</span>
+                                <div className="flex items-center border border-theme-ink/15 rounded-lg overflow-hidden">
                                   <button
                                     onClick={() => {
                                       if (item.quantity > 1) {
@@ -284,7 +284,7 @@ export default function DesignHeader() {
                                         removeFromCart(item.id,userId!);
                                       }
                                     }}
-                                    className="px-3 py-1.5 hover:bg-gray-100 text-sm font-bold"
+                                    className="px-3 py-1.5 hover:bg-theme-soft text-sm font-bold"
                                   >
                                     -
                                   </button>
@@ -293,7 +293,7 @@ export default function DesignHeader() {
                                   </span>
                                   <button
                                     onClick={() => updateCartItemQuantity(item.id,userId!, item.quantity + 1)}
-                                    className="px-3 py-1.5 hover:bg-gray-100 text-sm font-bold"
+                                    className="px-3 py-1.5 hover:bg-theme-soft text-sm font-bold"
                                   >
                                     +
                                   </button>
@@ -304,7 +304,7 @@ export default function DesignHeader() {
                                 <p className="font-bold text-lg">R{(item.price * item.quantity).toFixed(2)}</p>
                                 <button
                                   onClick={() => removeFromCart(item.id,userId!)}
-                                  className="text-red-500 hover:text-red-700"
+                                  className="text-theme-error-ink hover:text-theme-error-ink"
                                 >
                                   <Trash2 className="w-5 h-5" />
                                 </button>
@@ -318,19 +318,19 @@ export default function DesignHeader() {
                 </div>
 
                 {/* Cart Total */}
-                <div className="border-t border-gray-200 pt-4">
+                <div className="border-t border-theme-ink/15 pt-4">
                   <div className="flex justify-between items-center mb-4">
                     <span className="text-lg font-black">Total:</span>
                     <span className="text-2xl font-black">
                       R{getCartTotal().toFixed(2)}
                     </span>
                   </div>
-                  <Button 
+                  <Button
                     onClick={() => {
                       router.push("/studio/checkout");
                       setShowCartModal(false);
                     }}
-                    className="w-full bg-black text-white py-3 rounded font-bold hover:bg-gray-800 transition-colors flex items-center justify-center gap-2"
+                    className="w-full bg-theme-ink text-theme-base py-3 rounded font-bold hover:bg-theme-ink/85 transition-colors flex items-center justify-center gap-2"
                   >
                     <LockIcon className="w-5 h-5" />
                     Proceed to Checkout
@@ -341,7 +341,7 @@ export default function DesignHeader() {
             {cart.length > 0 && (
               <button
                 onClick={() => setShowCartModal(false)}
-                className="w-full mt-4 border border-gray-300 py-2 rounded font-bold hover:bg-gray-100 transition-colors"
+                className="w-full mt-4 border border-theme-ink/15 py-2 rounded font-bold hover:bg-theme-soft transition-colors"
               >
                 Close
               </button>

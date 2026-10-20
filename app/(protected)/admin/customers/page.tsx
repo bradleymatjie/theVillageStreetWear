@@ -37,7 +37,7 @@ export default async function CustomersPage() {
       <div>
         <h1 className="text-3xl font-bold uppercase mb-6">Customers</h1>
         <div className="p-6 bg-[var(--palette-surface-admin)] border border-[var(--palette-border-admin)] rounded-lg">
-          <p className="text-red-400">Error: {error}</p>
+          <p className="text-theme-error-ink">Error: {error}</p>
         </div>
       </div>
     );
@@ -53,17 +53,17 @@ export default async function CustomersPage() {
 
         {customers.length === 0 ? (
           <div className="p-6 bg-[var(--palette-surface-admin)] border border-[var(--palette-border-admin)] rounded-lg">
-            <p className="text-gray-400">No customers found.</p>
+            <p className="text-theme-muted">No customers found.</p>
           </div>
         ) : (
           <div className="bg-[var(--palette-surface-admin)] border border-[var(--palette-border-admin)] rounded-lg overflow-hidden">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-[var(--palette-border-admin)] bg-[var(--palette-border-admin)]">
-                  <th className="text-left p-4 font-semibold text-gray-300">User ID</th>
-                  <th className="text-left p-4 font-semibold text-gray-300">Full Name</th>
-                  <th className="text-left p-4 font-semibold text-gray-300">Email</th>
-                  <th className="text-left p-4 font-semibold text-gray-300">Updated At</th>
+                  <th className="text-left p-4 font-semibold text-theme-ink/75">User ID</th>
+                  <th className="text-left p-4 font-semibold text-theme-ink/75">Full Name</th>
+                  <th className="text-left p-4 font-semibold text-theme-ink/75">Email</th>
+                  <th className="text-left p-4 font-semibold text-theme-ink/75">Updated At</th>
                 </tr>
               </thead>
               <tbody>
@@ -75,10 +75,10 @@ export default async function CustomersPage() {
 
                   return (
                     <tr key={customer.id} className="border-b border-[var(--palette-border-admin)] hover:bg-[var(--palette-border-admin)]">
-                      <td className="p-4 text-gray-300">{customer.user_id}</td>
-                      <td className="p-4 text-white">{customer.full_name ?? 'N/A'}</td>
-                      <td className="p-4 text-gray-300">{customer.email}</td>
-                      <td className="p-4 text-gray-300">{updatedAt}</td>
+                      <td className="p-4 text-theme-ink/75">{customer.user_id}</td>
+                      <td className="p-4 text-theme-ink">{customer.full_name ?? 'N/A'}</td>
+                      <td className="p-4 text-theme-ink/75">{customer.email}</td>
+                      <td className="p-4 text-theme-ink/75">{updatedAt}</td>
                     </tr>
                   );
                 })}

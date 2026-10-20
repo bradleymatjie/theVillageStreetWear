@@ -320,40 +320,40 @@ export default function BrandProductsPage() {
     };
 
     return (
-        <main className="min-h-screen bg-black p-4 text-white md:p-8">
+        <main className="min-h-screen bg-theme-base p-4 text-theme-ink md:p-8">
             <div className="mb-8 flex items-center justify-between">
                 <div>
                     <Link
                         href="/brand-dashboard"
-                        className="mb-3 inline-flex items-center gap-2 text-sm text-white/50 hover:text-white"
+                        className="mb-3 inline-flex items-center gap-2 text-sm text-theme-muted hover:text-theme-ink"
                     >
                         <ArrowLeft className="h-4 w-4" />
                         Back to dashboard
                     </Link>
 
                     <h1 className="text-3xl font-black md:text-4xl">{brandName}</h1>
-                    <p className="mt-1 text-sm text-white/50">Manage your brand products.</p>
+                    <p className="mt-1 text-sm text-theme-muted">Manage your brand products.</p>
                 </div>
 
-                <Button onClick={handleAddNew} className="bg-white text-black hover:bg-white/80">
+                <Button onClick={handleAddNew} className="bg-theme-ink text-theme-base hover:bg-theme-ink/80">
                     <Plus className="mr-2 h-4 w-4" />
                     Add Product
                 </Button>
             </div>
 
-            <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <section className="rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-6">
                 {loading ? (
-                    <p className="py-12 text-center text-white/50">Loading products...</p>
+                    <p className="py-12 text-center text-theme-muted">Loading products...</p>
                 ) : products.length === 0 ? (
                     <div className="py-12 text-center">
-                        <ImageIcon className="mx-auto mb-4 h-12 w-12 text-white/20" />
+                        <ImageIcon className="mx-auto mb-4 h-12 w-12 text-theme-ink/20" />
                         <h2 className="text-xl font-black">No products yet</h2>
-                        <p className="mt-2 text-sm text-white/50">
+                        <p className="mt-2 text-sm text-theme-muted">
                             Add your first product to start selling on The Village.
                         </p>
                         <Button
                             onClick={handleAddNew}
-                            className="mt-6 bg-white text-black hover:bg-white/80"
+                            className="mt-6 bg-theme-ink text-theme-base hover:bg-theme-ink/80"
                         >
                             <Plus className="mr-2 h-4 w-4" />
                             Add Product
@@ -367,9 +367,9 @@ export default function BrandProductsPage() {
                             return (
                                 <div
                                     key={product.id}
-                                    className="overflow-hidden rounded-2xl border border-white/10 bg-black/40"
+                                    className="overflow-hidden rounded-2xl border border-theme-ink/10 bg-theme-base/40"
                                 >
-                                    <div className="relative aspect-square bg-white/5">
+                                    <div className="relative aspect-square bg-theme-ink/5">
                                         {primaryImage ? (
                                             <img
                                                 src={primaryImage}
@@ -378,7 +378,7 @@ export default function BrandProductsPage() {
                                             />
                                         ) : (
                                             <div className="flex h-full items-center justify-center">
-                                                <ImageIcon className="h-10 w-10 text-white/20" />
+                                                <ImageIcon className="h-10 w-10 text-theme-ink/20" />
                                             </div>
                                         )}
 
@@ -386,7 +386,7 @@ export default function BrandProductsPage() {
                                             <Button
                                                 size="icon"
                                                 onClick={() => handleEdit(product)}
-                                                className="h-8 w-8 bg-white text-black hover:bg-white/80"
+                                                className="h-8 w-8 bg-theme-ink text-theme-base hover:bg-theme-ink/80"
                                             >
                                                 <Pencil className="h-4 w-4" />
                                             </Button>
@@ -412,7 +412,7 @@ export default function BrandProductsPage() {
                                         <h3 className="truncate text-lg font-black">{product.name}</h3>
                                         <p className="mt-1 text-xl font-black">R{product.price}</p>
                                         {product.category && (
-                                            <p className="mt-2 text-xs uppercase text-white/40">
+                                            <p className="mt-2 text-xs uppercase text-theme-muted">
                                                 {product.category}
                                             </p>
                                         )}
@@ -425,12 +425,12 @@ export default function BrandProductsPage() {
             </section>
 
             <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
-                <SheetContent className="inset-y-4 right-4 flex h-[calc(100vh-2rem)] w-[calc(100vw-2rem)] max-w-none flex-col overflow-hidden rounded-3xl border border-white/10 bg-black p-0 text-white sm:w-[46rem] sm:max-w-none lg:w-[56rem]">
-                    <SheetHeader className="border-b border-white/10 px-6 py-5 sm:px-8">
-                        <SheetTitle className="text-white">
+                <SheetContent className="inset-y-4 right-4 flex h-[calc(100vh-2rem)] w-[calc(100vw-2rem)] max-w-none flex-col overflow-hidden rounded-3xl border border-theme-ink/10 bg-theme-base p-0 text-theme-ink sm:w-[46rem] sm:max-w-none lg:w-[56rem]">
+                    <SheetHeader className="border-b border-theme-ink/10 px-6 py-5 sm:px-8">
+                        <SheetTitle className="text-theme-ink">
                             {editingProduct ? "Edit Product" : "Add Product"}
                         </SheetTitle>
-                        <SheetDescription className="text-white/50">
+                        <SheetDescription className="text-theme-muted">
                             This product will be listed under {brandName}.
                         </SheetDescription>
                     </SheetHeader>
@@ -450,24 +450,24 @@ export default function BrandProductsPage() {
                                 name="description"
                                 value={form.description}
                                 onChange={handleChange}
-                                className="mt-2 min-h-32 border-white/10 bg-white/5 text-white"
+                                className="mt-2 min-h-32 border-theme-ink/10 bg-theme-ink/5 text-theme-ink"
                             />
                         </div>
 
                         <div className="mt-6 grid gap-5 lg:grid-cols-2">
-                            <div className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                            <div className="space-y-4 rounded-2xl border border-theme-ink/10 bg-theme-ink/[0.03] p-4">
                                 <div>
                                     <RequiredLabel>Main Image</RequiredLabel>
                                     <Input
                                         type="file"
                                         accept="image/*"
                                         onChange={handleMainImageChange}
-                                        className="mt-2 border-white/10 bg-white/5 text-white"
+                                        className="mt-2 border-theme-ink/10 bg-theme-ink/5 text-theme-ink"
                                     />
                                 </div>
 
                                 {mainImage ? (
-                                    <div className="relative overflow-hidden rounded-xl border border-white/10">
+                                    <div className="relative overflow-hidden rounded-xl border border-theme-ink/10">
                                         <img src={mainImage.url} className="h-64 w-full object-cover" />
                                         <Button
                                             size="icon"
@@ -479,13 +479,13 @@ export default function BrandProductsPage() {
                                         </Button>
                                     </div>
                                 ) : (
-                                    <div className="flex h-64 items-center justify-center rounded-xl border border-dashed border-white/10 bg-black/40 text-sm text-white/35">
+                                    <div className="flex h-64 items-center justify-center rounded-xl border border-dashed border-theme-ink/10 bg-theme-base/40 text-sm text-theme-muted">
                                         Main image preview
                                     </div>
                                 )}
                             </div>
 
-                            <div className="space-y-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+                            <div className="space-y-4 rounded-2xl border border-theme-ink/10 bg-theme-ink/[0.03] p-4">
                                 <div>
                                     <Label>Additional Images</Label>
                                     <Input
@@ -493,7 +493,7 @@ export default function BrandProductsPage() {
                                         accept="image/*"
                                         multiple
                                         onChange={handleAdditionalImagesChange}
-                                        className="mt-2 border-white/10 bg-white/5 text-white"
+                                        className="mt-2 border-theme-ink/10 bg-theme-ink/5 text-theme-ink"
                                     />
                                 </div>
 
@@ -502,7 +502,7 @@ export default function BrandProductsPage() {
                                         {additionalImages.map((img, index) => (
                                             <div
                                                 key={index}
-                                                className="relative overflow-hidden rounded-xl border border-white/10"
+                                                className="relative overflow-hidden rounded-xl border border-theme-ink/10"
                                             >
                                                 <img src={img.url} className="h-28 w-full object-cover" />
                                                 <button
@@ -519,7 +519,7 @@ export default function BrandProductsPage() {
                                         ))}
                                     </div>
                                 ) : (
-                                    <div className="flex h-64 items-center justify-center rounded-xl border border-dashed border-white/10 bg-black/40 text-sm text-white/35">
+                                    <div className="flex h-64 items-center justify-center rounded-xl border border-dashed border-theme-ink/10 bg-theme-base/40 text-sm text-theme-muted">
                                         Additional image previews
                                     </div>
                                 )}
@@ -536,11 +536,11 @@ export default function BrandProductsPage() {
                             <Label>Mark as sold out</Label>
                         </div>
 
-                        <div className="sticky bottom-0 -mx-6 mt-6 flex gap-3 border-t border-white/10 bg-black/95 px-6 py-4 sm:-mx-8 sm:px-8">
+                        <div className="sticky bottom-0 -mx-6 mt-6 flex gap-3 border-t border-theme-ink/10 bg-theme-base/95 px-6 py-4 sm:-mx-8 sm:px-8">
                             <Button
                                 variant="outline"
                                 onClick={resetForm}
-                                className="flex-1 border-white/15 bg-black text-white hover:bg-white/10 hover:text-white"
+                                className="flex-1 border-theme-ink/15 bg-theme-base text-theme-ink hover:bg-theme-ink/10 hover:text-theme-ink"
                             >
                                 Cancel
                             </Button>
@@ -548,7 +548,7 @@ export default function BrandProductsPage() {
                             <Button
                                 onClick={handleSubmit}
                                 disabled={loading}
-                                className="flex-1 bg-white font-black text-black hover:bg-white/80"
+                                className="flex-1 bg-theme-ink font-black text-theme-base hover:bg-theme-ink/80"
                             >
                                 {loading
                                     ? "Saving..."
@@ -588,7 +588,7 @@ function Field({
                 onChange={onChange}
                 placeholder={placeholder}
                 required={required}
-                className="mt-2 border-white/10 bg-white/5 text-white"
+                className="mt-2 border-theme-ink/10 bg-theme-ink/5 text-theme-ink"
             />
         </div>
     );
@@ -604,8 +604,8 @@ function PriceField({
     return (
         <div>
             <RequiredLabel>Price</RequiredLabel>
-            <div className="mt-2 flex overflow-hidden rounded-md border border-white/10 bg-white/5 focus-within:ring-2 focus-within:ring-white/30">
-                <span className="flex items-center border-r border-white/10 px-3 text-sm font-black text-white/60">
+            <div className="mt-2 flex overflow-hidden rounded-md border border-theme-ink/10 bg-theme-ink/5 focus-within:ring-2 focus-within:ring-theme-ink/30">
+                <span className="flex items-center border-r border-theme-ink/10 px-3 text-sm font-black text-theme-muted">
                     R
                 </span>
                 <Input
@@ -615,7 +615,7 @@ function PriceField({
                     required
                     inputMode="decimal"
                     placeholder="399"
-                    className="border-0 bg-transparent text-white focus-visible:ring-0"
+                    className="border-0 bg-transparent text-theme-ink focus-visible:ring-0"
                 />
             </div>
         </div>
@@ -637,13 +637,13 @@ function CategoryField({
                 value={value}
                 onChange={onChange}
                 required
-                className="mt-2 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-white/30"
+                className="mt-2 w-full rounded-md border border-theme-ink/10 bg-theme-ink/5 px-3 py-2 text-theme-ink outline-none focus:ring-2 focus:ring-theme-ink/30"
             >
-                <option value="" className="bg-black">
+                <option value="" className="bg-theme-base">
                     Select category
                 </option>
                 {productCategories.map((category) => (
-                    <option key={category} value={category} className="bg-black">
+                    <option key={category} value={category} className="bg-theme-base">
                         {category}
                     </option>
                 ))}
@@ -667,13 +667,13 @@ function MaterialField({
                 value={value}
                 onChange={onChange}
                 required
-                className="mt-2 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-white outline-none focus:ring-2 focus:ring-white/30"
+                className="mt-2 w-full rounded-md border border-theme-ink/10 bg-theme-ink/5 px-3 py-2 text-theme-ink outline-none focus:ring-2 focus:ring-theme-ink/30"
             >
-                <option value="" className="bg-black">
+                <option value="" className="bg-theme-base">
                     Select material
                 </option>
                 {productMaterials.map((material) => (
-                    <option key={material} value={material} className="bg-black">
+                    <option key={material} value={material} className="bg-theme-base">
                         {material}
                     </option>
                 ))}
@@ -685,7 +685,7 @@ function MaterialField({
 function RequiredLabel({ children }: { children: React.ReactNode }) {
     return (
         <Label>
-            {children} <span className="text-red-400">*</span>
+            {children} <span className="text-theme-error-ink">*</span>
         </Label>
     );
 }

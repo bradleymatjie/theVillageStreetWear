@@ -43,19 +43,19 @@ export function UsersChart({ data }: UsersChartProps) {
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-gray-900 border border-gray-700 rounded-lg p-3 shadow-xl">
-          <p className="text-sm font-medium text-gray-300 mb-2">{label}</p>
+        <div className="bg-theme-surface border border-theme-ink/20 rounded-lg p-3 shadow-xl">
+          <p className="text-sm font-medium text-theme-ink/75 mb-2">{label}</p>
           <div className="space-y-1">
             {payload.map((entry: any, index: number) => (
               <div key={index} className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-2">
-                  <div 
-                    className="w-2 h-2 rounded-full" 
+                  <div
+                    className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: entry.color }}
                   />
-                  <span className="text-sm text-gray-400">{entry.dataKey}:</span>
+                  <span className="text-sm text-theme-muted">{entry.dataKey}:</span>
                 </div>
-                <span className="text-sm font-medium text-white">
+                <span className="text-sm font-medium text-theme-ink">
                   {typeof entry.value === 'number' ? entry.value.toLocaleString() : entry.value}
                 </span>
               </div>
@@ -74,8 +74,8 @@ export function UsersChart({ data }: UsersChartProps) {
           data={formattedData}
           margin={{ top: 5, right: 30, left: 0, bottom: 5 }}
         >
-          <CartesianGrid 
-            strokeDasharray="3 3" 
+          <CartesianGrid
+            strokeDasharray="3 3"
             stroke="var(--palette-chart-grid)"
             vertical={false}
           />
@@ -97,13 +97,13 @@ export function UsersChart({ data }: UsersChartProps) {
             }}
           />
           <Tooltip content={<CustomTooltip />} />
-          <Legend 
-            verticalAlign="top" 
+          <Legend
+            verticalAlign="top"
             height={36}
             iconType="circle"
             iconSize={8}
             formatter={(value) => (
-              <span className="text-sm text-gray-400">{value}</span>
+              <span className="text-sm text-theme-muted">{value}</span>
             )}
           />
           <Area

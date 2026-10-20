@@ -48,7 +48,7 @@ export default async function BrandOrdersPage({
     return (
       <div className="mx-auto max-w-7xl">
         <h1 className="text-3xl font-black">Orders</h1>
-        <p className="mt-3 text-white/50">Brand profile not found.</p>
+        <p className="mt-3 text-theme-muted">Brand profile not found.</p>
       </div>
     );
   }
@@ -79,11 +79,11 @@ export default async function BrandOrdersPage({
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mb-8">
-        <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/40">
+        <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-muted">
           Brand Orders
         </p>
         <h1 className="mt-2 text-4xl font-black">Orders</h1>
-        <p className="mt-2 text-sm text-white/50">
+        <p className="mt-2 text-sm text-theme-muted">
           View paid orders placed for {brand.name}.
         </p>
       </div>
@@ -111,7 +111,7 @@ export default async function BrandOrdersPage({
         />
       </div>
 
-      <section className="mt-10 rounded-3xl border border-white/10 bg-white/5 p-5 sm:p-6">
+      <section className="mt-10 rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-5 sm:p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <h2 className="text-2xl font-black">Recent Orders</h2>
 
@@ -129,8 +129,8 @@ export default async function BrandOrdersPage({
                   }
                   className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold transition ${
                     isActive
-                      ? "bg-white text-black"
-                      : "border border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white"
+                      ? "bg-theme-ink text-theme-base"
+                      : "border border-theme-ink/10 bg-theme-ink/5 text-theme-muted hover:bg-theme-ink/10 hover:text-theme-ink"
                   }`}
                 >
                   {filter.label}
@@ -141,9 +141,9 @@ export default async function BrandOrdersPage({
         </div>
 
         {orders.length === 0 ? (
-          <div className="mt-8 rounded-2xl border border-white/10 bg-black/30 p-8 text-center">
+          <div className="mt-8 rounded-2xl border border-theme-ink/10 bg-theme-base/30 p-8 text-center">
             <p className="font-bold">No paid orders found</p>
-            <p className="mt-2 text-sm text-white/50">
+            <p className="mt-2 text-sm text-theme-muted">
               Paid orders matching this filter will appear here.
             </p>
           </div>

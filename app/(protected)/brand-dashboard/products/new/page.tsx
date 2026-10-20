@@ -86,29 +86,29 @@ export default function NewBrandProductPage() {
   };
 
   return (
-    <main className="min-h-screen bg-black px-4 py-8 text-white sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-theme-base px-4 py-8 text-theme-ink sm:px-6 lg:px-8">
       <div className="mx-auto max-w-3xl">
         <Link
           href="/brand-dashboard"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-white/60 hover:text-white"
+          className="mb-8 inline-flex items-center gap-2 text-sm text-theme-muted hover:text-theme-ink"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to dashboard
         </Link>
 
         <div className="mb-8">
-          <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/40">
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-muted">
             Brand Dashboard
           </p>
           <h1 className="mt-2 text-4xl font-black">Add Product</h1>
-          <p className="mt-2 text-sm text-white/50">
+          <p className="mt-2 text-sm text-theme-muted">
             Upload a new product to The Village marketplace.
           </p>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-5 rounded-3xl border border-white/10 bg-white/5 p-6"
+          className="space-y-5 rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-6"
         >
           <Input
             label="Product Name"
@@ -148,7 +148,7 @@ export default function NewBrandProductPage() {
               onChange={handleChange}
               rows={4}
               required
-              className="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-3 text-white outline-none"
+              className="mt-2 w-full rounded-xl border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink outline-none"
               placeholder="Tell customers about this product..."
             />
           </div>
@@ -171,7 +171,7 @@ export default function NewBrandProductPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-white py-4 text-sm font-black uppercase tracking-wide text-black transition hover:bg-white/80 disabled:opacity-50"
+            className="w-full rounded-xl bg-theme-ink py-4 text-sm font-black uppercase tracking-wide text-theme-base transition hover:bg-theme-ink/80 disabled:opacity-50"
           >
             {loading ? "Adding Product..." : "Add Product"}
           </button>
@@ -198,7 +198,7 @@ function CategorySelect({
         value={value}
         onChange={onChange}
         required={required}
-        className="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-3 text-white outline-none"
+        className="mt-2 w-full rounded-xl border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink outline-none"
       >
         <option value="">Select category</option>
         {productCategories.map((category) => (
@@ -223,8 +223,8 @@ function PriceInput({
   return (
     <div>
       <RequiredLabel>Price</RequiredLabel>
-      <div className="mt-2 flex overflow-hidden rounded-xl border border-white/10 bg-black">
-        <span className="flex items-center border-r border-white/10 px-4 text-sm font-black text-white/60">
+      <div className="mt-2 flex overflow-hidden rounded-xl border border-theme-ink/10 bg-theme-base">
+        <span className="flex items-center border-r border-theme-ink/10 px-4 text-sm font-black text-theme-muted">
           R
         </span>
         <input
@@ -234,7 +234,7 @@ function PriceInput({
           required={required}
           inputMode="decimal"
           placeholder="399"
-          className="w-full bg-transparent px-4 py-3 text-white outline-none"
+          className="w-full bg-transparent px-4 py-3 text-theme-ink outline-none"
         />
       </div>
     </div>
@@ -258,7 +258,7 @@ function MaterialSelect({
         value={value}
         onChange={onChange}
         required={required}
-        className="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-3 text-white outline-none"
+        className="mt-2 w-full rounded-xl border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink outline-none"
       >
         <option value="">Select material</option>
         {productMaterials.map((material) => (
@@ -299,7 +299,7 @@ function Input({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-3 text-white outline-none"
+        className="mt-2 w-full rounded-xl border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink outline-none"
       />
     </div>
   );
@@ -308,7 +308,7 @@ function Input({
 function RequiredLabel({ children }: { children: React.ReactNode }) {
   return (
     <label className="text-sm font-bold">
-      {children} <span className="text-red-400">*</span>
+      {children} <span className="text-theme-error-ink">*</span>
     </label>
   );
 }

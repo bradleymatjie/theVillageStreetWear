@@ -76,11 +76,11 @@ export default function ResetPasswordPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-black px-4 text-white">
-      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8">
+    <main className="flex min-h-screen items-center justify-center bg-theme-base px-4 text-theme-ink">
+      <div className="w-full max-w-md rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-6 sm:p-8">
         <h1 className="text-2xl font-black sm:text-3xl">Set Your Password</h1>
 
-        <p className="mt-2 text-sm text-white/60">
+        <p className="mt-2 text-sm text-theme-muted">
           Create a password to access your brand dashboard.
         </p>
 
@@ -92,7 +92,7 @@ export default function ResetPasswordPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-3 text-white outline-none"
+              className="mt-2 w-full rounded-xl border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink outline-none"
               placeholder="Enter password"
             />
           </div>
@@ -104,17 +104,17 @@ export default function ResetPasswordPage() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-3 text-white outline-none"
+              className="mt-2 w-full rounded-xl border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink outline-none"
               placeholder="Confirm password"
             />
           </div>
 
-          {error && <p className="text-sm text-red-400">{error}</p>}
+          {error && <p className="text-sm text-theme-error-ink">{error}</p>}
 
           <button
             type="submit"
             disabled={loading || !sessionReady}
-            className="mt-4 w-full rounded-xl bg-white py-3 font-black text-black transition hover:bg-white/80 disabled:opacity-60"
+            className="mt-4 w-full rounded-xl bg-theme-ink py-3 font-black text-theme-base transition hover:bg-theme-ink/80 disabled:opacity-60"
           >
             {!sessionReady ? "Preparing..." : loading ? "Saving..." : "Set Password"}
           </button>

@@ -83,16 +83,16 @@ export default function RegisterBrandPage() {
 
   if (submitted) {
     return (
-      <main className="min-h-screen bg-black px-4 py-16 text-white sm:px-6 lg:px-8">
+      <main className="min-h-screen bg-theme-base px-4 py-16 text-theme-ink sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
-          <div className="border border-white/10 bg-white/[0.04] p-6 sm:p-10">
-            <p className="mb-4 inline-flex bg-white px-3 py-1 text-xs font-black uppercase tracking-wide text-black">
+          <div className="border border-theme-ink/10 bg-theme-ink/[0.04] p-6 sm:p-10">
+            <p className="mb-4 inline-flex bg-theme-ink px-3 py-1 text-xs font-black uppercase tracking-wide text-theme-base">
               Application received
             </p>
             <h1 className="text-4xl font-black leading-tight sm:text-6xl">
               APPLICATION RECEIVED.
             </h1>
-            <p className="mt-5 text-sm leading-7 text-white/60 sm:text-base">
+            <p className="mt-5 text-sm leading-7 text-theme-muted sm:text-base">
               Your application has been sent to The Village. Every brand is
               reviewed before approval.
             </p>
@@ -107,10 +107,10 @@ export default function RegisterBrandPage() {
                 "Start selling",
               ].map((item, index) => (
                 <div key={item} className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-white/10 bg-white/5 text-xs font-black text-white/55">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-theme-ink/10 bg-theme-ink/5 text-xs font-black text-theme-muted">
                     {String(index + 1).padStart(2, "0")}
                   </div>
-                  <p className="border border-white/10 bg-black px-4 py-3 text-sm font-black uppercase tracking-wide text-white/75">
+                  <p className="border border-theme-ink/10 bg-theme-base px-4 py-3 text-sm font-black uppercase tracking-wide text-theme-ink/75">
                     {item}
                   </p>
                 </div>
@@ -123,35 +123,35 @@ export default function RegisterBrandPage() {
   }
 
   return (
-    <main className="min-h-screen bg-black px-4 py-16 text-white sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-theme-base px-4 py-16 text-theme-ink sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <p className="mb-4 inline-flex border border-white/20 px-3 py-1 text-xs font-black uppercase tracking-[0.24em] text-white/55">
+          <p className="mb-4 inline-flex border border-theme-ink/20 px-3 py-1 text-xs font-black uppercase tracking-[0.24em] text-theme-muted">
             Brand application
           </p>
           <h1 className="text-5xl font-black leading-none sm:text-6xl">
             Apply to join The Village.
           </h1>
-          <p className="mt-5 text-sm leading-7 text-white/60 sm:text-base">
+          <p className="mt-5 text-sm leading-7 text-theme-muted sm:text-base">
             This first step is intentionally short. Tell us enough to understand
             your brand, your product direction and whether The Village is the
             right fit.
           </p>
 
-          <div className="mt-8 border border-white/10 bg-white/5 p-5">
+          <div className="mt-8 border border-theme-ink/10 bg-theme-ink/5 p-5">
             <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-white text-black">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center bg-theme-ink text-theme-base">
                 <Percent className="h-5 w-5" />
               </div>
               <div>
                 <h2 className="text-lg font-black">Commission partnership</h2>
-                <p className="mt-2 text-sm leading-6 text-white/60">
+                <p className="mt-2 text-sm leading-6 text-theme-muted">
                   Applying is free. The Village only earns 10% from completed
                   marketplace sales.
                 </p>
               </div>
             </div>
-            <div className="mt-5 grid gap-3 text-sm font-bold text-white/80">
+            <div className="mt-5 grid gap-3 text-sm font-bold text-theme-ink/80">
               {["R0 monthly fees", "R0 listing fees", "Applications reviewed"].map(
                 (item) => (
                   <p key={item} className="flex items-center gap-2">
@@ -166,7 +166,7 @@ export default function RegisterBrandPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-5 border border-white/10 bg-white/[0.04] p-6 sm:p-8"
+          className="space-y-5 border border-theme-ink/10 bg-theme-ink/[0.04] p-6 sm:p-8"
         >
           <div className="grid gap-5 sm:grid-cols-2">
             <div>
@@ -176,7 +176,7 @@ export default function RegisterBrandPage() {
                 required
                 value={form.brandName}
                 onChange={handleChange}
-                className="mt-2 w-full border border-white/10 bg-black px-4 py-3 text-white focus:outline-none"
+                className="mt-2 w-full border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink focus:outline-none"
                 placeholder="Your Brand"
               />
             </div>
@@ -188,7 +188,7 @@ export default function RegisterBrandPage() {
                 required
                 value={form.ownerName}
                 onChange={handleChange}
-                className="mt-2 w-full border border-white/10 bg-black px-4 py-3 text-white focus:outline-none"
+                className="mt-2 w-full border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink focus:outline-none"
                 placeholder="Your name"
               />
             </div>
@@ -203,7 +203,7 @@ export default function RegisterBrandPage() {
                 required
                 value={form.email}
                 onChange={handleChange}
-                className="mt-2 w-full border border-white/10 bg-black px-4 py-3 text-white focus:outline-none"
+                className="mt-2 w-full border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink focus:outline-none"
                 placeholder="you@email.com"
               />
             </div>
@@ -215,7 +215,7 @@ export default function RegisterBrandPage() {
                 required
                 value={form.phone}
                 onChange={handleChange}
-                className="mt-2 w-full border border-white/10 bg-black px-4 py-3 text-white focus:outline-none"
+                className="mt-2 w-full border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink focus:outline-none"
                 placeholder="+27..."
               />
             </div>
@@ -229,7 +229,7 @@ export default function RegisterBrandPage() {
                 required
                 value={form.instagram}
                 onChange={handleChange}
-                className="mt-2 w-full border border-white/10 bg-black px-4 py-3 text-white focus:outline-none"
+                className="mt-2 w-full border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink focus:outline-none"
                 placeholder="@yourbrand"
               />
             </div>
@@ -240,7 +240,7 @@ export default function RegisterBrandPage() {
                 required
                 value={form.location}
                 onChange={handleChange}
-                className="mt-2 w-full border border-white/10 bg-black px-4 py-3 text-white focus:outline-none"
+                className="mt-2 w-full border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink focus:outline-none"
                 placeholder="Johannesburg, Gauteng"
               />
             </div>
@@ -252,7 +252,7 @@ export default function RegisterBrandPage() {
                 required
                 value={form.category}
                 onChange={handleChange}
-                className="mt-2 w-full border border-white/10 bg-black px-4 py-3 text-white focus:outline-none"
+                className="mt-2 w-full border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink focus:outline-none"
                 placeholder="T-shirts, caps, sneakers..."
               />
             </div>
@@ -266,7 +266,7 @@ export default function RegisterBrandPage() {
               rows={5}
               value={form.description}
               onChange={handleChange}
-              className="mt-2 w-full border border-white/10 bg-black px-4 py-3 text-white focus:outline-none"
+              className="mt-2 w-full border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink focus:outline-none"
               placeholder="What does your brand stand for? Who is it for? What makes it different?"
             />
           </div>
@@ -274,13 +274,13 @@ export default function RegisterBrandPage() {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 bg-white py-4 font-black uppercase tracking-wide text-black transition hover:bg-white/80 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 bg-theme-ink py-4 font-black uppercase tracking-wide text-theme-base transition hover:bg-theme-ink/80 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {loading ? "Submitting..." : "Apply to The Village"}
             <ArrowRight className="h-4 w-4" />
           </button>
 
-          <p className="text-center text-xs font-bold uppercase tracking-[0.18em] text-white/35">
+          <p className="text-center text-xs font-bold uppercase tracking-[0.18em] text-theme-muted">
             Applications are reviewed before approval.
           </p>
         </form>

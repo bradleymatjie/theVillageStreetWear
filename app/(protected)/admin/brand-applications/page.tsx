@@ -32,9 +32,9 @@ export default async function BrandApplicationsPage() {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-black p-6 text-white">
-        <p className="text-red-400">Error loading applications.</p>
-        <p className="mt-2 text-sm text-white/50">{error.message}</p>
+      <main className="min-h-screen bg-theme-base p-6 text-theme-ink">
+        <p className="text-theme-error-ink">Error loading applications.</p>
+        <p className="mt-2 text-sm text-theme-muted">{error.message}</p>
       </main>
     );
   }
@@ -42,24 +42,24 @@ export default async function BrandApplicationsPage() {
   const applications = (data || []) as BrandApplication[];
 
   return (
-    <main className="min-h-screen bg-black p-4 text-white sm:p-6">
+    <main className="min-h-screen bg-theme-base p-4 text-theme-ink sm:p-6">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
-          <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/40">
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-muted">
             Admin
           </p>
           <h1 className="mt-2 text-3xl font-black sm:text-5xl">
             Brand Applications
           </h1>
-          <p className="mt-2 text-sm text-white/50">
+          <p className="mt-2 text-sm text-theme-muted">
             Review brands that applied to join The Village.
           </p>
         </div>
 
         {applications.length === 0 ? (
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
+          <div className="rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-8 text-center">
             <p className="font-bold">No applications yet</p>
-            <p className="mt-2 text-sm text-white/50">
+            <p className="mt-2 text-sm text-theme-muted">
               New brand applications will appear here.
             </p>
           </div>
@@ -68,45 +68,45 @@ export default async function BrandApplicationsPage() {
             {applications.map((app) => (
               <div
                 key={app.id}
-                className="rounded-3xl border border-white/10 bg-white/5 p-5"
+                className="rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-5"
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <div className="flex items-center gap-2">
                       <h2 className="text-xl font-black">{app.brand_name}</h2>
-                      <span className="rounded-full bg-amber-500/20 px-3 py-1 text-xs font-black text-amber-400">
+                      <span className="rounded-full bg-amber-500/20 px-3 py-1 text-xs font-black text-theme-warning-ink">
                         {app.status}
                       </span>
                     </div>
 
-                    <p className="mt-1 text-sm text-white/50">
+                    <p className="mt-1 text-sm text-theme-muted">
                       Owner: {app.owner_name}
                     </p>
                   </div>
 
-                  <div className="rounded-2xl bg-white px-4 py-2 text-sm font-black text-black">
+                  <div className="rounded-2xl bg-theme-ink px-4 py-2 text-sm font-black text-theme-base">
                     {planLabels[app.plan] || app.plan}
                   </div>
                 </div>
 
                 <div className="mt-5 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
                   <div>
-                    <p className="text-white/40">Email</p>
+                    <p className="text-theme-muted">Email</p>
                     <p className="font-bold">{app.email}</p>
                   </div>
 
                   <div>
-                    <p className="text-white/40">Phone</p>
+                    <p className="text-theme-muted">Phone</p>
                     <p className="font-bold">{app.phone}</p>
                   </div>
 
                   <div>
-                    <p className="text-white/40">Instagram</p>
+                    <p className="text-theme-muted">Instagram</p>
                     <p className="font-bold">{app.instagram || "Not added"}</p>
                   </div>
 
                   <div>
-                    <p className="text-white/40">Applied</p>
+                    <p className="text-theme-muted">Applied</p>
                     <p className="font-bold">
                       {new Date(app.created_at).toLocaleDateString()}
                     </p>
@@ -114,11 +114,11 @@ export default async function BrandApplicationsPage() {
                 </div>
 
                 {app.description && (
-                  <div className="mt-5 rounded-2xl bg-black/40 p-4">
-                    <p className="text-xs font-bold uppercase tracking-wide text-white/40">
+                  <div className="mt-5 rounded-2xl bg-theme-base/40 p-4">
+                    <p className="text-xs font-bold uppercase tracking-wide text-theme-muted">
                       About brand
                     </p>
-                    <p className="mt-2 text-sm leading-6 text-white/70">
+                    <p className="mt-2 text-sm leading-6 text-theme-ink/70">
                       {app.description}
                     </p>
                   </div>
@@ -130,7 +130,7 @@ export default async function BrandApplicationsPage() {
                   <a
                     href={`https://wa.me/${app.phone.replace(/\D/g, "")}`}
                     target="_blank"
-                    className="rounded-2xl border border-white/10 px-5 py-3 text-center text-sm font-black text-white/70"
+                    className="rounded-2xl border border-theme-ink/10 px-5 py-3 text-center text-sm font-black text-theme-ink/70"
                   >
                     WhatsApp
                   </a>

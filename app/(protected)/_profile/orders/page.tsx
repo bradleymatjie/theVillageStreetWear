@@ -96,20 +96,20 @@ export default function OrdersPage() {
 
   const getOrderStatusClass = (status: string) => {
     const classes: Record<string, string> = {
-      pending: "bg-yellow-100 text-yellow-700",
-      pending_payment: "bg-yellow-100 text-yellow-700",
-      paid: "bg-blue-100 text-blue-700",
-      processing: "bg-blue-100 text-blue-700",
-      preparing: "bg-purple-100 text-purple-700",
-      shipping: "bg-indigo-100 text-indigo-700",
-      out_for_delivery: "bg-orange-100 text-orange-700",
-      delivered: "bg-green-100 text-green-700",
-      cancelled: "bg-red-100 text-red-700",
-      refunded: "bg-gray-100 text-gray-700",
-      failed: "bg-red-100 text-red-700",
+      pending: "bg-theme-warning-bg text-theme-warning-ink",
+      pending_payment: "bg-theme-warning-bg text-theme-warning-ink",
+      paid: "bg-theme-info-bg text-theme-info-ink",
+      processing: "bg-theme-info-bg text-theme-info-ink",
+      preparing: "bg-theme-purple-bg text-theme-purple-ink",
+      shipping: "bg-theme-purple-bg text-theme-purple-ink",
+      out_for_delivery: "bg-theme-warning-bg text-theme-warning-ink",
+      delivered: "bg-theme-success-bg text-theme-success-ink",
+      cancelled: "bg-theme-error-bg text-theme-error-ink",
+      refunded: "bg-theme-soft text-theme-ink/85",
+      failed: "bg-theme-error-bg text-theme-error-ink",
     };
 
-    return classes[status] || "bg-gray-100 text-gray-700";
+    return classes[status] || "bg-theme-soft text-theme-ink/85";
   };
 
   const formatMoney = (value: any) => `R${Number(value || 0).toFixed(2)}`;
@@ -117,33 +117,33 @@ export default function OrdersPage() {
   if (loading) {
   return (
     <div className="min-h-screen px-4 py-6">
-      <div className="mb-4 h-5 w-20 animate-pulse rounded-full bg-black/10 dark:bg-white/10" />
+      <div className="mb-4 h-5 w-20 animate-pulse rounded-full bg-theme-ink/10" />
 
-      <div className="mb-6 h-10 w-48 animate-pulse rounded-2xl bg-black/10 dark:bg-white/10" />
+      <div className="mb-6 h-10 w-48 animate-pulse rounded-2xl bg-theme-ink/10" />
 
       <div className="space-y-4">
         {[1, 2, 3].map((item) => (
           <div
             key={item}
-            className="animate-pulse rounded-3xl border border-black/10 p-5 dark:border-white/10"
+            className="animate-pulse rounded-3xl border p-5 border-theme-ink/10"
           >
             <div className="flex items-start gap-4">
-              <div className="h-20 w-20 shrink-0 rounded-2xl bg-black/10 dark:bg-white/10" />
+              <div className="h-20 w-20 shrink-0 rounded-2xl bg-theme-ink/10" />
 
               <div className="flex-1">
-                <div className="h-6 w-3/4 rounded-xl bg-black/10 dark:bg-white/10" />
+                <div className="h-6 w-3/4 rounded-xl bg-theme-ink/10" />
 
-                <div className="mt-3 h-4 w-32 rounded-full bg-black/10 dark:bg-white/10" />
+                <div className="mt-3 h-4 w-32 rounded-full bg-theme-ink/10" />
 
-                <div className="mt-4 h-5 w-24 rounded-xl bg-black/10 dark:bg-white/10" />
+                <div className="mt-4 h-5 w-24 rounded-xl bg-theme-ink/10" />
 
                 <div className="mt-4 flex gap-2">
-                  <div className="h-7 w-24 rounded-full bg-black/10 dark:bg-white/10" />
+                  <div className="h-7 w-24 rounded-full bg-theme-ink/10" />
                 </div>
               </div>
             </div>
 
-            <div className="mt-5 h-11 w-full rounded-2xl bg-black/10 dark:bg-white/10" />
+            <div className="mt-5 h-11 w-full rounded-2xl bg-theme-ink/10" />
           </div>
         ))}
       </div>
@@ -206,8 +206,8 @@ export default function OrdersPage() {
                       <span
                         className={`rounded-full px-3 py-1 text-xs font-bold ${
                           paymentStatus === "paid"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-yellow-100 text-yellow-700"
+                            ? "bg-theme-success-bg text-theme-success-ink"
+                            : "bg-theme-warning-bg text-theme-warning-ink"
                         }`}
                       >
                         Payment: {paymentStatus}
@@ -218,7 +218,7 @@ export default function OrdersPage() {
 
                 <button
                   onClick={() => setSelectedOrder(order)}
-                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-black py-2 text-white"
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-theme-base py-2 text-theme-ink"
                 >
                   <Eye size={16} />
                   View more
@@ -244,7 +244,7 @@ export default function OrdersPage() {
         open={!!selectedOrder}
         onOpenChange={(open) => !open && setSelectedOrder(null)}
       >
-        <SheetContent className="hidden h-auto max-h-screen w-[460px] overflow-hidden bg-white text-black dark:bg-black dark:text-white md:block">
+        <SheetContent className="hidden h-auto max-h-screen w-[460px] overflow-hidden bg-theme-base text-theme-ink md:block">
           <div className="max-h-screen overflow-y-auto p-6">
             {selectedOrder && <OrderDetails order={selectedOrder} />}
           </div>
