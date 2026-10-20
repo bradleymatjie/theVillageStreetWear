@@ -137,7 +137,7 @@ export default function Header() {
       </header>
 
       {isMounted && !isLoading && isLoggedIn && (
-      <nav className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-4 rounded-2xl border border-white/10 bg-[var(--palette-surface-pill)]/95 px-1 pb-[env(safe-area-inset-bottom)] text-white shadow-2xl backdrop-blur-xl lg:hidden">
+      <nav className="fixed inset-x-3 bottom-3 z-40 grid grid-cols-4 rounded-2xl border border-white/10 bg-[var(--palette-surface-pill)]/95 px-1 text-white shadow-2xl backdrop-blur-xl lg:hidden">
         {[
           { label: "Home", href: homeHref, icon: Home },
           { label: "Shop", href: "/products", icon: ShoppingBag },
