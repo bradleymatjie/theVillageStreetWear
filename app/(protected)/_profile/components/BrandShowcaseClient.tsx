@@ -22,9 +22,9 @@ export default function BrandShowcaseClient({ products }: BrandShowcaseClientPro
         <div>
           <div className="flex items-center gap-3">
             <h2 className="text-xl font-black sm:text-2xl">New from local brands</h2>
-            <span className="hidden h-px w-10 bg-black/30 dark:bg-white/30 sm:block" />
+            <span className="hidden h-px w-10 bg-theme-base/30 dark:bg-theme-ink/30 sm:block" />
           </div>
-          <p className="mt-1 text-sm text-black/50 dark:text-white/50">Fresh drops from across The Village.</p>
+          <p className="mt-1 text-sm text-theme-base/50 dark:text-theme-ink/50">Fresh drops from across The Village.</p>
         </div>
         <Link href="/products" className="flex shrink-0 items-center gap-2 text-xs font-bold underline underline-offset-4 sm:text-sm">
           View all <ArrowRight className="h-4 w-4" />
@@ -36,11 +36,11 @@ export default function BrandShowcaseClient({ products }: BrandShowcaseClientPro
           <Link
             key={product.id}
             href={joinProfilePath(profileBase, `products/${product.id}`)}
-            className="group w-[76vw] max-w-[310px] shrink-0 snap-start overflow-hidden rounded-2xl border border-black/10 bg-black/[0.025] transition hover:-translate-y-1 hover:bg-black/5 dark:border-white/10 dark:bg-white/[0.03] dark:hover:bg-white/[0.06] sm:w-auto sm:max-w-none"
+            className="group w-[76vw] max-w-[310px] shrink-0 snap-start overflow-hidden rounded-2xl border border-theme-base/10 bg-theme-base/[0.025] transition hover:-translate-y-1 hover:bg-theme-base/5 dark:border-theme-ink/10 dark:bg-theme-ink/[0.03] dark:hover:bg-theme-ink/[0.06] sm:w-auto sm:max-w-none"
           >
-            <div className="relative aspect-[4/3] overflow-hidden bg-white sm:aspect-[4/5]">
+            <div className="relative aspect-[4/3] overflow-hidden bg-theme-ink sm:aspect-[4/5]">
               <img src={product.imageurl || "/noImage.jpg"} alt={product.name} className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
-              <span className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/70 text-white backdrop-blur">
+              <span className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full border border-theme-ink/20 bg-theme-base/70 text-theme-ink backdrop-blur">
                 <Heart className="h-5 w-5" />
               </span>
             </div>

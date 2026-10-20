@@ -35,7 +35,7 @@ export const StatCard = ({
     ? "text-green-400"
     : trendType === "negative"
       ? "text-red-400"
-      : "text-gray-400";
+      : "text-theme-ink/60";
 
   return (
     <Card className="bg-gradient-to-br from-gray-900/50 to-black border-gray-800 hover:border-gray-700 transition-all duration-300 hover:shadow-lg">
@@ -46,7 +46,7 @@ export const StatCard = ({
               {icon}
             </div>
             <div>
-              <p className="text-2xl font-bold mt-1 text-white">{value}</p>
+              <p className="text-2xl font-bold mt-1 text-theme-ink">{value}</p>
             </div>
           </div>
           {trend !== undefined && <TrendIndicator value={trend} />}

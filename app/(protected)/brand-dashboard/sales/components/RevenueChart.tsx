@@ -23,7 +23,7 @@ export function RevenueChart({
   data: RevenuePoint[];
 }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-black/40 p-5">
+    <div className="rounded-3xl border border-theme-ink/10 bg-theme-base/40 p-5">
       <h3 className="text-lg font-black">{title}</h3>
 
       <div className="mt-5 h-72 w-full">
@@ -39,14 +39,14 @@ export function RevenueChart({
             <XAxis
               dataKey="label"
               tick={{ fontSize: 12, fill: "var(--palette-text-email-subtle)" }}
-              axisLine={{ stroke: "var(--palette-white-10)" }}
+              axisLine={{ stroke: "color-mix(in srgb, var(--theme-ink) 10%, transparent)" }}
               tickLine={false}
             />
 
             {/* Y Axis */}
             <YAxis
               tick={{ fontSize: 12, fill: "var(--palette-text-email-subtle)" }}
-              axisLine={{ stroke: "var(--palette-white-10)" }}
+              axisLine={{ stroke: "color-mix(in srgb, var(--theme-ink) 10%, transparent)" }}
               tickLine={false}
             />
 
@@ -58,11 +58,11 @@ export function RevenueChart({
               ]}
               contentStyle={{
                 background: "var(--palette-surface-chart-tooltip)",
-                border: "1px solid var(--palette-white-10)",
+                border: "1px solid color-mix(in srgb, var(--theme-ink) 10%, transparent)",
                 borderRadius: "12px",
-                color: "var(--palette-white)",
+                color: "var(--theme-ink)",
               }}
-              cursor={{ fill: "var(--palette-white-5)" }}
+              cursor={{ fill: "color-mix(in srgb, var(--theme-ink) 5%, transparent)" }}
             />
 
             {/* Bars */}

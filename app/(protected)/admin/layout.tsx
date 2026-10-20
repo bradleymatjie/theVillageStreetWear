@@ -44,8 +44,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   };
 
   return (
-    <div className="flex min-h-screen bg-black text-white">
-      <aside className="fixed left-0 top-0 flex h-full w-64 flex-col border-r border-white/10 p-6">
+    <div className="flex min-h-screen bg-theme-base text-theme-ink">
+      <aside className="fixed left-0 top-0 flex h-full w-64 flex-col border-r border-theme-ink/10 p-6">
         <h1 className="mb-10 text-2xl font-extrabold uppercase tracking-wide">
           The Village
         </h1>
@@ -55,7 +55,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <Link
               key={href}
               href={href}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-3 font-medium uppercase tracking-wide text-white transition hover:bg-white/10 hover:text-green-400"
+              className="flex w-full items-center gap-3 rounded-md px-3 py-3 font-medium uppercase tracking-wide text-theme-ink transition hover:bg-theme-ink/10 hover:text-green-400"
             >
               <Icon size={18} />
               {label}

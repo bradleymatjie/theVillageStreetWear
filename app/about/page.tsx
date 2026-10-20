@@ -4,8 +4,8 @@ import Link from "next/link";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-black text-white">
-      <section className="relative flex h-[60vh] items-center justify-center overflow-hidden md:h-[70vh]">
+    <div className="min-h-screen bg-theme-base text-theme-ink">
+      <section className="theme-media relative flex h-[60vh] items-center justify-center overflow-hidden md:h-[70vh]">
         <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/50 via-black/70 to-black" />
 
         <div className="absolute inset-0 opacity-10">
@@ -22,13 +22,13 @@ export default function AboutPage() {
           <h1 className="mb-6 text-6xl font-black tracking-tighter sm:text-7xl md:text-8xl lg:text-9xl">
             THE VILLAGE
           </h1>
-          <p className="text-xl font-light uppercase tracking-wide text-gray-300 sm:text-2xl md:text-3xl">
+          <p className="text-xl font-light uppercase tracking-wide text-theme-ink/75 sm:text-2xl md:text-3xl">
             A Marketplace for Streetwear Brands
           </p>
         </div>
       </section>
 
-      <section className="border-t border-white/10 px-4 py-20 sm:px-6">
+      <section className="border-t border-theme-ink/10 px-4 py-20 sm:px-6">
         <div className="mx-auto max-w-6xl">
           <div className="grid items-center gap-12 md:grid-cols-2">
             <div>
@@ -36,7 +36,7 @@ export default function AboutPage() {
                 The Platform
               </h2>
 
-              <div className="space-y-4 text-lg leading-relaxed text-gray-300">
+              <div className="space-y-4 text-lg leading-relaxed text-theme-ink/75">
                 <p>
                   The Village is a marketplace built for streetwear brands to
                   launch, sell, and grow online.
@@ -46,13 +46,13 @@ export default function AboutPage() {
                   mobile-first shopping experience — from product discovery to
                   orders and delivery tracking.
                 </p>
-                <p className="font-semibold text-white">
+                <p className="font-semibold text-theme-ink">
                   This is where brands are built.
                 </p>
               </div>
             </div>
 
-            <div className="relative h-[400px] overflow-hidden rounded-2xl bg-white/5 md:h-[500px]">
+            <div className="relative h-[400px] overflow-hidden rounded-2xl bg-theme-ink/5 md:h-[500px]">
               <img
                 src="/jozi.jpg"
                 width={700}
@@ -60,13 +60,13 @@ export default function AboutPage() {
                 alt="Johannesburg street culture"
                 className="h-full w-full object-cover object-bottom"
               />
-              <div className="absolute inset-0 bg-black/30" />
+              <div className="absolute inset-0 bg-theme-base/30" />
             </div>
           </div>
         </div>
       </section>
 
-      <section className="bg-white px-4 py-20 text-black sm:px-6">
+      <section className="theme-paper bg-theme-ink px-4 py-20 text-theme-base sm:px-6">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="mb-8 text-5xl font-black uppercase tracking-tight sm:text-6xl">
             Our Mission
@@ -78,10 +78,10 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="border-t border-white/10 px-4 py-20 sm:px-6">
+      <section className="border-t border-theme-ink/10 px-4 py-20 sm:px-6">
         <div className="mx-auto max-w-6xl">
           <div className="grid items-center gap-12 md:grid-cols-2">
-            <div className="relative order-2 h-[400px] overflow-hidden rounded-2xl bg-white/5 md:order-1">
+            <div className="relative order-2 h-[400px] overflow-hidden rounded-2xl bg-theme-ink/5 md:order-1">
               <img
                 src="/leo.png"
                 width={700}
@@ -96,7 +96,7 @@ export default function AboutPage() {
                 Create & Sell Your Designs
               </h2>
 
-              <div className="space-y-4 text-lg leading-relaxed text-gray-300">
+              <div className="space-y-4 text-lg leading-relaxed text-theme-ink/75">
                 <p>
                   Turn your ideas into products and sell them on The Village.
                   Design custom apparel, launch your own drops, and start
@@ -107,13 +107,13 @@ export default function AboutPage() {
                   from scratch, The Village gives you a place to showcase,
                   promote, and sell.
                 </p>
-                <p className="font-semibold text-white">
+                <p className="font-semibold text-theme-ink">
                   Your brand. Your products. Your marketplace.
                 </p>
 
                 <Link
                   href="/sell"
-                  className="mt-6 inline-block bg-white px-8 py-3 font-bold uppercase tracking-wider text-black transition-colors hover:bg-gray-200"
+                  className="mt-6 inline-block bg-theme-ink px-8 py-3 font-bold uppercase tracking-wider text-theme-base transition-colors hover:bg-gray-200"
                 >
                   Join as a Brand
                 </Link>
@@ -157,19 +157,19 @@ export default function AboutPage() {
               return (
                 <div
                   key={item.title}
-                  className="border border-white/20 p-8 transition-colors hover:bg-white/5"
+                  className="border border-theme-ink/20 p-8 transition-colors hover:bg-theme-ink/5"
                 >
                   <div className="mb-4 flex items-center justify-between">
-                    <span className="text-5xl font-black text-white/20">
+                    <span className="text-5xl font-black text-theme-ink/20">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <Icon className="h-7 w-7 text-white/40" />
+                    <Icon className="h-7 w-7 text-theme-ink/40" />
                   </div>
 
                   <h3 className="mb-3 text-2xl font-bold uppercase">
                     {item.title}
                   </h3>
-                  <p className="text-gray-400">{item.text}</p>
+                  <p className="text-theme-ink/60">{item.text}</p>
                 </div>
               );
             })}
@@ -177,7 +177,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-white px-4 py-20 text-black sm:px-6">
+      <section className="theme-paper bg-theme-ink px-4 py-20 text-theme-base sm:px-6">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="mb-8 text-5xl font-black uppercase tracking-tight sm:text-6xl">
             Start Your Brand
@@ -198,7 +198,7 @@ export default function AboutPage() {
               <span className="font-semibold">Email</span>
               <Link
                 href="mailto:thevillagestreetwear@gmail.com"
-                className="text-gray-600 transition-colors hover:text-black"
+                className="text-gray-600 transition-colors hover:text-theme-base"
               >
                 thevillagestreetwear@gmail.com
               </Link>
@@ -209,7 +209,7 @@ export default function AboutPage() {
               <span className="font-semibold">Phone</span>
               <Link
                 href="tel:+27729509295"
-                className="text-gray-600 transition-colors hover:text-black"
+                className="text-gray-600 transition-colors hover:text-theme-base"
               >
                 072 950 9295
               </Link>
@@ -219,14 +219,14 @@ export default function AboutPage() {
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link
               href="/sell"
-              className="inline-block bg-black px-12 py-4 text-lg font-bold uppercase tracking-wider text-white transition-colors hover:bg-gray-900"
+              className="inline-block bg-theme-base px-12 py-4 text-lg font-bold uppercase tracking-wider text-theme-ink transition-colors hover:bg-gray-900"
             >
               Start Selling
             </Link>
 
             <Link
               href="/products"
-              className="inline-block border border-black px-12 py-4 text-lg font-bold uppercase tracking-wider text-black transition-colors hover:bg-black hover:text-white"
+              className="inline-block border border-theme-base px-12 py-4 text-lg font-bold uppercase tracking-wider text-theme-base transition-colors hover:bg-theme-base hover:text-theme-ink"
             >
               Explore Catalog
             </Link>
@@ -234,7 +234,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="border-t border-white/10 px-4 py-8 text-center">
+      <section className="border-t border-theme-ink/10 px-4 py-8 text-center">
         <p className="text-sm uppercase tracking-widest text-gray-500">
           Est. 2025 • Johannesburg, South Africa • The Village Marketplace
         </p>

@@ -47,22 +47,22 @@ export default function ProductCard({
 
   return (
     <article
-      className={`group relative overflow-hidden border border-white/10 bg-white/[0.04] transition-all duration-300 hover:-translate-y-1 hover:border-white/35 hover:bg-white/[0.07] ${className}`}
+      className={`group relative overflow-hidden border border-theme-ink/10 bg-theme-ink/[0.04] transition-all duration-300 hover:-translate-y-1 hover:border-theme-ink/35 hover:bg-theme-ink/[0.07] ${className}`}
     >
       {isSoldOut && (
-        <div className="absolute left-3 top-3 z-20 bg-white px-3 py-1 text-xs font-black uppercase text-black">
+        <div className="absolute left-3 top-3 z-20 bg-theme-ink px-3 py-1 text-xs font-black uppercase text-theme-base">
           Sold out
         </div>
       )}
 
       {product.category && (
-        <div className="absolute right-3 top-3 z-20 bg-black/70 px-3 py-1 text-[10px] font-black uppercase tracking-wide text-white backdrop-blur">
+        <div className="theme-media absolute right-3 top-3 z-20 bg-theme-base/70 px-3 py-1 text-[10px] font-black uppercase tracking-wide text-theme-ink backdrop-blur">
           {product.category}
         </div>
       )}
 
       <Link href={detailHref} className="block">
-        <div className="relative aspect-[4/5] overflow-hidden bg-white/5">
+        <div className="relative aspect-[4/5] overflow-hidden bg-theme-ink/5">
           <img
             src={primaryImage}
             alt={product.name}
@@ -82,26 +82,26 @@ export default function ProductCard({
                 id: product.brand_id,
                 name: product.brand_name,
               })}
-              className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.18em] text-white/60 underline underline-offset-4 transition hover:text-white focus-visible:outline focus-visible:outline-1 focus-visible:outline-white"
+              className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.18em] text-theme-ink/60 underline underline-offset-4 transition hover:text-theme-ink focus-visible:outline focus-visible:outline-1 focus-visible:outline-theme-ink"
             >
               {product.brand_name || "The Village"}
               <ArrowUpRight className="h-3 w-3" />
             </Link>
           ) : (
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-white/35">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-theme-ink/35">
               The Village
             </p>
           )}
 
           <Link href={detailHref} className="block">
-            <h3 className="mt-2 min-h-10 text-sm font-black leading-5 text-white transition hover:text-white/75">
+            <h3 className="mt-2 min-h-10 text-sm font-black leading-5 text-theme-ink transition hover:text-theme-ink/75">
               {product.name}
             </h3>
           </Link>
         </div>
 
         <div className="flex items-center justify-between gap-3">
-          <p className="text-xl font-black leading-none text-white">
+          <p className="text-xl font-black leading-none text-theme-ink">
             {formattedPrice}
           </p>
 
@@ -110,8 +110,8 @@ export default function ProductCard({
               onClick={handleAddToCart}
               className={`flex h-10 min-w-10 items-center justify-center gap-2 px-3 text-xs font-black uppercase transition-all duration-300 ${
                 isAdded
-                  ? "bg-emerald-500 text-black"
-                  : "bg-white text-black hover:bg-white/85"
+                  ? "bg-emerald-500 text-theme-base"
+                  : "bg-theme-ink text-theme-base hover:bg-theme-ink/85"
               }`}
             >
               {isAdded ? (
@@ -129,7 +129,7 @@ export default function ProductCard({
           ) : (
             <Link
               href={detailHref}
-              className="flex h-10 min-w-10 items-center justify-center gap-2 bg-white px-3 text-xs font-black uppercase text-black transition hover:bg-white/85"
+              className="flex h-10 min-w-10 items-center justify-center gap-2 bg-theme-ink px-3 text-xs font-black uppercase text-theme-base transition hover:bg-theme-ink/85"
             >
               <ArrowUpRight className="h-4 w-4" />
               <span className="hidden sm:inline">View</span>

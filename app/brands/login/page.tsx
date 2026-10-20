@@ -44,15 +44,15 @@ export default function BrandLoginPage() {
   };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-black px-4 text-white">
-      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-white/5 p-6 sm:p-8">
-        <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-white/40">
+    <main className="flex min-h-screen items-center justify-center bg-theme-base px-4 text-theme-ink">
+      <div className="w-full max-w-md rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-6 sm:p-8">
+        <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-theme-ink/40">
           Brand Portal
         </p>
 
         <h1 className="text-3xl font-black">Brand Login</h1>
 
-        <p className="mt-2 text-sm text-white/60">
+        <p className="mt-2 text-sm text-theme-ink/60">
           Sign in to manage your products and orders.
         </p>
 
@@ -64,7 +64,7 @@ export default function BrandLoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-2 w-full rounded-xl border border-white/10 bg-black px-4 py-3 text-white outline-none"
+              className="mt-2 w-full rounded-xl border border-theme-ink/10 bg-theme-base px-4 py-3 text-theme-ink outline-none"
               placeholder="brand@email.com"
             />
           </div>
@@ -78,14 +78,14 @@ export default function BrandLoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-white/10 bg-black px-4 py-3 pr-12 text-white outline-none"
+                className="w-full rounded-xl border border-theme-ink/10 bg-theme-base px-4 py-3 pr-12 text-theme-ink outline-none"
                 placeholder="Enter password"
               />
 
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 hover:text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-theme-ink/60 hover:text-theme-ink"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
@@ -102,7 +102,7 @@ export default function BrandLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-xl bg-white py-3 font-black text-black transition hover:bg-white/80 disabled:opacity-60"
+            className="w-full rounded-xl bg-theme-ink py-3 font-black text-theme-base transition hover:bg-theme-ink/80 disabled:opacity-60"
           >
             {loading ? "Signing in..." : "Login"}
           </button>

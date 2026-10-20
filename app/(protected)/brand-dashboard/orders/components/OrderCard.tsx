@@ -6,10 +6,10 @@ export function OrderCard({ order }: { order: Order }) {
   const items = order.metadata?.cartItems || [];
 
   return (
-    <div className="rounded-3xl border border-white/10 bg-black/40 p-4 sm:p-5">
+    <div className="rounded-3xl border border-theme-ink/10 bg-theme-base/40 p-4 sm:p-5">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
-          <p className="break-all text-xs font-bold uppercase tracking-[0.18em] text-white/30 sm:tracking-[0.2em]">
+          <p className="break-all text-xs font-bold uppercase tracking-[0.18em] text-theme-ink/30 sm:tracking-[0.2em]">
             {order.order_id}
           </p>
 
@@ -17,10 +17,10 @@ export function OrderCard({ order }: { order: Order }) {
             {order.customer_name}
           </h3>
 
-          <p className="mt-1 break-all text-sm text-white/50">{order.email}</p>
+          <p className="mt-1 break-all text-sm text-theme-ink/50">{order.email}</p>
 
           {order.phone && (
-            <p className="mt-1 break-all text-sm text-white/50">
+            <p className="mt-1 break-all text-sm text-theme-ink/50">
               {order.phone}
             </p>
           )}
@@ -33,7 +33,7 @@ export function OrderCard({ order }: { order: Order }) {
           </div>
 
           <div className="w-full sm:w-auto">
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-white/35 sm:text-right">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-theme-ink/35 sm:text-right">
               Update status
             </p>
             <OrderStatusSelect
@@ -45,13 +45,13 @@ export function OrderCard({ order }: { order: Order }) {
       </div>
 
       {items.length > 0 && (
-        <div className="mt-5 space-y-3 border-t border-white/10 pt-5">
-          <p className="text-sm font-bold text-white/60">Order Items</p>
+        <div className="mt-5 space-y-3 border-t border-theme-ink/10 pt-5">
+          <p className="text-sm font-bold text-theme-ink/60">Order Items</p>
 
           {items.map((item, index) => (
             <div
               key={`${item.product_id}-${index}`}
-              className="flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-3 sm:flex-row sm:items-center"
+              className="flex flex-col gap-4 rounded-2xl border border-theme-ink/10 bg-theme-ink/[0.03] p-3 sm:flex-row sm:items-center"
             >
               <div className="flex gap-3 sm:flex-1">
                 {item.product_image && (
@@ -67,7 +67,7 @@ export function OrderCard({ order }: { order: Order }) {
                     {item.product_name}
                   </p>
 
-                  <p className="mt-1 text-xs leading-5 text-white/50">
+                  <p className="mt-1 text-xs leading-5 text-theme-ink/50">
                     Qty: {item.quantity}
                     {item.size && ` • Size: ${item.size}`}
                     {item.material && ` • Material: ${item.material}`}
@@ -75,14 +75,14 @@ export function OrderCard({ order }: { order: Order }) {
                 </div>
               </div>
 
-              <div className="flex items-end justify-between border-t border-white/10 pt-3 text-right sm:block sm:border-t-0 sm:pt-0">
-                <p className="text-xs text-white/40 sm:hidden">Item total</p>
+              <div className="flex items-end justify-between border-t border-theme-ink/10 pt-3 text-right sm:block sm:border-t-0 sm:pt-0">
+                <p className="text-xs text-theme-ink/40 sm:hidden">Item total</p>
 
                 <div>
                   <p className="font-bold">
                     R{Number(item.total_price || 0).toFixed(2)}
                   </p>
-                  <p className="text-xs text-white/40">
+                  <p className="text-xs text-theme-ink/40">
                     R{Number(item.unit_price || 0).toFixed(2)} each
                   </p>
                 </div>
@@ -92,14 +92,14 @@ export function OrderCard({ order }: { order: Order }) {
         </div>
       )}
 
-      <div className="mt-5 border-t border-white/10 pt-5 text-sm text-white/50">
+      <div className="mt-5 border-t border-theme-ink/10 pt-5 text-sm text-theme-ink/50">
         <p className="break-words leading-6">
           {order.shipping_method === "pickup"
             ? `Pickup: ${order.pickup_location || "Not specified"}`
             : `Delivery: ${order.shipping_address || "Not specified"}`}
         </p>
 
-        <p className="mt-3 text-lg font-black text-white">
+        <p className="mt-3 text-lg font-black text-theme-ink">
           Total: R{Number(order.total || 0).toFixed(2)}
         </p>
       </div>

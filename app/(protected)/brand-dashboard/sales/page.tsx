@@ -94,7 +94,7 @@ export default async function BrandSalesPage() {
     return (
       <div className="mx-auto max-w-7xl">
         <h1 className="text-3xl font-black">Sales</h1>
-        <p className="mt-3 text-white/50">Brand profile not found.</p>
+        <p className="mt-3 text-theme-ink/50">Brand profile not found.</p>
       </div>
     );
   }
@@ -132,11 +132,11 @@ export default async function BrandSalesPage() {
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mb-8">
-        <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/40">
+        <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-ink/40">
           Brand Sales
         </p>
         <h1 className="mt-2 text-4xl font-black">Sales</h1>
-        <p className="mt-2 text-sm text-white/50">
+        <p className="mt-2 text-sm text-theme-ink/50">
           Completed sales for {brand.name}.
         </p>
       </div>
@@ -172,13 +172,13 @@ export default async function BrandSalesPage() {
       </div>
 
       {/* Sales list */}
-      <section className="mt-10 rounded-3xl border border-white/10 bg-white/5 p-5 sm:p-6">
+      <section className="mt-10 rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-5 sm:p-6">
         <h2 className="text-2xl font-black">Sales History</h2>
 
         {sales.length === 0 ? (
-          <div className="mt-8 rounded-2xl border border-white/10 bg-black/30 p-8 text-center">
+          <div className="mt-8 rounded-2xl border border-theme-ink/10 bg-theme-base/30 p-8 text-center">
             <p className="font-bold">No sales yet</p>
-            <p className="mt-2 text-sm text-white/50">
+            <p className="mt-2 text-sm text-theme-ink/50">
               Completed orders will appear here.
             </p>
           </div>
@@ -190,23 +190,23 @@ export default async function BrandSalesPage() {
               return (
                 <div
                   key={order.id}
-                  className="rounded-3xl border border-white/10 bg-black/40 p-4 sm:p-5"
+                  className="rounded-3xl border border-theme-ink/10 bg-theme-base/40 p-4 sm:p-5"
                 >
                   <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
                     <div>
-                      <p className="text-xs text-white/30">
+                      <p className="text-xs text-theme-ink/30">
                         {order.order_id}
                       </p>
                       <h3 className="text-lg font-black">
                         {order.customer_name}
                       </h3>
-                      <p className="text-sm text-white/50">
+                      <p className="text-sm text-theme-ink/50">
                         {order.email}
                       </p>
                     </div>
 
                     <div className="text-right">
-                      <p className="text-xs text-white/40">
+                      <p className="text-xs text-theme-ink/40">
                         {new Date(order.created_at).toLocaleDateString()}
                       </p>
                       <p className="text-lg font-black">
@@ -216,7 +216,7 @@ export default async function BrandSalesPage() {
                   </div>
 
                   {items.length > 0 && (
-                    <div className="mt-5 space-y-3 border-t border-white/10 pt-5">
+                    <div className="mt-5 space-y-3 border-t border-theme-ink/10 pt-5">
                       {items.map((item, index) => (
                         <div key={index} className="flex items-center gap-3">
                           {item.product_image && (
@@ -230,7 +230,7 @@ export default async function BrandSalesPage() {
                             <p className="font-bold">
                               {item.product_name}
                             </p>
-                            <p className="text-xs text-white/50">
+                            <p className="text-xs text-theme-ink/50">
                               Qty: {item.quantity}
                             </p>
                           </div>

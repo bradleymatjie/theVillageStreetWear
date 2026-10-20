@@ -117,33 +117,33 @@ export default function OrdersPage() {
   if (loading) {
   return (
     <div className="min-h-screen px-4 py-6">
-      <div className="mb-4 h-5 w-20 animate-pulse rounded-full bg-black/10 dark:bg-white/10" />
+      <div className="mb-4 h-5 w-20 animate-pulse rounded-full bg-theme-base/10 dark:bg-theme-ink/10" />
 
-      <div className="mb-6 h-10 w-48 animate-pulse rounded-2xl bg-black/10 dark:bg-white/10" />
+      <div className="mb-6 h-10 w-48 animate-pulse rounded-2xl bg-theme-base/10 dark:bg-theme-ink/10" />
 
       <div className="space-y-4">
         {[1, 2, 3].map((item) => (
           <div
             key={item}
-            className="animate-pulse rounded-3xl border border-black/10 p-5 dark:border-white/10"
+            className="animate-pulse rounded-3xl border border-theme-base/10 p-5 dark:border-theme-ink/10"
           >
             <div className="flex items-start gap-4">
-              <div className="h-20 w-20 shrink-0 rounded-2xl bg-black/10 dark:bg-white/10" />
+              <div className="h-20 w-20 shrink-0 rounded-2xl bg-theme-base/10 dark:bg-theme-ink/10" />
 
               <div className="flex-1">
-                <div className="h-6 w-3/4 rounded-xl bg-black/10 dark:bg-white/10" />
+                <div className="h-6 w-3/4 rounded-xl bg-theme-base/10 dark:bg-theme-ink/10" />
 
-                <div className="mt-3 h-4 w-32 rounded-full bg-black/10 dark:bg-white/10" />
+                <div className="mt-3 h-4 w-32 rounded-full bg-theme-base/10 dark:bg-theme-ink/10" />
 
-                <div className="mt-4 h-5 w-24 rounded-xl bg-black/10 dark:bg-white/10" />
+                <div className="mt-4 h-5 w-24 rounded-xl bg-theme-base/10 dark:bg-theme-ink/10" />
 
                 <div className="mt-4 flex gap-2">
-                  <div className="h-7 w-24 rounded-full bg-black/10 dark:bg-white/10" />
+                  <div className="h-7 w-24 rounded-full bg-theme-base/10 dark:bg-theme-ink/10" />
                 </div>
               </div>
             </div>
 
-            <div className="mt-5 h-11 w-full rounded-2xl bg-black/10 dark:bg-white/10" />
+            <div className="mt-5 h-11 w-full rounded-2xl bg-theme-base/10 dark:bg-theme-ink/10" />
           </div>
         ))}
       </div>
@@ -218,7 +218,7 @@ export default function OrdersPage() {
 
                 <button
                   onClick={() => setSelectedOrder(order)}
-                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-black py-2 text-white"
+                  className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl bg-theme-base py-2 text-theme-ink"
                 >
                   <Eye size={16} />
                   View more
@@ -244,7 +244,7 @@ export default function OrdersPage() {
         open={!!selectedOrder}
         onOpenChange={(open) => !open && setSelectedOrder(null)}
       >
-        <SheetContent className="hidden h-auto max-h-screen w-[460px] overflow-hidden bg-white text-black dark:bg-black dark:text-white md:block">
+        <SheetContent className="hidden h-auto max-h-screen w-[460px] overflow-hidden bg-theme-ink text-theme-base dark:bg-theme-base dark:text-theme-ink md:block">
           <div className="max-h-screen overflow-y-auto p-6">
             {selectedOrder && <OrderDetails order={selectedOrder} />}
           </div>

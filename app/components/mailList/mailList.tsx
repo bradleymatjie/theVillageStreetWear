@@ -48,7 +48,7 @@ export default function NewsletterSignup() {
   };
 
   return (
-    <section className="bg-black text-white py-20 px-4 text-center font-sans">
+    <section className="bg-theme-base text-theme-ink py-20 px-4 text-center font-sans">
       <div className="max-w-2xl mx-auto">
         <h2 className="text-4xl font-black uppercase tracking-wider mb-4">
           Join The Village
@@ -65,12 +65,12 @@ export default function NewsletterSignup() {
             placeholder="Enter your email"
             required
             autoComplete="email"
-            className="w-full sm:flex-1 min-w-0 px-6 py-5 text-base rounded-lg bg-white text-black shadow-lg focus:outline-none focus:ring-4 focus:ring-orange-500/50"
+            className="w-full sm:flex-1 min-w-0 px-6 py-5 text-base rounded-lg bg-theme-ink text-theme-base shadow-lg focus:outline-none focus:ring-4 focus:ring-orange-500/50"
           />
           <button
             type="submit"
             disabled={loading}
-            className="w-full sm:w-auto px-10 py-5 text-base font-bold uppercase tracking-wider bg-orange-600 text-white rounded-lg shadow-lg transition-all duration-300 hover:bg-orange-500 hover:-translate-y-1 hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:translate-y-0"
+            className="w-full sm:w-auto px-10 py-5 text-base font-bold uppercase tracking-wider bg-orange-600 text-theme-ink rounded-lg shadow-lg transition-all duration-300 hover:bg-orange-500 hover:-translate-y-1 hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:translate-y-0"
           >
             {loading ? 'Submitting...' : 'Subscribe'}
           </button>

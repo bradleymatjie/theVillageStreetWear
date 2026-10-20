@@ -104,30 +104,30 @@ export default async function BrandsPage() {
   const brands = await getBrands();
 
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-theme-base text-theme-ink">
       <section className="px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1fr_0.55fr] lg:items-end">
           <div>
-            <p className="mb-5 inline-flex border border-white/20 px-3 py-1 text-xs font-black uppercase tracking-[0.24em] text-white/55">
+            <p className="mb-5 inline-flex border border-theme-ink/20 px-3 py-1 text-xs font-black uppercase tracking-[0.24em] text-theme-ink/55">
               Browse brands
             </p>
             <h1 className="max-w-4xl text-6xl font-black leading-[0.88] sm:text-8xl">
               BRANDS IN THE VILLAGE.
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-white/65 sm:text-lg">
+            <p className="mt-6 max-w-2xl text-base leading-8 text-theme-ink/65 sm:text-lg">
               Discover independent South African streetwear labels, explore
               their stories, and shop their latest products.
             </p>
           </div>
 
-          <div className="border border-white/10 bg-white/[0.04] p-5">
+          <div className="border border-theme-ink/10 bg-theme-ink/[0.04] p-5">
             <p className="text-5xl font-black">{brands.length}</p>
-            <p className="mt-2 text-xs font-black uppercase tracking-[0.2em] text-white/45">
+            <p className="mt-2 text-xs font-black uppercase tracking-[0.2em] text-theme-ink/45">
               Active brands with products live
             </p>
             <Link
               href="/sell"
-              className="mt-6 inline-flex items-center text-sm font-black uppercase tracking-wide text-white/60 underline underline-offset-4 transition hover:text-white"
+              className="mt-6 inline-flex items-center text-sm font-black uppercase tracking-wide text-theme-ink/60 underline underline-offset-4 transition hover:text-theme-ink"
             >
               Sell your brand <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

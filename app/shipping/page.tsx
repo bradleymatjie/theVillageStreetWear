@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function ShippingInfo() {
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="theme-paper min-h-screen bg-theme-ink text-theme-base">
       {/* Header */}
       <div className="bg-gradient-to-b from-gray-50 to-white py-16 sm:py-24 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
@@ -24,7 +24,7 @@ export default function ShippingInfo() {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         {/* Quick Summary */}
-        <div className="bg-black text-white rounded-lg p-6 sm:p-8 mb-12">
+        <div className="bg-theme-base text-theme-ink rounded-lg p-6 sm:p-8 mb-12">
           <h2 className="text-2xl font-black mb-4">QUICK SUMMARY</h2>
           <ul className="space-y-3">
             <li className="flex items-start gap-3">
@@ -58,7 +58,7 @@ export default function ShippingInfo() {
             </div>
             <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
               <p className="text-gray-600 leading-relaxed mb-4">
-                <strong className="text-black">We currently ship within South Africa only.</strong> We deliver to all provinces including:
+                <strong className="text-theme-base">We currently ship within South Africa only.</strong> We deliver to all provinces including:
               </p>
               <div className="grid sm:grid-cols-2 gap-3 text-gray-700">
                 <div className="flex items-center gap-2">
@@ -116,7 +116,7 @@ export default function ShippingInfo() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed mb-4">
-                All orders are processed within <strong className="text-black">2-3 business days</strong> (excluding weekends and holidays) 
+                All orders are processed within <strong className="text-theme-base">2-3 business days</strong> (excluding weekends and holidays)
                 after receiving your order confirmation email. You will receive another notification when your order has shipped.
               </p>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
@@ -143,10 +143,10 @@ export default function ShippingInfo() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed mb-6">
-                Once your order has been processed and shipped, delivery typically takes <strong className="text-black">3-5 business days</strong> depending 
+                Once your order has been processed and shipped, delivery typically takes <strong className="text-theme-base">3-5 business days</strong> depending
                 on your location within South Africa.
               </p>
-              
+
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
                   <h3 className="font-bold mb-2">Major Cities</h3>
@@ -201,12 +201,12 @@ export default function ShippingInfo() {
             </div>
             <div className="bg-gray-50 rounded-lg p-6 sm:p-8 border border-gray-200">
               <p className="text-gray-600 leading-relaxed mb-6">
-                Once your order ships, you'll receive a shipping confirmation email with a tracking number. 
+                Once your order ships, you'll receive a shipping confirmation email with a tracking number.
                 You can use this number to track your package's journey.
               </p>
               <div className="space-y-4">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                     1
                   </div>
                   <div>
@@ -215,7 +215,7 @@ export default function ShippingInfo() {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                     2
                   </div>
                   <div>
@@ -224,7 +224,7 @@ export default function ShippingInfo() {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                     3
                   </div>
                   <div>
@@ -233,7 +233,7 @@ export default function ShippingInfo() {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                     4
                   </div>
                   <div>
@@ -242,7 +242,7 @@ export default function ShippingInfo() {
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-600 text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                     ✓
                   </div>
                   <div>
@@ -264,16 +264,16 @@ export default function ShippingInfo() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed mb-4">
-                If your order hasn't arrived within the estimated delivery time, or if there are any issues with your delivery, 
+                If your order hasn't arrived within the estimated delivery time, or if there are any issues with your delivery,
                 please contact us immediately at{' '}
-                <a href="mailto:thevillagestreetwear@gmail.com" className="underline font-bold hover:text-black">
+                <a href="mailto:thevillagestreetwear@gmail.com" className="underline font-bold hover:text-theme-base">
                   thevillagestreetwear@gmail.com
                 </a>
               </p>
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
                 <h3 className="font-bold mb-2">Lost or Damaged Packages</h3>
                 <p className="text-sm text-gray-700">
-                  In the rare event that your package is lost or arrives damaged, we'll work with you to resolve the issue. 
+                  In the rare event that your package is lost or arrives damaged, we'll work with you to resolve the issue.
                   Please contact us within 48 hours of receiving a damaged package with photos of the damage.
                 </p>
               </div>
@@ -282,15 +282,15 @@ export default function ShippingInfo() {
         </div>
 
         {/* Contact Section */}
-        <div className="mt-16 bg-black text-white rounded-lg p-8 text-center">
+        <div className="mt-16 bg-theme-base text-theme-ink rounded-lg p-8 text-center">
           <Truck className="w-12 h-12 mx-auto mb-4" />
           <h2 className="text-2xl font-black mb-2">SHIPPING QUESTIONS?</h2>
-          <p className="text-gray-300 mb-6">
+          <p className="text-theme-ink/75 mb-6">
             Have questions about shipping? We're here to help.
           </p>
           <a
             href="mailto:thevillagestreetwear@gmail.com"
-            className="inline-flex items-center gap-2 bg-white text-black font-bold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
+            className="inline-flex items-center gap-2 bg-theme-ink text-theme-base font-bold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
           >
             Contact Support
           </a>

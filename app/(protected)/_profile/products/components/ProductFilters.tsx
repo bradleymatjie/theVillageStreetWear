@@ -48,7 +48,7 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
   if (!data) {
     return (
       <div className="py-12 text-center">
-        <p className="text-black/50 dark:text-white/50">
+        <p className="text-theme-base/50 dark:text-theme-ink/50">
           Loading products...
         </p>
       </div>
@@ -93,18 +93,18 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
           placeholder="Search products..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full rounded-full bg-black/5 text-black placeholder-black/50 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:bg-white/5 dark:text-white dark:placeholder-white/50 dark:focus-visible:ring-white dark:focus-visible:ring-offset-black sm:w-80"
+          className="w-full rounded-full bg-theme-base/5 text-theme-base placeholder-theme-base/50 focus-visible:ring-2 focus-visible:ring-theme-base focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:bg-theme-ink/5 dark:text-theme-ink dark:placeholder-theme-ink/50 dark:focus-visible:ring-theme-ink dark:focus-visible:ring-offset-black sm:w-80"
         />
 
         <Select
           value={sortBy}
           onValueChange={(value) => setSortBy(value as typeof sortBy)}
         >
-          <SelectTrigger className="w-full rounded-full bg-black/5 text-black focus-visible:ring-2 focus-visible:ring-black dark:bg-white/5 dark:text-white dark:focus-visible:ring-white sm:w-[220px]">
+          <SelectTrigger className="w-full rounded-full bg-theme-base/5 text-theme-base focus-visible:ring-2 focus-visible:ring-theme-base dark:bg-theme-ink/5 dark:text-theme-ink dark:focus-visible:ring-theme-ink sm:w-[220px]">
             <SelectValue placeholder="Sort by" />
           </SelectTrigger>
 
-          <SelectContent className="border-black/10 bg-white text-black dark:border-white/10 dark:bg-black dark:text-white">
+          <SelectContent className="border-theme-base/10 bg-theme-ink text-theme-base dark:border-theme-ink/10 dark:bg-theme-base dark:text-theme-ink">
             <SelectItem value="featured">Latest</SelectItem>
             <SelectItem value="price-low">Price: Low → High</SelectItem>
             <SelectItem value="price-high">Price: High → Low</SelectItem>
@@ -126,8 +126,8 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
               onClick={() => setSelectedBrand(brand)}
               variant="ghost"
               className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors ${active
-                  ? "bg-black text-white hover:bg-black/90 dark:bg-white dark:text-black dark:hover:bg-white/90"
-                  : "text-black/60 hover:bg-black/10 dark:text-white/60 dark:hover:bg-white/10"
+                  ? "bg-theme-base text-theme-ink hover:bg-theme-base/90 dark:bg-theme-ink dark:text-theme-base dark:hover:bg-theme-ink/90"
+                  : "text-theme-base/60 hover:bg-theme-base/10 dark:text-theme-ink/60 dark:hover:bg-theme-ink/10"
                 }`}
             >
               {brand === "all" ? "All" : brand}
@@ -149,10 +149,10 @@ export default function ProductFilters({ data }: ProductFiltersProps) {
 
       {sortedProducts.length === 0 && (
         <div className="py-12 text-center">
-          <p className="mb-2 text-lg text-black/50 dark:text-white/50">
+          <p className="mb-2 text-lg text-theme-base/50 dark:text-theme-ink/50">
             No products found
           </p>
-          <p className="text-sm text-black/40 dark:text-white/40">
+          <p className="text-sm text-theme-base/40 dark:text-theme-ink/40">
             {searchTerm || selectedBrand !== "all"
               ? "Try adjusting your filters"
               : "Check back soon for new drops"}

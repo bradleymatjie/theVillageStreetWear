@@ -107,7 +107,10 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: getColorValue("--palette-black"),
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: getColorValue("--palette-black") },
+    { media: "(prefers-color-scheme: light)", color: getColorValue("--palette-white") },
+  ],
   colorScheme: "dark light",
 };
 
@@ -140,7 +143,7 @@ export default function RootLayout({
       </head>
       <body className={`${poppins.variable} antialiased`}>
         <AuthSession />
-         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
         <div>
           <Suspense fallback={null}>
           <Header />

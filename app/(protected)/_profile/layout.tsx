@@ -6,7 +6,7 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen overflow-x-hidden bg-white pb-24 text-black transition-colors dark:bg-black dark:text-white lg:pb-0">
+    <main className="min-h-screen overflow-x-hidden bg-theme-ink pb-24 text-theme-base transition-colors dark:bg-theme-base dark:text-theme-ink lg:pb-0">
       <section>
         {children}
       </section>

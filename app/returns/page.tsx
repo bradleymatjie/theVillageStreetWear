@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function ReturnsPolicy() {
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="theme-paper min-h-screen bg-theme-ink text-theme-base">
       {/* Header */}
       <div className="bg-gradient-to-b from-gray-50 to-white py-16 sm:py-24 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
@@ -24,7 +24,7 @@ export default function ReturnsPolicy() {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         {/* Quick Summary */}
-        <div className="bg-black text-white rounded-lg p-6 sm:p-8 mb-12">
+        <div className="bg-theme-base text-theme-ink rounded-lg p-6 sm:p-8 mb-12">
           <h2 className="text-2xl font-black mb-4">QUICK SUMMARY</h2>
           <ul className="space-y-3">
             <li className="flex items-start gap-3">
@@ -54,8 +54,8 @@ export default function ReturnsPolicy() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed">
-                You have <strong className="text-black">3 days from the date of delivery</strong> to initiate a return. 
-                Returns requested after this period will not be accepted. The return window begins on the day 
+                You have <strong className="text-theme-base">3 days from the date of delivery</strong> to initiate a return.
+                Returns requested after this period will not be accepted. The return window begins on the day
                 your order is delivered to your address.
               </p>
             </div>
@@ -111,49 +111,49 @@ export default function ReturnsPolicy() {
             <div className="bg-gray-50 rounded-lg p-6 sm:p-8 border border-gray-200">
               <ol className="space-y-6">
                 <li className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold">
+                  <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold">
                     1
                   </div>
                   <div>
                     <h3 className="font-bold mb-2">Contact Us</h3>
                     <p className="text-gray-600">
-                      Email us at <a href="mailto:thevillagestreetwear@gmail.com" className="underline hover:text-black">thevillagestreetwear@gmail.com</a> within 
+                      Email us at <a href="mailto:thevillagestreetwear@gmail.com" className="underline hover:text-theme-base">thevillagestreetwear@gmail.com</a> within
                       3 days of delivery with your order number and reason for return.
                     </p>
                   </div>
                 </li>
                 <li className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold">
+                  <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold">
                     2
                   </div>
                   <div>
                     <h3 className="font-bold mb-2">Get Approval</h3>
                     <p className="text-gray-600">
-                      Wait for our team to approve your return request. We'll provide you with return instructions 
+                      Wait for our team to approve your return request. We'll provide you with return instructions
                       and our return address.
                     </p>
                   </div>
                 </li>
                 <li className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold">
+                  <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold">
                     3
                   </div>
                   <div>
                     <h3 className="font-bold mb-2">Pack Your Items</h3>
                     <p className="text-gray-600">
-                      Securely pack your items with all original tags and packaging. Include your order confirmation 
+                      Securely pack your items with all original tags and packaging. Include your order confirmation
                       or packing slip.
                     </p>
                   </div>
                 </li>
                 <li className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold">
+                  <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold">
                     4
                   </div>
                   <div>
                     <h3 className="font-bold mb-2">Ship Your Return</h3>
                     <p className="text-gray-600">
-                      Send your package to the address provided. We recommend using a tracked shipping method. 
+                      Send your package to the address provided. We recommend using a tracked shipping method.
                       Return shipping costs are the customer's responsibility unless the item is faulty.
                     </p>
                   </div>
@@ -172,12 +172,12 @@ export default function ReturnsPolicy() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed mb-4">
-                Once we receive and inspect your return, we'll notify you via email. If approved, your refund 
-                will be processed within <strong className="text-black">5-7 business days</strong> to your original 
+                Once we receive and inspect your return, we'll notify you via email. If approved, your refund
+                will be processed within <strong className="text-theme-base">5-7 business days</strong> to your original
                 payment method.
               </p>
               <p className="text-gray-600 leading-relaxed">
-                Please note that it may take an additional 3-5 business days for the refund to reflect in your 
+                Please note that it may take an additional 3-5 business days for the refund to reflect in your
                 account, depending on your bank or payment provider.
               </p>
             </div>
@@ -193,11 +193,11 @@ export default function ReturnsPolicy() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed mb-4">
-                We currently do not offer direct exchanges. If you need a different size or item, please return 
+                We currently do not offer direct exchanges. If you need a different size or item, please return
                 your original purchase for a refund and place a new order.
               </p>
               <p className="text-gray-600 leading-relaxed">
-                This ensures you get your preferred item as quickly as possible without waiting for the return 
+                This ensures you get your preferred item as quickly as possible without waiting for the return
                 process to complete.
               </p>
             </div>
@@ -214,13 +214,13 @@ export default function ReturnsPolicy() {
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
               <p className="text-gray-700 leading-relaxed mb-4">
                 If you receive a faulty or damaged item, please contact us immediately at{' '}
-                <a href="mailto:thevillagestreetwear@gmail.com" className="underline font-bold hover:text-black">
+                <a href="mailto:thevillagestreetwear@gmail.com" className="underline font-bold hover:text-theme-base">
                   thevillagestreetwear@gmail.com
                 </a>{' '}
                 with photos of the defect or damage.
               </p>
               <p className="text-gray-700 leading-relaxed">
-                We'll arrange a replacement or full refund, including return shipping costs, at no additional 
+                We'll arrange a replacement or full refund, including return shipping costs, at no additional
                 charge to you.
               </p>
             </div>
@@ -228,15 +228,15 @@ export default function ReturnsPolicy() {
         </div>
 
         {/* Contact Section */}
-        <div className="mt-16 bg-black text-white rounded-lg p-8 text-center">
+        <div className="mt-16 bg-theme-base text-theme-ink rounded-lg p-8 text-center">
           <Mail className="w-12 h-12 mx-auto mb-4" />
           <h2 className="text-2xl font-black mb-2">QUESTIONS?</h2>
-          <p className="text-gray-300 mb-6">
+          <p className="text-theme-ink/75 mb-6">
             If you have any questions about our returns policy, please don't hesitate to contact us.
           </p>
           <a
             href="mailto:thevillagestreetwear@gmail.com"
-            className="inline-flex items-center gap-2 bg-white text-black font-bold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
+            className="inline-flex items-center gap-2 bg-theme-ink text-theme-base font-bold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
           >
             <Mail className="w-4 h-4" />
             Contact Support

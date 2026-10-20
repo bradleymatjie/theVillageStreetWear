@@ -269,7 +269,7 @@ export default function BrandProfilePage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center text-white">
+      <div className="flex min-h-[60vh] items-center justify-center text-theme-ink">
         <Loader2 className="mr-3 h-5 w-5 animate-spin" />
         Loading brand profile...
       </div>
@@ -278,9 +278,9 @@ export default function BrandProfilePage() {
 
   if (!brand) {
     return (
-      <div className="mx-auto max-w-3xl border border-white/10 bg-white/5 p-8 text-center">
+      <div className="mx-auto max-w-3xl border border-theme-ink/10 bg-theme-ink/5 p-8 text-center">
         <p className="text-lg font-black">Brand profile unavailable</p>
-        <p className="mt-2 text-sm text-white/50">
+        <p className="mt-2 text-sm text-theme-ink/50">
           Contact admin if this keeps happening.
         </p>
       </div>
@@ -302,19 +302,19 @@ export default function BrandProfilePage() {
         <div>
           <Link
             href="/brand-dashboard"
-            className="mb-3 inline-flex items-center gap-2 text-sm text-white/50 hover:text-white"
+            className="mb-3 inline-flex items-center gap-2 text-sm text-theme-ink/50 hover:text-theme-ink"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to dashboard
           </Link>
 
-          <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/40">
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-ink/40">
             Brand Identity
           </p>
           <h1 className="mt-2 text-3xl font-black sm:text-4xl">
             {brand.name}
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-white/50">
+          <p className="mt-2 max-w-2xl text-sm text-theme-ink/50">
             Shape how your brand appears on The Village: story, location,
             visuals, and social presence.
           </p>
@@ -323,7 +323,7 @@ export default function BrandProfilePage() {
         <Button
           onClick={handleSave}
           disabled={saving || !!uploading}
-          className="bg-white text-black hover:bg-white/80"
+          className="bg-theme-ink text-theme-base hover:bg-theme-ink/80"
         >
           {saving ? (
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -383,7 +383,7 @@ export default function BrandProfilePage() {
                   onChange={handleChange}
                   placeholder="Tell customers what your brand stands for, where it started, and what makes it different."
                   rows={7}
-                  className="mt-2 rounded-none border-white/10 bg-black text-white placeholder:text-white/30"
+                  className="mt-2 rounded-none border-theme-ink/10 bg-theme-base text-theme-ink placeholder:text-theme-ink/30"
                 />
               </div>
 
@@ -460,13 +460,13 @@ export default function BrandProfilePage() {
         </section>
 
         <aside className="lg:sticky lg:top-8 lg:self-start">
-          <div className="border border-white/10 bg-white/[0.04] p-5">
-            <p className="mb-4 text-xs font-black uppercase tracking-[0.22em] text-white/35">
+          <div className="border border-theme-ink/10 bg-theme-ink/[0.04] p-5">
+            <p className="mb-4 text-xs font-black uppercase tracking-[0.22em] text-theme-ink/35">
               Public Preview
             </p>
 
-            <div className="overflow-hidden border border-white/10 bg-black">
-              <div className="relative h-52 bg-white/5">
+            <div className="overflow-hidden border border-theme-ink/10 bg-theme-base">
+              <div className="relative h-52 bg-theme-ink/5">
                 {form.cover_image_url ? (
                   <img
                     src={form.cover_image_url}
@@ -475,14 +475,14 @@ export default function BrandProfilePage() {
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center">
-                    <ImageIcon className="h-10 w-10 text-white/20" />
+                    <ImageIcon className="h-10 w-10 text-theme-ink/20" />
                   </div>
                 )}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
               </div>
 
               <div className="relative px-5 pb-6">
-                <div className="-mt-12 flex h-24 w-24 items-center justify-center overflow-hidden border border-white/20 bg-black">
+                <div className="-mt-12 flex h-24 w-24 items-center justify-center overflow-hidden border border-theme-ink/20 bg-theme-base">
                   {form.logo_url ? (
                     <img
                       src={form.logo_url}
@@ -497,18 +497,18 @@ export default function BrandProfilePage() {
                 </div>
 
                 <div className="mt-5">
-                  <p className="text-xs font-black uppercase tracking-[0.2em] text-white/35">
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-ink/35">
                     {form.style_category || "Streetwear brand"}
                   </p>
                   <h2 className="mt-2 text-3xl font-black">{brand.name}</h2>
                   {form.tagline && (
-                    <p className="mt-2 text-sm font-bold text-white/75">
+                    <p className="mt-2 text-sm font-bold text-theme-ink/75">
                       {form.tagline}
                     </p>
                   )}
                 </div>
 
-                <div className="mt-5 space-y-3 text-sm text-white/60">
+                <div className="mt-5 space-y-3 text-sm text-theme-ink/60">
                   {location && (
                     <p className="flex items-center gap-2">
                       <MapPin className="h-4 w-4" />
@@ -523,11 +523,11 @@ export default function BrandProfilePage() {
                   )}
                 </div>
 
-                <div className="mt-6 border-t border-white/10 pt-5">
-                  <p className="text-xs font-black uppercase tracking-[0.18em] text-white/35">
+                <div className="mt-6 border-t border-theme-ink/10 pt-5">
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-theme-ink/35">
                     Story
                   </p>
-                  <p className="mt-3 whitespace-pre-line text-sm leading-6 text-white/65">
+                  <p className="mt-3 whitespace-pre-line text-sm leading-6 text-theme-ink/65">
                     {form.story ||
                       "Add your story to help shoppers understand what your brand stands for."}
                   </p>
@@ -541,8 +541,8 @@ export default function BrandProfilePage() {
                 "Location builds trust",
                 "Socials make the brand discoverable",
               ].map((item) => (
-                <p key={item} className="flex items-center gap-2 text-sm text-white/60">
-                  <CheckCircle className="h-4 w-4 text-white/70" />
+                <p key={item} className="flex items-center gap-2 text-sm text-theme-ink/60">
+                  <CheckCircle className="h-4 w-4 text-theme-ink/70" />
                   {item}
                 </p>
               ))}
@@ -566,12 +566,12 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <section className="border border-white/10 bg-white/[0.04] p-5 sm:p-6">
-      <p className="text-xs font-black uppercase tracking-[0.22em] text-white/35">
+    <section className="border border-theme-ink/10 bg-theme-ink/[0.04] p-5 sm:p-6">
+      <p className="text-xs font-black uppercase tracking-[0.22em] text-theme-ink/35">
         {eyebrow}
       </p>
       <h2 className="mt-2 text-2xl font-black">{title}</h2>
-      <p className="mt-2 text-sm leading-6 text-white/50">{description}</p>
+      <p className="mt-2 text-sm leading-6 text-theme-ink/50">{description}</p>
       <div className="mt-6">{children}</div>
     </section>
   );
@@ -598,7 +598,7 @@ function Field({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="mt-2 rounded-none border-white/10 bg-black text-white placeholder:text-white/30"
+        className="mt-2 rounded-none border-theme-ink/10 bg-theme-base text-theme-ink placeholder:text-theme-ink/30"
       />
     </div>
   );
@@ -623,7 +623,7 @@ function ImageUploadField({
     <div>
       <Label>{label}</Label>
       <div
-        className={`mt-2 overflow-hidden border border-white/10 bg-black ${
+        className={`mt-2 overflow-hidden border border-theme-ink/10 bg-theme-base ${
           wide ? "aspect-[16/9]" : "aspect-square"
         }`}
       >
@@ -631,14 +631,14 @@ function ImageUploadField({
           <img src={previewUrl} alt={label} className="h-full w-full object-cover" />
         ) : (
           <div className="flex h-full items-center justify-center">
-            <ImageIcon className="h-10 w-10 text-white/20" />
+            <ImageIcon className="h-10 w-10 text-theme-ink/20" />
           </div>
         )}
       </div>
 
-      <p className="mt-2 text-xs text-white/40">{help}</p>
+      <p className="mt-2 text-xs text-theme-ink/40">{help}</p>
 
-      <label className="mt-3 inline-flex cursor-pointer items-center justify-center gap-2 border border-white/10 px-4 py-3 text-sm font-black text-white/70 transition hover:bg-white hover:text-black">
+      <label className="mt-3 inline-flex cursor-pointer items-center justify-center gap-2 border border-theme-ink/10 px-4 py-3 text-sm font-black text-theme-ink/70 transition hover:bg-theme-ink hover:text-theme-base">
         {uploading ? (
           <Loader2 className="h-4 w-4 animate-spin" />
         ) : (

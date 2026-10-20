@@ -29,12 +29,12 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="fixed left-0 top-0 hidden h-screen w-72 border-r border-white/10 bg-black px-5 py-6 text-white lg:block">
+    <aside className="fixed left-0 top-0 hidden h-screen w-72 border-r border-theme-ink/10 bg-theme-base px-5 py-6 text-theme-ink lg:block">
       <Link href={profileBase} className="block text-2xl font-black">
         The Village
       </Link>
 
-      <p className="mt-1 text-xs text-white/40">Marketplace dashboard</p>
+      <p className="mt-1 text-xs text-theme-ink/40">Marketplace dashboard</p>
 
       <nav className="mt-10 space-y-2">
         {navItems.map((item) => {
@@ -48,8 +48,8 @@ export default function Sidebar() {
               href={href}
               className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition ${
                 active
-                  ? "bg-white text-black"
-                  : "text-white/60 hover:bg-white/10 hover:text-white"
+                  ? "bg-theme-ink text-theme-base"
+                  : "text-theme-ink/60 hover:bg-theme-ink/10 hover:text-theme-ink"
               }`}
             >
               <Icon className="h-5 w-5" />
@@ -61,7 +61,7 @@ export default function Sidebar() {
 
       <button
         onClick={handleLogout}
-        className="absolute bottom-6 left-5 right-5 flex items-center justify-center gap-2 rounded-2xl border border-white/10 px-4 py-3 text-sm font-bold text-white/70 transition hover:bg-red-600 hover:text-white"
+        className="absolute bottom-6 left-5 right-5 flex items-center justify-center gap-2 rounded-2xl border border-theme-ink/10 px-4 py-3 text-sm font-bold text-theme-ink/70 transition hover:bg-red-600 hover:text-theme-ink"
       >
         <LogOut className="h-5 w-5" />
         Logout

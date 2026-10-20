@@ -14,7 +14,7 @@ export default async function BrandShowcase() {
     console.error("Error fetching products:", error);
 
     return (
-      <section className="rounded-2xl border border-white/10 bg-white/5 p-4">
+      <section className="rounded-2xl border border-theme-ink/10 bg-theme-ink/5 p-4">
         <p className="text-sm text-red-400">Could not load brands.</p>
       </section>
     );

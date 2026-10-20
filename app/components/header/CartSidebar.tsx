@@ -25,7 +25,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
 
       {/* Sidebar */}
       <div
-        className={`border border-red-500 fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`theme-paper border border-red-500 fixed top-0 right-0 h-full w-full sm:w-96 bg-theme-ink shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -52,7 +52,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                 <p className="text-sm text-gray-600 mb-6">Add some items to get started</p>
                 <button
                   onClick={onClose}
-                  className="px-6 py-2 bg-black text-white font-semibold rounded-md hover:bg-gray-800 transition-colors"
+                  className="px-6 py-2 bg-theme-base text-theme-ink font-semibold rounded-md hover:bg-gray-800 transition-colors"
                 >
                   Continue Shopping
                 </button>
@@ -137,7 +137,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
               <Link
                 href="/checkout"
                 onClick={onClose}
-                className="block w-full py-3 bg-black text-white text-center font-bold rounded-md hover:bg-gray-800 transition-colors"
+                className="block w-full py-3 bg-theme-base text-theme-ink text-center font-bold rounded-md hover:bg-gray-800 transition-colors"
               >
                 Checkout
               </Link>

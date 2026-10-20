@@ -203,7 +203,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
             <Button
               type="submit"
               disabled={loading || googleLoading}
-              className="w-full bg-black text-white hover:bg-gray-800 transition-colors"
+              className="w-full bg-theme-base text-theme-ink hover:bg-gray-800 transition-colors"
             >
               {loading ? (
                 <span className="flex items-center gap-2">
@@ -230,7 +230,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
               )}
             </Button>
           </div>
-          
+
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-gray-200" />
@@ -239,7 +239,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
               <span className="bg-background px-2 text-muted-foreground">Or</span>
             </div>
           </div>
-          
+
           {/* Google Sign-In Button */}
           <div className="flex flex-col gap-4">
             <Button
@@ -247,7 +247,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
               variant="outline"
               onClick={handleGoogleSignIn}
               disabled={loading || googleLoading}
-              className="w-full border-gray-200 bg-white hover:bg-gray-50 flex items-center gap-2"
+              className="w-full border-gray-200 bg-white text-black hover:bg-gray-50 flex items-center gap-2"
             >
               {googleLoading ? (
                 <span className="flex items-center gap-2">

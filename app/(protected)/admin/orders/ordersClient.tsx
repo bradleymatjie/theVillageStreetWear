@@ -40,7 +40,7 @@ const statusOptions = [
 
 function getStatusColor(status: string) {
   const option = statusOptions.find((opt) => opt.value === status);
-  return option?.color || "bg-gray-800 text-gray-400";
+  return option?.color || "bg-gray-800 text-theme-ink/60";
 }
 
 function getStatusLabel(status: string) {
@@ -86,12 +86,12 @@ function OrderCard({
       >
         <div className="flex flex-col md:flex-row md:items-center gap-4">
           <span className="font-bold text-lg">#{order.order_id}</span>
-          <span className="text-gray-400 flex items-center gap-2">
+          <span className="text-theme-ink/60 flex items-center gap-2">
             <Clock className="w-4 h-4" />
             {new Date(order.created_at).toLocaleString()}
           </span>
           <span className="font-medium">{order.customer_name}</span>
-          <span className="text-gray-400">{order.email}</span>
+          <span className="text-theme-ink/60">{order.email}</span>
           <span className="font-bold text-xl">R{order.total.toFixed(2)}</span>
         </div>
 
@@ -100,9 +100,9 @@ function OrderCard({
             {getStatusLabel(order.status)}
           </span>
           {order.shipping_method === "delivery" ? (
-            <Truck className="w-5 h-5 text-gray-400" />
+            <Truck className="w-5 h-5 text-theme-ink/60" />
           ) : (
-            <MapPin className="w-5 h-5 text-gray-400" />
+            <MapPin className="w-5 h-5 text-theme-ink/60" />
           )}
         </div>
       </button>
@@ -131,13 +131,13 @@ function OrderCard({
                   <div className="flex-1">
                     <h4 className="font-semibold">{item.name}</h4>
                     {(item.selected_size || item.selected_material) && (
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-theme-ink/60">
                         {item.selected_size && `Size: ${item.selected_size}`}
                         {item.selected_size && item.selected_material && " / "}
                         {item.selected_material && `Material: ${item.selected_material}`}
                       </p>
                     )}
-                    <p className="text-sm text-gray-400">Quantity: {item.quantity}</p>
+                    <p className="text-sm text-theme-ink/60">Quantity: {item.quantity}</p>
                   </div>
                   <div className="font-semibold">
                     R{(item.price * item.quantity).toFixed(2)}
@@ -155,12 +155,12 @@ function OrderCard({
                 Customer Info
               </h3>
               <p>{order.customer_name}</p>
-              <p className="text-gray-400 flex items-center gap-2 mt-1">
+              <p className="text-theme-ink/60 flex items-center gap-2 mt-1">
                 <Mail className="w-4 h-4" />
                 {order.email}
               </p>
               {order.phone && (
-                <p className="text-gray-400 flex items-center gap-2 mt-1">
+                <p className="text-theme-ink/60 flex items-center gap-2 mt-1">
                   <Phone className="w-4 h-4" />
                   {order.phone}
                 </p>
@@ -177,9 +177,9 @@ function OrderCard({
                 {order.shipping_method === "delivery" ? "Delivery" : "Pickup"} Details
               </h3>
               {order.shipping_method === "delivery" ? (
-                <p className="whitespace-pre-line text-gray-300">{order.shipping_address}</p>
+                <p className="whitespace-pre-line text-theme-ink/75">{order.shipping_address}</p>
               ) : (
-                <p className="text-gray-300">{order.pickup_location}</p>
+                <p className="text-theme-ink/75">{order.pickup_location}</p>
               )}
             </div>
           </div>
@@ -192,7 +192,7 @@ function OrderCard({
                 value={localStatus}
                 onChange={(e) => setLocalStatus(e.target.value)}
                 disabled={updating}
-                className="bg-[var(--palette-border-admin)] border border-[var(--palette-ink-secondary)] text-white px-4 py-2 rounded-lg focus:outline-none focus:border-white"
+                className="bg-[var(--palette-border-admin)] border border-[var(--palette-ink-secondary)] text-theme-ink px-4 py-2 rounded-lg focus:outline-none focus:border-theme-ink"
               >
                 {statusOptions.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -205,7 +205,7 @@ function OrderCard({
                 <button
                   onClick={handleSave}
                   disabled={updating}
-                  className="px-6 py-2 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-2 bg-theme-ink text-theme-base font-bold rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {updating ? "Saving..." : "Save Changes"}
                 </button>
@@ -270,9 +270,9 @@ export default function OrdersPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-theme-base text-theme-ink flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-theme-ink mx-auto mb-4"></div>
           <p>Loading orders...</p>
         </div>
       </div>
@@ -292,7 +292,7 @@ export default function OrdersPage() {
       <div>
         <h1 className="text-3xl font-bold uppercase mb-6">Orders</h1>
         <div className="p-6 bg-[var(--palette-surface-admin)] border border-[var(--palette-border-admin)] rounded-lg">
-          <p className="text-gray-400">You have no orders yet.</p>
+          <p className="text-theme-ink/60">You have no orders yet.</p>
         </div>
       </div>
     );

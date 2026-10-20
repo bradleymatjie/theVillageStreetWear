@@ -57,7 +57,7 @@ function SuccessContent() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-black text-white">
+      <main className="flex min-h-screen items-center justify-center bg-theme-base text-theme-ink">
         <Loader2 className="mr-2 h-5 w-5 animate-spin" />
         Confirming your order...
       </main>
@@ -65,34 +65,34 @@ function SuccessContent() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-black px-4 text-white">
-      <div className="w-full max-w-xl rounded-3xl border border-white/10 bg-white/5 p-8 text-center">
+    <main className="flex min-h-screen items-center justify-center bg-theme-base px-4 text-theme-ink">
+      <div className="w-full max-w-xl rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-8 text-center">
         <CheckCircle className="mx-auto mb-5 h-16 w-16 text-green-400" />
 
-        <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/40">
+        <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-ink/40">
           Payment Complete
         </p>
 
         <h1 className="mt-3 text-4xl font-black">Order received</h1>
 
-        <p className="mt-3 text-white/60">
+        <p className="mt-3 text-theme-ink/60">
           Thank you for your purchase. Your order has been created successfully.
         </p>
 
         {order && (
-          <div className="mt-6 rounded-2xl bg-black/40 p-5 text-left text-sm">
+          <div className="mt-6 rounded-2xl bg-theme-base/40 p-5 text-left text-sm">
             <div className="flex justify-between">
-              <span className="text-white/50">Order ID</span>
+              <span className="text-theme-ink/50">Order ID</span>
               <span className="font-bold">{order.order_id}</span>
             </div>
 
             <div className="mt-3 flex justify-between">
-              <span className="text-white/50">Status</span>
+              <span className="text-theme-ink/50">Status</span>
               <span className="font-bold capitalize">{order.status}</span>
             </div>
 
             <div className="mt-3 flex justify-between">
-              <span className="text-white/50">Total</span>
+              <span className="text-theme-ink/50">Total</span>
               <span className="font-bold">R{Number(order.total).toFixed(2)}</span>
             </div>
           </div>
@@ -101,14 +101,14 @@ function SuccessContent() {
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
           <Link
             href={joinProfilePath(profileBase, "orders")}
-            className="flex-1 rounded-full bg-white px-6 py-3 text-sm font-black text-black"
+            className="flex-1 rounded-full bg-theme-ink px-6 py-3 text-sm font-black text-theme-base"
           >
             Track Order
           </Link>
 
           <Link
             href={joinProfilePath(profileBase, "products")}
-            className="flex-1 rounded-full border border-white/20 px-6 py-3 text-sm font-black text-white"
+            className="flex-1 rounded-full border border-theme-ink/20 px-6 py-3 text-sm font-black text-theme-ink"
           >
             Continue Shopping
           </Link>

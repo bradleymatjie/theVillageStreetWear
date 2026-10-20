@@ -63,32 +63,32 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-white text-black dark:bg-black dark:text-white">
+      <div className="flex min-h-screen items-center justify-center bg-theme-ink text-theme-base dark:bg-theme-base dark:text-theme-ink">
         Loading...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white px-4 py-8 text-black dark:bg-black dark:text-white">
+    <div className="min-h-screen bg-theme-ink px-4 py-8 text-theme-base dark:bg-theme-base dark:text-theme-ink">
       <div className="mx-auto max-w-2xl">
 
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-black">My Profile</h1>
-          <p className="mt-2 text-sm text-black/60 dark:text-white/60">
+          <p className="mt-2 text-sm text-theme-base/60 dark:text-theme-ink/60">
             Manage your account
           </p>
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl border border-black/10 bg-black/5 p-6 dark:border-white/10 dark:bg-white/5">
+        <div className="rounded-2xl border border-theme-base/10 bg-theme-base/5 p-6 dark:border-theme-ink/10 dark:bg-theme-ink/5">
 
           {/* Avatar */}
           <div className="mb-6 flex justify-center">
             <img
               src="/defaultPic.jpg"
-              className="h-24 w-24 rounded-full border border-black/10 object-cover dark:border-white/10"
+              className="h-24 w-24 rounded-full border border-theme-base/10 object-cover dark:border-theme-ink/10"
             />
           </div>
 
@@ -96,7 +96,7 @@ export default function ProfilePage() {
 
             {/* Name */}
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-black/70 dark:text-white/70">
+              <label className="flex items-center gap-2 text-sm font-medium text-theme-base/70 dark:text-theme-ink/70">
                 <UserIcon className="h-4 w-4" />
                 Full Name
               </label>
@@ -108,13 +108,13 @@ export default function ProfilePage() {
                   setFormData({ ...formData, full_name: e.target.value })
                 }
                 disabled={!editing}
-                className="mt-2 w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-black focus:outline-none dark:border-white/10 dark:bg-black dark:text-white"
+                className="mt-2 w-full rounded-xl border border-theme-base/10 bg-theme-ink px-3 py-2 text-theme-base focus:outline-none dark:border-theme-ink/10 dark:bg-theme-base dark:text-theme-ink"
               />
             </div>
 
             {/* Email */}
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-black/70 dark:text-white/70">
+              <label className="flex items-center gap-2 text-sm font-medium text-theme-base/70 dark:text-theme-ink/70">
                 <Mail className="h-4 w-4" />
                 Email
               </label>
@@ -122,13 +122,13 @@ export default function ProfilePage() {
               <input
                 value={formData.email}
                 disabled
-                className="mt-2 w-full rounded-xl border border-black/10 bg-black/5 px-3 py-2 text-black/60 dark:border-white/10 dark:bg-white/5 dark:text-white/60"
+                className="mt-2 w-full rounded-xl border border-theme-base/10 bg-theme-base/5 px-3 py-2 text-theme-base/60 dark:border-theme-ink/10 dark:bg-theme-ink/5 dark:text-theme-ink/60"
               />
             </div>
 
             {/* Phone */}
             <div>
-              <label className="flex items-center gap-2 text-sm font-medium text-black/70 dark:text-white/70">
+              <label className="flex items-center gap-2 text-sm font-medium text-theme-base/70 dark:text-theme-ink/70">
                 <Phone className="h-4 w-4" />
                 Phone
               </label>
@@ -140,7 +140,7 @@ export default function ProfilePage() {
                   setFormData({ ...formData, phone: e.target.value })
                 }
                 disabled={!editing}
-                className="mt-2 w-full rounded-xl border border-black/10 bg-white px-3 py-2 text-black focus:outline-none dark:border-white/10 dark:bg-black dark:text-white"
+                className="mt-2 w-full rounded-xl border border-theme-base/10 bg-theme-ink px-3 py-2 text-theme-base focus:outline-none dark:border-theme-ink/10 dark:bg-theme-base dark:text-theme-ink"
               />
             </div>
 
@@ -151,7 +151,7 @@ export default function ProfilePage() {
                   <button
                     type="button"
                     onClick={() => setEditing(true)}
-                    className="flex-1 rounded-xl bg-black py-3 text-sm font-black text-white dark:bg-white dark:text-black"
+                    className="flex-1 rounded-xl bg-theme-base py-3 text-sm font-black text-theme-ink dark:bg-theme-ink dark:text-theme-base"
                   >
                     Edit Profile
                   </button>
@@ -159,7 +159,7 @@ export default function ProfilePage() {
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="flex-1 rounded-xl border border-black/20 py-3 text-sm font-black dark:border-white/20"
+                    className="flex-1 rounded-xl border border-theme-base/20 py-3 text-sm font-black dark:border-theme-ink/20"
                   >
                     Logout
                   </button>
@@ -169,14 +169,14 @@ export default function ProfilePage() {
                   <button
                     type="button"
                     onClick={() => setEditing(false)}
-                    className="flex-1 rounded-xl border border-black/20 py-3 text-sm dark:border-white/20"
+                    className="flex-1 rounded-xl border border-theme-base/20 py-3 text-sm dark:border-theme-ink/20"
                   >
                     Cancel
                   </button>
 
                   <button
                     type="submit"
-                    className="flex-1 rounded-xl bg-black py-3 text-sm font-black text-white dark:bg-white dark:text-black"
+                    className="flex-1 rounded-xl bg-theme-base py-3 text-sm font-black text-theme-ink dark:bg-theme-ink dark:text-theme-base"
                   >
                     Save
                   </button>
@@ -186,7 +186,7 @@ export default function ProfilePage() {
           </form>
 
           {/* Meta */}
-          <div className="mt-6 border-t border-black/10 pt-4 text-center text-xs text-black/50 dark:border-white/10 dark:text-white/50">
+          <div className="mt-6 border-t border-theme-base/10 pt-4 text-center text-xs text-theme-base/50 dark:border-theme-ink/10 dark:text-theme-ink/50">
             <p>
               Member since{" "}
               {new Date(user.created_at).toLocaleDateString()}

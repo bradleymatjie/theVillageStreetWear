@@ -158,7 +158,7 @@ export default function BrandDashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center text-white">
+      <div className="flex min-h-[60vh] items-center justify-center text-theme-ink">
         Loading dashboard...
       </div>
     );
@@ -167,11 +167,11 @@ export default function BrandDashboardPage() {
   return (
     <div className="mx-auto max-w-7xl">
       {showProfilePrompt && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-[var(--palette-surface-modal)] p-6 text-white shadow-2xl sm:p-7">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-theme-base/75 px-4 backdrop-blur-sm">
+          <div className="w-full max-w-lg rounded-3xl border border-theme-ink/10 bg-[var(--palette-surface-modal)] p-6 text-theme-ink shadow-2xl sm:p-7">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.24em] text-white/35">
+                <p className="text-xs font-black uppercase tracking-[0.24em] text-theme-ink/35">
                   Brand profile
                 </p>
                 <h2 className="mt-3 text-3xl font-black leading-tight">
@@ -182,26 +182,26 @@ export default function BrandDashboardPage() {
               <button
                 type="button"
                 onClick={dismissProfilePrompt}
-                className="rounded-full border border-white/10 p-2 text-white/50 transition hover:bg-white hover:text-black"
+                className="rounded-full border border-theme-ink/10 p-2 text-theme-ink/50 transition hover:bg-theme-ink hover:text-theme-base"
                 aria-label="Close profile reminder"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <p className="mt-4 text-sm leading-6 text-white/60">
+            <p className="mt-4 text-sm leading-6 text-theme-ink/60">
               Your profile is what buyers see before they decide to support you.
               Add your story, logo, location, address, and socials so customers
               know who they are buying from and whether pickup is available.
             </p>
 
-            <div className="mt-6 grid gap-3 text-sm text-white/65 sm:grid-cols-2">
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                <p className="font-black text-white">Build trust</p>
+            <div className="mt-6 grid gap-3 text-sm text-theme-ink/65 sm:grid-cols-2">
+              <div className="rounded-2xl border border-theme-ink/10 bg-theme-ink/[0.04] p-4">
+                <p className="font-black text-theme-ink">Build trust</p>
                 <p className="mt-1">Tell people what your brand stands for.</p>
               </div>
-              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                <p className="font-black text-white">Enable pickup</p>
+              <div className="rounded-2xl border border-theme-ink/10 bg-theme-ink/[0.04] p-4">
+                <p className="font-black text-theme-ink">Enable pickup</p>
                 <p className="mt-1">A complete address can unlock R0 pickup.</p>
               </div>
             </div>
@@ -209,14 +209,14 @@ export default function BrandDashboardPage() {
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/brand-dashboard/profile"
-                className="flex-1 rounded-full bg-white px-5 py-3 text-center text-sm font-black text-black"
+                className="flex-1 rounded-full bg-theme-ink px-5 py-3 text-center text-sm font-black text-theme-base"
               >
                 Complete profile
               </Link>
               <button
                 type="button"
                 onClick={dismissProfilePrompt}
-                className="flex-1 rounded-full border border-white/15 px-5 py-3 text-sm font-black text-white transition hover:bg-white/10"
+                className="flex-1 rounded-full border border-theme-ink/15 px-5 py-3 text-sm font-black text-theme-ink transition hover:bg-theme-ink/10"
               >
                 Later
               </button>
@@ -227,7 +227,7 @@ export default function BrandDashboardPage() {
 
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.25em] text-white/40">
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-ink/40">
             Brand Dashboard
           </p>
 
@@ -235,14 +235,14 @@ export default function BrandDashboardPage() {
             Welcome, {brandName}
           </h1>
 
-          <p className="mt-2 text-sm text-white/50">
+          <p className="mt-2 text-sm text-theme-ink/50">
             Manage your products, orders, and brand presence on The Village.
           </p>
         </div>
 
         <button
           onClick={handleLogout}
-          className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-5 py-2 text-sm font-bold text-white transition hover:bg-white hover:text-black"
+          className="inline-flex items-center justify-center gap-2 rounded-full border border-theme-ink/20 px-5 py-2 text-sm font-bold text-theme-ink transition hover:bg-theme-ink hover:text-theme-base"
         >
           <LogOut className="h-4 w-4" />
           Logout
@@ -284,37 +284,37 @@ export default function BrandDashboardPage() {
 
         <Link
           href="/brand-dashboard/products"
-          className="rounded-3xl bg-white p-6 text-black transition hover:bg-white/80"
+          className="rounded-3xl bg-theme-ink p-6 text-theme-base transition hover:bg-theme-ink/80"
         >
           <Plus className="mb-5 h-7 w-7" />
           <h2 className="text-xl font-black">Add Product</h2>
-          <p className="mt-2 text-sm text-black/60">
+          <p className="mt-2 text-sm text-theme-base/60">
             Upload a new marketplace item.
           </p>
         </Link>
       </div>
 
-      <section className="mt-10 rounded-3xl border border-white/10 bg-white/5 p-5 sm:p-6">
+      <section className="mt-10 rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-5 sm:p-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-black">Your Products</h2>
-            <p className="mt-1 text-sm text-white/50">
+            <p className="mt-1 text-sm text-theme-ink/50">
               Your latest listed products.
             </p>
           </div>
 
           <Link
             href="/brand-dashboard/products"
-            className="rounded-full bg-white px-5 py-3 text-center text-sm font-black text-black"
+            className="rounded-full bg-theme-ink px-5 py-3 text-center text-sm font-black text-theme-base"
           >
             Add Product
           </Link>
         </div>
 
         {recentProducts.length === 0 ? (
-          <div className="mt-8 rounded-2xl border border-white/10 bg-black/30 p-8 text-center">
+          <div className="mt-8 rounded-2xl border border-theme-ink/10 bg-theme-base/30 p-8 text-center">
             <p className="font-bold">No products yet</p>
-            <p className="mt-2 text-sm text-white/50">
+            <p className="mt-2 text-sm text-theme-ink/50">
               Start by adding your first product to the marketplace.
             </p>
           </div>
@@ -324,7 +324,7 @@ export default function BrandDashboardPage() {
               <Link
                 key={product.id}
                 href="/brand-dashboard/products"
-                className="overflow-hidden rounded-2xl border border-white/10 bg-black/40 transition hover:bg-white/10"
+                className="overflow-hidden rounded-2xl border border-theme-ink/10 bg-theme-base/40 transition hover:bg-theme-ink/10"
               >
                 <img
                   src={product.imageurl}
@@ -334,7 +334,7 @@ export default function BrandDashboardPage() {
 
                 <div className="p-4">
                   <p className="line-clamp-1 font-bold">{product.name}</p>
-                  <p className="mt-1 text-sm text-white/50">
+                  <p className="mt-1 text-sm text-theme-ink/50">
                     R{product.price}
                   </p>
 
@@ -369,12 +369,12 @@ function DashboardCard({
   return (
     <Link
       href={href}
-      className="rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:bg-white/10"
+      className="rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-6 transition hover:bg-theme-ink/10"
     >
-      <Icon className="mb-5 h-7 w-7 text-white/60" />
-      <p className="text-sm font-bold text-white/40">{title}</p>
+      <Icon className="mb-5 h-7 w-7 text-theme-ink/60" />
+      <p className="text-sm font-bold text-theme-ink/40">{title}</p>
       <h2 className="mt-2 text-3xl font-black">{value}</h2>
-      <p className="mt-1 text-sm text-white/50">{text}</p>
+      <p className="mt-1 text-sm text-theme-ink/50">{text}</p>
     </Link>
   );
 }

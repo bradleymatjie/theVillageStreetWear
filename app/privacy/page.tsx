@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export default function PrivacyPolicy() {
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="theme-paper min-h-screen bg-theme-ink text-theme-base">
       {/* Header */}
       <div className="bg-gradient-to-b from-gray-50 to-white py-16 sm:py-24 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
@@ -21,13 +21,13 @@ export default function PrivacyPolicy() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-        <div className="bg-black text-white rounded-lg p-6 sm:p-8 mb-12">
+        <div className="bg-theme-base text-theme-ink rounded-lg p-6 sm:p-8 mb-12">
           <div className="flex items-center gap-3 mb-4">
             <Shield className="w-8 h-8" />
             <h2 className="text-2xl font-black">YOUR PRIVACY MATTERS</h2>
           </div>
-          <p className="text-gray-300 leading-relaxed">
-            At The Village, we take your privacy seriously. This Privacy Policy explains how we collect, use, 
+          <p className="text-theme-ink/75 leading-relaxed">
+            At The Village, we take your privacy seriously. This Privacy Policy explains how we collect, use,
             disclose, and safeguard your information when you visit our website or make a purchase from us.
           </p>
         </div>
@@ -43,7 +43,7 @@ export default function PrivacyPolicy() {
               <div>
                 <h3 className="font-bold mb-3">Personal Information</h3>
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  When you make a purchase or attempt to make a purchase through our website, we collect certain 
+                  When you make a purchase or attempt to make a purchase through our website, we collect certain
                   information from you, including:
                 </p>
                 <ul className="space-y-2 text-gray-700 ml-6">
@@ -134,7 +134,7 @@ export default function PrivacyPolicy() {
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
                 <h3 className="font-bold mb-2">Legal Requirements</h3>
                 <p className="text-gray-600 text-sm leading-relaxed">
-                  We may disclose your information if required to do so by law or in response to valid requests 
+                  We may disclose your information if required to do so by law or in response to valid requests
                   by public authorities (e.g., a court or government agency).
                 </p>
               </div>
@@ -151,7 +151,7 @@ export default function PrivacyPolicy() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed mb-4">
-                We implement appropriate technical and organizational security measures to protect your personal 
+                We implement appropriate technical and organizational security measures to protect your personal
                 information against unauthorized access, alteration, disclosure, or destruction.
               </p>
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
@@ -165,7 +165,7 @@ export default function PrivacyPolicy() {
                 </ul>
               </div>
               <p className="text-gray-600 text-sm leading-relaxed mt-4">
-                However, please note that no method of transmission over the internet or electronic storage is 100% 
+                However, please note that no method of transmission over the internet or electronic storage is 100%
                 secure. While we strive to protect your personal information, we cannot guarantee its absolute security.
               </p>
             </div>
@@ -185,7 +185,7 @@ export default function PrivacyPolicy() {
               </p>
               <div className="grid gap-4">
                 <div className="flex gap-4 items-start bg-gray-50 rounded-lg p-4 border border-gray-200">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                     1
                   </div>
                   <div>
@@ -194,7 +194,7 @@ export default function PrivacyPolicy() {
                   </div>
                 </div>
                 <div className="flex gap-4 items-start bg-gray-50 rounded-lg p-4 border border-gray-200">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                     2
                   </div>
                   <div>
@@ -203,7 +203,7 @@ export default function PrivacyPolicy() {
                   </div>
                 </div>
                 <div className="flex gap-4 items-start bg-gray-50 rounded-lg p-4 border border-gray-200">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                     3
                   </div>
                   <div>
@@ -212,7 +212,7 @@ export default function PrivacyPolicy() {
                   </div>
                 </div>
                 <div className="flex gap-4 items-start bg-gray-50 rounded-lg p-4 border border-gray-200">
-                  <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                  <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                     4
                   </div>
                   <div>
@@ -223,7 +223,7 @@ export default function PrivacyPolicy() {
               </div>
               <p className="text-gray-600 text-sm leading-relaxed mt-4">
                 To exercise any of these rights, please contact us at{' '}
-                <a href="mailto:thevillagestreetwear@gmail.com" className="underline font-bold hover:text-black">
+                <a href="mailto:thevillagestreetwear@gmail.com" className="underline font-bold hover:text-theme-base">
                   thevillagestreetwear@gmail.com
                 </a>
               </p>
@@ -240,7 +240,7 @@ export default function PrivacyPolicy() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed mb-4">
-                We use cookies and similar tracking technologies to track activity on our website and store certain information. 
+                We use cookies and similar tracking technologies to track activity on our website and store certain information.
                 Cookies are files with a small amount of data that are sent to your browser from a website and stored on your device.
               </p>
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
@@ -258,7 +258,7 @@ export default function PrivacyPolicy() {
                 </ul>
               </div>
               <p className="text-gray-600 text-sm leading-relaxed mt-4">
-                You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. 
+                You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.
                 However, if you do not accept cookies, you may not be able to use some portions of our website.
               </p>
             </div>
@@ -274,8 +274,8 @@ export default function PrivacyPolicy() {
             </div>
             <div className="bg-red-50 border border-red-200 rounded-lg p-6">
               <p className="text-gray-700 leading-relaxed">
-                Our website is not intended for individuals under the age of 18. We do not knowingly collect 
-                personal information from children. If you are a parent or guardian and believe your child has 
+                Our website is not intended for individuals under the age of 18. We do not knowingly collect
+                personal information from children. If you are a parent or guardian and believe your child has
                 provided us with personal information, please contact us immediately.
               </p>
             </div>
@@ -291,8 +291,8 @@ export default function PrivacyPolicy() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed">
-                We may update this Privacy Policy from time to time. We will notify you of any changes by posting 
-                the new Privacy Policy on this page and updating the "Last updated" date at the top of this policy. 
+                We may update this Privacy Policy from time to time. We will notify you of any changes by posting
+                the new Privacy Policy on this page and updating the "Last updated" date at the top of this policy.
                 We encourage you to review this Privacy Policy periodically for any changes.
               </p>
             </div>
@@ -300,15 +300,15 @@ export default function PrivacyPolicy() {
         </div>
 
         {/* Contact Section */}
-        <div className="mt-16 bg-black text-white rounded-lg p-8 text-center">
+        <div className="mt-16 bg-theme-base text-theme-ink rounded-lg p-8 text-center">
           <Mail className="w-12 h-12 mx-auto mb-4" />
           <h2 className="text-2xl font-black mb-2">QUESTIONS ABOUT PRIVACY?</h2>
-          <p className="text-gray-300 mb-6">
+          <p className="text-theme-ink/75 mb-6">
             If you have any questions about this Privacy Policy, please contact us.
           </p>
           <a
             href="mailto:thevillagestreetwear@gmail.com"
-            className="inline-flex items-center gap-2 bg-white text-black font-bold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
+            className="inline-flex items-center gap-2 bg-theme-ink text-theme-base font-bold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
           >
             <Mail className="w-4 h-4" />
             Contact Us

@@ -23,8 +23,8 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
     : ["100% Cotton"];
 
   // Handle images array
-  const productImages = product.images && product.images.length > 0 
-    ? product.images 
+  const productImages = product.images && product.images.length > 0
+    ? product.images
     : [product.imageurl || '/placeholder-product.jpg'];
 
   const [selectedSize, setSelectedSize] = useState<string>(availableSizes[0]);
@@ -49,7 +49,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 border-b ">
+    <div className="min-h-screen bg-theme-base text-theme-ink p-4 border-b ">
       <div className="max-w-6xl mx-auto">
         <Link
           href="/products"
@@ -59,19 +59,19 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         </Link>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           <div>
-            <div className="relative aspect-square rounded-md overflow-hidden border border-white/20 group">
+            <div className="relative aspect-square rounded-md overflow-hidden border border-theme-ink/20 group">
               <img
                 src={imageUrl || "/noImage.jpg"}
                 alt={product.name}                className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"              />
               {isSoldOut && (
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center z-10">
-                  <span className="text-white font-bold text-xl uppercase tracking-wide px-4 py-2 bg-black/30 rounded-full">
+                <div className="absolute inset-0 bg-theme-base/60 flex items-center justify-center z-10">
+                  <span className="text-theme-ink font-bold text-xl uppercase tracking-wide px-4 py-2 bg-theme-base/30 rounded-full">
                     Sold Out
                   </span>
                 </div>
               )}
             </div>
-            
+
             {productImages.length > 1 && (
               <div className="mt-4 flex h-[100px] w-full justify-center">
                 {productImages.map((img, index) => (
@@ -79,9 +79,9 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
                     className={`relative aspect-square rounded-md overflow-hidden border-2 transition-all ${
-                      selectedImageIndex === index 
-                        ? "border-white" 
-                        : "border-white/20 hover:border-white/40"
+                      selectedImageIndex === index
+                        ? "border-theme-ink"
+                        : "border-theme-ink/20 hover:border-theme-ink/40"
                     }`}
                   >
                     <img
@@ -95,7 +95,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
           <div className="space-y-6 lg:pt-4 ">
             {product.category && (
-              <p className="text-sm uppercase tracking-wide text-gray-400 font-medium">
+              <p className="text-sm uppercase tracking-wide text-theme-ink/60 font-medium">
                 {product.category}
               </p>
             )}
@@ -104,10 +104,10 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
               {product.name}
             </h1>
 
-            <p className="text-3xl font-bold text-white">{formattedPrice}</p>
+            <p className="text-3xl font-bold text-theme-ink">{formattedPrice}</p>
 
             {product.description && (
-              <div className="prose prose-invert max-w-none text-gray-300 leading-relaxed">
+              <div className="prose prose-invert max-w-none text-theme-ink/75 leading-relaxed">
                 <p>{product.description}</p>
               </div>
             )}
@@ -115,7 +115,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             {/* ========== SIZE SELECTOR ========== */}
             {availableSizes.length > 0 && (
               <div className="space-y-2">
-                <p className="font-medium text-gray-300">Select Size</p>
+                <p className="font-medium text-theme-ink/75">Select Size</p>
 
                 <div className="flex flex-wrap gap-2">
                   {availableSizes.map((size) => (
@@ -124,8 +124,8 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                       onClick={() => setSelectedSize(size)}
                       disabled={isSoldOut}
                       className={`px-4 py-2 border rounded-md transition-all ${selectedSize === size
-                          ? "bg-white text-black"
-                          : "border-white/20 text-gray-300 hover:border-white/40"
+                          ? "bg-theme-ink text-theme-base"
+                          : "border-theme-ink/20 text-theme-ink/75 hover:border-theme-ink/40"
                         } ${isSoldOut ? "opacity-50 cursor-not-allowed" : ""}`}
                     >
                       {size}
@@ -140,8 +140,8 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
               <button
                 onClick={handleAddToCart}
                 className={`flex-1 py-4 px-6 font-bold rounded-md text-center transition-all duration-300 ${isAdded
-                    ? "bg-green-600 text-white"
-                    : "bg-white text-black hover:bg-gray-100"
+                    ? "bg-green-600 text-theme-ink"
+                    : "bg-theme-ink text-theme-base hover:bg-gray-100"
                   } ${isSoldOut ? "opacity-50 cursor-not-allowed" : ""}`}
                 disabled={isSoldOut}
               >
@@ -154,7 +154,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
               <Link
                 href={isSoldOut ? "#" : "/checkout"}
-                className={`py-4 px-6 border border-white/20 rounded-md font-bold text-center hover:border-white/50 transition-colors ${isSoldOut ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
+                className={`py-4 px-6 border border-theme-ink/20 rounded-md font-bold text-center hover:border-theme-ink/50 transition-colors ${isSoldOut ? "opacity-50 cursor-not-allowed pointer-events-none" : ""
                   }`}
               >
                 {isSoldOut ? "Sold Out" : "Buy Now"}

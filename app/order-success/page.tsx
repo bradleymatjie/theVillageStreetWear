@@ -9,7 +9,7 @@ export default function OrderSuccessPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="max-w-md w-full">
-        <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+        <div className="bg-theme-ink rounded-lg shadow-lg p-8 text-center">
           {/* Success Icon */}
           <div className="mb-6">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto">
@@ -57,7 +57,7 @@ export default function OrderSuccessPage() {
           <div className="space-y-3">
             <Link
               href="/products"
-              className="block w-full py-3 bg-black text-white font-semibold rounded-md hover:bg-gray-800 transition-colors"
+              className="block w-full py-3 bg-theme-base text-theme-ink font-semibold rounded-md hover:bg-gray-800 transition-colors"
             >
               Continue Shopping
             </Link>
@@ -74,7 +74,7 @@ export default function OrderSuccessPage() {
         <div className="mt-6 text-center text-sm text-gray-600">
           <p>
             Questions about your order?{" "}
-            <Link href="/contact" className="text-black font-semibold hover:underline">
+            <Link href="/contact" className="text-theme-base font-semibold hover:underline">
               Contact us
             </Link>
           </p>

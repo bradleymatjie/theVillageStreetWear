@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export default function TermsConditions() {
   return (
-    <div className="min-h-screen bg-white text-black">
+    <div className="theme-paper min-h-screen bg-theme-ink text-theme-base">
       {/* Header */}
       <div className="bg-gradient-to-b from-gray-50 to-white py-16 sm:py-24 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
@@ -24,13 +24,13 @@ export default function TermsConditions() {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         {/* Introduction */}
-        <div className="bg-black text-white rounded-lg p-6 sm:p-8 mb-12">
+        <div className="bg-theme-base text-theme-ink rounded-lg p-6 sm:p-8 mb-12">
           <div className="flex items-center gap-3 mb-4">
             <FileText className="w-8 h-8" />
             <h2 className="text-2xl font-black">AGREEMENT TO TERMS</h2>
           </div>
-          <p className="text-gray-300 leading-relaxed">
-            By accessing and using The Village website and purchasing our products, you agree to be bound by these 
+          <p className="text-theme-ink/75 leading-relaxed">
+            By accessing and using The Village website and purchasing our products, you agree to be bound by these
             Terms and Conditions. Please read them carefully before making a purchase.
           </p>
         </div>
@@ -47,7 +47,7 @@ export default function TermsConditions() {
             </div>
             <div className="prose prose-gray max-w-none space-y-4">
               <p className="text-gray-600 leading-relaxed">
-                These Terms and Conditions govern your use of The Village's website and the purchase of products. 
+                These Terms and Conditions govern your use of The Village's website and the purchase of products.
                 By using our website or making a purchase, you accept these terms in full.
               </p>
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
@@ -74,7 +74,7 @@ export default function TermsConditions() {
               <div>
                 <h3 className="font-bold mb-3">Product Information</h3>
                 <p className="text-gray-600 leading-relaxed mb-4">
-                  We strive to display product colors and images as accurately as possible. However, we cannot 
+                  We strive to display product colors and images as accurately as possible. However, we cannot
                   guarantee that your device's display will accurately reflect the actual color or appearance of products.
                 </p>
               </div>
@@ -96,8 +96,8 @@ export default function TermsConditions() {
               <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
                 <h3 className="font-bold mb-3">Product Availability</h3>
                 <p className="text-gray-700 text-sm leading-relaxed">
-                  All products are subject to availability. We reserve the right to limit quantities of any products 
-                  or services. If a product becomes unavailable after you place an order, we will notify you and 
+                  All products are subject to availability. We reserve the right to limit quantities of any products
+                  or services. If a product becomes unavailable after you place an order, we will notify you and
                   provide a full refund.
                 </p>
               </div>
@@ -118,7 +118,7 @@ export default function TermsConditions() {
                 <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
                   <ol className="space-y-4">
                     <li className="flex gap-4">
-                      <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                      <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                         1
                       </div>
                       <div>
@@ -127,7 +127,7 @@ export default function TermsConditions() {
                       </div>
                     </li>
                     <li className="flex gap-4">
-                      <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                      <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                         2
                       </div>
                       <div>
@@ -136,7 +136,7 @@ export default function TermsConditions() {
                       </div>
                     </li>
                     <li className="flex gap-4">
-                      <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                      <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                         3
                       </div>
                       <div>
@@ -145,7 +145,7 @@ export default function TermsConditions() {
                       </div>
                     </li>
                     <li className="flex gap-4">
-                      <div className="flex-shrink-0 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center font-bold text-sm">
+                      <div className="flex-shrink-0 w-8 h-8 bg-theme-base text-theme-ink rounded-full flex items-center justify-center font-bold text-sm">
                         4
                       </div>
                       <div>
@@ -173,7 +173,7 @@ export default function TermsConditions() {
                   </div>
                 </div>
                 <p className="text-gray-600 text-sm leading-relaxed mt-4">
-                  Payment must be received in full before we process your order. We do not store your payment 
+                  Payment must be received in full before we process your order. We do not store your payment
                   information - all payments are handled securely by Yoco.
                 </p>
               </div>
@@ -191,7 +191,7 @@ export default function TermsConditions() {
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed mb-4">
                 We currently ship within South Africa only. For detailed shipping information, please see our{' '}
-                <Link href="/shipping" className="underline font-bold hover:text-black">
+                <Link href="/shipping" className="underline font-bold hover:text-theme-base">
                   Shipping Information page
                 </Link>.
               </p>
@@ -217,9 +217,9 @@ export default function TermsConditions() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed mb-4">
-                We have a 3-day return policy. For complete details on returns, exchanges, and refunds, please 
+                We have a 3-day return policy. For complete details on returns, exchanges, and refunds, please
                 see our{' '}
-                <Link href="/returns" className="underline font-bold hover:text-black">
+                <Link href="/returns" className="underline font-bold hover:text-theme-base">
                   Returns Policy page
                 </Link>.
               </p>
@@ -245,7 +245,7 @@ export default function TermsConditions() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed mb-4">
-                All content on this website, including but not limited to text, graphics, logos, images, and software, 
+                All content on this website, including but not limited to text, graphics, logos, images, and software,
                 is the property of The Village and is protected by South African and international copyright laws.
               </p>
               <div className="bg-red-50 border border-red-200 rounded-lg p-6">
@@ -270,7 +270,7 @@ export default function TermsConditions() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed mb-4">
-                To the fullest extent permitted by law, The Village shall not be liable for any indirect, incidental, 
+                To the fullest extent permitted by law, The Village shall not be liable for any indirect, incidental,
                 special, consequential, or punitive damages resulting from:
               </p>
               <ul className="space-y-2 text-gray-700 ml-6 mb-4">
@@ -280,7 +280,7 @@ export default function TermsConditions() {
                 <li>• Any other matter relating to our service</li>
               </ul>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Our total liability to you for any claim arising out of or relating to these terms shall not exceed 
+                Our total liability to you for any claim arising out of or relating to these terms shall not exceed
                 the amount you paid for the product(s) in question.
               </p>
             </div>
@@ -318,7 +318,7 @@ export default function TermsConditions() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed">
-                These Terms and Conditions are governed by and construed in accordance with the laws of South Africa. 
+                These Terms and Conditions are governed by and construed in accordance with the laws of South Africa.
                 Any disputes arising from these terms shall be subject to the exclusive jurisdiction of the South African courts.
               </p>
             </div>
@@ -334,8 +334,8 @@ export default function TermsConditions() {
             </div>
             <div className="prose prose-gray max-w-none">
               <p className="text-gray-600 leading-relaxed">
-                We reserve the right to modify these Terms and Conditions at any time. Changes will be effective 
-                immediately upon posting to our website. Your continued use of our website after changes are posted 
+                We reserve the right to modify these Terms and Conditions at any time. Changes will be effective
+                immediately upon posting to our website. Your continued use of our website after changes are posted
                 constitutes your acceptance of the modified terms.
               </p>
             </div>
@@ -356,7 +356,7 @@ export default function TermsConditions() {
               <div className="space-y-2 text-sm">
                 <p className="text-gray-700">
                   <strong>Email:</strong>{' '}
-                  <a href="mailto:thevillagestreetwear@gmail.com" className="underline hover:text-black">
+                  <a href="mailto:thevillagestreetwear@gmail.com" className="underline hover:text-theme-base">
                     thevillagestreetwear@gmail.com
                   </a>
                 </p>
@@ -369,15 +369,15 @@ export default function TermsConditions() {
         </div>
 
         {/* Contact CTA */}
-        <div className="mt-16 bg-black text-white rounded-lg p-8 text-center">
+        <div className="mt-16 bg-theme-base text-theme-ink rounded-lg p-8 text-center">
           <FileText className="w-12 h-12 mx-auto mb-4" />
           <h2 className="text-2xl font-black mb-2">QUESTIONS ABOUT OUR TERMS?</h2>
-          <p className="text-gray-300 mb-6">
+          <p className="text-theme-ink/75 mb-6">
             If you have any questions or concerns about these terms, we're here to help.
           </p>
           <a
             href="mailto:thevillagestreetwear@gmail.com"
-            className="inline-flex items-center gap-2 bg-white text-black font-bold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
+            className="inline-flex items-center gap-2 bg-theme-ink text-theme-base font-bold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors"
           >
             <Mail className="w-4 h-4" />
             Contact Us

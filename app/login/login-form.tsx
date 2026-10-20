@@ -218,7 +218,7 @@ export function LoginForm({
 
             <Button
               type="submit"
-              className="w-full bg-black text-white hover:bg-gray-800 transition-colors"
+              className="w-full bg-theme-base text-theme-ink hover:bg-gray-800 transition-colors"
               disabled={loading || googleLoading}
             >
               {loading ? (
@@ -261,7 +261,7 @@ export function LoginForm({
               variant="outline"
               onClick={handleGoogleSignIn}
               disabled={loading || googleLoading}
-              className="w-full border-gray-200 bg-white hover:bg-gray-50 flex items-center gap-2"
+              className="w-full border-gray-200 bg-white text-black hover:bg-gray-50 flex items-center gap-2"
             >
               {googleLoading ? (
                 <span className="flex items-center gap-2">

@@ -75,7 +75,7 @@ type ImageItem = {
           .select("id, full_name")
           .eq("id", session.user.id)
           .single();
-        
+
         if (adminData) {
           setIsAdmin(true);
           setAdminProfile(adminData);
@@ -352,10 +352,10 @@ type ImageItem = {
   };
 
   // Auth guards (unchanged)
-  if (authLoading) return <div className="flex justify-center items-center h-screen bg-black text-white">Loading...</div>;
+  if (authLoading) return <div className="flex justify-center items-center h-screen bg-theme-base text-theme-ink">Loading...</div>;
   if (!user) {
     return (
-      <div className="min-h-screen bg-black text-white p-8 flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-theme-base text-theme-ink p-8 flex flex-col items-center justify-center">
         <h1 className="text-2xl mb-4 uppercase tracking-widest">ADMIN ACCESS REQUIRED</h1>
         <div className="bg-gray-900 border border-gray-700 rounded-lg p-6 w-full max-w-md">
           <Input
@@ -363,16 +363,16 @@ type ImageItem = {
             placeholder="Email"
             value={loginForm.email}
             onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
-            className="mb-4 bg-gray-800 border-gray-600 text-white"
+            className="mb-4 bg-gray-800 border-gray-600 text-theme-ink"
           />
           <Input
             type="password"
             placeholder="Password"
             value={loginForm.password}
             onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
-            className="mb-4 bg-gray-800 border-gray-600 text-white"
+            className="mb-4 bg-gray-800 border-gray-600 text-theme-ink"
           />
-          <Button onClick={handleLogin} className="w-full bg-white text-black hover:bg-gray-100">
+          <Button onClick={handleLogin} className="w-full bg-theme-ink text-theme-base hover:bg-gray-100">
             <LogIn size={18} className="mr-2" /> LOGIN AS ADMIN
           </Button>
         </div>
@@ -381,10 +381,10 @@ type ImageItem = {
   }
   if (!isAdmin) {
     return (
-      <div className="min-h-screen bg-black text-white p-8 flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-theme-base text-theme-ink p-8 flex flex-col items-center justify-center">
         <h1 className="text-2xl mb-4 uppercase tracking-widest">ADMIN ACCESS DENIED</h1>
-        <p className="text-gray-400 mb-4">You're logged in as a customer. Contact support to become an admin.</p>
-        <Button onClick={handleLogout} variant="outline" className="border-white text-white">
+        <p className="text-theme-ink/60 mb-4">You're logged in as a customer. Contact support to become an admin.</p>
+        <Button onClick={handleLogout} variant="outline" className="border-theme-ink text-theme-ink">
           <LogOut size={18} className="mr-2" /> LOGOUT
         </Button>
       </div>
@@ -392,22 +392,22 @@ type ImageItem = {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 md:p-8">
+    <div className="min-h-screen bg-theme-base text-theme-ink p-4 md:p-8">
       {/* Header (unchanged) */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-wider">
             THE VILLAGE
           </h1>
-          <p className="text-sm text-gray-400 mt-1">Product Management</p>
+          <p className="text-sm text-theme-ink/60 mt-1">Product Management</p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-sm text-gray-400 hidden sm:inline">
+          <span className="text-sm text-theme-ink/60 hidden sm:inline">
             {adminProfile?.full_name || user.email}
           </span>
           <Button
             onClick={handleAddNew}
-            className="bg-white text-black hover:bg-gray-200"
+            className="bg-theme-ink text-theme-base hover:bg-gray-200"
           >
             <Plus size={18} className="mr-2" /> Add Product
           </Button>
@@ -417,13 +417,13 @@ type ImageItem = {
       {/* Product Grid – updated to use images[0] ?? imageurl */}
       <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-6">
         {loading ? (
-          <div className="text-center text-gray-400 py-12">Loading products...</div>
+          <div className="text-center text-theme-ink/60 py-12">Loading products...</div>
         ) : products.length === 0 ? (
           <div className="text-center py-12">
             <ImageIcon size={48} className="mx-auto text-gray-600 mb-4" />
             <h3 className="text-xl font-semibold mb-2">No products yet</h3>
-            <p className="text-gray-400 mb-6">Get started by adding your first product</p>
-            <Button onClick={handleAddNew} className="bg-white text-black hover:bg-gray-200">
+            <p className="text-theme-ink/60 mb-6">Get started by adding your first product</p>
+            <Button onClick={handleAddNew} className="bg-theme-ink text-theme-base hover:bg-gray-200">
               <Plus size={18} className="mr-2" /> Add Your First Product
             </Button>
           </div>
@@ -467,7 +467,7 @@ type ImageItem = {
                       </Button>
                     </div>
                     {product.soldout && (
-                      <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                      <div className="absolute top-2 left-2 bg-red-500 text-theme-ink text-xs px-2 py-1 rounded">
                         SOLD OUT
                       </div>
                     )}
@@ -476,7 +476,7 @@ type ImageItem = {
                     <h3 className="font-semibold text-lg mb-1 truncate">{product.name}</h3>
                     <p className="text-xl font-bold mb-2">R{product.price}</p>
                     {product.category && (
-                      <p className="text-xs text-gray-400 uppercase mb-2">{product.category}</p>
+                      <p className="text-xs text-theme-ink/60 uppercase mb-2">{product.category}</p>
                     )}
                     {product.availablesizes && product.availablesizes.length > 0 && (
                       <p className="text-xs text-gray-500">
@@ -493,12 +493,12 @@ type ImageItem = {
 
       {/* Drawer – updated image sections */}
       <Sheet open={drawerOpen} onOpenChange={setDrawerOpen}>
-        <SheetContent className="w-full sm:max-w-lg bg-gray-900 border-gray-800 text-white overflow-y-auto">
+        <SheetContent className="w-full sm:max-w-lg bg-gray-900 border-gray-800 text-theme-ink overflow-y-auto">
           <SheetHeader>
-            <SheetTitle className="text-white text-xl">
+            <SheetTitle className="text-theme-ink text-xl">
               {editingProduct ? "Edit Product" : "Add New Product"}
             </SheetTitle>
-            <SheetDescription className="text-gray-400">
+            <SheetDescription className="text-theme-ink/60">
               {editingProduct ? "Update product details below" : "Fill in the product details below"}
             </SheetDescription>
           </SheetHeader>
@@ -513,7 +513,7 @@ type ImageItem = {
                 value={form.name}
                 onChange={handleChange}
                 placeholder="Enter product name"
-                className="bg-gray-800 border-gray-700 text-white"
+                className="bg-gray-800 border-gray-700 text-theme-ink"
               />
             </div>
 
@@ -525,7 +525,7 @@ type ImageItem = {
                 value={form.price}
                 onChange={handleChange}
                 placeholder="49.99"
-                className="bg-gray-800 border-gray-700 text-white"
+                className="bg-gray-800 border-gray-700 text-theme-ink"
               />
             </div>
 
@@ -537,7 +537,7 @@ type ImageItem = {
                 value={form.category}
                 onChange={handleChange}
                 placeholder="e.g., T-Shirts, Hoodies"
-                className="bg-gray-800 border-gray-700 text-white"
+                className="bg-gray-800 border-gray-700 text-theme-ink"
               />
             </div>
 
@@ -550,7 +550,7 @@ type ImageItem = {
                 onChange={handleChange}
                 placeholder="Product description..."
                 rows={3}
-                className="bg-gray-800 border-gray-700 text-white resize-none"
+                className="bg-gray-800 border-gray-700 text-theme-ink resize-none"
               />
             </div>
 
@@ -562,7 +562,7 @@ type ImageItem = {
                 value={form.sizes}
                 onChange={handleChange}
                 placeholder="S, M, L, XL"
-                className="bg-gray-800 border-gray-700 text-white"
+                className="bg-gray-800 border-gray-700 text-theme-ink"
               />
             </div>
 
@@ -574,7 +574,7 @@ type ImageItem = {
                 value={form.materials}
                 onChange={handleChange}
                 placeholder="Cotton, Polyester"
-                className="bg-gray-800 border-gray-700 text-white"
+                className="bg-gray-800 border-gray-700 text-theme-ink"
               />
             </div>
 
@@ -585,7 +585,7 @@ type ImageItem = {
                 type="file"
                 accept="image/*"
                 onChange={handleMainImageChange}
-                className="bg-gray-800 border-gray-700 text-white file:bg-gray-700 file:text-white file:border-0 file:mr-4"
+                className="bg-gray-800 border-gray-700 text-theme-ink file:bg-gray-700 file:text-theme-ink file:border-0 file:mr-4"
               />
               {mainImage && (
                 <div className="relative rounded-lg overflow-hidden border border-gray-700">
@@ -598,7 +598,7 @@ type ImageItem = {
                   >
                     <X size={16} />
                   </Button>
-                  {!mainImage.file && <p className="text-xs text-gray-400 mt-1 text-center">Current main image</p>}
+                  {!mainImage.file && <p className="text-xs text-theme-ink/60 mt-1 text-center">Current main image</p>}
                 </div>
               )}
             </div>
@@ -611,7 +611,7 @@ type ImageItem = {
                 accept="image/*"
                 multiple
                 onChange={handleAdditionalImagesChange}
-                className="bg-gray-800 border-gray-700 text-white file:bg-gray-700 file:text-white file:border-0 file:mr-4"
+                className="bg-gray-800 border-gray-700 text-theme-ink file:bg-gray-700 file:text-theme-ink file:border-0 file:mr-4"
               />
               {additionalImages.length > 0 && (
                 <div className="grid grid-cols-3 gap-4">
@@ -626,7 +626,7 @@ type ImageItem = {
                       >
                         <X size={14} />
                       </Button>
-                      {!item.file && <p className="text-xs text-gray-400 text-center mt-1">Current</p>}
+                      {!item.file && <p className="text-xs text-theme-ink/60 text-center mt-1">Current</p>}
                     </div>
                   ))}
                 </div>
@@ -659,7 +659,7 @@ type ImageItem = {
               <Button
                 onClick={handleSubmit}
                 disabled={loading || !form.name || !form.price}
-                className="flex-1 bg-white text-black hover:bg-gray-200"
+                className="flex-1 bg-theme-ink text-theme-base hover:bg-gray-200"
               >
                 {loading ? "Saving..." : editingProduct ? "Update Product" : "Add Product"}
               </Button>

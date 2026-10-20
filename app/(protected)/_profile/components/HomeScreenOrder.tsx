@@ -76,21 +76,21 @@ export default function HomeScreenOrder() {
   const ordersHref = joinProfilePath(profileBase, "orders");
 
   return (
-    <section className="rounded-2xl border border-black/10 bg-black/[0.025] p-4 dark:border-white/10 dark:bg-white/[0.03] sm:p-6">
+    <section className="rounded-2xl border border-theme-base/10 bg-theme-base/[0.025] p-4 dark:border-theme-ink/10 dark:bg-theme-ink/[0.03] sm:p-6">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <h2 className="text-xl font-black sm:text-2xl">Your latest order</h2>
-          <span className="hidden h-px w-10 bg-black/30 dark:bg-white/30 sm:block" />
+          <span className="hidden h-px w-10 bg-theme-base/30 dark:bg-theme-ink/30 sm:block" />
         </div>
         <Link href={ordersHref} className="text-xs font-bold underline underline-offset-4 sm:text-sm">View all</Link>
       </div>
 
       {loading ? (
-        <div className="mt-5 flex min-h-32 items-center justify-center gap-2 text-sm text-black/50 dark:text-white/50">
+        <div className="mt-5 flex min-h-32 items-center justify-center gap-2 text-sm text-theme-base/50 dark:text-theme-ink/50">
           <Loader2 className="h-4 w-4 animate-spin" /> Loading order...
         </div>
       ) : !order ? (
-        <div className="mt-5 rounded-xl border border-dashed border-black/15 p-6 text-center dark:border-white/15">
+        <div className="mt-5 rounded-xl border border-dashed border-theme-base/15 p-6 text-center dark:border-theme-ink/15">
           <p className="font-bold">No orders yet</p>
           <Link href="/products" className="mt-3 inline-flex items-center gap-2 text-sm font-bold underline">
             Shop new drops <ArrowRight className="h-4 w-4" />
@@ -102,11 +102,11 @@ export default function HomeScreenOrder() {
             {firstItem?.image_url ? (
               <img src={firstItem.image_url} alt={firstItem.name} className="h-20 w-20 shrink-0 rounded-xl object-cover" />
             ) : (
-              <div className="h-20 w-20 shrink-0 rounded-xl bg-black/10 dark:bg-white/10" />
+              <div className="h-20 w-20 shrink-0 rounded-xl bg-theme-base/10 dark:bg-theme-ink/10" />
             )}
             <div className="min-w-0">
               <p className="truncate text-sm font-black">{firstItem?.name || "Order"}</p>
-              <p className="mt-1 truncate text-xs text-black/50 dark:text-white/50">{order.order_id}</p>
+              <p className="mt-1 truncate text-xs text-theme-base/50 dark:text-theme-ink/50">{order.order_id}</p>
               <p className="mt-2 font-black">R{Number(order.total).toFixed(2)}</p>
             </div>
           </div>
@@ -121,19 +121,19 @@ export default function HomeScreenOrder() {
                 const active = complete || current;
                 return (
                   <div key={step.key} className="relative text-center">
-                    {index > 0 && <span className={`absolute right-1/2 top-3 h-px w-full ${index <= currentStepIndex ? "bg-black dark:bg-white" : "bg-black/15 dark:bg-white/20"}`} />}
-                    <span className={`relative z-10 mx-auto flex h-6 w-6 items-center justify-center rounded-full border-2 ${active ? "border-black bg-black text-white dark:border-white dark:bg-white dark:text-black" : "border-black/20 bg-white dark:border-white/25 dark:bg-black"}`}>
+                    {index > 0 && <span className={`absolute right-1/2 top-3 h-px w-full ${index <= currentStepIndex ? "bg-theme-base dark:bg-theme-ink" : "bg-theme-base/15 dark:bg-theme-ink/20"}`} />}
+                    <span className={`relative z-10 mx-auto flex h-6 w-6 items-center justify-center rounded-full border-2 ${active ? "border-theme-base bg-theme-base text-theme-ink dark:border-theme-ink dark:bg-theme-ink dark:text-theme-base" : "border-theme-base/20 bg-theme-ink dark:border-theme-ink/25 dark:bg-theme-base"}`}>
                       {complete && <Check className="h-3.5 w-3.5" />}
-                      {current && <span className="h-2 w-2 rounded-full bg-white dark:bg-black" />}
+                      {current && <span className="h-2 w-2 rounded-full bg-theme-ink dark:bg-theme-base" />}
                     </span>
-                    <p className={`mt-2 text-[10px] font-bold sm:text-xs ${active ? "text-black dark:text-white" : "text-black/40 dark:text-white/40"}`}>{step.label}</p>
+                    <p className={`mt-2 text-[10px] font-bold sm:text-xs ${active ? "text-theme-base dark:text-theme-ink" : "text-theme-base/40 dark:text-theme-ink/40"}`}>{step.label}</p>
                   </div>
                 );
               })}
             </div>
           )}
 
-          <Link href={ordersHref} className="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl bg-black px-5 text-sm font-black text-white transition hover:bg-black/80 dark:bg-white dark:text-black dark:hover:bg-white/80">
+          <Link href={ordersHref} className="inline-flex min-h-12 items-center justify-center gap-3 rounded-xl bg-theme-base px-5 text-sm font-black text-theme-ink transition hover:bg-theme-base/80 dark:bg-theme-ink dark:text-theme-base dark:hover:bg-theme-ink/80">
             Track order <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
