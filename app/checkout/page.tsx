@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useCartStore } from "@/app/lib/cartStore";
 import { ShoppingBag, Truck, MapPin, LockIcon } from "lucide-react";
 import { useUser } from "../lib/user";
-import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
 import { getShippingFeeCents } from "@/app/lib/checkout-pricing";
 
@@ -26,8 +25,9 @@ function CheckoutPage() {
   const { user } = useUser();
   const { items, hasHydrated } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [deliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup'>('delivery');
-  const [pickupDetails, setPickupDetails] = useState<PickupDetails | null>(null);
+  const [requestedDeliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup'>('delivery');
+  const [pickupResult, setPickupResult] = useState<{ productId: string; details: PickupDetails | null; error: boolean } | null>(null);
+  const [pickupRetry, setPickupRetry] = useState(0);
   const [selectedBrandKey, setSelectedBrandKey] = useState<string>("");
 
   // Initialize form data with user info
@@ -79,7 +79,11 @@ function CheckoutPage() {
     checkoutGroups.find((group) => group.key === selectedBrandKey) ||
     checkoutGroups[0];
   const checkoutItems = selectedGroup?.items || [];
-  const selectedBrandId = selectedGroup?.brandId || "";
+  const selectedProductId = checkoutItems[0]?.id || "";
+  const currentPickup = pickupResult?.productId === selectedProductId ? pickupResult : null;
+  const pickupDetails = currentPickup?.details || null;
+  const pickupLoading = Boolean(selectedProductId && !currentPickup);
+  const deliveryOption = requestedDeliveryOption === "pickup" && pickupDetails ? "pickup" : "delivery";
   const pickupLocation = pickupDetails
     ? [
         pickupDetails.address,
@@ -105,41 +109,23 @@ function CheckoutPage() {
   }, [hasHydrated, checkoutGroups, selectedBrandKey]);
 
   useEffect(() => {
+    if (!hasHydrated || !selectedProductId) return;
+    let cancelled = false;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
     async function loadPickupDetails() {
-      if (!hasHydrated || !selectedBrandId) {
-        setPickupDetails(null);
-        setDeliveryOption("delivery");
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from("brands")
-        .select("name, street_address, location_city, location_province, location_country")
-        .eq("id", selectedBrandId)
-        .maybeSingle();
-
-      if (
-        error ||
-        !data?.street_address ||
-        !data?.location_city ||
-        !data?.location_province
-      ) {
-        setPickupDetails(null);
-        setDeliveryOption("delivery");
-        return;
-      }
-
-      setPickupDetails({
-        brandName: data.name,
-        address: data.street_address,
-        city: data.location_city,
-        province: data.location_province,
-        country: data.location_country,
-      });
+      try {
+        const response = await fetch(`/api/checkout/pickup?productId=${encodeURIComponent(selectedProductId)}`, { cache: "no-store", signal: controller.signal });
+        if (!response.ok) throw new Error("Pickup lookup failed");
+        const data = await response.json();
+        if (!cancelled) setPickupResult({ productId: selectedProductId, details: data.pickup || null, error: false });
+      } catch {
+        if (!cancelled) setPickupResult({ productId: selectedProductId, details: null, error: true });
+      } finally { clearTimeout(timeout); }
     }
-
-    loadPickupDetails();
-  }, [hasHydrated, selectedBrandId]);
+    void loadPickupDetails();
+    return () => { cancelled = true; controller.abort(); clearTimeout(timeout); };
+  }, [hasHydrated, selectedProductId, pickupRetry]);
 
   const subtotal = checkoutItems.reduce((total, item) => {
     const priceMatch = item.price.match(/[\d.,]+/);
@@ -193,7 +179,7 @@ function CheckoutPage() {
       new Set(cartItems.map((item) => item.brand_id).filter(Boolean))
     );
 
-    if (brandIds.length !== 1) {
+    if (brandIds.length > 1) {
       toast.error(
         "Choose a brand order to check out."
       );
@@ -381,7 +367,7 @@ function CheckoutPage() {
                     </span>
                   </label>
 
-                  {pickupDetails && (
+                  {pickupDetails ? (
                     <label
                       className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition ${
                         deliveryOption === "pickup"
@@ -407,6 +393,14 @@ function CheckoutPage() {
                         </span>
                       </span>
                     </label>
+                  ) : (
+                    <div className="rounded-lg border border-theme-ink/15 p-4 text-sm" aria-live="polite">
+                      <p className="flex items-center gap-2 font-bold"><MapPin className="h-4 w-4" /> Pick up</p>
+                      <p className="mt-1 text-theme-muted">
+                        {pickupLoading ? "Checking pickup availability…" : currentPickup?.error ? "We couldn't load this brand's pickup address." : "Pickup is not available for this brand yet."}
+                      </p>
+                      {currentPickup?.error && <button type="button" onClick={() => { setPickupResult(null); setPickupRetry(value => value + 1); }} className="mt-2 min-h-10 font-semibold underline underline-offset-4">Try again</button>}
+                    </div>
                   )}
                 </div>
 

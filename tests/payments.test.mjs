@@ -208,3 +208,25 @@ test("the return page distinguishes missing, pending, failed and paid orders", (
     assert.equal(reconciled, status === "paid" ? 1 : 0);
   }
 });
+
+test("pickup lookup derives the brand from the product and distinguishes missing addresses from lookup errors", async () => {
+  let product = { brand_id: "actual-brand" };
+  let brand = { name: "Fixture brand", street_address: " 10 Test Street ", location_city: " Johannesburg ", location_province: " Gauteng ", location_country: "South Africa" };
+  let failed = false;
+  const client = { from(table) {
+    const query = { select() { return query; }, eq() { return query; }, async maybeSingle() { return failed ? { data: null, error: { message: "Lookup failed" } } : { data: table === "brands" ? brand : product, error: null }; } };
+    return query;
+  } };
+  const { GET } = load("app/api/checkout/pickup/route.ts", { "@/lib/supebase/admin": { supabaseAdmin: client } });
+  const request = new Request(`https://shop.example/api/checkout/pickup?productId=${orderId}`);
+  assert.equal((await GET(new Request("https://shop.example/api/checkout/pickup?productId=invalid"))).status, 400);
+  const response = await GET(request);
+  assert.equal(response.status, 200);
+  assert.equal((await response.json()).pickup.address, "10 Test Street");
+  brand = { ...brand, street_address: "  " };
+  assert.equal((await (await GET(request)).json()).pickup, null);
+  product = null;
+  assert.equal((await GET(request)).status, 404);
+  failed = true;
+  assert.equal((await GET(request)).status, 503);
+});
