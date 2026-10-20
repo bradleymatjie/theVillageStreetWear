@@ -45,7 +45,7 @@ export default function CountdownBanner() {
   return (
     <div
       className={`fixed inset-x-0 top-0 z-50 p-3 text-center font-semibold text-sm flex items-center justify-center gap-2 h-[50px] transition-colors duration-500 ${
-        isExpired ? "bg-green-500 text-green-950" : "bg-yellow-400 text-yellow-950"
+        isExpired ? "bg-green-500 text-theme-success-ink" : "bg-yellow-400 text-theme-warning-ink"
       }`}
     >
       <span>

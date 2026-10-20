@@ -325,14 +325,14 @@ export default function BrandProductsPage() {
                 <div>
                     <Link
                         href="/brand-dashboard"
-                        className="mb-3 inline-flex items-center gap-2 text-sm text-theme-ink/50 hover:text-theme-ink"
+                        className="mb-3 inline-flex items-center gap-2 text-sm text-theme-muted hover:text-theme-ink"
                     >
                         <ArrowLeft className="h-4 w-4" />
                         Back to dashboard
                     </Link>
 
                     <h1 className="text-3xl font-black md:text-4xl">{brandName}</h1>
-                    <p className="mt-1 text-sm text-theme-ink/50">Manage your brand products.</p>
+                    <p className="mt-1 text-sm text-theme-muted">Manage your brand products.</p>
                 </div>
 
                 <Button onClick={handleAddNew} className="bg-theme-ink text-theme-base hover:bg-theme-ink/80">
@@ -343,12 +343,12 @@ export default function BrandProductsPage() {
 
             <section className="rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-6">
                 {loading ? (
-                    <p className="py-12 text-center text-theme-ink/50">Loading products...</p>
+                    <p className="py-12 text-center text-theme-muted">Loading products...</p>
                 ) : products.length === 0 ? (
                     <div className="py-12 text-center">
                         <ImageIcon className="mx-auto mb-4 h-12 w-12 text-theme-ink/20" />
                         <h2 className="text-xl font-black">No products yet</h2>
-                        <p className="mt-2 text-sm text-theme-ink/50">
+                        <p className="mt-2 text-sm text-theme-muted">
                             Add your first product to start selling on The Village.
                         </p>
                         <Button
@@ -412,7 +412,7 @@ export default function BrandProductsPage() {
                                         <h3 className="truncate text-lg font-black">{product.name}</h3>
                                         <p className="mt-1 text-xl font-black">R{product.price}</p>
                                         {product.category && (
-                                            <p className="mt-2 text-xs uppercase text-theme-ink/40">
+                                            <p className="mt-2 text-xs uppercase text-theme-muted">
                                                 {product.category}
                                             </p>
                                         )}
@@ -430,7 +430,7 @@ export default function BrandProductsPage() {
                         <SheetTitle className="text-theme-ink">
                             {editingProduct ? "Edit Product" : "Add Product"}
                         </SheetTitle>
-                        <SheetDescription className="text-theme-ink/50">
+                        <SheetDescription className="text-theme-muted">
                             This product will be listed under {brandName}.
                         </SheetDescription>
                     </SheetHeader>
@@ -479,7 +479,7 @@ export default function BrandProductsPage() {
                                         </Button>
                                     </div>
                                 ) : (
-                                    <div className="flex h-64 items-center justify-center rounded-xl border border-dashed border-theme-ink/10 bg-theme-base/40 text-sm text-theme-ink/35">
+                                    <div className="flex h-64 items-center justify-center rounded-xl border border-dashed border-theme-ink/10 bg-theme-base/40 text-sm text-theme-muted">
                                         Main image preview
                                     </div>
                                 )}
@@ -519,7 +519,7 @@ export default function BrandProductsPage() {
                                         ))}
                                     </div>
                                 ) : (
-                                    <div className="flex h-64 items-center justify-center rounded-xl border border-dashed border-theme-ink/10 bg-theme-base/40 text-sm text-theme-ink/35">
+                                    <div className="flex h-64 items-center justify-center rounded-xl border border-dashed border-theme-ink/10 bg-theme-base/40 text-sm text-theme-muted">
                                         Additional image previews
                                     </div>
                                 )}
@@ -605,7 +605,7 @@ function PriceField({
         <div>
             <RequiredLabel>Price</RequiredLabel>
             <div className="mt-2 flex overflow-hidden rounded-md border border-theme-ink/10 bg-theme-ink/5 focus-within:ring-2 focus-within:ring-theme-ink/30">
-                <span className="flex items-center border-r border-theme-ink/10 px-3 text-sm font-black text-theme-ink/60">
+                <span className="flex items-center border-r border-theme-ink/10 px-3 text-sm font-black text-theme-muted">
                     R
                 </span>
                 <Input
@@ -685,7 +685,7 @@ function MaterialField({
 function RequiredLabel({ children }: { children: React.ReactNode }) {
     return (
         <Label>
-            {children} <span className="text-red-400">*</span>
+            {children} <span className="text-theme-error-ink">*</span>
         </Label>
     );
 }

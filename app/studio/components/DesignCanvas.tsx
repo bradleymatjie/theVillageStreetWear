@@ -24,7 +24,7 @@ const tshirtColors: TShirtColor[] = [
 
 // Helper function to convert data URL to Blob
 const dataURLtoBlob = (dataUrl: string): Blob => {
-  
+
   const arr = dataUrl.split(',');
   const mime = arr[0].match(/:(.*?);/)?.[1] || 'image/jpeg';
   const bstr = atob(arr[1]);
@@ -73,9 +73,9 @@ export default function DesignCanvas() {
   };
 
   const handleAddToCart = async () => {
-   
+
     if (!ToCaptureRef.current) return;
-    
+
     setIsAddingToCart(true);
     const originalView = currentView;
     const prevId = selectedElementId;
@@ -99,7 +99,7 @@ export default function DesignCanvas() {
       backDataUrl = await toJpeg(ToCaptureRef.current!, cartPreviewOptions);
 
       // Convert data URLs to Blobs then Files
-      const blobToFile = (blob: Blob, filename: string) => 
+      const blobToFile = (blob: Blob, filename: string) =>
         new File([blob], filename, { type: blob.type });
 
       const frontBlob = dataURLtoBlob(frontDataUrl);
@@ -109,7 +109,7 @@ export default function DesignCanvas() {
 
       // Get user ID from store
       const userId = user?.id;
-      
+
       if (!userId) throw new Error('Login required');
 
       // Upload to Supabase Storage
@@ -208,7 +208,7 @@ export default function DesignCanvas() {
     const element = currentElements.find((el) => el.id === id);
     if (!rect || !element) return;
 
-    const coords = 'touches' in e ? 
+    const coords = 'touches' in e ?
       { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } :
       { clientX: e.clientX, clientY: e.clientY };
 
@@ -220,7 +220,7 @@ export default function DesignCanvas() {
       initialY: element.y,
     };
     setSelectedElementId(id);
-    
+
     document.addEventListener('mousemove', handleDragMove);
     document.addEventListener('touchmove', handleDragMove, { passive: false });
     document.addEventListener('mouseup', handleDragEnd);
@@ -253,8 +253,8 @@ export default function DesignCanvas() {
     e.stopPropagation();
     const el = currentElements.find((el) => el.id === id);
     if (el?.type !== 'image') return;
-    
-    const coords = 'touches' in e ? 
+
+    const coords = 'touches' in e ?
       { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } :
       { clientX: e.clientX, clientY: e.clientY };
 
@@ -298,7 +298,7 @@ export default function DesignCanvas() {
     const el = currentElements.find((el) => el.id === id);
     if (!rect || !el) return;
 
-    const coords = 'touches' in e ? 
+    const coords = 'touches' in e ?
       { clientX: e.touches[0].clientX, clientY: e.touches[0].clientY } :
       { clientX: e.clientX, clientY: e.clientY };
 
@@ -344,9 +344,9 @@ export default function DesignCanvas() {
   }, [setSelectedElementId]);
 
   return (
-    <div className="h-full w-full flex flex-col bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl shadow-inner">
-      <div className="p-4 border-b border-slate-200 bg-white/80 backdrop-blur-sm flex items-center justify-between flex-wrap gap-3">
-        <Link href="/" className="text-lg font-bold text-slate-800 flex items-center gap-2">
+    <div className="h-full w-full flex flex-col bg-gradient-to-br from-theme-soft to-theme-soft rounded-xl shadow-inner">
+      <div className="p-4 border-b border-theme-ink/15 bg-theme-surface/80 backdrop-blur-sm flex items-center justify-between flex-wrap gap-3">
+        <Link href="/" className="text-lg font-bold text-theme-ink flex items-center gap-2">
           <ChevronLeft className="w-5 h-5" /> Home
         </Link>
         <div className="flex gap-3">
@@ -371,7 +371,7 @@ export default function DesignCanvas() {
       <div className="flex-1 p-8 flex items-center justify-center overflow-hidden">
         <div
           ref={ToCaptureRef}
-          className="relative w-full max-w-2xl aspect-square bg-white rounded-2xl shadow-2xl overflow-hidden"
+          className="relative w-full max-w-2xl aspect-square bg-[var(--palette-white)] rounded-2xl shadow-2xl overflow-hidden"
         >
           <img
             src={currentTshirtImage}
@@ -443,7 +443,7 @@ export default function DesignCanvas() {
                         <div
                           onMouseDown={(e) => handleResizeStart(e, 'se', element.id)}
                           onTouchStart={(e) => handleResizeStart(e, 'se', element.id)}
-                          className="absolute -bottom-3 -right-3 w-6 h-6 bg-blue-500 border-3 border-white rounded-full cursor-se-resize hover:bg-blue-600 transition-colors shadow-lg z-10"
+                          className="absolute -bottom-3 -right-3 w-6 h-6 bg-blue-500 border-3 border-theme-ink rounded-full cursor-se-resize hover:bg-blue-600 transition-colors shadow-lg z-10"
                           style={{ touchAction: 'none' }}
                         />
                       )}
@@ -454,7 +454,7 @@ export default function DesignCanvas() {
                         className="absolute -top-10 left-1/2 -translate-x-1/2 cursor-grab active:cursor-grabbing z-10"
                         style={{ touchAction: 'none' }}
                       >
-                        <RotateCw className="w-6 h-6 text-blue-500 hover:text-blue-600 drop-shadow-md" />
+                        <RotateCw className="w-6 h-6 text-theme-info-ink hover:text-theme-info-ink drop-shadow-md" />
                       </div>
 
                       <button

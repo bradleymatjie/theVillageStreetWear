@@ -94,7 +94,7 @@ export default async function BrandSalesPage() {
     return (
       <div className="mx-auto max-w-7xl">
         <h1 className="text-3xl font-black">Sales</h1>
-        <p className="mt-3 text-theme-ink/50">Brand profile not found.</p>
+        <p className="mt-3 text-theme-muted">Brand profile not found.</p>
       </div>
     );
   }
@@ -132,11 +132,11 @@ export default async function BrandSalesPage() {
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mb-8">
-        <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-ink/40">
+        <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-muted">
           Brand Sales
         </p>
         <h1 className="mt-2 text-4xl font-black">Sales</h1>
-        <p className="mt-2 text-sm text-theme-ink/50">
+        <p className="mt-2 text-sm text-theme-muted">
           Completed sales for {brand.name}.
         </p>
       </div>
@@ -178,7 +178,7 @@ export default async function BrandSalesPage() {
         {sales.length === 0 ? (
           <div className="mt-8 rounded-2xl border border-theme-ink/10 bg-theme-base/30 p-8 text-center">
             <p className="font-bold">No sales yet</p>
-            <p className="mt-2 text-sm text-theme-ink/50">
+            <p className="mt-2 text-sm text-theme-muted">
               Completed orders will appear here.
             </p>
           </div>
@@ -200,13 +200,13 @@ export default async function BrandSalesPage() {
                       <h3 className="text-lg font-black">
                         {order.customer_name}
                       </h3>
-                      <p className="text-sm text-theme-ink/50">
+                      <p className="text-sm text-theme-muted">
                         {order.email}
                       </p>
                     </div>
 
                     <div className="text-right">
-                      <p className="text-xs text-theme-ink/40">
+                      <p className="text-xs text-theme-muted">
                         {new Date(order.created_at).toLocaleDateString()}
                       </p>
                       <p className="text-lg font-black">
@@ -230,7 +230,7 @@ export default async function BrandSalesPage() {
                             <p className="font-bold">
                               {item.product_name}
                             </p>
-                            <p className="text-xs text-theme-ink/50">
+                            <p className="text-xs text-theme-muted">
                               Qty: {item.quantity}
                             </p>
                           </div>

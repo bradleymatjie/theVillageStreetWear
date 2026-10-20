@@ -14,17 +14,17 @@ export default async function CatalogPage() {
     console.error("Supabase error:", error);
 
     return (
-      <div className="flex min-h-screen items-center justify-center bg-theme-ink text-theme-base dark:bg-theme-base dark:text-theme-ink">
+      <div className="flex min-h-screen items-center justify-center bg-theme-base text-theme-ink">
         <div className="text-center">
-          <p className="mb-4 text-xl text-red-500">Error loading catalog</p>
-          <p className="text-theme-base/50 dark:text-theme-ink/50">{error.message}</p>
+          <p className="mb-4 text-xl text-theme-error-ink">Error loading catalog</p>
+          <p className="text-theme-muted">{error.message}</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-theme-ink p-4 text-theme-base transition-colors dark:bg-theme-base dark:text-theme-ink md:p-8">
+    <div className="min-h-screen p-4 transition-colors bg-theme-base text-theme-ink md:p-8">
       <div className="mx-auto max-w-7xl">
         <h1 className="mb-8 text-4xl font-black md:text-5xl">Catalog</h1>
 

@@ -84,7 +84,7 @@ export default function BrandsBrowser({ brands }: { brands: BrandCardData[] }) {
         <div className="border border-theme-ink/10 bg-theme-ink/[0.04] p-4 sm:p-5">
           <div className="grid gap-3 lg:grid-cols-[1.4fr_0.8fr_0.8fr]">
             <label className="relative block">
-              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-theme-ink/35" />
+              <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-theme-muted" />
               <input
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
@@ -122,7 +122,7 @@ export default function BrandsBrowser({ brands }: { brands: BrandCardData[] }) {
         </div>
 
         <div className="mt-6 flex items-center justify-between gap-4">
-          <p className="text-sm font-bold text-theme-ink/45">
+          <p className="text-sm font-bold text-theme-muted">
             Showing {filteredBrands.length} of {brands.length} brands
           </p>
           {(search || city !== "all" || category !== "all") && (
@@ -133,7 +133,7 @@ export default function BrandsBrowser({ brands }: { brands: BrandCardData[] }) {
                 setCity("all");
                 setCategory("all");
               }}
-              className="text-xs font-black uppercase tracking-wide text-theme-ink/60 underline underline-offset-4 transition hover:text-theme-ink"
+              className="text-xs font-black uppercase tracking-wide text-theme-muted underline underline-offset-4 transition hover:text-theme-ink"
             >
               Clear filters
             </button>
@@ -143,7 +143,7 @@ export default function BrandsBrowser({ brands }: { brands: BrandCardData[] }) {
         {filteredBrands.length === 0 ? (
           <div className="mt-6 border border-theme-ink/10 bg-theme-ink/[0.04] p-10 text-center">
             <p className="text-xl font-black">No brands match those filters.</p>
-            <p className="mt-2 text-sm text-theme-ink/50">
+            <p className="mt-2 text-sm text-theme-muted">
               Try a different location, category, or search term.
             </p>
           </div>
@@ -164,12 +164,12 @@ export default function BrandsBrowser({ brands }: { brands: BrandCardData[] }) {
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      <span className="text-3xl font-black text-theme-ink/45">
+                      <span className="text-3xl font-black text-theme-muted">
                         {brand.name.slice(0, 1)}
                       </span>
                     )}
                   </div>
-                  <span className="border border-theme-ink/10 px-3 py-1 text-[10px] font-black uppercase tracking-wide text-theme-ink/45">
+                  <span className="border border-theme-ink/10 px-3 py-1 text-[10px] font-black uppercase tracking-wide text-theme-muted">
                     {brand.style_category || brand.categories[0] || "Streetwear"}
                   </span>
                 </div>
@@ -178,7 +178,7 @@ export default function BrandsBrowser({ brands }: { brands: BrandCardData[] }) {
                   <h2 className="text-2xl font-black leading-tight">
                     {brand.name}
                   </h2>
-                  <p className="mt-3 line-clamp-3 text-sm leading-6 text-theme-ink/55">
+                  <p className="mt-3 line-clamp-3 text-sm leading-6 text-theme-muted">
                     {brand.tagline ||
                       "Independent streetwear brand building inside The Village."}
                   </p>
@@ -186,16 +186,16 @@ export default function BrandsBrowser({ brands }: { brands: BrandCardData[] }) {
 
                 <div className="mt-6 space-y-3 border-t border-theme-ink/10 pt-4">
                   {getLocation(brand) && (
-                    <p className="flex items-center gap-2 text-xs font-bold text-theme-ink/45">
+                    <p className="flex items-center gap-2 text-xs font-bold text-theme-muted">
                       <MapPin className="h-4 w-4" />
                       {getLocation(brand)}
                     </p>
                   )}
-                  <p className="flex items-center gap-2 text-xs font-bold text-theme-ink/45">
+                  <p className="flex items-center gap-2 text-xs font-bold text-theme-muted">
                     <Package className="h-4 w-4" />
                     {brand.productCount} products live
                   </p>
-                  <p className="inline-flex items-center text-xs font-black uppercase tracking-wide text-theme-ink/60 group-hover:text-theme-ink">
+                  <p className="inline-flex items-center text-xs font-black uppercase tracking-wide text-theme-muted group-hover:text-theme-ink">
                     View storefront <ArrowRight className="ml-2 h-3.5 w-3.5" />
                   </p>
                 </div>

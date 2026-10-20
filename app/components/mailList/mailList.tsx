@@ -70,14 +70,14 @@ export default function NewsletterSignup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full sm:w-auto px-10 py-5 text-base font-bold uppercase tracking-wider bg-orange-600 text-theme-ink rounded-lg shadow-lg transition-all duration-300 hover:bg-orange-500 hover:-translate-y-1 hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:translate-y-0"
+            className="w-full sm:w-auto px-10 py-5 text-base font-bold uppercase tracking-wider bg-orange-600 text-white rounded-lg shadow-lg transition-all duration-300 hover:bg-orange-500 hover:-translate-y-1 hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed disabled:translate-y-0"
           >
             {loading ? 'Submitting...' : 'Subscribe'}
           </button>
         </form>
 
         {(message || error) && (
-          <div className={`mt-8 text-sm font-medium ${message ? 'text-green-400' : 'text-orange-500'}`}>
+          <div className={`mt-8 text-sm font-medium ${message ? 'text-theme-success-ink' : 'text-theme-warning-ink'}`}>
             {message || error}
           </div>
         )}

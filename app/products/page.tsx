@@ -15,8 +15,8 @@ export default async function CatalogPage() {
     return (
       <div className="min-h-screen bg-theme-base text-theme-ink flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-500 text-xl mb-4">Error loading catalog</p>
-          <p className="text-theme-ink/60">{error.message}</p>
+          <p className="text-theme-error-ink text-xl mb-4">Error loading catalog</p>
+          <p className="text-theme-muted">{error.message}</p>
         </div>
       </div>
     );
@@ -28,13 +28,13 @@ export default async function CatalogPage() {
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
             <div>
-              <p className="mb-4 inline-flex border border-theme-ink/15 px-3 py-1 text-xs font-black uppercase tracking-[0.22em] text-theme-ink/45">
+              <p className="mb-4 inline-flex border border-theme-ink/15 px-3 py-1 text-xs font-black uppercase tracking-[0.22em] text-theme-muted">
                 Marketplace
               </p>
               <h1 className="max-w-3xl text-4xl font-black leading-tight md:text-5xl">
                 Discover drops from independent streetwear brands.
               </h1>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-theme-ink/60 sm:text-base">
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-theme-muted sm:text-base">
                 Browse local labels, compare new pieces, and check out with the
                 same order flow across every brand on The Village.
               </p>
@@ -49,7 +49,7 @@ export default async function CatalogPage() {
               ].map(({ icon: Icon, label }) => (
                 <div key={label} className="border border-theme-ink/10 bg-theme-ink/5 p-3">
                   <Icon className="mb-3 h-5 w-5 text-theme-ink/70" />
-                  <p className="text-xs font-black uppercase tracking-[0.16em] text-theme-ink/60">
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-theme-muted">
                     {label}
                   </p>
                 </div>

@@ -49,7 +49,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-theme-base text-theme-ink p-4 border-b ">
+    <div className="min-h-screen bg-theme-base text-theme-ink p-4 border-b">
       <div className="max-w-6xl mx-auto">
         <Link
           href="/products"
@@ -95,7 +95,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
           <div className="space-y-6 lg:pt-4 ">
             {product.category && (
-              <p className="text-sm uppercase tracking-wide text-theme-ink/60 font-medium">
+              <p className="text-sm uppercase tracking-wide text-theme-muted font-medium">
                 {product.category}
               </p>
             )}
@@ -107,7 +107,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             <p className="text-3xl font-bold text-theme-ink">{formattedPrice}</p>
 
             {product.description && (
-              <div className="prose prose-invert max-w-none text-theme-ink/75 leading-relaxed">
+              <div className="prose dark:prose-invert max-w-none text-theme-ink/75 leading-relaxed">
                 <p>{product.description}</p>
               </div>
             )}
@@ -140,8 +140,8 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
               <button
                 onClick={handleAddToCart}
                 className={`flex-1 py-4 px-6 font-bold rounded-md text-center transition-all duration-300 ${isAdded
-                    ? "bg-green-600 text-theme-ink"
-                    : "bg-theme-ink text-theme-base hover:bg-gray-100"
+                    ? "bg-green-600 text-white"
+                    : "bg-theme-ink text-theme-base hover:bg-theme-ink/85"
                   } ${isSoldOut ? "opacity-50 cursor-not-allowed" : ""}`}
                 disabled={isSoldOut}
               >

@@ -86,7 +86,7 @@ export default function HomeScreenOrder() {
       </div>
 
       {loading ? (
-        <div className="mt-5 flex min-h-32 items-center justify-center gap-2 text-sm text-theme-ink/60">
+        <div className="mt-5 flex min-h-32 items-center justify-center gap-2 text-sm text-theme-muted">
           <Loader2 className="h-4 w-4 animate-spin" /> Loading order...
         </div>
       ) : !order ? (
@@ -106,13 +106,13 @@ export default function HomeScreenOrder() {
             )}
             <div className="min-w-0">
               <p className="truncate text-sm font-black">{firstItem?.name || "Order"}</p>
-              <p className="mt-1 truncate text-xs text-theme-ink/60">{order.order_id}</p>
+              <p className="mt-1 truncate text-xs text-theme-muted">{order.order_id}</p>
               <p className="mt-2 font-black">R{Number(order.total).toFixed(2)}</p>
             </div>
           </div>
 
           {order.status.toLowerCase() === "cancelled" ? (
-            <div className="rounded-xl bg-red-500/10 p-4 text-sm font-bold text-red-500">This order was cancelled.</div>
+            <div className="rounded-xl bg-red-500/10 p-4 text-sm font-bold text-theme-error-ink">This order was cancelled.</div>
           ) : (
             <div className="grid grid-cols-4">
               {timelineSteps.map((step, index) => {
@@ -126,7 +126,7 @@ export default function HomeScreenOrder() {
                       {complete && <Check className="h-3.5 w-3.5" />}
                       {current && <span className="h-2 w-2 rounded-full bg-theme-base" />}
                     </span>
-                    <p className={`mt-2 text-[10px] font-bold sm:text-xs ${active ? "text-theme-ink" : "text-theme-ink/60"}`}>{step.label}</p>
+                    <p className={`mt-2 text-[10px] font-bold sm:text-xs ${active ? "text-theme-ink" : "text-theme-muted"}`}>{step.label}</p>
                   </div>
                 );
               })}

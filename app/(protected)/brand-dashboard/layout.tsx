@@ -55,7 +55,7 @@ export default function BrandDashboardLayout({
             The Village
           </Link>
 
-          <p className="mt-1 text-xs uppercase tracking-[0.25em] text-theme-ink/40">
+          <p className="mt-1 text-xs uppercase tracking-[0.25em] text-theme-muted">
             Brand Portal
           </p>
 
@@ -117,7 +117,7 @@ function DesktopNavLink({
       className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition ${
         active
           ? "bg-theme-ink text-theme-base"
-          : "text-theme-ink/60 hover:bg-theme-ink/10 hover:text-theme-ink"
+          : "text-theme-muted hover:bg-theme-ink/10 hover:text-theme-ink"
       }`}
     >
       <Icon className="h-5 w-5" />
@@ -143,12 +143,12 @@ function MobileNavLink({
       className={`flex flex-col items-center justify-center rounded-2xl px-2 py-2 text-[11px] font-bold transition ${
         active
           ? "text-theme-ink"
-          : "text-theme-ink/60 hover:bg-theme-ink/10 hover:text-theme-ink"
+          : "text-theme-muted hover:bg-theme-ink/10 hover:text-theme-ink"
       }`}
     >
       <Icon
         className={`mb-1 h-5 w-5 ${
-          active ? "text-theme-ink" : "text-theme-ink/60"
+          active ? "text-theme-ink" : "text-theme-muted"
         }`}
       />
       {label}

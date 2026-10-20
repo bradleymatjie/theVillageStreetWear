@@ -55,7 +55,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
             <Link
               key={href}
               href={href}
-              className="flex w-full items-center gap-3 rounded-md px-3 py-3 font-medium uppercase tracking-wide text-theme-ink transition hover:bg-theme-ink/10 hover:text-green-400"
+              className="flex w-full items-center gap-3 rounded-md px-3 py-3 font-medium uppercase tracking-wide text-theme-ink transition hover:bg-theme-ink/10 hover:text-theme-success-ink"
             >
               <Icon size={18} />
               {label}
@@ -66,7 +66,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         {/* Logout Button */}
         <button
           onClick={handleLogout}
-          className="mt-6 flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium uppercase tracking-wide text-red-400 transition hover:bg-red-500/10 hover:text-red-300"
+          className="mt-6 flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium uppercase tracking-wide text-theme-error-ink transition hover:bg-red-500/10 hover:text-theme-error-ink"
         >
           <LogOut size={18} />
           Logout

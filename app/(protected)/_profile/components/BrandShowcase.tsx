@@ -15,7 +15,7 @@ export default async function BrandShowcase() {
 
     return (
       <section className="rounded-2xl border border-theme-ink/10 bg-theme-ink/5 p-4">
-        <p className="text-sm text-red-400">Could not load brands.</p>
+        <p className="text-sm text-theme-error-ink">Could not load brands.</p>
       </section>
     );
   }

@@ -37,7 +37,7 @@ export default async function CustomersPage() {
       <div>
         <h1 className="text-3xl font-bold uppercase mb-6">Customers</h1>
         <div className="p-6 bg-[var(--palette-surface-admin)] border border-[var(--palette-border-admin)] rounded-lg">
-          <p className="text-red-400">Error: {error}</p>
+          <p className="text-theme-error-ink">Error: {error}</p>
         </div>
       </div>
     );
@@ -53,7 +53,7 @@ export default async function CustomersPage() {
 
         {customers.length === 0 ? (
           <div className="p-6 bg-[var(--palette-surface-admin)] border border-[var(--palette-border-admin)] rounded-lg">
-            <p className="text-theme-ink/60">No customers found.</p>
+            <p className="text-theme-muted">No customers found.</p>
           </div>
         ) : (
           <div className="bg-[var(--palette-surface-admin)] border border-[var(--palette-border-admin)] rounded-lg overflow-hidden">

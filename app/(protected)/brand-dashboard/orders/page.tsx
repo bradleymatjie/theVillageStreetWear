@@ -48,7 +48,7 @@ export default async function BrandOrdersPage({
     return (
       <div className="mx-auto max-w-7xl">
         <h1 className="text-3xl font-black">Orders</h1>
-        <p className="mt-3 text-theme-ink/50">Brand profile not found.</p>
+        <p className="mt-3 text-theme-muted">Brand profile not found.</p>
       </div>
     );
   }
@@ -79,11 +79,11 @@ export default async function BrandOrdersPage({
   return (
     <div className="mx-auto max-w-7xl">
       <div className="mb-8">
-        <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-ink/40">
+        <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-muted">
           Brand Orders
         </p>
         <h1 className="mt-2 text-4xl font-black">Orders</h1>
-        <p className="mt-2 text-sm text-theme-ink/50">
+        <p className="mt-2 text-sm text-theme-muted">
           View paid orders placed for {brand.name}.
         </p>
       </div>
@@ -130,7 +130,7 @@ export default async function BrandOrdersPage({
                   className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold transition ${
                     isActive
                       ? "bg-theme-ink text-theme-base"
-                      : "border border-theme-ink/10 bg-theme-ink/5 text-theme-ink/60 hover:bg-theme-ink/10 hover:text-theme-ink"
+                      : "border border-theme-ink/10 bg-theme-ink/5 text-theme-muted hover:bg-theme-ink/10 hover:text-theme-ink"
                   }`}
                 >
                   {filter.label}
@@ -143,7 +143,7 @@ export default async function BrandOrdersPage({
         {orders.length === 0 ? (
           <div className="mt-8 rounded-2xl border border-theme-ink/10 bg-theme-base/30 p-8 text-center">
             <p className="font-bold">No paid orders found</p>
-            <p className="mt-2 text-sm text-theme-ink/50">
+            <p className="mt-2 text-sm text-theme-muted">
               Paid orders matching this filter will appear here.
             </p>
           </div>

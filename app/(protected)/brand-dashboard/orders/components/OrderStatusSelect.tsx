@@ -92,9 +92,9 @@ export default function OrderStatusSelect({
       >
         <span>{hasUpcomingStatuses ? "Update status" : activeStatus.label}</span>
         {pending ? (
-          <Loader2 className="h-4 w-4 animate-spin text-theme-ink/60" />
+          <Loader2 className="h-4 w-4 animate-spin text-theme-muted" />
         ) : (
-          <ChevronDown className="h-4 w-4 text-theme-ink/60" />
+          <ChevronDown className="h-4 w-4 text-theme-muted" />
         )}
       </button>
 
@@ -103,13 +103,13 @@ export default function OrderStatusSelect({
           <div className="w-full max-w-lg rounded-3xl border border-theme-ink/10 bg-[var(--palette-surface-dialog)] p-5 shadow-2xl sm:p-6">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-ink/35">
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-muted">
                   Update customer
                 </p>
                 <h3 className="mt-2 text-2xl font-black text-theme-ink">
                   Choose next status
                 </h3>
-                <p className="mt-2 text-sm leading-5 text-theme-ink/60">
+                <p className="mt-2 text-sm leading-5 text-theme-muted">
                   Completed stages are greyed out. Pick the next stage when it
                   is true for this order.
                 </p>
@@ -121,7 +121,7 @@ export default function OrderStatusSelect({
                   setSelectedStatus("");
                   setOpen(false);
                 }}
-                className="rounded-full border border-theme-ink/10 p-2 text-theme-ink/50 transition hover:bg-theme-ink hover:text-theme-base"
+                className="rounded-full border border-theme-ink/10 p-2 text-theme-muted transition hover:bg-theme-ink hover:text-theme-base"
                 aria-label="Close status picker"
               >
                 <X className="h-5 w-5" />
@@ -162,12 +162,12 @@ export default function OrderStatusSelect({
                           {item.label}
                         </span>
                         {completed && (
-                          <span className="rounded-full bg-theme-ink/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-theme-ink/50">
+                          <span className="rounded-full bg-theme-ink/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-theme-muted">
                             Completed
                           </span>
                         )}
                         {active && (
-                          <span className="rounded-full bg-theme-ink/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-theme-ink/50">
+                          <span className="rounded-full bg-theme-ink/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-theme-muted">
                             Current
                           </span>
                         )}
@@ -177,7 +177,7 @@ export default function OrderStatusSelect({
                           </span>
                         )}
                       </span>
-                      <span className="mt-1 block text-xs leading-5 text-theme-ink/50">
+                      <span className="mt-1 block text-xs leading-5 text-theme-muted">
                         {item.message}
                       </span>
                     </span>
@@ -187,7 +187,7 @@ export default function OrderStatusSelect({
             </div>
 
             <div className="mt-5 border-t border-theme-ink/10 pt-5">
-              <p className="text-xs leading-5 text-theme-ink/50">
+              <p className="text-xs leading-5 text-theme-muted">
                 {selectedStatus
                   ? `Confirm ${selectedStatusLabel} when you are ready to notify the customer.`
                   : "Pick an upcoming status to continue."}

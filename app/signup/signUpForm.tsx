@@ -108,9 +108,9 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
           </div>
 
           {error && (
-            <Alert variant="destructive" className="border-red-200 bg-red-50">
+            <Alert variant="destructive" className="border-theme-error-ink/25 bg-theme-error-bg">
               <AlertCircle className="h-4 w-4" />
-              <AlertDescription className="text-red-900">{error}</AlertDescription>
+              <AlertDescription className="text-theme-error-ink">{error}</AlertDescription>
             </Alert>
           )}
 
@@ -203,7 +203,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
             <Button
               type="submit"
               disabled={loading || googleLoading}
-              className="w-full bg-theme-base text-theme-ink hover:bg-gray-800 transition-colors"
+              className="w-full bg-theme-ink text-theme-base hover:bg-theme-ink/85 transition-colors"
             >
               {loading ? (
                 <span className="flex items-center gap-2">
@@ -233,7 +233,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-gray-200" />
+              <span className="w-full border-t border-theme-ink/15" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-muted-foreground">Or</span>
@@ -247,7 +247,7 @@ export function SignupForm({ className, ...props }: React.ComponentProps<"div">)
               variant="outline"
               onClick={handleGoogleSignIn}
               disabled={loading || googleLoading}
-              className="w-full border-gray-200 bg-white text-black hover:bg-gray-50 flex items-center gap-2"
+              className="w-full border-theme-ink/15 bg-theme-surface text-theme-ink hover:bg-theme-soft flex items-center gap-2"
             >
               {googleLoading ? (
                 <span className="flex items-center gap-2">

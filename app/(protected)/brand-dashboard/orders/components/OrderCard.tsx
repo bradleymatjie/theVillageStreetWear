@@ -17,10 +17,10 @@ export function OrderCard({ order }: { order: Order }) {
             {order.customer_name}
           </h3>
 
-          <p className="mt-1 break-all text-sm text-theme-ink/50">{order.email}</p>
+          <p className="mt-1 break-all text-sm text-theme-muted">{order.email}</p>
 
           {order.phone && (
-            <p className="mt-1 break-all text-sm text-theme-ink/50">
+            <p className="mt-1 break-all text-sm text-theme-muted">
               {order.phone}
             </p>
           )}
@@ -33,7 +33,7 @@ export function OrderCard({ order }: { order: Order }) {
           </div>
 
           <div className="w-full sm:w-auto">
-            <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-theme-ink/35 sm:text-right">
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-theme-muted sm:text-right">
               Update status
             </p>
             <OrderStatusSelect
@@ -46,7 +46,7 @@ export function OrderCard({ order }: { order: Order }) {
 
       {items.length > 0 && (
         <div className="mt-5 space-y-3 border-t border-theme-ink/10 pt-5">
-          <p className="text-sm font-bold text-theme-ink/60">Order Items</p>
+          <p className="text-sm font-bold text-theme-muted">Order Items</p>
 
           {items.map((item, index) => (
             <div
@@ -67,7 +67,7 @@ export function OrderCard({ order }: { order: Order }) {
                     {item.product_name}
                   </p>
 
-                  <p className="mt-1 text-xs leading-5 text-theme-ink/50">
+                  <p className="mt-1 text-xs leading-5 text-theme-muted">
                     Qty: {item.quantity}
                     {item.size && ` • Size: ${item.size}`}
                     {item.material && ` • Material: ${item.material}`}
@@ -76,13 +76,13 @@ export function OrderCard({ order }: { order: Order }) {
               </div>
 
               <div className="flex items-end justify-between border-t border-theme-ink/10 pt-3 text-right sm:block sm:border-t-0 sm:pt-0">
-                <p className="text-xs text-theme-ink/40 sm:hidden">Item total</p>
+                <p className="text-xs text-theme-muted sm:hidden">Item total</p>
 
                 <div>
                   <p className="font-bold">
                     R{Number(item.total_price || 0).toFixed(2)}
                   </p>
-                  <p className="text-xs text-theme-ink/40">
+                  <p className="text-xs text-theme-muted">
                     R{Number(item.unit_price || 0).toFixed(2)} each
                   </p>
                 </div>
@@ -92,7 +92,7 @@ export function OrderCard({ order }: { order: Order }) {
         </div>
       )}
 
-      <div className="mt-5 border-t border-theme-ink/10 pt-5 text-sm text-theme-ink/50">
+      <div className="mt-5 border-t border-theme-ink/10 pt-5 text-sm text-theme-muted">
         <p className="break-words leading-6">
           {order.shipping_method === "pickup"
             ? `Pickup: ${order.pickup_location || "Not specified"}`

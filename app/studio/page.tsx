@@ -26,14 +26,14 @@ export default function DesignStudio() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col">
+    <div className="min-h-screen bg-theme-soft flex flex-col">
       <Drawer open={!user} onOpenChange={() => {}}>
         <DrawerContent>
           <div className="mx-auto w-full max-w-lg">
             <DrawerHeader>
               <DrawerTitle>Login Required</DrawerTitle>
               <DrawerDescription className="text-base mt-4">
-                To handle the heavy lifting—storing your designs, images, and other data securely in our database—you need to log in. 
+                To handle the heavy lifting—storing your designs, images, and other data securely in our database—you need to log in.
                 This allows you to access your work from any device and continue designing seamlessly without losing progress.
               </DrawerDescription>
             </DrawerHeader>
@@ -45,11 +45,11 @@ export default function DesignStudio() {
                 </AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground">
                   <p className="mb-4">
-                    Without an account, the only way to save your designs would be using your browser's local storage. 
+                    Without an account, the only way to save your designs would be using your browser's local storage.
                     It's handy for small amounts of data, but browsers strictly limit it—usually to just 5–10 MB per website.
                   </p>
                   <p>
-                    A design tool like this works with images, layers, and detailed projects that can easily grow much larger than that. 
+                    A design tool like this works with images, layers, and detailed projects that can easily grow much larger than that.
                     Once you hit the limit, you wouldn't be able to save new work, and in some cases you could even lose existing designs if the browser clears space.
                   </p>
                   <p className="mt-4 font-medium">

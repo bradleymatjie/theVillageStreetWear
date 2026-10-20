@@ -33,8 +33,8 @@ export default async function BrandApplicationsPage() {
   if (error) {
     return (
       <main className="min-h-screen bg-theme-base p-6 text-theme-ink">
-        <p className="text-red-400">Error loading applications.</p>
-        <p className="mt-2 text-sm text-theme-ink/50">{error.message}</p>
+        <p className="text-theme-error-ink">Error loading applications.</p>
+        <p className="mt-2 text-sm text-theme-muted">{error.message}</p>
       </main>
     );
   }
@@ -45,13 +45,13 @@ export default async function BrandApplicationsPage() {
     <main className="min-h-screen bg-theme-base p-4 text-theme-ink sm:p-6">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8">
-          <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-ink/40">
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-muted">
             Admin
           </p>
           <h1 className="mt-2 text-3xl font-black sm:text-5xl">
             Brand Applications
           </h1>
-          <p className="mt-2 text-sm text-theme-ink/50">
+          <p className="mt-2 text-sm text-theme-muted">
             Review brands that applied to join The Village.
           </p>
         </div>
@@ -59,7 +59,7 @@ export default async function BrandApplicationsPage() {
         {applications.length === 0 ? (
           <div className="rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-8 text-center">
             <p className="font-bold">No applications yet</p>
-            <p className="mt-2 text-sm text-theme-ink/50">
+            <p className="mt-2 text-sm text-theme-muted">
               New brand applications will appear here.
             </p>
           </div>
@@ -74,12 +74,12 @@ export default async function BrandApplicationsPage() {
                   <div>
                     <div className="flex items-center gap-2">
                       <h2 className="text-xl font-black">{app.brand_name}</h2>
-                      <span className="rounded-full bg-amber-500/20 px-3 py-1 text-xs font-black text-amber-400">
+                      <span className="rounded-full bg-amber-500/20 px-3 py-1 text-xs font-black text-theme-warning-ink">
                         {app.status}
                       </span>
                     </div>
 
-                    <p className="mt-1 text-sm text-theme-ink/50">
+                    <p className="mt-1 text-sm text-theme-muted">
                       Owner: {app.owner_name}
                     </p>
                   </div>
@@ -91,22 +91,22 @@ export default async function BrandApplicationsPage() {
 
                 <div className="mt-5 grid gap-3 text-sm sm:grid-cols-2 lg:grid-cols-4">
                   <div>
-                    <p className="text-theme-ink/40">Email</p>
+                    <p className="text-theme-muted">Email</p>
                     <p className="font-bold">{app.email}</p>
                   </div>
 
                   <div>
-                    <p className="text-theme-ink/40">Phone</p>
+                    <p className="text-theme-muted">Phone</p>
                     <p className="font-bold">{app.phone}</p>
                   </div>
 
                   <div>
-                    <p className="text-theme-ink/40">Instagram</p>
+                    <p className="text-theme-muted">Instagram</p>
                     <p className="font-bold">{app.instagram || "Not added"}</p>
                   </div>
 
                   <div>
-                    <p className="text-theme-ink/40">Applied</p>
+                    <p className="text-theme-muted">Applied</p>
                     <p className="font-bold">
                       {new Date(app.created_at).toLocaleDateString()}
                     </p>
@@ -115,7 +115,7 @@ export default async function BrandApplicationsPage() {
 
                 {app.description && (
                   <div className="mt-5 rounded-2xl bg-theme-base/40 p-4">
-                    <p className="text-xs font-bold uppercase tracking-wide text-theme-ink/40">
+                    <p className="text-xs font-bold uppercase tracking-wide text-theme-muted">
                       About brand
                     </p>
                     <p className="mt-2 text-sm leading-6 text-theme-ink/70">

@@ -31,7 +31,7 @@ export default function BottomNav() {
               key={href}
               href={href}
               className={`flex min-h-16 flex-col items-center justify-center gap-1 py-2 text-[11px] font-bold transition ${
-                isActive ? "text-theme-ink" : "text-theme-ink/40"
+                isActive ? "text-theme-ink" : "text-theme-muted"
               }`}
             >
               <Icon className="h-5 w-5" />

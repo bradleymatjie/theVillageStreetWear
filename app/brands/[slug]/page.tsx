@@ -192,7 +192,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
               </div>
 
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.24em] text-theme-ink/45">
+                <p className="text-xs font-black uppercase tracking-[0.24em] text-theme-muted">
                   {brandProfile.style_category || "Streetwear brand"}
                 </p>
                 <h1 className="mt-2 text-5xl font-black leading-none sm:text-7xl">
@@ -214,13 +214,13 @@ export default async function BrandPage({ params }: BrandPageProps) {
           <div className="grid items-stretch gap-8 lg:grid-cols-[0.85fr_1.15fr]">
             <aside className="space-y-4">
               <div className="flex h-full flex-col border border-theme-ink/10 bg-theme-ink/[0.04] p-5">
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-ink/35">
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-muted">
                   Brand details
                 </p>
                 <div className="mt-5 space-y-4 text-sm text-theme-ink/65">
                   {brandProfile.street_address && (
                     <p className="flex items-start gap-3">
-                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-theme-ink/45" />
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-theme-muted" />
                       <span>{brandProfile.street_address}</span>
                     </p>
                   )}
@@ -228,7 +228,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
                     brandProfile.location_province ||
                     brandProfile.location_country) && (
                     <p className="flex items-start gap-3">
-                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-theme-ink/45" />
+                      <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-theme-muted" />
                       <span>
                         {[
                           brandProfile.location_city,
@@ -242,7 +242,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
                   )}
                   {brandProfile.founded_year && (
                     <p className="flex items-center gap-3">
-                      <Calendar className="h-4 w-4 text-theme-ink/45" />
+                      <Calendar className="h-4 w-4 text-theme-muted" />
                       Founded {brandProfile.founded_year}
                     </p>
                   )}
@@ -253,9 +253,9 @@ export default async function BrandPage({ params }: BrandPageProps) {
                       rel="noreferrer"
                       className="flex items-center gap-3 transition hover:text-theme-ink"
                     >
-                      <Instagram className="h-4 w-4 text-theme-ink/45" />
+                      <Instagram className="h-4 w-4 text-theme-muted" />
                       <span>{getSocialLabel(brandProfile.instagram)}</span>
-                      <ExternalLink className="ml-auto h-3.5 w-3.5 text-theme-ink/35" />
+                      <ExternalLink className="ml-auto h-3.5 w-3.5 text-theme-muted" />
                     </a>
                   )}
                   {brandProfile.tiktok && (
@@ -265,13 +265,13 @@ export default async function BrandPage({ params }: BrandPageProps) {
                       rel="noreferrer"
                       className="flex items-center gap-3 transition hover:text-theme-ink"
                     >
-                      <Shirt className="h-4 w-4 text-theme-ink/45" />
+                      <Shirt className="h-4 w-4 text-theme-muted" />
                       <span>{getSocialLabel(brandProfile.tiktok)}</span>
-                      <ExternalLink className="ml-auto h-3.5 w-3.5 text-theme-ink/35" />
+                      <ExternalLink className="ml-auto h-3.5 w-3.5 text-theme-muted" />
                     </a>
                   )}
                   <p className="flex items-center gap-3">
-                    <Package className="h-4 w-4 text-theme-ink/45" />
+                    <Package className="h-4 w-4 text-theme-muted" />
                     {brandProducts.length} products live
                   </p>
                 </div>
@@ -279,7 +279,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
             </aside>
 
             <section className="h-full border border-theme-ink/10 bg-theme-ink/[0.04] p-5 sm:p-6">
-              <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-ink/35">
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-muted">
                 Story
               </p>
               <h2 className="mt-2 text-3xl font-black">About {brandProfile.name}</h2>
@@ -293,12 +293,12 @@ export default async function BrandPage({ params }: BrandPageProps) {
           <section className="mt-10">
             <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-ink/35">
+                <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-muted">
                   Products
                 </p>
                 <h2 className="mt-2 text-3xl font-black">Latest drops</h2>
               </div>
-              <p className="text-sm text-theme-ink/45">
+              <p className="text-sm text-theme-muted">
                 Shop pieces listed by {brandProfile.name}.
               </p>
             </div>
@@ -306,7 +306,7 @@ export default async function BrandPage({ params }: BrandPageProps) {
             {brandProducts.length === 0 ? (
               <div className="border border-theme-ink/10 bg-theme-ink/[0.03] p-8 text-center">
                 <p className="font-black">No products live yet</p>
-                <p className="mt-2 text-sm text-theme-ink/50">
+                <p className="mt-2 text-sm text-theme-muted">
                   This brand has not listed products yet.
                 </p>
               </div>

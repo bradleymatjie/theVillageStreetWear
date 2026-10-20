@@ -66,7 +66,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="theme-paper bg-theme-ink px-4 py-20 text-theme-base sm:px-6">
+      <section className="bg-theme-base px-4 py-20 text-theme-ink sm:px-6">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="mb-8 text-5xl font-black uppercase tracking-tight sm:text-6xl">
             Our Mission
@@ -113,7 +113,7 @@ export default function AboutPage() {
 
                 <Link
                   href="/sell"
-                  className="mt-6 inline-block bg-theme-ink px-8 py-3 font-bold uppercase tracking-wider text-theme-base transition-colors hover:bg-gray-200"
+                  className="mt-6 inline-block bg-theme-ink px-8 py-3 font-bold uppercase tracking-wider text-theme-base transition-colors hover:bg-theme-ink/85"
                 >
                   Join as a Brand
                 </Link>
@@ -160,16 +160,16 @@ export default function AboutPage() {
                   className="border border-theme-ink/20 p-8 transition-colors hover:bg-theme-ink/5"
                 >
                   <div className="mb-4 flex items-center justify-between">
-                    <span className="text-5xl font-black text-theme-ink/20">
+                    <span className="text-5xl font-black text-theme-muted">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <Icon className="h-7 w-7 text-theme-ink/40" />
+                    <Icon className="h-7 w-7 text-theme-muted" />
                   </div>
 
                   <h3 className="mb-3 text-2xl font-bold uppercase">
                     {item.title}
                   </h3>
-                  <p className="text-theme-ink/60">{item.text}</p>
+                  <p className="text-theme-muted">{item.text}</p>
                 </div>
               );
             })}
@@ -177,7 +177,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="theme-paper bg-theme-ink px-4 py-20 text-theme-base sm:px-6">
+      <section className="bg-theme-base px-4 py-20 text-theme-ink sm:px-6">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="mb-8 text-5xl font-black uppercase tracking-tight sm:text-6xl">
             Start Your Brand
@@ -190,7 +190,7 @@ export default function AboutPage() {
             <div className="flex flex-col items-center space-y-2">
               <MapPin className="mb-2 h-8 w-8" />
               <span className="font-semibold">Location</span>
-              <span className="text-gray-600">Johannesburg, SA</span>
+              <span className="text-theme-muted">Johannesburg, SA</span>
             </div>
 
             <div className="flex flex-col items-center space-y-2">
@@ -198,7 +198,7 @@ export default function AboutPage() {
               <span className="font-semibold">Email</span>
               <Link
                 href="mailto:thevillagestreetwear@gmail.com"
-                className="text-gray-600 transition-colors hover:text-theme-base"
+                className="text-theme-muted transition-colors hover:text-theme-ink"
               >
                 thevillagestreetwear@gmail.com
               </Link>
@@ -209,7 +209,7 @@ export default function AboutPage() {
               <span className="font-semibold">Phone</span>
               <Link
                 href="tel:+27729509295"
-                className="text-gray-600 transition-colors hover:text-theme-base"
+                className="text-theme-muted transition-colors hover:text-theme-ink"
               >
                 072 950 9295
               </Link>
@@ -219,14 +219,14 @@ export default function AboutPage() {
           <div className="flex flex-col justify-center gap-3 sm:flex-row">
             <Link
               href="/sell"
-              className="inline-block bg-theme-base px-12 py-4 text-lg font-bold uppercase tracking-wider text-theme-ink transition-colors hover:bg-gray-900"
+              className="inline-block bg-theme-ink px-12 py-4 text-lg font-bold uppercase tracking-wider text-theme-base transition-colors hover:bg-theme-ink/85"
             >
               Start Selling
             </Link>
 
             <Link
               href="/products"
-              className="inline-block border border-theme-base px-12 py-4 text-lg font-bold uppercase tracking-wider text-theme-base transition-colors hover:bg-theme-base hover:text-theme-ink"
+              className="inline-block border border-theme-ink px-12 py-4 text-lg font-bold uppercase tracking-wider text-theme-ink transition-colors hover:bg-theme-ink hover:text-theme-base"
             >
               Explore Catalog
             </Link>
@@ -235,7 +235,7 @@ export default function AboutPage() {
       </section>
 
       <section className="border-t border-theme-ink/10 px-4 py-8 text-center">
-        <p className="text-sm uppercase tracking-widest text-gray-500">
+        <p className="text-sm uppercase tracking-widest text-theme-muted">
           Est. 2025 • Johannesburg, South Africa • The Village Marketplace
         </p>
       </section>

@@ -46,13 +46,13 @@ export default function BrandLoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-theme-base px-4 text-theme-ink">
       <div className="w-full max-w-md rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-6 sm:p-8">
-        <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-theme-ink/40">
+        <p className="mb-3 text-xs font-black uppercase tracking-[0.25em] text-theme-muted">
           Brand Portal
         </p>
 
         <h1 className="text-3xl font-black">Brand Login</h1>
 
-        <p className="mt-2 text-sm text-theme-ink/60">
+        <p className="mt-2 text-sm text-theme-muted">
           Sign in to manage your products and orders.
         </p>
 
@@ -85,7 +85,7 @@ export default function BrandLoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-theme-ink/60 hover:text-theme-ink"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-theme-muted hover:text-theme-ink"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
@@ -97,7 +97,7 @@ export default function BrandLoginPage() {
             </div>
           </div>
 
-          {error && <p className="text-sm text-red-400">{error}</p>}
+          {error && <p className="text-sm text-theme-error-ink">{error}</p>}
 
           <button
             type="submit"

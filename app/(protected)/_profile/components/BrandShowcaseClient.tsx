@@ -41,7 +41,7 @@ export default function BrandShowcaseClient({ products }: BrandShowcaseClientPro
             View all <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
-        <p className="mt-1 text-sm text-theme-ink/60">Fresh drops from across The Village.</p>
+        <p className="mt-1 text-sm text-theme-muted">Fresh drops from across The Village.</p>
       </div>
 
       <div className="no-scrollbar flex snap-x gap-3 overflow-x-auto pb-2 sm:grid sm:grid-cols-2 sm:overflow-visible lg:grid-cols-4">

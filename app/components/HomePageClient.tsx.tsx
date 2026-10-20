@@ -151,7 +151,7 @@ export default function HomePageClient({
               >
                 <motion.p
                   variants={dropIn}
-                  className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-theme-ink/45"
+                  className="mb-3 text-xs font-black uppercase tracking-[0.22em] text-theme-muted"
                 >
                   Streetwear, sharpened
                 </motion.p>
@@ -163,7 +163,7 @@ export default function HomePageClient({
                 </motion.h2>
                 <motion.p
                   variants={dropIn}
-                  className="mt-5 max-w-xl text-sm leading-7 text-theme-ink/60 sm:text-base"
+                  className="mt-5 max-w-xl text-sm leading-7 text-theme-muted sm:text-base"
                 >
                   The Village connects shoppers with independent brands, making
                   discovery, checkout and delivery easier from the first drop.
@@ -179,41 +179,41 @@ export default function HomePageClient({
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, amount: 0.25 }}
-          className="theme-paper bg-theme-ink px-4 py-12 text-theme-base sm:px-6 sm:py-16"
+          className="bg-theme-base px-4 py-12 text-theme-ink sm:px-6 sm:py-16"
         >
           <div className="mx-auto grid max-w-7xl items-center gap-8 lg:grid-cols-[1fr_0.75fr]">
             <div>
-              <p className="mb-4 text-xs font-black uppercase tracking-[0.22em] text-theme-base/40">
+              <p className="mb-4 text-xs font-black uppercase tracking-[0.22em] text-theme-muted">
                 Browse the labels
               </p>
               <h2 className="max-w-3xl text-4xl font-black leading-none sm:text-5xl lg:text-6xl">
                 DISCOVER THE BRANDS BUILDING IN THE VILLAGE.
               </h2>
-              <p className="mt-5 max-w-2xl text-sm leading-7 text-theme-base/60 sm:text-base">
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-theme-muted sm:text-base">
                 Explore independent South African streetwear labels, read their
                 stories, and shop products directly from each brand storefront.
               </p>
             </div>
 
-            <div className="border border-theme-base/10 bg-theme-base p-5 text-theme-ink">
+            <div className="border border-theme-ink/10 bg-theme-ink p-5 text-theme-base">
               <div className="grid gap-3">
                 {["Brand storefronts", "Location filters", "Category filters"].map(
                   (item) => (
                     <div
                       key={item}
-                      className="flex items-center justify-between border border-theme-ink/10 bg-theme-ink/[0.04] px-4 py-3"
+                      className="flex items-center justify-between border border-theme-base/10 bg-theme-base/[0.04] px-4 py-3"
                     >
-                      <span className="text-sm font-bold text-theme-ink/65">
+                      <span className="text-sm font-bold text-theme-base/65">
                         {item}
                       </span>
-                      <ArrowRight className="h-4 w-4 text-theme-ink/45" />
+                      <ArrowRight className="h-4 w-4 text-theme-base/70" />
                     </div>
                   )
                 )}
               </div>
               <Link
                 href="/brands"
-                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-theme-ink px-6 py-4 text-sm font-black uppercase tracking-wide text-theme-base transition hover:bg-theme-ink/85"
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-md bg-theme-base px-6 py-4 text-sm font-black uppercase tracking-wide text-theme-ink transition hover:bg-theme-base/85"
               >
                 Explore Brands
                 <ArrowRight className="h-4 w-4" />
@@ -236,7 +236,7 @@ export default function HomePageClient({
                   <span className="flex h-9 w-9 items-center justify-center rounded-md border border-theme-ink/15 bg-theme-ink/5">
                     <Icon className="h-4 w-4" />
                   </span>
-                  <span className="text-xs font-black uppercase tracking-[0.18em] text-theme-ink/60">
+                  <span className="text-xs font-black uppercase tracking-[0.18em] text-theme-muted">
                     {label}
                   </span>
                 </div>
@@ -379,11 +379,11 @@ export default function HomePageClient({
                   index % 2 === 1 ? "translate-y-5" : ""
                 }`}
               >
-                <p className="text-[10px] font-bold uppercase tracking-wide text-theme-ink/45">
+                <p className="text-[10px] font-bold uppercase tracking-wide text-theme-muted">
                   {eyebrow}
                 </p>
                 <h3 className="mt-2 text-base font-black">{title}</h3>
-                <p className="mt-2 text-xs leading-5 text-theme-ink/60">{text}</p>
+                <p className="mt-2 text-xs leading-5 text-theme-muted">{text}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -419,9 +419,9 @@ export default function HomePageClient({
               whileHover={{ y: -14, scale: 1.04 }}
               className={`${card.className} rounded-lg border border-theme-ink/10 bg-theme-ink/[0.08] p-6 shadow-[0_25px_80px_var(--palette-black-45)] backdrop-blur-2xl`}
             >
-              <p className="text-sm font-bold text-theme-ink/40">{card.eyebrow}</p>
+              <p className="text-sm font-bold text-theme-muted">{card.eyebrow}</p>
               <h3 className="mt-3 text-2xl font-black">{card.title}</h3>
-              <p className="mt-4 text-sm leading-6 text-theme-ink/55">
+              <p className="mt-4 text-sm leading-6 text-theme-muted">
                 {card.text}
               </p>
 

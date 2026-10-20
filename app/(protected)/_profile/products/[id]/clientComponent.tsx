@@ -49,7 +49,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
   };
 
   return (
-    <div className="min-h-screen bg-theme-ink p-4 text-theme-base dark:bg-theme-base dark:text-theme-ink lg:pb-4">
+    <div className="min-h-screen bg-theme-base p-4 pb-28 text-theme-ink sm:pb-4">
       <div className="mx-auto max-w-6xl">
         {/* BACK */}
         <Link
@@ -62,10 +62,11 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:gap-12">
           {/* IMAGE */}
           <div>
-            <div className="group relative aspect-square overflow-hidden rounded-xl border border-theme-base/10 bg-theme-ink dark:border-theme-ink/10">
+            <div className="group relative aspect-square overflow-hidden rounded-xl border border-theme-ink/10 bg-theme-soft">
               <img
                 src={imageUrl}
-                alt={product.name}                className="h-full w-full object-contain transition duration-300 group-hover:scale-105"
+                alt={product.name}
+                className="h-full w-full object-contain transition duration-300 group-hover:scale-105"
               />
 
               {isSoldOut && (
@@ -84,15 +85,16 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
-                    className={`relative h-20 w-20 overflow-hidden rounded-md border-2 ${
+                    className={`relative h-20 w-20 shrink-0 overflow-hidden rounded-md border-2 ${
                       selectedImageIndex === index
-                        ? "border-theme-base dark:border-theme-ink"
-                        : "border-theme-base/10 dark:border-theme-ink/10"
+                        ? "border-theme-ink"
+                        : "border-theme-ink/10"
                     }`}
                   >
                     <img
                       src={img}
-                      alt="product"                      className="h-full w-full object-cover"
+                      alt={`${product.name} — image ${index + 1}`}
+                      className="h-full w-full object-cover"
                     />
                   </button>
                 ))}
@@ -103,7 +105,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
           {/* DETAILS */}
           <div className="space-y-6">
             {product.category && (
-              <p className="text-sm uppercase tracking-wide text-theme-base/50 dark:text-theme-ink/50">
+              <p className="text-sm uppercase tracking-wide text-theme-muted">
                 {product.category}
               </p>
             )}
@@ -113,26 +115,26 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             <p className="text-3xl font-bold">{formattedPrice}</p>
 
             {product.description && (
-              <p className="leading-relaxed text-theme-base/70 dark:text-theme-ink/70">
+              <p className="leading-relaxed text-theme-ink/75">
                 {product.description}
               </p>
             )}
 
             {/* SIZE */}
             <div>
-              <p className="mb-2 font-medium text-theme-base/70 dark:text-theme-ink/70">
+              <p className="mb-2 font-medium text-theme-ink/75">
                 Select Size
               </p>
 
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 {availableSizes.map((size) => (
                   <button
                     key={size}
                     onClick={() => setSelectedSize(size)}
                     className={`rounded-md border px-4 py-2 ${
                       selectedSize === size
-                        ? "bg-theme-base text-theme-ink dark:bg-theme-ink dark:text-theme-base"
-                        : "border-theme-base/20 dark:border-theme-ink/20"
+                        ? "bg-theme-ink text-theme-base"
+                        : "border-theme-ink/20"
                     }`}
                   >
                     {size}
@@ -148,8 +150,8 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
                 disabled={isSoldOut}
                 className={`flex-1 rounded-md px-6 py-4 font-bold transition ${
                   isAdded
-                    ? "bg-green-600 text-theme-ink"
-                    : "bg-theme-base text-theme-ink hover:bg-theme-base/80 dark:bg-theme-ink dark:text-theme-base"
+                    ? "bg-green-600 text-white"
+                    : "bg-theme-ink text-theme-base hover:bg-theme-ink/80"
                 }`}
               >
                 {isSoldOut
@@ -161,7 +163,7 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
 
               <Link
                 href={isSoldOut ? "#" : "/checkout"}
-                className="rounded-md border border-theme-base/20 px-6 py-4 text-center font-bold dark:border-theme-ink/20"
+                className="rounded-md border border-theme-ink/20 px-6 py-4 text-center font-bold"
               >
                 Buy Now
               </Link>
@@ -171,11 +173,11 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
       </div>
 
       {/* 🔥 MOBILE FIXED ADD TO CART */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 border-t z-10000 border-theme-base/10 bg-theme-ink/95 p-4 backdrop-blur-xl dark:border-theme-ink/10 dark:bg-theme-base/95 sm:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-theme-ink/10 bg-theme-base/95 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] text-theme-ink backdrop-blur-xl sm:hidden">
         <div className="flex items-center gap-3">
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-black">{formattedPrice}</p>
-            <p className="text-sm font-bold text-theme-base/60 dark:text-theme-ink/60">
+            <p className="text-sm font-bold text-theme-muted">
               <span>Size: {selectedSize}</span>
             </p>
 
@@ -186,8 +188,8 @@ export default function ProductPageClient({ product }: ProductPageClientProps) {
             disabled={isSoldOut}
             className={`rounded-full px-6 py-4 text-sm font-black transition ${
               isAdded
-                ? "bg-green-600 text-theme-ink"
-                : "bg-theme-base text-theme-ink dark:bg-theme-ink dark:text-theme-base"
+                ? "bg-green-600 text-white"
+                : "bg-theme-ink text-theme-base"
             } ${isSoldOut ? "cursor-not-allowed opacity-50" : ""}`}
           >
             {isSoldOut ? "Sold Out" : isAdded ? "✓ Added" : "Add To Bag"}

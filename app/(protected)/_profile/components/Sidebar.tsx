@@ -34,7 +34,7 @@ export default function Sidebar() {
         The Village
       </Link>
 
-      <p className="mt-1 text-xs text-theme-ink/40">Marketplace dashboard</p>
+      <p className="mt-1 text-xs text-theme-muted">Marketplace dashboard</p>
 
       <nav className="mt-10 space-y-2">
         {navItems.map((item) => {
@@ -49,7 +49,7 @@ export default function Sidebar() {
               className={`flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold transition ${
                 active
                   ? "bg-theme-ink text-theme-base"
-                  : "text-theme-ink/60 hover:bg-theme-ink/10 hover:text-theme-ink"
+                  : "text-theme-muted hover:bg-theme-ink/10 hover:text-theme-ink"
               }`}
             >
               <Icon className="h-5 w-5" />
@@ -61,7 +61,7 @@ export default function Sidebar() {
 
       <button
         onClick={handleLogout}
-        className="absolute bottom-6 left-5 right-5 flex items-center justify-center gap-2 rounded-2xl border border-theme-ink/10 px-4 py-3 text-sm font-bold text-theme-ink/70 transition hover:bg-red-600 hover:text-theme-ink"
+        className="absolute bottom-6 left-5 right-5 flex items-center justify-center gap-2 rounded-2xl border border-theme-ink/10 px-4 py-3 text-sm font-bold text-theme-ink/70 transition hover:bg-red-600 hover:text-white"
       >
         <LogOut className="h-5 w-5" />
         Logout

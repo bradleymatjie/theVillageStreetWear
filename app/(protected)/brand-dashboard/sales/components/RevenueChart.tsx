@@ -31,7 +31,7 @@ export function RevenueChart({
           <BarChart data={data}>
             {/* Grid */}
             <CartesianGrid
-              stroke="var(--palette-white-8)"
+              stroke="var(--border)"
               strokeDasharray="3 3"
             />
 

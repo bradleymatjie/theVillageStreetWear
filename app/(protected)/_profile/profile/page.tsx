@@ -23,7 +23,7 @@ export default function ProfilePage() {
   const { user, isLoading } = useUser();
   if (!user) {
     return <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 bg-theme-base px-4 text-theme-ink">
-      {isLoading ? <><Loader2 className="h-6 w-6 animate-spin" aria-hidden="true" /><p role="status">Loading your profile…</p></> : <><h1 className="text-2xl font-bold">Your account</h1><p className="text-theme-ink/60">Sign in to view and manage your profile.</p><Link href="/login" className={primaryButton}>Sign in <ArrowRight className="h-4 w-4" /></Link></>}
+      {isLoading ? <><Loader2 className="h-6 w-6 animate-spin" aria-hidden="true" /><p role="status">Loading your profile…</p></> : <><h1 className="text-2xl font-bold">Your account</h1><p className="text-theme-muted">Sign in to view and manage your profile.</p><Link href="/login" className={primaryButton}>Sign in <ArrowRight className="h-4 w-4" /></Link></>}
     </div>;
   }
   return <ProfileDetails key={user.id} user={user} />;
@@ -89,17 +89,17 @@ function ProfileDetails({ user }: { user: ExtendedUser }) {
     <div className="min-h-screen bg-theme-base px-4 py-7 text-theme-ink sm:px-6 sm:py-10">
       <div className="mx-auto max-w-5xl">
         <div className="mb-6 sm:mb-8">
-          <Link href={profileBase} className="mb-3 inline-flex items-center gap-1 text-xs font-semibold text-theme-ink/60 hover:text-theme-ink">Your account <ChevronRight className="h-3 w-3" /> Profile</Link>
+          <Link href={profileBase} className="mb-3 inline-flex items-center gap-1 text-xs font-semibold text-theme-muted hover:text-theme-ink">Your account <ChevronRight className="h-3 w-3" /> Profile</Link>
           <h1 className="text-3xl font-black tracking-tight sm:text-4xl">My profile</h1>
-          <p className="mt-2 text-sm text-theme-ink/60">Your details, account information, and shopping essentials.</p>
+          <p className="mt-2 text-sm text-theme-muted">Your details, account information, and shopping essentials.</p>
         </div>
 
         <section aria-label="Account overview" className={`${panel} mb-5 flex items-center gap-4 p-5 sm:p-6`}>
           <div aria-hidden="true" className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-theme-ink text-xl font-bold text-theme-base">{initials}</div>
           <div className="min-w-0 flex-1">
             <h2 className="break-words text-xl font-bold">{displayName}</h2>
-            <p className="mt-1 break-all text-sm text-theme-ink/60">{user.email || "No email on file"}</p>
-            <p className="mt-2 flex items-center gap-1.5 text-xs text-theme-ink/60"><Clock3 className="h-3.5 w-3.5 shrink-0" /> Member since {formatDate(user.created_at)}</p>
+            <p className="mt-1 break-all text-sm text-theme-muted">{user.email || "No email on file"}</p>
+            <p className="mt-2 flex items-center gap-1.5 text-xs text-theme-muted"><Clock3 className="h-3.5 w-3.5 shrink-0" /> Member since {formatDate(user.created_at)}</p>
           </div>
         </section>
 
@@ -107,17 +107,17 @@ function ProfileDetails({ user }: { user: ExtendedUser }) {
           <div className="space-y-5">
             <section aria-labelledby="details-heading" className={`${panel} p-5 sm:p-6`}>
               <div className="mb-5 flex items-center justify-between gap-3">
-                <div><h2 id="details-heading" className="text-lg font-bold">Personal details</h2><p className="mt-1 text-xs text-theme-ink/60">Keep your contact information up to date.</p></div>
+                <div><h2 id="details-heading" className="text-lg font-bold">Personal details</h2><p className="mt-1 text-xs text-theme-muted">Keep your contact information up to date.</p></div>
                 {!draft && <button type="button" disabled={Boolean(busy)} onClick={() => { setDraft({ full_name: fullName, phone }); setFeedback(null); }} className={secondaryButton}><Pencil className="h-3.5 w-3.5" /> Edit</button>}
               </div>
               {draft ? <form onSubmit={saveProfile} className="space-y-4" aria-busy={busy === "save"}>
                 <div><label htmlFor="profile-name" className="text-sm font-semibold">Full name</label><input id="profile-name" name="full_name" autoComplete="name" required minLength={2} maxLength={80} autoFocus disabled={Boolean(busy)} value={draft.full_name} onChange={event => setDraft({ ...draft, full_name: event.target.value })} className={inputStyle} /></div>
-                <div><label htmlFor="profile-phone" className="text-sm font-semibold">Phone number <span className="font-normal text-theme-ink/60">(optional)</span></label><input id="profile-phone" name="phone" type="tel" autoComplete="tel" maxLength={30} disabled={Boolean(busy)} value={draft.phone} placeholder="e.g. +27 72 123 4567" onChange={event => setDraft({ ...draft, phone: event.target.value })} className={inputStyle} /></div>
+                <div><label htmlFor="profile-phone" className="text-sm font-semibold">Phone number <span className="font-normal text-theme-muted">(optional)</span></label><input id="profile-phone" name="phone" type="tel" autoComplete="tel" maxLength={30} disabled={Boolean(busy)} value={draft.phone} placeholder="e.g. +27 72 123 4567" onChange={event => setDraft({ ...draft, phone: event.target.value })} className={inputStyle} /></div>
                 <div className="flex flex-wrap gap-3 pt-1"><button type="submit" disabled={Boolean(busy) || !hasChanges} className={`${primaryButton} flex-1`}>{busy === "save" ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}{busy === "save" ? "Saving…" : "Save changes"}</button><button type="button" disabled={Boolean(busy)} onClick={() => { setDraft(null); setFeedback(null); }} className={secondaryButton}>Cancel</button></div>
               </form> : <dl className="divide-y divide-theme-ink/10">
-                {[{ label: "Full name", value: fullName || "Not added", icon: UserRound }, { label: "Email address", value: user.email || "Not added", icon: Mail }, { label: "Phone number", value: phone || "Not added", icon: Phone }].map(({ label, value, icon: Icon }) => <div key={label} className="flex items-start gap-3 py-4 first:pt-0 last:pb-0"><Icon className="mt-0.5 h-4 w-4 shrink-0 text-theme-ink/50" /><div className="min-w-0"><dt className="text-xs text-theme-ink/60">{label}</dt><dd className="mt-1 break-words text-sm font-medium">{value}</dd></div></div>)}
+                {[{ label: "Full name", value: fullName || "Not added", icon: UserRound }, { label: "Email address", value: user.email || "Not added", icon: Mail }, { label: "Phone number", value: phone || "Not added", icon: Phone }].map(({ label, value, icon: Icon }) => <div key={label} className="flex items-start gap-3 py-4 first:pt-0 last:pb-0"><Icon className="mt-0.5 h-4 w-4 shrink-0 text-theme-muted" /><div className="min-w-0"><dt className="text-xs text-theme-muted">{label}</dt><dd className="mt-1 break-words text-sm font-medium">{value}</dd></div></div>)}
               </dl>}
-              <p className="mt-5 border-t border-theme-ink/10 pt-4 text-xs leading-5 text-theme-ink/60">Your email is linked to your sign-in. <Link href="/contact" className="font-semibold text-theme-ink underline underline-offset-4">Contact support</Link> if you need help changing it.</p>
+              <p className="mt-5 border-t border-theme-ink/10 pt-4 text-xs leading-5 text-theme-muted">Your email is linked to your sign-in. <Link href="/contact" className="font-semibold text-theme-ink underline underline-offset-4">Contact support</Link> if you need help changing it.</p>
             </section>
 
             {feedback && <p role={feedback.kind === "error" ? "alert" : "status"} className={`${panel} flex items-start gap-2 p-4 text-sm`}>
@@ -126,7 +126,7 @@ function ProfileDetails({ user }: { user: ExtendedUser }) {
 
             <section aria-labelledby="shopping-heading" className={`${panel} overflow-hidden`}>
               <h2 id="shopping-heading" className="px-5 pt-5 text-lg font-bold sm:px-6">Shopping & support</h2>
-              {[{ title: "My orders", description: "Track deliveries and view past purchases", href: joinProfilePath(profileBase, "orders"), icon: Package }, { title: "Need a hand?", description: "Get help with an order or your account", href: "/contact", icon: HelpCircle }].map(({ title, description, href, icon: Icon }) => <Link key={title} href={href} className="flex min-h-20 items-center gap-3 px-5 py-4 text-theme-ink transition hover:bg-theme-ink/5 sm:px-6"><Icon className="h-5 w-5 shrink-0 text-theme-ink/70" /><div className="min-w-0 flex-1"><p className="text-sm font-semibold">{title}</p><p className="mt-1 text-xs leading-5 text-theme-ink/60">{description}</p></div><ArrowRight className="h-4 w-4 shrink-0" /></Link>)}
+              {[{ title: "My orders", description: "Track deliveries and view past purchases", href: joinProfilePath(profileBase, "orders"), icon: Package }, { title: "Need a hand?", description: "Get help with an order or your account", href: "/contact", icon: HelpCircle }].map(({ title, description, href, icon: Icon }) => <Link key={title} href={href} className="flex min-h-20 items-center gap-3 px-5 py-4 text-theme-ink transition hover:bg-theme-ink/5 sm:px-6"><Icon className="h-5 w-5 shrink-0 text-theme-ink/70" /><div className="min-w-0 flex-1"><p className="text-sm font-semibold">{title}</p><p className="mt-1 text-xs leading-5 text-theme-muted">{description}</p></div><ArrowRight className="h-4 w-4 shrink-0" /></Link>)}
             </section>
           </div>
 
@@ -134,17 +134,17 @@ function ProfileDetails({ user }: { user: ExtendedUser }) {
             <section aria-labelledby="account-heading" className={`${panel} p-5 sm:p-6`}>
               <h2 id="account-heading" className="flex items-center gap-2 text-lg font-bold"><ShieldCheck className="h-5 w-5" /> Account information</h2>
               <dl className="mt-5 space-y-5 text-sm">
-                <div><dt className="text-xs text-theme-ink/60">Email status</dt><dd className="mt-1.5 flex items-center gap-2 font-medium">{verified && <CheckCircle2 className="h-4 w-4" />}{verified ? "Verified" : "Not verified"}</dd></div>
-                <div><dt className="text-xs text-theme-ink/60">Sign-in method</dt><dd className="mt-1.5 font-medium">{providerName || "Email"}</dd></div>
-                <div><dt className="text-xs text-theme-ink/60">Last sign-in</dt><dd className="mt-1.5 font-medium">{formatDate(user.last_sign_in_at)}</dd></div>
+                <div><dt className="text-xs text-theme-muted">Email status</dt><dd className="mt-1.5 flex items-center gap-2 font-medium">{verified && <CheckCircle2 className="h-4 w-4" />}{verified ? "Verified" : "Not verified"}</dd></div>
+                <div><dt className="text-xs text-theme-muted">Sign-in method</dt><dd className="mt-1.5 font-medium">{providerName || "Email"}</dd></div>
+                <div><dt className="text-xs text-theme-muted">Last sign-in</dt><dd className="mt-1.5 font-medium">{formatDate(user.last_sign_in_at)}</dd></div>
               </dl>
             </section>
 
             <section aria-labelledby="appearance-heading" className={`${panel} flex items-start gap-3 p-5 sm:p-6`}>
-              <Monitor className="mt-0.5 h-5 w-5 shrink-0 text-theme-ink/70" /><div><h2 id="appearance-heading" className="text-sm font-semibold">Follows your device</h2><p className="mt-1 text-xs leading-5 text-theme-ink/60">{systemTheme ? `${systemTheme === "dark" ? "Dark" : "Light"} mode is active. ` : ""}Change your device appearance to switch the website theme.</p></div>
+              <Monitor className="mt-0.5 h-5 w-5 shrink-0 text-theme-ink/70" /><div><h2 id="appearance-heading" className="text-sm font-semibold">Follows your device</h2><p className="mt-1 text-xs leading-5 text-theme-muted">{systemTheme ? `${systemTheme === "dark" ? "Dark" : "Light"} mode is active. ` : ""}Change your device appearance to switch the website theme.</p></div>
             </section>
 
-            <div className="px-1"><button type="button" onClick={logout} disabled={Boolean(busy) || Boolean(draft)} className={`${secondaryButton} w-full`}>{busy === "logout" ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogOut className="h-4 w-4" />}{busy === "logout" ? "Signing out…" : "Sign out"}</button>{draft && <p className="mt-2 text-center text-xs text-theme-ink/60">Save or cancel your changes before signing out.</p>}</div>
+            <div className="px-1"><button type="button" onClick={logout} disabled={Boolean(busy) || Boolean(draft)} className={`${secondaryButton} w-full`}>{busy === "logout" ? <Loader2 className="h-4 w-4 animate-spin" /> : <LogOut className="h-4 w-4" />}{busy === "logout" ? "Signing out…" : "Sign out"}</button>{draft && <p className="mt-2 text-center text-xs text-theme-muted">Save or cancel your changes before signing out.</p>}</div>
           </div>
         </div>
       </div>

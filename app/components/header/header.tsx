@@ -35,7 +35,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 border-b border-black/10 bg-white/95 text-black backdrop-blur-xl lg:border-theme-ink/10 lg:bg-[var(--palette-surface-header)]/95 lg:text-theme-ink">
+      <header className="sticky top-0 z-50 border-b border-theme-ink/10 bg-theme-surface/95 text-theme-ink backdrop-blur-xl lg:border-theme-ink/10 lg:bg-[var(--palette-surface-header)]/95 lg:text-theme-ink">
         <div className="mx-auto flex h-[68px] max-w-[1480px] items-center justify-between px-4 sm:px-6 lg:h-[82px] lg:px-8">
           <Link
             href="/"
@@ -48,7 +48,7 @@ export default function Header() {
               fill
               priority
               sizes="(min-width: 640px) 192px, 160px"
-              className="object-contain object-left lg:dark:hidden"
+              className="object-contain object-left dark:hidden"
             />
             <Image
               src="/brand/logo-horizontal-dark.png"
@@ -56,7 +56,7 @@ export default function Header() {
               fill
               priority
               sizes="(min-width: 640px) 192px, 160px"
-              className="hidden object-contain object-left lg:dark:block"
+              className="hidden object-contain object-left dark:block"
             />
           </Link>
 
@@ -66,7 +66,7 @@ export default function Header() {
                 <Link href={href} className="text-[11px] font-bold tracking-[0.14em] text-theme-ink/75 transition hover:text-theme-ink">
                   {label}
                 </Link>
-                {index < 3 && <span className="text-xs text-theme-ink/35">/</span>}
+                {index < 3 && <span className="text-xs text-theme-muted">/</span>}
               </div>
             ))}
           </nav>
@@ -90,24 +90,24 @@ export default function Header() {
 
             <button
               onClick={() => setIsCartOpen(true)}
-              className="relative flex h-10 w-10 items-center justify-center text-black lg:text-theme-ink"
+              className="relative flex h-10 w-10 items-center justify-center text-theme-ink lg:text-theme-ink"
               aria-label="Open cart"
             >
               <ShoppingCart className="h-5 w-5" />
               {isMounted && cartItemCount > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-theme-base px-1 text-[10px] font-black text-theme-ink dark:bg-theme-ink dark:text-theme-base">
+                <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-black bg-theme-ink text-theme-base">
                   {cartItemCount > 9 ? "9+" : cartItemCount}
                 </span>
               )}
             </button>
 
             <Link href={profileHref} className="lg:hidden">
-              <User className="h-5 w-5 text-black" />
+              <User className="h-5 w-5 text-theme-ink" />
             </Link>
 
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-black lg:hidden"
+              className="text-theme-ink lg:hidden"
             >
               {isMobileMenuOpen ? <X /> : <Menu />}
             </button>
@@ -115,11 +115,11 @@ export default function Header() {
         </div>
 
         <div
-          className={`overflow-hidden border-t border-theme-base/10 bg-white transition-all duration-300 lg:hidden ${
+          className={`overflow-hidden border-t border-theme-base/10 bg-theme-surface transition-all duration-300 lg:hidden ${
             isMobileMenuOpen ? "max-h-72 opacity-100" : "max-h-0 opacity-0"
           }`}
         >
-          <nav className="flex flex-col gap-2 px-4 py-4 text-black">
+          <nav className="flex flex-col gap-2 px-4 py-4 text-theme-ink">
             <Link href="/products" onClick={() => setIsMobileMenuOpen(false)} className="py-2 text-sm font-black">
               MARKETPLACE
             </Link>
@@ -146,7 +146,7 @@ export default function Header() {
         ].map(({ label, href, icon: Icon }) => {
           const active = pathname === href || (label !== "Home" && href !== "/" && pathname.startsWith(`${href}/`));
           return (
-            <Link key={label} href={href} className={`flex min-h-14 flex-col items-center justify-center gap-1 text-[9px] ${active ? "text-theme-ink" : "text-theme-ink/45"}`}>
+            <Link key={label} href={href} className={`flex min-h-14 flex-col items-center justify-center gap-1 text-[9px] ${active ? "text-theme-ink" : "text-theme-muted"}`}>
               <span className={active ? "flex h-6 w-6 items-center justify-center rounded-full bg-theme-ink text-theme-base" : "flex h-6 w-6 items-center justify-center"}>
                 <Icon className="h-3.5 w-3.5" />
               </span>

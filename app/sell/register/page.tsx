@@ -92,7 +92,7 @@ export default function RegisterBrandPage() {
             <h1 className="text-4xl font-black leading-tight sm:text-6xl">
               APPLICATION RECEIVED.
             </h1>
-            <p className="mt-5 text-sm leading-7 text-theme-ink/60 sm:text-base">
+            <p className="mt-5 text-sm leading-7 text-theme-muted sm:text-base">
               Your application has been sent to The Village. Every brand is
               reviewed before approval.
             </p>
@@ -107,7 +107,7 @@ export default function RegisterBrandPage() {
                 "Start selling",
               ].map((item, index) => (
                 <div key={item} className="flex items-center gap-3">
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-theme-ink/10 bg-theme-ink/5 text-xs font-black text-theme-ink/55">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center border border-theme-ink/10 bg-theme-ink/5 text-xs font-black text-theme-muted">
                     {String(index + 1).padStart(2, "0")}
                   </div>
                   <p className="border border-theme-ink/10 bg-theme-base px-4 py-3 text-sm font-black uppercase tracking-wide text-theme-ink/75">
@@ -126,13 +126,13 @@ export default function RegisterBrandPage() {
     <main className="min-h-screen bg-theme-base px-4 py-16 text-theme-ink sm:px-6 lg:px-8">
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <p className="mb-4 inline-flex border border-theme-ink/20 px-3 py-1 text-xs font-black uppercase tracking-[0.24em] text-theme-ink/55">
+          <p className="mb-4 inline-flex border border-theme-ink/20 px-3 py-1 text-xs font-black uppercase tracking-[0.24em] text-theme-muted">
             Brand application
           </p>
           <h1 className="text-5xl font-black leading-none sm:text-6xl">
             Apply to join The Village.
           </h1>
-          <p className="mt-5 text-sm leading-7 text-theme-ink/60 sm:text-base">
+          <p className="mt-5 text-sm leading-7 text-theme-muted sm:text-base">
             This first step is intentionally short. Tell us enough to understand
             your brand, your product direction and whether The Village is the
             right fit.
@@ -145,7 +145,7 @@ export default function RegisterBrandPage() {
               </div>
               <div>
                 <h2 className="text-lg font-black">Commission partnership</h2>
-                <p className="mt-2 text-sm leading-6 text-theme-ink/60">
+                <p className="mt-2 text-sm leading-6 text-theme-muted">
                   Applying is free. The Village only earns 10% from completed
                   marketplace sales.
                 </p>
@@ -280,7 +280,7 @@ export default function RegisterBrandPage() {
             <ArrowRight className="h-4 w-4" />
           </button>
 
-          <p className="text-center text-xs font-bold uppercase tracking-[0.18em] text-theme-ink/35">
+          <p className="text-center text-xs font-bold uppercase tracking-[0.18em] text-theme-muted">
             Applications are reviewed before approval.
           </p>
         </form>

@@ -171,7 +171,7 @@ export default function BrandDashboardPage() {
           <div className="w-full max-w-lg rounded-3xl border border-theme-ink/10 bg-[var(--palette-surface-modal)] p-6 text-theme-ink shadow-2xl sm:p-7">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.24em] text-theme-ink/35">
+                <p className="text-xs font-black uppercase tracking-[0.24em] text-theme-muted">
                   Brand profile
                 </p>
                 <h2 className="mt-3 text-3xl font-black leading-tight">
@@ -182,14 +182,14 @@ export default function BrandDashboardPage() {
               <button
                 type="button"
                 onClick={dismissProfilePrompt}
-                className="rounded-full border border-theme-ink/10 p-2 text-theme-ink/50 transition hover:bg-theme-ink hover:text-theme-base"
+                className="rounded-full border border-theme-ink/10 p-2 text-theme-muted transition hover:bg-theme-ink hover:text-theme-base"
                 aria-label="Close profile reminder"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
-            <p className="mt-4 text-sm leading-6 text-theme-ink/60">
+            <p className="mt-4 text-sm leading-6 text-theme-muted">
               Your profile is what buyers see before they decide to support you.
               Add your story, logo, location, address, and socials so customers
               know who they are buying from and whether pickup is available.
@@ -227,7 +227,7 @@ export default function BrandDashboardPage() {
 
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-ink/40">
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-muted">
             Brand Dashboard
           </p>
 
@@ -235,7 +235,7 @@ export default function BrandDashboardPage() {
             Welcome, {brandName}
           </h1>
 
-          <p className="mt-2 text-sm text-theme-ink/50">
+          <p className="mt-2 text-sm text-theme-muted">
             Manage your products, orders, and brand presence on The Village.
           </p>
         </div>
@@ -298,7 +298,7 @@ export default function BrandDashboardPage() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h2 className="text-2xl font-black">Your Products</h2>
-            <p className="mt-1 text-sm text-theme-ink/50">
+            <p className="mt-1 text-sm text-theme-muted">
               Your latest listed products.
             </p>
           </div>
@@ -314,7 +314,7 @@ export default function BrandDashboardPage() {
         {recentProducts.length === 0 ? (
           <div className="mt-8 rounded-2xl border border-theme-ink/10 bg-theme-base/30 p-8 text-center">
             <p className="font-bold">No products yet</p>
-            <p className="mt-2 text-sm text-theme-ink/50">
+            <p className="mt-2 text-sm text-theme-muted">
               Start by adding your first product to the marketplace.
             </p>
           </div>
@@ -334,12 +334,12 @@ export default function BrandDashboardPage() {
 
                 <div className="p-4">
                   <p className="line-clamp-1 font-bold">{product.name}</p>
-                  <p className="mt-1 text-sm text-theme-ink/50">
+                  <p className="mt-1 text-sm text-theme-muted">
                     R{product.price}
                   </p>
 
                   {product.soldout && (
-                    <p className="mt-2 text-xs font-bold text-red-400">
+                    <p className="mt-2 text-xs font-bold text-theme-error-ink">
                       Sold out
                     </p>
                   )}
@@ -371,10 +371,10 @@ function DashboardCard({
       href={href}
       className="rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-6 transition hover:bg-theme-ink/10"
     >
-      <Icon className="mb-5 h-7 w-7 text-theme-ink/60" />
-      <p className="text-sm font-bold text-theme-ink/40">{title}</p>
+      <Icon className="mb-5 h-7 w-7 text-theme-muted" />
+      <p className="text-sm font-bold text-theme-muted">{title}</p>
       <h2 className="mt-2 text-3xl font-black">{value}</h2>
-      <p className="mt-1 text-sm text-theme-ink/50">{text}</p>
+      <p className="mt-1 text-sm text-theme-muted">{text}</p>
     </Link>
   );
 }

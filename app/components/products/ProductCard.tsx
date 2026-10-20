@@ -82,13 +82,13 @@ export default function ProductCard({
                 id: product.brand_id,
                 name: product.brand_name,
               })}
-              className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.18em] text-theme-ink/60 underline underline-offset-4 transition hover:text-theme-ink focus-visible:outline focus-visible:outline-1 focus-visible:outline-theme-ink"
+              className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.18em] text-theme-muted underline underline-offset-4 transition hover:text-theme-ink focus-visible:outline focus-visible:outline-1 focus-visible:outline-theme-ink"
             >
               {product.brand_name || "The Village"}
               <ArrowUpRight className="h-3 w-3" />
             </Link>
           ) : (
-            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-theme-ink/35">
+            <p className="text-[10px] font-black uppercase tracking-[0.18em] text-theme-muted">
               The Village
             </p>
           )}

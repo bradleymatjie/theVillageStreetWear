@@ -5,7 +5,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "./components/header/header";
 import Footer from "./components/footer/footer";
-import { Toaster } from "sonner";
+import AppToaster from "./components/AppToaster";
 import Script from "next/script";
 import GoogleAnalytics from "./components/GoogleAnalytics";
 import { Suspense } from "react";
@@ -152,8 +152,8 @@ export default function RootLayout({
           <Footer />
           </Suspense>
         </div>
+        <AppToaster />
          </ThemeProvider>
-        <Toaster />
         <PwaRegistration />
         <Analytics />
       </body>

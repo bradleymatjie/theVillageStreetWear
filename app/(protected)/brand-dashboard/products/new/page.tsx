@@ -90,18 +90,18 @@ export default function NewBrandProductPage() {
       <div className="mx-auto max-w-3xl">
         <Link
           href="/brand-dashboard"
-          className="mb-8 inline-flex items-center gap-2 text-sm text-theme-ink/60 hover:text-theme-ink"
+          className="mb-8 inline-flex items-center gap-2 text-sm text-theme-muted hover:text-theme-ink"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to dashboard
         </Link>
 
         <div className="mb-8">
-          <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-ink/40">
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-muted">
             Brand Dashboard
           </p>
           <h1 className="mt-2 text-4xl font-black">Add Product</h1>
-          <p className="mt-2 text-sm text-theme-ink/50">
+          <p className="mt-2 text-sm text-theme-muted">
             Upload a new product to The Village marketplace.
           </p>
         </div>
@@ -224,7 +224,7 @@ function PriceInput({
     <div>
       <RequiredLabel>Price</RequiredLabel>
       <div className="mt-2 flex overflow-hidden rounded-xl border border-theme-ink/10 bg-theme-base">
-        <span className="flex items-center border-r border-theme-ink/10 px-4 text-sm font-black text-theme-ink/60">
+        <span className="flex items-center border-r border-theme-ink/10 px-4 text-sm font-black text-theme-muted">
           R
         </span>
         <input
@@ -308,7 +308,7 @@ function Input({
 function RequiredLabel({ children }: { children: React.ReactNode }) {
   return (
     <label className="text-sm font-bold">
-      {children} <span className="text-red-400">*</span>
+      {children} <span className="text-theme-error-ink">*</span>
     </label>
   );
 }

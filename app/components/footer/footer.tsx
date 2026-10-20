@@ -13,7 +13,7 @@ export default function Footer() {
     <footer className="bg-theme-base text-theme-ink">
         <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14">
         <div className="mb-10 max-w-2xl">
-          <p className="text-sm leading-6 text-theme-ink/50">
+          <p className="text-sm leading-6 text-theme-muted">
             A marketplace helping streetwear brands launch, sell, and grow online.
           </p>
         </div>
@@ -23,7 +23,7 @@ export default function Footer() {
             <h3 className="mb-4 text-xs font-black uppercase tracking-widest text-theme-ink/70">
               Marketplace
             </h3>
-            <ul className="space-y-2 text-sm text-theme-ink/45">
+            <ul className="space-y-2 text-sm text-theme-muted">
               <li>
                 <Link href="/products" className="hover:text-theme-ink">
                   Explore Catalog
@@ -49,7 +49,7 @@ export default function Footer() {
             <h3 className="mb-4 text-xs font-black uppercase tracking-widest text-theme-ink/70">
               For Brands
             </h3>
-            <ul className="space-y-2 text-sm text-theme-ink/45">
+            <ul className="space-y-2 text-sm text-theme-muted">
               <li>
                 <Link href="/sell" className="hover:text-theme-ink">
                   Join as a Brand
@@ -77,7 +77,7 @@ export default function Footer() {
             <h3 className="mb-4 text-xs font-black uppercase tracking-widest text-theme-ink/70">
               Company
             </h3>
-            <ul className="space-y-2 text-sm text-theme-ink/45">
+            <ul className="space-y-2 text-sm text-theme-muted">
               <li>
                 <Link href="/about" className="hover:text-theme-ink">
                   About
@@ -105,7 +105,7 @@ export default function Footer() {
             <h3 className="mb-4 text-xs font-black uppercase tracking-widest text-theme-ink/70">
               Location
             </h3>
-            <p className="text-sm leading-6 text-theme-ink/45">
+            <p className="text-sm leading-6 text-theme-muted">
               Johannesburg, Gauteng
               <br />
               South Africa
@@ -115,7 +115,7 @@ export default function Footer() {
 
         <div className="border-t border-theme-ink/10 pt-6">
           <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-xs text-theme-ink/40">
+            <p className="text-xs text-theme-muted">
               Copyright 2026 The Village Marketplace. All rights reserved.
             </p>
 

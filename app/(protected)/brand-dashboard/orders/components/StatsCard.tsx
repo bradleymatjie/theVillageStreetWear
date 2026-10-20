@@ -11,10 +11,10 @@ export function StatsCard({
 }) {
   return (
     <div className="rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-6">
-      <Icon className="mb-5 h-7 w-7 text-theme-ink/60" />
-      <p className="text-sm font-bold text-theme-ink/40">{title}</p>
+      <Icon className="mb-5 h-7 w-7 text-theme-muted" />
+      <p className="text-sm font-bold text-theme-muted">{title}</p>
       <h2 className="mt-2 text-3xl font-black">{value}</h2>
-      <p className="mt-1 text-sm text-theme-ink/50">{text}</p>
+      <p className="mt-1 text-sm text-theme-muted">{text}</p>
     </div>
   );
 }

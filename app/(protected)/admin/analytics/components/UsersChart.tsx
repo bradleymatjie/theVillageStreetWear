@@ -53,7 +53,7 @@ export function UsersChart({ data }: UsersChartProps) {
                     className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: entry.color }}
                   />
-                  <span className="text-sm text-theme-ink/60">{entry.dataKey}:</span>
+                  <span className="text-sm text-theme-muted">{entry.dataKey}:</span>
                 </div>
                 <span className="text-sm font-medium text-theme-ink">
                   {typeof entry.value === 'number' ? entry.value.toLocaleString() : entry.value}
@@ -103,7 +103,7 @@ export function UsersChart({ data }: UsersChartProps) {
             iconType="circle"
             iconSize={8}
             formatter={(value) => (
-              <span className="text-sm text-theme-ink/60">{value}</span>
+              <span className="text-sm text-theme-muted">{value}</span>
             )}
           />
           <Area

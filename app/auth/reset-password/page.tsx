@@ -80,7 +80,7 @@ export default function ResetPasswordPage() {
       <div className="w-full max-w-md rounded-3xl border border-theme-ink/10 bg-theme-ink/5 p-6 sm:p-8">
         <h1 className="text-2xl font-black sm:text-3xl">Set Your Password</h1>
 
-        <p className="mt-2 text-sm text-theme-ink/60">
+        <p className="mt-2 text-sm text-theme-muted">
           Create a password to access your brand dashboard.
         </p>
 
@@ -109,7 +109,7 @@ export default function ResetPasswordPage() {
             />
           </div>
 
-          {error && <p className="text-sm text-red-400">{error}</p>}
+          {error && <p className="text-sm text-theme-error-ink">{error}</p>}
 
           <button
             type="submit"

@@ -280,7 +280,7 @@ export default function BrandProfilePage() {
     return (
       <div className="mx-auto max-w-3xl border border-theme-ink/10 bg-theme-ink/5 p-8 text-center">
         <p className="text-lg font-black">Brand profile unavailable</p>
-        <p className="mt-2 text-sm text-theme-ink/50">
+        <p className="mt-2 text-sm text-theme-muted">
           Contact admin if this keeps happening.
         </p>
       </div>
@@ -302,19 +302,19 @@ export default function BrandProfilePage() {
         <div>
           <Link
             href="/brand-dashboard"
-            className="mb-3 inline-flex items-center gap-2 text-sm text-theme-ink/50 hover:text-theme-ink"
+            className="mb-3 inline-flex items-center gap-2 text-sm text-theme-muted hover:text-theme-ink"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to dashboard
           </Link>
 
-          <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-ink/40">
+          <p className="text-sm font-bold uppercase tracking-[0.25em] text-theme-muted">
             Brand Identity
           </p>
           <h1 className="mt-2 text-3xl font-black sm:text-4xl">
             {brand.name}
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-theme-ink/50">
+          <p className="mt-2 max-w-2xl text-sm text-theme-muted">
             Shape how your brand appears on The Village: story, location,
             visuals, and social presence.
           </p>
@@ -461,7 +461,7 @@ export default function BrandProfilePage() {
 
         <aside className="lg:sticky lg:top-8 lg:self-start">
           <div className="border border-theme-ink/10 bg-theme-ink/[0.04] p-5">
-            <p className="mb-4 text-xs font-black uppercase tracking-[0.22em] text-theme-ink/35">
+            <p className="mb-4 text-xs font-black uppercase tracking-[0.22em] text-theme-muted">
               Public Preview
             </p>
 
@@ -497,7 +497,7 @@ export default function BrandProfilePage() {
                 </div>
 
                 <div className="mt-5">
-                  <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-ink/35">
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-theme-muted">
                     {form.style_category || "Streetwear brand"}
                   </p>
                   <h2 className="mt-2 text-3xl font-black">{brand.name}</h2>
@@ -508,7 +508,7 @@ export default function BrandProfilePage() {
                   )}
                 </div>
 
-                <div className="mt-5 space-y-3 text-sm text-theme-ink/60">
+                <div className="mt-5 space-y-3 text-sm text-theme-muted">
                   {location && (
                     <p className="flex items-center gap-2">
                       <MapPin className="h-4 w-4" />
@@ -524,7 +524,7 @@ export default function BrandProfilePage() {
                 </div>
 
                 <div className="mt-6 border-t border-theme-ink/10 pt-5">
-                  <p className="text-xs font-black uppercase tracking-[0.18em] text-theme-ink/35">
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-theme-muted">
                     Story
                   </p>
                   <p className="mt-3 whitespace-pre-line text-sm leading-6 text-theme-ink/65">
@@ -541,7 +541,7 @@ export default function BrandProfilePage() {
                 "Location builds trust",
                 "Socials make the brand discoverable",
               ].map((item) => (
-                <p key={item} className="flex items-center gap-2 text-sm text-theme-ink/60">
+                <p key={item} className="flex items-center gap-2 text-sm text-theme-muted">
                   <CheckCircle className="h-4 w-4 text-theme-ink/70" />
                   {item}
                 </p>
@@ -567,11 +567,11 @@ function Panel({
 }) {
   return (
     <section className="border border-theme-ink/10 bg-theme-ink/[0.04] p-5 sm:p-6">
-      <p className="text-xs font-black uppercase tracking-[0.22em] text-theme-ink/35">
+      <p className="text-xs font-black uppercase tracking-[0.22em] text-theme-muted">
         {eyebrow}
       </p>
       <h2 className="mt-2 text-2xl font-black">{title}</h2>
-      <p className="mt-2 text-sm leading-6 text-theme-ink/50">{description}</p>
+      <p className="mt-2 text-sm leading-6 text-theme-muted">{description}</p>
       <div className="mt-6">{children}</div>
     </section>
   );
@@ -636,7 +636,7 @@ function ImageUploadField({
         )}
       </div>
 
-      <p className="mt-2 text-xs text-theme-ink/40">{help}</p>
+      <p className="mt-2 text-xs text-theme-muted">{help}</p>
 
       <label className="mt-3 inline-flex cursor-pointer items-center justify-center gap-2 border border-theme-ink/10 px-4 py-3 text-sm font-black text-theme-ink/70 transition hover:bg-theme-ink hover:text-theme-base">
         {uploading ? (
