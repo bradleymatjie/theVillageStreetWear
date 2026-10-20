@@ -1,3 +1,4 @@
+import { getColorValue } from "@/lib/server-colors";
 // app/api/admin/orders/update/route.ts
 import { supabase } from '@/lib/supabaseClient';
 import { Resend } from 'resend';
@@ -89,19 +90,19 @@ export async function POST(request: Request) {
             };
 
             const badgeStyles: Record<string, { bg: string; text: string }> = {
-                pending: { bg: '#fffbeb', text: '#d97706' },      // amber
-                processing: { bg: '#eff6ff', text: '#2563eb' },   // blue
-                shipped: { bg: '#f3e8ff', text: '#9333ea' },      // purple
-                delivered: { bg: '#ecfdf5', text: '#059669' },    // emerald green
-                cancelled: { bg: '#fee2e2', text: '#dc2626' },    // red
+                pending: { bg: getColorValue("--palette-status-pending-bg"), text: getColorValue("--palette-status-pending-text") },      // amber
+                processing: { bg: getColorValue("--palette-status-processing-bg"), text: getColorValue("--palette-link-blue") },   // blue
+                shipped: { bg: getColorValue("--palette-status-shipped-bg"), text: getColorValue("--palette-status-shipped-text") },      // purple
+                delivered: { bg: getColorValue("--palette-status-delivered-bg"), text: getColorValue("--palette-status-delivered-text") },    // emerald green
+                cancelled: { bg: getColorValue("--palette-status-cancelled-bg"), text: getColorValue("--palette-status-cancelled-text") },    // red
             };
 
             // const statusLabel = statusLabels[status] || status.charAt(0).toUpperCase() + status.slice(1);
-            const { bg: bgColor, text: textColor } = badgeStyles[status] || { bg: '#f3f4f6', text: '#4b5563' }; // fallback gray
+            const { bg: bgColor, text: textColor } = badgeStyles[status] || { bg: getColorValue("--palette-surface-email-muted"), text: getColorValue("--palette-text-email-secondary") }; // fallback gray
 
             const html = `
-  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background-color: #ffffff;">
-    <h1 style="color: #000; margin-bottom: 24px;">
+  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid ${getColorValue("--palette-border-email")}; border-radius: 8px; background-color: ${getColorValue("--palette-white")};">
+    <h1 style="color: ${getColorValue("--palette-black")}; margin-bottom: 24px;">
       Order Update: 
       <span style="
         display: inline-block;
@@ -129,8 +130,8 @@ export async function POST(request: Request) {
             <p style="font-size: 16px; line-height: 1.5; margin-bottom: 30px;">
             If you have any questions, simply reply to this email.
             </p>
-            <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 30px 0;" />
-            <p style="color: #666; font-size: 12px; text-align: center;">
+            <hr style="border: none; border-top: 1px solid ${getColorValue("--palette-border-email")}; margin: 30px 0;" />
+            <p style="color: ${getColorValue("--palette-ink-subtle")}; font-size: 12px; text-align: center;">
             © ${new Date().getFullYear()} The Village Streetwear. All rights reserved.
             </p>
         </div>

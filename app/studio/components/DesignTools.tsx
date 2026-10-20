@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo } from 'react';
+import { colorLabel, resolveCssColor } from '@/lib/browser-colors';
 import {
   Upload,
   Type,
@@ -67,14 +68,14 @@ interface TShirtColor {
 }
 
 const tshirtColors: TShirtColor[] = [
-  { name: 'white', hex: '#FFFFFF', frontImage: '/assets/white_front.png', backImage: '/assets/white_back.png' },
-  { name: 'black', hex: '#000000', frontImage: '/assets/black_front.png', backImage: '/assets/black_back.png' },
-  { name: 'red', hex: '#FF0000', frontImage: '/assets/red_front.png', backImage: '/assets/red_back.png' },
+  { name: 'white', hex: 'var(--palette-white)', frontImage: '/assets/white_front.png', backImage: '/assets/white_back.png' },
+  { name: 'black', hex: 'var(--palette-black)', frontImage: '/assets/black_front.png', backImage: '/assets/black_back.png' },
+  { name: 'red', hex: 'var(--palette-design-red)', frontImage: '/assets/red_front.png', backImage: '/assets/red_back.png' },
 ];
 
 const textColors = [
-  '#FFFFFF', '#000000', '#FF0000', '#00FF00', '#0000FF',
-  '#FFFF00', '#FF00FF', '#00FFFF',
+  'var(--palette-white)', 'var(--palette-black)', 'var(--palette-design-red)', 'var(--palette-design-green)', 'var(--palette-design-blue)',
+  'var(--palette-design-yellow)', 'var(--palette-design-magenta)', 'var(--palette-design-cyan)',
 ];
 
 const fonts = [
@@ -111,7 +112,7 @@ export default function DesignTools() {
 
   const [textSettings, setTextSettings] = useState({
     text: '',
-    color: '#000000',
+    color: 'var(--palette-black)',
     fontSize: 32,
     fontFamily: 'Arial',
     align: 'center' as 'left' | 'center' | 'right',
@@ -128,7 +129,7 @@ export default function DesignTools() {
     if (!selectedElement) {
       setTextSettings({
         text: '',
-        color: '#000000',
+        color: 'var(--palette-black)',
         fontSize: 32,
         fontFamily: 'Arial',
         align: 'center',
@@ -179,6 +180,7 @@ export default function DesignTools() {
       type: 'text',
       zIndex: currentElements.length,
       ...textSettings,
+      color: resolveCssColor(textSettings.color),
       x: 50,
       y: 50,
       rotation: selectedRotation,
@@ -318,7 +320,7 @@ export default function DesignTools() {
                   className="aspect-square h-2 border border-gray-500"
                   style={{
                     backgroundColor: color.hex,
-                    borderColor: currentDesign.tshirtColor === color.name ? '#000000':'gray',
+                    borderColor: currentDesign.tshirtColor === color.name ? 'var(--palette-black)':'var(--palette-design-border)',
                     scale: currentDesign.tshirtColor === color.name ? '1.1':'.8'
                   }}
                   onClick={() => setCurrentTshirtColor(color.name)}
@@ -499,7 +501,7 @@ export default function DesignTools() {
                                 className="w-6 h-6 rounded-md border border-border mr-3 flex-shrink-0"
                                 style={{ backgroundColor: textSettings.color }}
                               />
-                              <span className="truncate">{textSettings.color.toUpperCase()}</span>
+                              <span className="truncate">{colorLabel(textSettings.color)}</span>
                               <ChevronDown className="ml-auto h-4 w-4 opacity-50 flex-shrink-0" />
                             </div>
                           </Button>
@@ -509,11 +511,11 @@ export default function DesignTools() {
                             {textColors.map((color) => (
                               <DropdownMenuItem
                                 key={color}
-                                onSelect={() => updateTextSetting('color', color)}
+                                onSelect={() => updateTextSetting('color', resolveCssColor(color))}
                                 className="p-0 hover:bg-transparent focus:bg-transparent"
                               >
                                 <div
-                                  className={`w-8 h-8 rounded-md border-2 border-border cursor-pointer transition-all hover:scale-105 ${textSettings.color === color ? 'ring-4 ring-primary ring-offset-2' : ''
+                                  className={`w-8 h-8 rounded-md border-2 border-border cursor-pointer transition-all hover:scale-105 ${resolveCssColor(textSettings.color) === resolveCssColor(color) ? 'ring-4 ring-primary ring-offset-2' : ''
                                     }`}
                                   style={{ backgroundColor: color }}
                                 />

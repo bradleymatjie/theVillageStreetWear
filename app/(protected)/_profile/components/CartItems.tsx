@@ -3,6 +3,7 @@
 import { useCartStore } from "@/app/lib/cartStore";
 import { X, Minus, Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { createPortal } from "react-dom";
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -13,11 +14,13 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
   const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCartStore();
   const totalPrice = getTotalPrice();
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <>
       {/* Overlay */}
       <div
-        className={`fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
+        className={`fixed inset-0 z-[100] bg-black/50 transition-opacity duration-300 ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
@@ -25,7 +28,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-full w-full sm:w-96 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed right-0 top-0 z-[110] h-full w-full transform bg-white shadow-2xl transition-transform duration-300 ease-in-out sm:w-96 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -151,6 +154,7 @@ export default function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
           )}
         </div>
       </div>
-    </>
+    </>,
+    document.body,
   );
 }

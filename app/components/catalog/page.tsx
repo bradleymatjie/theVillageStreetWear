@@ -11,10 +11,10 @@ export default async function Catalog() {
     }
 
   return (
-    <section className="py-8 sm:py-12 lg:py-16 px-4 sm:px-6 bg-black text-white">
+    <section className="bg-[var(--palette-surface-catalog)] px-4 py-10 text-black sm:px-6 sm:py-14 lg:py-16">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 sm:mb-8 gap-4">
-          <h2 className="text-2xl sm:text-3xl font-black">LATEST DROPS</h2>
+          <div><p className="mb-1 text-[10px] font-bold uppercase tracking-[0.2em] text-black/45">Shop the latest</p><h2 className="text-3xl font-black tracking-[-0.04em] sm:text-4xl">LATEST DROPS</h2></div>
           <Link href="/products" className="flex items-center gap-2 text-xs sm:text-sm font-bold hover:underline">
             SEE MORE <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
           </Link>
@@ -22,7 +22,7 @@ export default async function Catalog() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {data?.map((item) => (
             <Link key={item.slug} href={`/products/${item.id}`} className="group block">
-              <div className={`relative overflow-hidden rounded-md border border-white/20 hover:border-white/50 transition-colors ${item.soldOut ? 'opacity-50' : ''}`}>
+              <div className={`relative overflow-hidden rounded-lg border border-black/10 bg-white transition-all hover:-translate-y-1 hover:shadow-xl ${item.soldOut ? 'opacity-50' : ''}`}>
                 <div className="aspect-square relative">
                   <img
                     src={item.imageurl}
@@ -34,7 +34,8 @@ export default async function Catalog() {
                   )}
                 </div>
                 <div className="p-3 sm:p-4">
-                  <h3 className="font-bold text-xs sm:text-sm mb-1">{item.name}</h3>
+                  <p className="mb-1 text-[9px] font-bold uppercase tracking-[0.16em] text-black/40">The Village</p>
+                  <h3 className="mb-1 text-xs font-bold sm:text-sm">{item.name}</h3>
                 </div>
               </div>
             </Link>

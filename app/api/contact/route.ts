@@ -1,3 +1,4 @@
+import { getColorValue } from "@/lib/server-colors";
 // app/api/contact/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
@@ -40,24 +41,24 @@ export async function POST(request: NextRequest) {
               body {
                 font-family: Arial, sans-serif;
                 line-height: 1.6;
-                color: #333;
+                color: ${getColorValue("--palette-ink-secondary")};
               }
               .container {
                 max-width: 600px;
                 margin: 0 auto;
                 padding: 20px;
-                background-color: #f9f9f9;
+                background-color: ${getColorValue("--palette-surface-email")};
               }
               .header {
-                background-color: #000;
-                color: #fff;
+                background-color: ${getColorValue("--palette-black")};
+                color: ${getColorValue("--palette-white")};
                 padding: 20px;
                 text-align: center;
                 font-weight: bold;
                 font-size: 24px;
               }
               .content {
-                background-color: #fff;
+                background-color: ${getColorValue("--palette-white")};
                 padding: 30px;
                 margin-top: 20px;
                 border-radius: 5px;
@@ -67,25 +68,25 @@ export async function POST(request: NextRequest) {
               }
               .label {
                 font-weight: bold;
-                color: #666;
+                color: ${getColorValue("--palette-ink-subtle")};
                 text-transform: uppercase;
                 font-size: 12px;
                 margin-bottom: 5px;
               }
               .value {
-                color: #000;
+                color: ${getColorValue("--palette-black")};
                 font-size: 16px;
               }
               .message-box {
-                background-color: #f5f5f5;
+                background-color: ${getColorValue("--palette-surface-neutral")};
                 padding: 15px;
-                border-left: 4px solid #000;
+                border-left: 4px solid ${getColorValue("--palette-black")};
                 margin-top: 10px;
               }
               .footer {
                 text-align: center;
                 margin-top: 20px;
-                color: #666;
+                color: ${getColorValue("--palette-ink-subtle")};
                 font-size: 12px;
               }
             </style>

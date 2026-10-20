@@ -36,7 +36,7 @@ export default async function CustomersPage() {
     return (
       <div>
         <h1 className="text-3xl font-bold uppercase mb-6">Customers</h1>
-        <div className="p-6 bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg">
+        <div className="p-6 bg-[var(--palette-surface-admin)] border border-[var(--palette-border-admin)] rounded-lg">
           <p className="text-red-400">Error: {error}</p>
         </div>
       </div>
@@ -52,14 +52,14 @@ export default async function CustomersPage() {
         </div>
 
         {customers.length === 0 ? (
-          <div className="p-6 bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg">
+          <div className="p-6 bg-[var(--palette-surface-admin)] border border-[var(--palette-border-admin)] rounded-lg">
             <p className="text-gray-400">No customers found.</p>
           </div>
         ) : (
-          <div className="bg-[#0D0D0D] border border-[#1A1A1A] rounded-lg overflow-hidden">
+          <div className="bg-[var(--palette-surface-admin)] border border-[var(--palette-border-admin)] rounded-lg overflow-hidden">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-[#1A1A1A] bg-[#1A1A1A]">
+                <tr className="border-b border-[var(--palette-border-admin)] bg-[var(--palette-border-admin)]">
                   <th className="text-left p-4 font-semibold text-gray-300">User ID</th>
                   <th className="text-left p-4 font-semibold text-gray-300">Full Name</th>
                   <th className="text-left p-4 font-semibold text-gray-300">Email</th>
@@ -74,7 +74,7 @@ export default async function CustomersPage() {
                   const updatedAt = formatDistanceToNow(new Date(customer.updated_at), { addSuffix: true });
 
                   return (
-                    <tr key={customer.id} className="border-b border-[#1A1A1A] hover:bg-[#1A1A1A]">
+                    <tr key={customer.id} className="border-b border-[var(--palette-border-admin)] hover:bg-[var(--palette-border-admin)]">
                       <td className="p-4 text-gray-300">{customer.user_id}</td>
                       <td className="p-4 text-white">{customer.full_name ?? 'N/A'}</td>
                       <td className="p-4 text-gray-300">{customer.email}</td>

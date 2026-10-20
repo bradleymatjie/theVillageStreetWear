@@ -76,18 +76,18 @@ export function UsersChart({ data }: UsersChartProps) {
         >
           <CartesianGrid 
             strokeDasharray="3 3" 
-            stroke="#2A2A2A" 
+            stroke="var(--palette-chart-grid)"
             vertical={false}
           />
           <XAxis
             dataKey="formattedDate"
-            stroke="#666"
+            stroke="var(--palette-ink-subtle)"
             fontSize={12}
             tickLine={false}
             axisLine={false}
           />
           <YAxis
-            stroke="#666"
+            stroke="var(--palette-ink-subtle)"
             fontSize={12}
             tickLine={false}
             axisLine={false}
@@ -109,7 +109,7 @@ export function UsersChart({ data }: UsersChartProps) {
           <Area
             type="monotone"
             dataKey="users"
-            stroke="#3b82f6"
+            stroke="var(--palette-chart-blue)"
             fill="url(#colorUsers)"
             strokeWidth={2}
             fillOpacity={0.1}
@@ -118,7 +118,7 @@ export function UsersChart({ data }: UsersChartProps) {
           <Line
             type="monotone"
             dataKey="pageViews"
-            stroke="#10b981"
+            stroke="var(--palette-chart-emerald)"
             strokeWidth={2}
             strokeDasharray="5 5"
             dot={false}
@@ -127,15 +127,15 @@ export function UsersChart({ data }: UsersChartProps) {
           <Line
             type="monotone"
             dataKey="sessions"
-            stroke="#8b5cf6"
+            stroke="var(--palette-chart-purple)"
             strokeWidth={2}
             dot={false}
             name="Sessions"
           />
           <defs>
             <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+              <stop offset="5%" stopColor="var(--palette-chart-blue)" stopOpacity={0.3}/>
+              <stop offset="95%" stopColor="var(--palette-chart-blue)" stopOpacity={0}/>
             </linearGradient>
           </defs>
         </LineChart>

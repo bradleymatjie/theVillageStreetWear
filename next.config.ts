@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  outputFileTracingIncludes: {
+    "/*": ["./app/theme/colors.css"],
+  },
   images: {
     remotePatterns: [
       {

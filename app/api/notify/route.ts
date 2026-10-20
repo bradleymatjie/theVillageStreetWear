@@ -1,3 +1,4 @@
+import { getColorValue } from "@/lib/server-colors";
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { Resend } from 'resend';
@@ -44,9 +45,9 @@ export async function POST(request: NextRequest) {
         to: [email],
         subject: "You're In The Village 🔥 – Exclusive Drops Incoming",
         html: `
-      <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #000; color: #fff; text-align: center;">
+      <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: ${getColorValue("--palette-black")}; color: ${getColorValue("--palette-white")}; text-align: center;">
         <!-- Logo / Header -->
-        <h1 style="font-size: 42px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: #ff4500; margin-bottom: 8px;">
+        <h1 style="font-size: 42px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: ${getColorValue("--palette-brand-orange")}; margin-bottom: 8px;">
           The Village
         </h1>
         <p style="font-size: 14px; opacity: 0.7; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 1px;">
@@ -54,21 +55,21 @@ export async function POST(request: NextRequest) {
         </p>
 
         <!-- Main Content -->
-        <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 24px; color: #fff;">
+        <h2 style="font-size: 18px; font-weight: bold; margin-bottom: 24px; color: ${getColorValue("--palette-white")};">
           Welcome to the Crew ${email}!
         </h2>
 
-        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 32px; opacity: 0.9; color: #f5f5f5;">
+        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 32px; opacity: 0.9; color: ${getColorValue("--palette-surface-neutral")};">
           You just locked in first access to limited drops, custom designs, and exclusive streetwear heat built by the community.
         </p>
 
-        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 40px; opacity: 0.9;  #f5f5f5;">
+        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 40px; opacity: 0.9;  ${getColorValue("--palette-surface-neutral")};">
           We'll keep it real — no spam, just fire notifications when new pieces drop and special offers for the inner circle.
         </p>
 
         <!-- CTA Button -->
         <div style="margin: 40px 0;">
-          <a href="https://thevillagestreetwear.com" target="_blank" style="display: inline-block; background-color: #ff4500; color: #fff; padding: 18px 40px; font-size: 18px; font-weight: bold; text-transform: uppercase; text-decoration: none; border-radius: 8px; box-shadow: 0 4px 20px rgba(255, 69, 0, 0.4);">
+          <a href="https://thevillagestreetwear.com" target="_blank" style="display: inline-block; background-color: ${getColorValue("--palette-brand-orange")}; color: ${getColorValue("--palette-white")}; padding: 18px 40px; font-size: 18px; font-weight: bold; text-transform: uppercase; text-decoration: none; border-radius: 8px; box-shadow: 0 4px 20px ${getColorValue("--palette-brand-orange-shadow")};">
             Explore The Village
           </a>
         </div>
@@ -80,10 +81,10 @@ export async function POST(request: NextRequest) {
         </p>
 
         <!-- Footer -->
-        <div style="margin-top: 60px; padding-top: 30px; border-top: 1px solid #333; font-size: 12px; opacity: 0.6;">
+        <div style="margin-top: 60px; padding-top: 30px; border-top: 1px solid ${getColorValue("--palette-ink-secondary")}; font-size: 12px; opacity: 0.6;">
           <p>© 2025 The Village - Streetwear. All rights reserved.</p>
           <p>
-            <a href="https://thevillagestreetwear.com" style="color: #ff4500; text-decoration: underline;">thevillagestreetwear.com</a>
+            <a href="https://thevillagestreetwear.com" style="color: ${getColorValue("--palette-brand-orange")}; text-decoration: underline;">thevillagestreetwear.com</a>
           </p>
         </div>
       </div>

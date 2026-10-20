@@ -168,7 +168,7 @@ export default function BrandDashboardPage() {
     <div className="mx-auto max-w-7xl">
       {showProfilePrompt && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/75 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-[#0b0b0b] p-6 text-white shadow-2xl sm:p-7">
+          <div className="w-full max-w-lg rounded-3xl border border-white/10 bg-[var(--palette-surface-modal)] p-6 text-white shadow-2xl sm:p-7">
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.24em] text-white/35">

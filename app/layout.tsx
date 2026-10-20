@@ -1,3 +1,4 @@
+import { getColorValue } from "@/lib/server-colors";
 import { Analytics } from "@vercel/analytics/next"
 import type { Metadata, Viewport } from "next";
 import { Poppins } from "next/font/google";
@@ -11,6 +12,7 @@ import { Suspense } from "react";
 import { ThemeProvider } from "next-themes";
 import { siteConfig } from "@/app/lib/seo";
 import PwaRegistration from "./components/PwaRegistration";
+import AuthSession from "./components/AuthSession";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -105,7 +107,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#000000",
+  themeColor: getColorValue("--palette-black"),
   colorScheme: "dark light",
 };
 
@@ -137,6 +139,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${poppins.variable} antialiased`}>
+        <AuthSession />
          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <div>
           <Suspense fallback={null}>

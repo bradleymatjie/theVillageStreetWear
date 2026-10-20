@@ -36,7 +36,7 @@ export default function AnimatedProfileShell({ children }: Props) {
       variants={pageDrop}
       initial="hidden"
       animate="show"
-      className="py-2"
+      className="pb-8"
     >
       {children}
     </motion.div>

@@ -1,5 +1,4 @@
-import BottomNav from "./components/BottomNav";
-import Sidebar from "./components/Sidebar";
+
 
 export default function ProfileLayout({
   children,
@@ -7,14 +6,12 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main className="min-h-screen bg-white text-black pb-24 transition-colors dark:bg-black dark:text-white lg:pb-0 overflow-x-hidden">
-      <Sidebar />
-
-      <section className="lg:ml-72">
+    <main className="min-h-screen overflow-x-hidden bg-white pb-24 text-black transition-colors dark:bg-black dark:text-white lg:pb-0">
+      <section>
         {children}
       </section>
 
-      <BottomNav />
+
     </main>
   );
 }
