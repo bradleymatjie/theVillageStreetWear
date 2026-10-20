@@ -143,7 +143,7 @@ export default function RootLayout({
       </head>
       <body className={`${poppins.variable} antialiased`}>
         <AuthSession />
-         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+         <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="village-system-theme" disableTransitionOnChange>
         <div>
           <Suspense fallback={null}>
           <Header />

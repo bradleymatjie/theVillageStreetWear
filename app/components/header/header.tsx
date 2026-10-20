@@ -1,6 +1,5 @@
 "use client";
 
-import ThemeToggle from "../ThemeToggle";
 import { useState, useSyncExternalStore } from "react";
 import { Home, Menu, Search, ShoppingBag, ShoppingCart, User, X } from "lucide-react";
 import Image from "next/image";
@@ -73,7 +72,6 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            <ThemeToggle />
             {isLoggedIn ? (
               <Link
                 href={profileHref}
