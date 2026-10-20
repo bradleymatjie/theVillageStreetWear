@@ -17,18 +17,18 @@ export async function GET() {
 
       // cartItems is stored as a JSON string in metadata
       let order_items: any[] = [];
-      if (metadata.cartItems && typeof metadata.cartItems === 'string') {
+      if (metadata.cartItems) {
         try {
-          const parsed = JSON.parse(metadata.cartItems);
+          const parsed = typeof metadata.cartItems === 'string' ? JSON.parse(metadata.cartItems) : metadata.cartItems;
           if (Array.isArray(parsed)) {
             order_items = parsed.map((item: any) => ({
-              id: item.id, // uuid string – fine for keys
-              name: item.name,
-              price: Number(item.price) || 0,
+              id: item.product_id || item.id,
+              name: item.product_name || item.name,
+              price: Number(item.unit_price ?? item.price) || 0,
               quantity: Number(item.quantity) || 1,
-              image_url: item.imageurl || '/noImage.jpg',
-              selected_size: item.selectedSize,
-              selected_material: item.selectedMaterial,
+              image_url: item.product_image || item.imageurl || '/noImage.jpg',
+              selected_size: item.size || item.selectedSize,
+              selected_material: item.material || item.selectedMaterial,
             }));
           }
         } catch (parseError) {
@@ -46,15 +46,15 @@ export async function GET() {
         id: order.id, // assuming integer id (frontend expects number); adjust if uuid
         order_id: metadata.orderId || order.order_id || `ORD-${order.id}`,
         created_at: order.created_at,
-        customer_name: metadata.customer_name || 'Unknown',
-        email: metadata.email || '',
-        phone: metadata.phone || '',
-        total,
+        customer_name: order.customer_name || metadata.customer_name || 'Unknown',
+        email: order.email || metadata.email || '',
+        phone: order.phone || metadata.phone || '',
+        total: Number(order.total ?? total),
         status: order.status || 'pending',
-        payment_status: order.payment_status || 'paid', // adjust if you have this column
-        shipping_method: metadata.shipping_method || 'delivery',
-        shipping_address: metadata.shipping_address || '',
-        pickup_location: metadata.pickup_location || '',
+        payment_status: order.payment_status || 'pending',
+        shipping_method: order.shipping_method || metadata.shipping_method || 'delivery',
+        shipping_address: order.shipping_address || metadata.shipping_address || '',
+        pickup_location: order.pickup_location || metadata.pickup_location || '',
         order_items,
       };
     });

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:payments": "node --test tests/payments.test.mjs"
   },
   "dependencies": {
     "@google-analytics/data": "^5.2.1",

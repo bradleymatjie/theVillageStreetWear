@@ -13,6 +13,8 @@ interface CartItem extends Product {
 interface CartStore {
   items: CartItem[];
   hasHydrated: boolean;
+  completedOrderIds: string[];
+  reconcilePaidOrder: (orderId: string, purchased: { cart_item_id: string; quantity: number }[]) => void;
 
   setHasHydrated: (state: boolean) => void;
 
@@ -30,6 +32,20 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
       hasHydrated: false,
+      completedOrderIds: [],
+      reconcilePaidOrder: (orderId, purchased) => {
+        set((state) => {
+          if (state.completedOrderIds.includes(orderId)) return state;
+          const quantities = new Map<string, number>();
+          for (const item of purchased) {
+            if (Number.isInteger(item.quantity) && item.quantity > 0) quantities.set(item.cart_item_id, (quantities.get(item.cart_item_id) || 0) + item.quantity);
+          }
+          return {
+            items: state.items.map(item => ({ ...item, quantity: Math.max(0, item.quantity - (quantities.get(item.cartItemId) || 0)) })).filter(item => item.quantity > 0),
+            completedOrderIds: [...state.completedOrderIds, orderId],
+          };
+        });
+      },
 
       setHasHydrated: (state) => set({ hasHydrated: state }),
 

@@ -7,6 +7,7 @@ import { ShoppingBag, Truck, MapPin, LockIcon } from "lucide-react";
 import { useUser } from "../lib/user";
 import { supabase } from "@/lib/supabaseClient";
 import { toast } from "sonner";
+import { getShippingFeeCents } from "@/app/lib/checkout-pricing";
 
 type PickupDetails = {
   brandName: string;
@@ -26,18 +27,8 @@ function CheckoutPage() {
   const { items, hasHydrated } = useCartStore();
   const [isProcessing, setIsProcessing] = useState(false);
   const [deliveryOption, setDeliveryOption] = useState<'delivery' | 'pickup'>('delivery');
-  const [orderId, setOrderId] = useState<string>("");
   const [pickupDetails, setPickupDetails] = useState<PickupDetails | null>(null);
   const [selectedBrandKey, setSelectedBrandKey] = useState<string>("");
-
-  useEffect(() => {
-    const generateOrderId = () => {
-      const timestamp = Date.now();
-      const random = Math.floor(Math.random() * 10000);
-      return `ORD-${timestamp}-${random}`;
-    };
-    setOrderId(generateOrderId());
-  }, []);
 
   // Initialize form data with user info
   const [formData, setFormData] = useState({
@@ -158,7 +149,7 @@ function CheckoutPage() {
 
     return total + itemPrice * item.quantity;
   }, 0);
-  const shipping = deliveryOption === 'delivery' && subtotal < 500 ? 75 : 0;
+  const shipping = getShippingFeeCents(Math.round(subtotal * 100), deliveryOption) / 100;
   const total = subtotal + shipping;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -170,6 +161,12 @@ function CheckoutPage() {
 
  const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
+  if (isProcessing) return;
+  if (!user) {
+    toast.error("Please sign in before checking out.");
+    window.location.href = "/login";
+    return;
+  }
   setIsProcessing(true);
 
   try {
@@ -215,7 +212,6 @@ function CheckoutPage() {
     }
 
     const requestBody = {
-      order_number: orderId,
       brand_id: brandIds[0],
       customer_id: user?.id,
       customer_name: formData.fullName,
@@ -524,9 +520,7 @@ function CheckoutPage() {
                   {selectedGroup.brandName} order
                 </p>
               )}
-              <div className="text-xs text-theme-muted mb-4">
-                Order ID: {orderId}
-              </div>
+              <p className="text-xs text-theme-muted mb-4">Your order number is created when you continue to payment.</p>
 
               {/* Cart Items */}
               <div className="space-y-4 mb-6 max-h-64 overflow-y-auto pr-2">

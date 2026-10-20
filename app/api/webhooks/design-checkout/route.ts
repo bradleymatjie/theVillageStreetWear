@@ -1,6 +1,7 @@
 // app/api/webhooks/design-checkout/route.ts
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabaseClient";
+import { verifyYocoSignature } from "@/lib/payments/yoco-signature";
 
 export async function POST(req: Request) {
   try {
@@ -30,7 +31,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
     }
 
-    // Parse payload
+    if (!verifyYocoSignature(rawBody, headers, secret)) {
+      return NextResponse.json({ error: "Invalid webhook signature" }, { status: 401 });
+    }
+
+    // Parse only after verifying the exact raw payload.
     const payload = JSON.parse(rawBody);
     const eventType = payload.type;
     const data = payload.payload || payload.data || payload;
